@@ -12,13 +12,18 @@
 - 安装身份与英文版、中文版 0.10.6 分开，测试安装不会覆盖它们。
 - 此版本用于查价问题验证，安装包由项目维护者单独分发。
 
+## 项目归档
+
+- `pd2-trader-cn-0.10.7-src.zip`：完整源码快照。
+- `pd2-trader-cn-0.10.7.bundle`：带有初始 Git 提交历史的源码 bundle。可运行 `git clone .\pd2-trader-cn-0.10.7.bundle pd2-trader-cn` 克隆。
+
 ## 上游与许可
 
 本项目基于 [errolgr/pd2-trade](https://github.com/errolgr/pd2-trade) 的开源源码整理和本地化。上游采用 MIT License；请保留本仓库中的 [LICENSE](LICENSE) 文件及版权声明。
 
 ## Windows 构建
 
-需要 Node.js、Rust 工具链和 Windows C++ 构建工具。安装 npm 依赖后，可在仓库根目录运行：
+需要 Node.js、Rust 工具链和 Windows C++ 构建工具。在仓库根目录安装 npm 依赖后运行：
 
 ```powershell
 npm ci
