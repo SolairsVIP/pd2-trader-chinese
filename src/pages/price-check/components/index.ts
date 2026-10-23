@@ -1,0 +1,20 @@
+// Main component
+export { default as ItemOverlayWidget } from './ItemOverlayWidget';
+
+// Sub-components
+export { RunePricePopover } from './RunePricePopover';
+export { StatRow } from './StatRow';
+
+// Hooks
+export { useEconomyData } from '../hooks/useEconomyData';
+export { useStatSelection } from '../hooks/useStatSelection';
+
+// Services
+export { fetchEconomyData, sortItemsByPrice, calculateRuneValues, getRuneBreakdown } from '../lib/economyService';
+export { buildTradeUrl } from '../lib/tradeUrlBuilder';
+
+// Utilities
+export { getTypeFromBaseType, getStatKey } from '../lib/utils';
+
+// Types
+export type { Props, ItemData, ItemValue, RuneCombination } from '../lib/types';

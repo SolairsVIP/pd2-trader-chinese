@@ -1,0 +1,73 @@
+import React, { useRef } from 'react';
+import { ChatButton } from '@/components/custom/ChatButton';
+import { useOptions } from '@/hooks/useOptions';
+import { confirmToast, showToast, useBadgeCount, useOverlay } from '@/overlay';
+import { NET_WORTH_PANEL_SIZE, panelBesideTicker } from '@/pages/net-worth/overlay';
+import { chatDockRect, clampDockOffset, setChatDockOffset, useChatDockOffset } from './chat-dock';
+
+/** Gap (px) between the dock and the net worth panel it opens. */
+const PANEL_GAP = 8;
+/** Room (px) the menu needs above the tab; with less, it opens below. */
+const MENU_ROOM = 300;
+
+const ChatButtonPage: React.FC = () => {
+  const { updateSettings } = useOptions();
+  const { openPanel, togglePanel, gameRect } = useOverlay();
+  const unreadCount = useBadgeCount('chatUnread');
+  // One offers badge: open trade whispers + website offers
+  const tradeOffersCount = useBadgeCount('whisperTrades') + useBadgeCount('tradeOffers');
+  const offset = useChatDockOffset();
+  const dock = chatDockRect(gameRect, offset);
+  const dragStart = useRef<number | null>(null);
+
+  const handleDisableClick = () =>
+    confirmToast({
+      title: '要禁用聊天悬浮按钮吗？',
+      description: '之后可在“设置 → 界面”中重新启用。',
+      confirmLabel: '禁用',
+      onConfirm: async () => {
+        await updateSettings({ chatButtonOverlayEnabled: false });
+        showToast('聊天悬浮按钮已禁用。可在“设置 → 界面”中重新启用。');
+      },
+    });
+
+  return (
+    // The panel frame spans the game's right edge, full height (click-through); the tab sits at its saved height.
+    <div
+      className="pointer-events-none absolute right-0"
+      style={{ top: dock.y - gameRect.y, width: dock.width, height: dock.height }}
+    >
+      <ChatButton
+        size={dock}
+        // Same as the chat hotkey: with unread messages, land on the newest unread thread
+        onChatClick={() => (unreadCount > 0 ? togglePanel('chat', { newestUnread: true }) : togglePanel('chat'))}
+        onOffersClick={() => openPanel('chat', { filter: 'selling' })}
+        onMarketClick={() => openPanel('market')}
+        onNetWorthClick={() =>
+          openPanel('netWorthPanel', undefined, {
+            placement: panelBesideTicker(dock, NET_WORTH_PANEL_SIZE, gameRect, PANEL_GAP),
+          })
+        }
+        onStashValueClick={() => openPanel('currency')}
+        // Already open (e.g. mid-listing): just bring it forward instead of switching it to manage mode
+        onManageListingsClick={() => openPanel('quickList', undefined, { placement: 'gameCenter', keepPayload: true })}
+        onSettingsClick={() => openPanel('settings')}
+        onDisableClick={handleDisableClick}
+        unreadCount={unreadCount}
+        tradeOffersCount={tradeOffersCount}
+        // Slides along the edge: dragging down lowers the tab (smaller offset above the game's bottom)
+        onDrag={(dy) => {
+          dragStart.current ??= offset;
+          setChatDockOffset(clampDockOffset(dragStart.current - dy / gameRect.height, gameRect.height), false);
+        }}
+        onDragEnd={() => {
+          dragStart.current = null;
+          setChatDockOffset(offset);
+        }}
+        menuBelow={dock.y - gameRect.y < MENU_ROOM}
+      />
+    </div>
+  );
+};
+
+export default ChatButtonPage;

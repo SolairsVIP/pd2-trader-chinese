@@ -1,0 +1,100 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capability for the main window",
+  "windows": ["Main"],
+  "permissions": [
+    "core:default",
+    "opener:default",
+    "core:window:allow-set-focus",
+    "core:window:allow-set-focusable",
+    "core:resources:allow-close",
+    "global-shortcut:allow-is-registered",
+    "global-shortcut:allow-register",
+    "global-shortcut:allow-unregister",
+    "process:default",
+    "process:allow-exit",
+    "clipboard-manager:default",
+    "clipboard-manager:allow-read-text",
+    "clipboard-manager:allow-write-text",
+    "core:app:allow-default-window-icon",
+    "app-exit:default",
+    "fs:default",
+    "fs:scope-resource-recursive",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        {
+          "path": "$APPDATA/*"
+        },
+        {
+          "path": "$APPCONFIG/*"
+        }
+      ]
+    },
+    "fs:allow-write-text-file",
+    "fs:allow-read-text-file",
+    "fs:allow-exists",
+    "fs:read-dirs",
+    "fs:create-app-specific-dirs",
+    "fs:allow-mkdir",
+    "fs:allow-read-text-file",
+    "fs:allow-appconfig-write",
+    "fs:allow-app-write-recursive",
+    "fs:write-all",
+    "fs:scope-resource-recursive",
+    "fs:allow-appconfig-read-recursive",
+    "fs:allow-appconfig-write-recursive",
+    "fs:allow-appdata-read-recursive",
+    "fs:allow-appdata-write-recursive",
+    "opener:allow-open-url",
+    {
+      "identifier": "fs:scope-appdata-recursive",
+      "allow": [
+        {
+          "path": "$APPDATA"
+        }
+      ]
+    },
+    {
+      "identifier": "fs:scope-appconfig-recursive",
+      "allow": [
+        {
+          "path": "$APPCONFIG"
+        }
+      ]
+    },
+    "opener:default",
+    {
+      "identifier": "opener:allow-open-path",
+      "allow": [
+        {
+          "path": "**"
+        },
+        {
+          "path": "$APPDATA/**"
+        },
+        {
+          "path": "$APPCONFIG/**"
+        }
+      ]
+    },
+    {
+      "identifier": "http:default",
+      "allow": [
+        {
+          "url": "https://api.projectdiablo2.com/**"
+        },
+        {
+          "url": "https://pd2trader.com/**"
+        },
+        {
+          "url": "http://localhost:3000/**"
+        },
+        {
+          "url": "https://caritive-zoila-unhumorously.ngrok-free.dev/**"
+        }
+      ]
+    }
+  ]
+}

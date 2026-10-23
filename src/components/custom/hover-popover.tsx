@@ -1,0 +1,45 @@
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import React, { useState } from 'react';
+
+interface HoverPopoverProps {
+  content: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+  onSelect?: () => void;
+  side?: 'top' | 'bottom' | 'left' | 'right';
+}
+
+export const HoverPopover: React.FC<HoverPopoverProps> = ({
+  content,
+  children,
+  className,
+  onSelect,
+  side = 'bottom',
+}) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Popover open={open}
+      onOpenChange={setOpen}>
+      <PopoverTrigger asChild
+        onClick={onSelect}>
+        {/* Wrap the child with mouse events to control the popover */}
+        <div onMouseEnter={() => setOpen(true)}
+          onMouseLeave={() => setOpen(false)}>
+          {children}
+        </div>
+      </PopoverTrigger>
+      <PopoverContent
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        // Hover-opened: don't move focus into the content (avoids a stray focus-visible ring).
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        side={side}
+        align="center"
+        className={className ? className : 'p-0 bg-transparent border-0 w-auto'}
+      >
+        {content}
+      </PopoverContent>
+    </Popover>
+  );
+};

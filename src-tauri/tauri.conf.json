@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "PD2 Trader 中文版",
+  "version": "0.10.7",
+  "identifier": "com.pd2-trader.chinese",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "mainBinaryName": "pd2-trader-installer",
+  "app": {
+    "windows": [],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "windows": {
+      "nsis": {
+        "installerIcon": "icons/favicon.ico",
+        "sidebarImage": "icons/banner.bmp"
+      }
+    },
+    "linux": {
+      "appimage": {
+        "bundleMediaFramework": true
+      }
+    },
+    "createUpdaterArtifacts": false,
+    "active": true,
+    "targets": "all",
+    "icon": ["icons/favicon.ico", "icons/favicon-32x32.png"]
+  }
+}

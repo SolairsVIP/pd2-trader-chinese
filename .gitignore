@@ -1,0 +1,42 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+*.tsbuildinfo
+src-tauri/target/
+src-tauri/bundle/
+*.msi
+*-setup.exe
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.tauri
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+app.db
+src-tauri/binaries/app/pantheon_server-x86_64-pc-windows-msvc.exe
+docs/.vitepress/cache
+docs/.vitepress/dist
+2
+# Sentry Config File
+.env.sentry-build-plugin
+.env
+.env.local
+
+# Local Agent context
+.agent/*coverage/
