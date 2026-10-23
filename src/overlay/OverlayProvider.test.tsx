@@ -43,7 +43,9 @@ vi.mock('./game', async (importOriginal) => {
 });
 /** Main's OS focus listener registered through trackKeyboardFocus (Tauri). */
 const focus = vi.hoisted(() => ({ onChange: null as ((focused: boolean, handoff?: boolean) => void) | null }));
+const nativeOverlay = vi.hoisted(() => ({ calls: [] as Array<{ command: string; args?: unknown }>, foregroundOwner: 'diablo' }));
 vi.mock('./keyboard', () => ({
+  FOREGROUND_EVENT: 'foreground-changed',
   claimKeyboard: vi.fn(async () => {}),
   releaseKeyboard: vi.fn(async () => {}),
   isKeyboardClaimed: vi.fn(() => false),
@@ -57,11 +59,18 @@ vi.mock('./keyboard', () => ({
 vi.mock('./region', () => ({ useRegionSync: () => {}, holdRegionLoop: () => () => {} }));
 vi.mock('./toast', () => ({ ToastLayer: () => null, setToastBridge: vi.fn(), showToast: vi.fn() }));
 const tauri = vi.hoisted(() => ({ on: false }));
-vi.mock('@tauri-apps/api/core', () => ({ isTauri: () => tauri.on, invoke: vi.fn(async () => {}) }));
+vi.mock('@tauri-apps/api/core', () => ({
+  isTauri: () => tauri.on,
+  invoke: vi.fn(async (command: string, args?: unknown) => {
+    nativeOverlay.calls.push({ command, args });
+    if (command === 'get_foreground_owner') return nativeOverlay.foregroundOwner;
+    return undefined;
+  }),
+}));
 /** Rust events the provider listens to (e.g. the outside-click hook). */
-const events = vi.hoisted(() => new Map<string, () => void>());
+const events = vi.hoisted(() => new Map<string, (event?: { payload?: unknown }) => void>());
 vi.mock('@/lib/browser-events', () => ({
-  listen: vi.fn(async (event: string, cb: () => void) => {
+  listen: vi.fn(async (event: string, cb: (event?: { payload?: unknown }) => void) => {
     events.set(event, cb);
     return () => events.delete(event);
   }),
@@ -142,6 +151,8 @@ const shown = (id: PanelId) => !!frame(id) && frame(id)!.style.display !== 'none
 
 beforeEach(() => {
   tauri.on = false;
+  nativeOverlay.calls = [];
+  nativeOverlay.foregroundOwner = 'diablo';
   game.state = { gameRect: { x: 100, y: 50, width: 1280, height: 720 }, gameFocused: true };
   for (const k of Object.keys(mounts)) delete mounts[k];
   localStorage.clear();
@@ -620,6 +631,27 @@ describe('closeOnBlur', () => {
     act(() => focus.onChange!(true));
     act(() => vi.advanceTimersByTime(CLOSE_ON_BLUR_MS * 2));
     expect(api.isOpen('chat')).toBe(true);
+  });
+});
+
+describe('native overlay z-order', () => {
+  it('floats visible panels over the game and yields to other foreground applications', async () => {
+    tauri.on = true;
+    mount();
+    await act(async () => {}); // foreground and outside-click listeners are registered asynchronously
+
+    const zOrderCalls = () =>
+      nativeOverlay.calls.filter((call) => call.command === 'set_overlay_z_order').map((call) => call.args);
+    expect(zOrderCalls()).toContainEqual({ topmost: false }); // no visible UI at startup
+
+    act(() => api.openPanel('settings'));
+    expect(zOrderCalls().at(-1)).toEqual({ topmost: true });
+
+    act(() => events.get('foreground-changed')?.({ payload: 'other' }));
+    expect(zOrderCalls().at(-1)).toEqual({ topmost: false });
+
+    act(() => events.get('foreground-changed')?.({ payload: 'diablo' }));
+    expect(zOrderCalls().at(-1)).toEqual({ topmost: true });
   });
 });
 

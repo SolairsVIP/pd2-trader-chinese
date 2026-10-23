@@ -111,6 +111,8 @@ pub fn run() {
             commands::get_diablo_rect,
             commands::press_key,
             commands::is_diablo_focused,
+            commands::get_foreground_owner,
+            commands::set_overlay_z_order,
             commands::focus_diablo,
             commands::focus_overlay,
             commands::set_outside_click_watch,

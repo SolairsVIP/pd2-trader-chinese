@@ -19,6 +19,33 @@ pub fn is_diablo_focused() -> bool {
     window::is_game_context()
 }
 
+/// Raw foreground owner used to keep the full-work-area overlay out of other applications' z-order.
+#[tauri::command]
+pub fn get_foreground_owner() -> window::Foreground {
+    window::foreground()
+}
+
+/// Keep the overlay topmost while it is being used over Diablo II, then yield it without activation
+/// as soon as another application becomes foreground.
+#[tauri::command]
+pub fn set_overlay_z_order(
+    overlay: tauri::WebviewWindow,
+    topmost: bool,
+) -> Result<(), String> {
+    #[cfg(target_os = "windows")]
+    {
+        let hwnd = overlay.hwnd().map_err(|error| error.to_string())?;
+        window::set_overlay_z_order(hwnd.0 as isize, topmost)
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    {
+        overlay
+            .set_always_on_top(topmost)
+            .map_err(|error| error.to_string())
+    }
+}
+
 #[tauri::command]
 pub fn focus_diablo() -> bool {
     window::focus_diablo()

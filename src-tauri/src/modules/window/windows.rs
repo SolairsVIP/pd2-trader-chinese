@@ -14,8 +14,9 @@ use windows_sys::Win32::{
     UI::Accessibility::{SetWinEventHook, UnhookWinEvent, HWINEVENTHOOK},
     UI::WindowsAndMessaging::{
         BringWindowToTop, FindWindowW, GetForegroundWindow, GetWindowRect,
-        GetWindowThreadProcessId, IsIconic, SetForegroundWindow, ShowWindow,
-        EVENT_SYSTEM_FOREGROUND, SW_RESTORE, WINEVENT_OUTOFCONTEXT,
+        GetWindowThreadProcessId, IsIconic, SetForegroundWindow, SetWindowPos, ShowWindow,
+        EVENT_SYSTEM_FOREGROUND, HWND_NOTOPMOST, HWND_TOPMOST, SWP_NOACTIVATE, SWP_NOMOVE,
+        SWP_NOSIZE, SW_RESTORE, WINEVENT_OUTOFCONTEXT,
     },
 };
 
@@ -54,6 +55,27 @@ static OVERLAY_WINDOW: AtomicIsize = AtomicIsize::new(0);
 
 pub fn set_overlay_window(hwnd: HWND) {
     OVERLAY_WINDOW.store(hwnd, Ordering::SeqCst);
+}
+
+/// Move the full-area overlay between topmost and normal z-order without activating it.
+pub fn set_overlay_z_order(hwnd: HWND, topmost: bool) -> Result<(), String> {
+    let insert_after = if topmost { HWND_TOPMOST } else { HWND_NOTOPMOST };
+    let ok = unsafe {
+        SetWindowPos(
+            hwnd,
+            insert_after,
+            0,
+            0,
+            0,
+            0,
+            SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
+        )
+    };
+    if ok == 0 {
+        Err("SetWindowPos failed while changing overlay z-order".to_string())
+    } else {
+        Ok(())
+    }
 }
 
 pub fn foreground() -> Foreground {
