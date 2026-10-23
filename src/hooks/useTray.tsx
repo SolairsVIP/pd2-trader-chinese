@@ -135,15 +135,18 @@ export const TrayProvider: React.FC<{ children?: React.ReactNode }> = ({ childre
           items: [
             {
               id: 'settings',
-              text: 'Settings',
+              text: '设置',
               action: () => {
                 setOverlayYieldedToOtherApps(false);
-                openPanel('settings');
+                // The shared overlay is non-focusable and non-topmost by default. A tray selection is an explicit
+                // request to show Settings, so bring it forward as a normal window; it still yields when another
+                // app is selected and is never kept topmost over the desktop.
+                openPanel('settings', undefined, { focus: true });
               },
             },
             {
               id: 'open-config',
-              text: 'Open config location',
+              text: '打开配置目录',
               action: async () => {
                 let wasYielded: boolean | null = null;
                 try {
@@ -159,7 +162,7 @@ export const TrayProvider: React.FC<{ children?: React.ReactNode }> = ({ childre
             },
             {
               id: 'quit',
-              text: 'Quit',
+              text: '退出',
               action: () => {
                 exit();
               },
