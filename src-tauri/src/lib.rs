@@ -59,9 +59,9 @@ pub fn run() {
                     }
                 };
 
-            // Single transparent always-on-top overlay hosting every UI panel. It never takes
-            // focus on its own (the frontend toggles focusable while a panel needs the keyboard)
-            // and only receives clicks inside the region set via `set_interactive_region`.
+            // Single transparent overlay hosting every UI panel. Start it as a normal window; the
+            // frontend raises it only while the game context is active. It never takes focus on its
+            // own and only receives clicks inside the region set via `set_interactive_region`.
             let main_window = WebviewWindowBuilder::new(
                 app,
                 &modules::config::WINDOW_CONFIG.labels.Main,
@@ -77,7 +77,7 @@ pub fn run() {
             .focusable(false)
             .resizable(false)
             .shadow(false)
-            .always_on_top(true)
+            .always_on_top(false)
             .skip_taskbar(true)
             .build()?;
 

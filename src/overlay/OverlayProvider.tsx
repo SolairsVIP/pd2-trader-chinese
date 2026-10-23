@@ -248,7 +248,9 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
     isPanelVisible(defs[id as PanelId], panel, gameFocused),
   );
   const hasVisibleUi = visiblePanels.length > 0 || toasts.length > 0;
-  const shouldFloatOverlay = hasVisibleUi && !yieldedToOtherApps;
+  // Only float over the game context. Being the app's foreground window is not enough: Settings opened
+  // from the tray while Diablo is not active must behave like an ordinary desktop window.
+  const shouldFloatOverlay = hasVisibleUi && gameFocused && !yieldedToOtherApps;
 
   // The full-monitor overlay must yield for every panel category, including sign-in and settings.
   // Unlike gameFocused, this foreground signal has no blur debounce.

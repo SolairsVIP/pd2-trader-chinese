@@ -653,6 +653,21 @@ describe('native overlay z-order', () => {
     act(() => events.get('foreground-changed')?.({ payload: 'diablo' }));
     expect(zOrderCalls().at(-1)).toEqual({ topmost: true });
   });
+
+  it('does not float Settings over desktop apps when the game context is inactive', async () => {
+    tauri.on = true;
+    nativeOverlay.foregroundOwner = 'ownWindow';
+    game.state = { ...game.state, gameFocused: false };
+    mount();
+    await act(async () => {});
+
+    act(() => api.openPanel('settings'));
+
+    const zOrderCalls = () =>
+      nativeOverlay.calls.filter((call) => call.command === 'set_overlay_z_order').map((call) => call.args);
+    expect(zOrderCalls()).toContainEqual({ topmost: false });
+    expect(zOrderCalls()).not.toContainEqual({ topmost: true });
+  });
 });
 
 describe('panel portal layer', () => {
