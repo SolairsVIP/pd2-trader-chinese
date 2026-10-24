@@ -4,19 +4,19 @@
 
 ## 下载当前版本
 
-**0.11.0 双客户端兼容·聚气修正版（实验版）**，发布日期：2026-10-24。插件界面为中文，**同一个安装包支持英文和汉化游戏客户端**，无需安装两套或手动切换语言。
+**0.11.0 双客户端兼容·聚气修正版**，发布日期：2026-10-24。插件界面为中文，**同一个安装包支持英文和汉化游戏客户端**，无需安装两套或手动切换语言。
 
-- [下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.0-compat.1/PD2.Trader.CN_0.11.0_dual-client_charges-fix_x64-setup.exe)
-- [GitHub Release 与全部附件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.0-compat.1)
-- [SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.0-compat.1/SHA256SUMS.txt)
-- [本次发布说明与兼容范围](docs/releases/v0.11.0-compat.1.md)
+- [下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.0/PD2.Trader.CN_0.11.0_dual-client_charges-fix_x64-setup.exe)
+- [GitHub Release 与全部附件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.0)
+- [SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.0/SHA256SUMS.txt)
+- [本次发布说明与兼容范围](docs/releases/v0.11.0.md)
 - [中文版功能介绍（PDF）](docs/PD2查价器中文版功能介绍.pdf)
 
 本次修复中文装备复制乱码，并支持中文底材、固定物品名及技能输入；修复鬼火投射者等装备的聚气记录缺少属性名称导致识别报错的问题。插件发给交易对方的消息模板继续使用英文。
 
 安装前完全退出正在运行的旧版，包括托盘进程，再运行安装包。同一产品身份的新版会更新现有中文版；之前另存的旧安装包可用于回退。自动更新仍关闭。
 
-已完成本地装备数据转换、查询参数核对、应用类型检查及 Windows 安装包构建。中文客户端的游戏内查价、上架、下架及远端估值仍需实测，因此此版本以公开预发布（Pre-release）形式提供。
+已完成本地装备数据转换、查询参数核对、应用类型检查及 Windows 安装包构建；用户已反馈最新安装包实测正常，本次作为正式版本发布。该反馈不代表所有装备或每一种汉化客户端均已逐项测试。
 
 ## 历次修复记录
 
