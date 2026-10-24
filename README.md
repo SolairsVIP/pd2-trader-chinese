@@ -1,5 +1,11 @@
 # PD2 Trader 中文版
 
+> **特别感谢原作者 [errolgr](https://github.com/errolgr) 及所有 PD2 Trader 贡献者！**
+>
+> 本项目基于开源项目 **[errolgr/pd2-trade](https://github.com/errolgr/pd2-trade)** 进行中文本地化和兼容修复。原作者的工作是本中文版的基础。
+>
+> **汉化作者：Solaris · 开源许可：[MIT License](LICENSE)**。保留原项目的版权声明与许可证。
+
 这是 PD2 Trader 的中文本地化分支。本仓库当前版本为 **0.11.0 中文版**，保留中文版 0.10.6 中恢复出的中文界面和词缀翻译，整合技能查价修复、物品名称汉化与中文市场搜索。
 
 ## 下载当前版本
