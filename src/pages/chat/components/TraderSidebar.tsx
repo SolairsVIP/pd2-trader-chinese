@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { localizeMarketItemName } from '@/lib/localize-item-name';
 import moment from 'moment';
 import {
   ArrowDownLeft,
@@ -100,7 +101,7 @@ function MarketTile({
       <PopoverTrigger asChild>
         <button
           type="button"
-          aria-label={`将「${listing.item.name}」关联到消息`}
+          aria-label={`将「${localizeMarketItemName(listing.item)}」关联到消息`}
           onClick={(e) => {
             // A click links it; the popover is for hovering (keep Radix from toggling it open)
             e.preventDefault();
@@ -461,7 +462,7 @@ export function TraderSidebar({
                           className={cn(!listed && 'opacity-50 grayscale')} />
                         <span className="min-w-0 flex-1">
                           <span className={cn('block truncate text-xs font-semibold', nameColor(listing))}>
-                            {listing.item.name}
+                            <span title={listing.item.name}>{localizeMarketItemName(listing.item)}</span>
                           </span>
                           <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
                             <span className="truncate tabular-nums text-foreground/85">

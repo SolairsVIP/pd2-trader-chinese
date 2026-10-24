@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { localizeItemName } from '@/lib/localize-item-name';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
@@ -31,7 +32,7 @@ export function HoldingName({ line, showTab = false }: { line: ValuationLine; sh
       </span>
       <div className="min-w-0 leading-tight">
         <p className={cn('truncate text-sm font-medium', CATEGORY_NAME_CLASS[line.category] ?? 'text-foreground')}>
-          {line.name}
+          <span title={line.name}>{localizeItemName(line.name, line.category === 'uniques' ? 'Unique' : line.category === 'sets' ? 'Set' : undefined)}</span>
         </p>
         {showTab && line.tab && <p className="truncate text-[11px] text-muted-foreground">{line.tab}</p>}
       </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { localizeBaseName, localizeMarketItemName } from '@/lib/localize-item-name';
 import moment from 'moment';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Heart, Loader2, Sigma } from 'lucide-react';
@@ -234,8 +235,8 @@ const ResultRow = React.memo(function ResultRow({
 
       <div className="min-w-0 flex-1">
         <div className="flex min-w-0 items-baseline gap-1.5">
-          <span className={cn('truncate text-[13px] font-semibold', itemNameColor(item))}>{item.name}</span>
-          {base && <span className="truncate text-[11px] text-muted-foreground">{base}</span>}
+          <span className={cn('truncate text-[13px] font-semibold', itemNameColor(item))} title={item.name}>{localizeMarketItemName(item)}</span>
+          {base && <span className="truncate text-[11px] text-muted-foreground" title={base}>{localizeBaseName(base)}</span>}
           {item.is_ethereal && <span className="shrink-0 text-[10px] text-info">无形</span>}
           {item.socket_count > 0 && (
             <span className="shrink-0 text-[10px] text-muted-foreground">{`${item.socket_count}os`}</span>

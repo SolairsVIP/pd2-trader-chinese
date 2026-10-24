@@ -12,6 +12,8 @@ import {
   useMarketPrices,
 } from '@/pages/chat/hooks/useListingMarketPrices';
 import { itemNameOptions, type ItemNameOption } from '../lib/catalog';
+import { localizeItemName } from '@/lib/localize-item-name';
+import { localizeQuality } from '@/lib/localize-pd2-text';
 import { Autocomplete, ClearButton } from './controls';
 import { formatHrPrice } from './ResultsList';
 
@@ -56,12 +58,12 @@ export function ItemNameSearch({
   hardcore: boolean;
   inputRef?: React.Ref<HTMLInputElement>;
 }) {
-  const [text, setText] = useState(value ?? '');
+  const [text, setText] = useState(localizeItemName(value));
   // A new value from outside (preset, payload, Clear) replaces the typed text
   const [shownValue, setShownValue] = useState(value);
   if (shownValue !== value) {
     setShownValue(value);
-    setText(value ?? '');
+    setText(localizeItemName(value));
   }
   const options = useMemo(() => itemNameOptions(text, NAME_SUGGESTIONS), [text]);
 
@@ -102,7 +104,7 @@ export function ItemNameSearch({
         options={options}
         optionKey={optionKey}
         onPick={(o) => {
-          setText(o.name);
+          setText(localizeItemName(o.name, o.quality));
           onChange(o.name);
         }}
         className={cn('h-7 pr-6 pl-7', value && 'text-foreground')}
@@ -118,14 +120,16 @@ export function ItemNameSearch({
                     o.quality === 'Runeword' ? 'text-q-rune' : qualityColor(o.quality),
                   )}
                 >
-                  {o.name}
+                  {localizeItemName(o.name, o.quality)}
                 </span>
                 <span className="shrink-0 font-semibold tabular-nums">
                   {price ? formatHrPrice(price.hr) : price === undefined && priced ? '' : '—'}
                 </span>
               </span>
               <span className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                <span className="min-w-0 flex-1 truncate">{o.slot ? `${o.quality} · ${o.slot}` : o.quality}</span>
+                <span className="min-w-0 flex-1 truncate" title={o.name}>
+                  {`${o.name} · ${o.quality === 'Base' ? '底材' : localizeQuality(o.quality)}${o.slot ? ` · ${o.slot}` : ''}`}
+                </span>
                 <span className="shrink-0 tabular-nums">
                   <PriceDetail price={price}
                     priced={priced} />

@@ -1,4 +1,5 @@
 import React from 'react';
+import { localizeMarketItemName } from '@/lib/localize-item-name';
 import { motion } from 'framer-motion';
 import { ChevronsDownUp, ChevronsUpDown, Loader2 } from 'lucide-react';
 import { Item as GameStashItem } from '@/common/types/pd2-website/GameStashResponse';
@@ -113,7 +114,7 @@ const ItemSelectionList: React.FC<ItemSelectionListProps> = ({
                     </span>
                     <div className={cn('truncate', qualityColor(stashItem.quality.name))}
                       style={{ fontFamily: 'DiabloFont' }}>
-                      {stashItem.name}
+                      <span title={stashItem.name}>{localizeMarketItemName(stashItem)}</span>
                     </div>
                   </div>
                   <MarketListingBadge

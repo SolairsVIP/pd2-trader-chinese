@@ -4,6 +4,7 @@ import type { ItemDetail, Modifier } from '@/common/types/pd2-website/GetMarketL
 import { qualityColor } from '@/pages/price-check/lib/qualityColor';
 import { ModMenu } from './ModMenu';
 import { localizePd2Text } from '@/lib/localize-pd2-text';
+import { localizeBaseName, localizeMarketItemName } from '@/lib/localize-item-name';
 
 /** Name colour: rune colour for runes/runewords, else the quality colour. */
 export const itemNameColor = (item: Pick<ItemDetail, 'is_runeword' | 'name' | 'quality'>) =>
@@ -63,9 +64,9 @@ export function ItemTooltip({
         <>
           <div className={cn('text-sm font-semibold', itemNameColor(item))}
             style={{ fontFamily: 'DiabloFont' }}>
-            {item.name}
+            <span title={item.name}>{localizeMarketItemName(item)}</span>
           </div>
-          {showBase && <div className={cn(itemNameColor(item), 'opacity-90')}>{item.base.name}</div>}
+          {showBase && <div className={cn(itemNameColor(item), 'opacity-90')} title={item.base.name}>{localizeBaseName(item.base.name)}</div>}
         </>
       )}
       {!item.is_identified && <div className="text-destructive">未鉴定</div>}
@@ -115,7 +116,7 @@ export function ItemTooltip({
         <div className="mt-2 space-y-1.5 border-t border-border/60 pt-2 text-left">
           {socketed.map((s, i) => (
             <div key={`${s.name}-${i}`}>
-              <div className={cn('font-medium', itemNameColor(s))}>{s.name}</div>
+              <div className={cn('font-medium', itemNameColor(s))} title={s.name}>{localizeMarketItemName(s)}</div>
               {displayMods(s).map((mod, j) => (
                 <ModMenu
                   key={`${mod.name}-${j}`}

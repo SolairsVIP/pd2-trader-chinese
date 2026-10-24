@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { localizeItemName } from '@/lib/localize-item-name';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
@@ -872,7 +873,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                     className={itemCard({ className: 'flex items-center justify-between gap-3' })}
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="truncate font-medium">{itemName}</div>
+                      <div className="truncate font-medium" title={itemName}>{localizeItemName(pendingListing.item.isRuneword ? pendingListing.item.runeword ?? itemName : itemName, pendingListing.item.isRuneword ? 'Runeword' : pendingListing.item.quality)}</div>
                       {(note || price) && (
                         <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
                           {price && (

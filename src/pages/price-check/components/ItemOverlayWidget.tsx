@@ -60,6 +60,7 @@ import { useOverlay } from '@/overlay';
 import { getSeasonDateConfig } from '@/lib/seasons';
 import { basisLabel, DEFAULT_PRICE_WINDOW_HOURS, priceWindowNote, windowLabel } from '@/lib/price-window';
 import { localizePd2Text, localizeQuality } from '@/lib/localize-pd2-text';
+import { localizeBaseName, localizeItemName } from '@/lib/localize-item-name';
 import { Label } from '@/components/ui/label';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { itemTypes } from '@/common/item-types';
@@ -791,11 +792,11 @@ export default function ItemOverlayWidget({ item, statMapper, onClose }: Props) 
   const getSearchModeDisplay = useCallback(() => {
     switch (searchMode) {
       case 0:
-        return `底材：${item.type}`;
+        return `底材：${localizeBaseName(item.type)}`;
       case 1:
-        return matchedItemType ? `类型：${matchedItemType.typeLabel}` : `底材：${item.type}`;
+        return matchedItemType ? `类型：${matchedItemType.typeLabel}` : `底材：${localizeBaseName(item.type)}`;
       default:
-        return `底材：${item.type}`;
+        return `底材：${localizeBaseName(item.type)}`;
     }
   }, [searchMode, item.type, matchedItemType]);
 
@@ -1161,7 +1162,7 @@ export default function ItemOverlayWidget({ item, statMapper, onClose }: Props) 
                 )}
                 style={{ fontFamily: 'DiabloFont' }}
               >
-                <span className="min-w-0 truncate">{displayTitle}</span>
+                <span className="min-w-0 truncate" title={displayTitle}>{localizeItemName(displayTitle, item.isRuneword ? 'Runeword' : item.quality)}</span>
                 {item.isRuneword && <Badge className="font-sans text-[10px] uppercase tracking-wider">符文之语</Badge>}
               </h1>
               {item.type && (
@@ -1177,7 +1178,7 @@ export default function ItemOverlayWidget({ item, statMapper, onClose }: Props) 
                   ) : (
                     <div className="px-1.5 text-muted-foreground"
                       style={{ fontFamily: 'DiabloFont' }}>
-                      底材：{item.type}
+                      底材：{localizeBaseName(item.type)}
                     </div>
                   )}
                   {shouldUseToggle && (
@@ -1262,7 +1263,7 @@ export default function ItemOverlayWidget({ item, statMapper, onClose }: Props) 
                     <HoverPopover
                       content={
                         <div className="w-[400px] max-w-[calc(100vw-16px)] space-y-3 rounded-lg border border-border bg-popover p-3 text-sm text-popover-foreground shadow-panel">
-                          <div className="truncate font-semibold">{displayTitle}</div>
+                          <div className="truncate font-semibold" title={displayTitle}>{localizeItemName(displayTitle, item.isRuneword ? 'Runeword' : item.quality)}</div>
                           <div className="grid grid-cols-2 gap-1.5">
                             <PopoverTile label={priceBasis}
                               emphasis>
@@ -1890,7 +1891,7 @@ function CorruptionRow({
       content={
         <div className="min-w-[220px] rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-panel">
           <div className="mb-1 flex items-center justify-between gap-3 text-[10px] text-muted-foreground">
-            <span className="truncate">{itemTitle}</span>
+            <span className="truncate" title={itemTitle}>{localizeItemName(itemTitle)}</span>
             <WebLink onClick={onOpenWeb}
               inPopover>
               打开

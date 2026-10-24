@@ -6,6 +6,7 @@ import { Bell, Clock, ExternalLink, Gamepad2, Heart, MessageSquare, Shield, Sigm
 import { isUserOnlineIngame } from '@/lib/user-online-status';
 import { cn } from '@/lib/utils';
 import { localizePd2Text, localizeQuality } from '@/lib/localize-pd2-text';
+import { localizeBaseName, localizeMarketItemName } from '@/lib/localize-item-name';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -296,7 +297,7 @@ const ResultCard = React.memo(function ResultCard({
   const quality = localizeQuality(item.is_runeword ? 'Runeword' : (item.quality?.name ?? ''));
   const handType = item.damage?.two_handed ? 'Two-Hand' : item.damage?.one_handed ? 'One-Hand' : null;
   const subtitle = [
-    [quality, item.base?.name && item.base.name !== item.name ? item.base.name : null].filter(Boolean).join(' '),
+    [quality, item.base?.name && item.base.name !== item.name ? localizeBaseName(item.base.name) : null].filter(Boolean).join(' '),
     [handType, item.base?.type].filter(Boolean).join(' '),
   ]
     .filter(Boolean)
@@ -351,7 +352,7 @@ const ResultCard = React.memo(function ResultCard({
             className={cn('truncate text-sm font-bold uppercase tracking-[0.08em]', itemNameColor(item))}
             title={item.name}
           >
-            {item.name}
+            {localizeMarketItemName(item)}
           </h3>
           {subtitle && <div className="truncate text-xs text-muted-foreground">{subtitle}</div>}
           <div className="mt-1.5 flex flex-wrap gap-1">
@@ -778,7 +779,7 @@ function SocketSection({
                 <SocketIcon listing={groupListings[g]}
                   className="size-7" />
                 <span className={cn('truncate text-[12px] font-semibold', groupNameColor(group))}>
-                  {group.items.length > 1 ? `${group.items.length} × ${group.name}` : group.name}
+                  {group.items.length > 1 ? `${group.items.length} × ${localizeMarketItemName(group.items[0])}` : localizeMarketItemName(group.items[0])}
                 </span>
                 {values[g] !== null && (
                   <span className="ml-auto shrink-0 tabular-nums text-muted-foreground">{`~${formatStat(values[g] ?? 0)} HR`}</span>

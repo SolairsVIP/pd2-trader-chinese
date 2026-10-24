@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { localizeMarketItemName } from '@/lib/localize-item-name';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -421,7 +422,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
 
       const duration = performance.now() - startTime;
       trackMeasurement('listed_items_delete', { duration_ms: duration }, { outcome: 'success' });
-      showToast(`已将「${listing.item.name}」从市场下架。`);
+      showToast(`已将「${localizeMarketItemName(listing.item)}」从市场下架。`);
     } catch (err) {
       const duration = performance.now() - startTime;
       trackMeasurement('listed_items_delete', { duration_ms: duration }, { outcome: 'error' });
@@ -762,7 +763,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
                         className={cn('truncate', qualityColor(listing.item.quality.name))}
                         style={{ fontFamily: 'DiabloFont' }}
                       >
-                        {listing.item.name}
+                        <span title={listing.item.name}>{localizeMarketItemName(listing.item)}</span>
                       </div>
                       <div className="mt-1 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
                         {listing.hr_price ? (

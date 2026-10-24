@@ -1,4 +1,5 @@
 import React from 'react';
+import { localizeMarketItemName } from '@/lib/localize-item-name';
 import { motion } from 'framer-motion';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Item as GameStashItem } from '@/common/types/pd2-website/GameStashResponse';
@@ -79,7 +80,7 @@ const MultipleMatchSelector: React.FC<MultipleMatchSelectorProps> = ({
               <div className="flex items-center justify-between gap-2">
                 <div className={cn('truncate', qualityColor(stashItem.quality.name))}
                   style={{ fontFamily: 'DiabloFont' }}>
-                  {stashItem.name}
+                  <span title={stashItem.name}>{localizeMarketItemName(stashItem)}</span>
                 </div>
                 <Button
                   type="button"

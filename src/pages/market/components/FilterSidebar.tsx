@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { localizeBaseName } from '@/lib/localize-item-name';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, ChevronDown, RotateCcw, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -188,7 +189,7 @@ export function FilterSidebar({
             value={f.baseCode}
             disabled={!f.typeCode}
             anyLabel={f.typeCode ? '不限' : '请先选择类型'}
-            options={bases.map((b) => ({ value: b.code, label: b.label }))}
+            options={bases.map((b) => ({ value: b.code, label: localizeBaseName(b.label) === b.label ? b.label : `${localizeBaseName(b.label)} · ${b.label}` }))}
             onChange={(baseCode) => set({ baseCode })}
           />
           <RarityField value={f.rarity}

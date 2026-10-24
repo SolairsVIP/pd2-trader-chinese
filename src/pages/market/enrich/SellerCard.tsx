@@ -1,4 +1,5 @@
 import React from 'react';
+import { localizeMarketItemName } from '@/lib/localize-item-name';
 import { ChevronRight, Store, User as UserIcon } from 'lucide-react';
 import type { MarketListingEntry } from '@/common/types/pd2-website/GetMarketListingsResponse';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -69,7 +70,7 @@ export function SellerCard({
                 className="size-7"
                 artClassName="max-h-6 max-w-6" />
               <span className={cn('min-w-0 flex-1 truncate text-xs font-semibold', nameColor(other))}>
-                {other.item.name}
+                <span title={other.item.name}>{localizeMarketItemName(other.item)}</span>
               </span>
               <DealBadge deal={deals.get(other._id)}
                 compact />

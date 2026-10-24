@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { localizeMarketItemName } from '@/lib/localize-item-name';
 import { ChevronDown, Copy, HandCoins } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -72,7 +73,7 @@ export function OfferButton({
       if (!(await ensureFresh())) return;
       const created = await createOffer(listing._id, { price: price.trim(), hrPrice: hr && hr > 0 ? hr : undefined });
       if (created === null) return; // 401: the sign-in flow takes over
-      showToast({ title: '报价已发送', description: `为「${listing.item.name}」报价 ${price.trim()}`, variant: 'success' });
+      showToast({ title: '报价已发送', description: `为「${localizeMarketItemName(listing.item)}」报价 ${price.trim()}`, variant: 'success' });
       setOpen(false);
       setPrice('');
       setHr(undefined);
@@ -104,7 +105,7 @@ export function OfferButton({
             void submit();
           }}
         >
-          <div className="text-xs font-semibold">{`为「${listing.item.name}」报价`}</div>
+          <div className="text-xs font-semibold">{`为「${localizeMarketItemName(listing.item)}」报价`}</div>
           {listing.price && (
             <div className="truncate text-[11px] text-muted-foreground">{`卖家标价：${listing.price}`}</div>
           )}

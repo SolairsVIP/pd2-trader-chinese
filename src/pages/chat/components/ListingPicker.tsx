@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
+import { localizeBaseName, localizeMarketItemName } from '@/lib/localize-item-name';
 import { AlertTriangle, Loader2, PackagePlus, RotateCw, Search } from 'lucide-react';
 import type { MarketListingEntry } from '@/common/types/pd2-website/GetMarketListingsResponse';
 import { Button } from '@/components/ui/button';
@@ -120,10 +121,10 @@ export function ListingPicker({
               <ListingThumb listing={listing} />
               <span className="min-w-0 flex-1">
                 <span className={cn('block truncate text-sm font-semibold', nameColor(listing))}>
-                  {listing.item.name}
+                  <span title={listing.item.name}>{localizeMarketItemName(listing.item)}</span>
                 </span>
                 {listing.item.base?.name && listing.item.base.name !== listing.item.name && (
-                  <span className="block truncate text-[11px] text-muted-foreground">{listing.item.base.name}</span>
+                  <span className="block truncate text-[11px] text-muted-foreground" title={listing.item.base.name}>{localizeBaseName(listing.item.base.name)}</span>
                 )}
               </span>
               <span className="max-w-24 shrink-0 truncate text-xs font-medium tabular-nums text-foreground/85">

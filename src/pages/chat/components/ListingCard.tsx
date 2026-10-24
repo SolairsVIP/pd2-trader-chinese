@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { localizeBaseName, localizeMarketItemName } from '@/lib/localize-item-name';
 import moment from 'moment';
 import { Package, User as UserIcon } from 'lucide-react';
 import { openUrl } from '@/lib/browser-opener';
@@ -121,9 +122,9 @@ export function ListingDetails({
   const delta = market && listing.hr_price > 0 ? marketDelta(listing.hr_price, market.hr) : null;
   return (
     <div className="w-80 max-w-[calc(100vw-16px)] rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-panel">
-      <div className={cn('truncate text-sm font-semibold', nameColor(listing))}>{item.name}</div>
+      <div className={cn('truncate text-sm font-semibold', nameColor(listing))} title={item.name}>{localizeMarketItemName(item)}</div>
       {item.base?.name && item.base.name !== item.name && (
-        <div className="truncate text-xs text-muted-foreground">{item.base.name}</div>
+        <div className="truncate text-xs text-muted-foreground" title={item.base.name}>{localizeBaseName(item.base.name)}</div>
       )}
       <ItemStatsDisplay
         // Listing ItemDetail is a superset-compatible view of the stash item for display purposes.
@@ -204,7 +205,7 @@ export function ListingCard({ listing, listed, url }: { listing: MarketListingEn
           <span className={cn(listingIconBoxClass, !listed && 'opacity-50 grayscale')}>
             <ItemArt listing={listing} />
           </span>
-          <span className={cn('truncate font-semibold', nameColor(listing))}>{listing.item.name}</span>
+          <span className={cn('truncate font-semibold', nameColor(listing))} title={listing.item.name}>{localizeMarketItemName(listing.item)}</span>
           {!listed && (
             <span className="shrink-0 rounded-sm bg-muted px-1 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
               已下架

@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { localizeItemName } from '@/lib/localize-item-name';
 import { Area, AreaChart, CartesianGrid, ReferenceLine, Tooltip as ChartTooltip, XAxis, YAxis } from 'recharts';
 import { AnimatePresence, motion } from 'framer-motion';
 import moment from 'moment';
@@ -563,7 +564,7 @@ function SessionRow({ session: s, best }: { session: SessionSummary; best: boole
               className="flex justify-between gap-3 tabular-nums">
               <span>
                 {g.qtyDelta > 0 ? '+' : ''}
-                {g.qtyDelta}× {g.name}
+                {g.qtyDelta}× {localizeItemName(g.name)}
               </span>
               <span className={deltaClass(g.valueDelta)}>({formatSignedHr(g.valueDelta)})</span>
             </p>
@@ -776,7 +777,7 @@ function SnapshotsSection({ token, owner, points }: { token: string; owner: NetW
                           variants={listItem}
                           className="grid grid-cols-[1fr_6rem_4rem_5.5rem] gap-2 px-2.5 py-1.5 transition-colors duration-(--dur-fast) hover:bg-muted/40"
                         >
-                          <span className={cn('truncate', CATEGORY_NAME_CLASS[line.category])}>{line.name}</span>
+                          <span className={cn('truncate', CATEGORY_NAME_CLASS[line.category])} title={line.name}>{localizeItemName(line.name, line.category === 'uniques' ? 'Unique' : line.category === 'sets' ? 'Set' : undefined)}</span>
                           <span className="text-right tabular-nums text-muted-foreground">
                             {line.qtyFrom} → {line.qtyTo}
                           </span>

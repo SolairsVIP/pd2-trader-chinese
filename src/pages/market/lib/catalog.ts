@@ -2,6 +2,7 @@ import { runeWords, setItems, uniqueItems } from '@/assets/items';
 import { modifierByName } from '@/assets/modifiers';
 import { SITE_BASE_NAMES, SITE_ITEM_TYPES } from './catalog.data';
 import { statLabel } from './stats';
+import { itemNameSearchLabels } from '@/lib/localize-item-name';
 import type { CharClass, CorruptionOption, Rarity } from './types';
 
 export interface CatalogOption {
@@ -308,19 +309,26 @@ const ITEM_NAMES: ItemNameOption[] = (() => {
   return out;
 })();
 
+const SEARCHABLE_NAMES = ITEM_NAMES.map((option) => ({
+  option,
+  labels: itemNameSearchLabels(option.name, option.quality).map((label) => label.toLowerCase()),
+}));
+
 /**
- * Item names matching `query` (case-insensitive): prefix matches, then word-start matches, then substring
+ * Item names matching English/Chinese `query`: prefix matches, then word-start matches, then substring
  * matches; alphabetical within each.
  */
 export function itemNameOptions(query: string, limit = 30): ItemNameOption[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
   const ranked: { option: ItemNameOption; rank: number }[] = [];
-  for (const option of ITEM_NAMES) {
-    const name = option.name.toLowerCase();
-    const at = name.indexOf(q);
-    if (at < 0) continue;
-    ranked.push({ option, rank: at === 0 ? 0 : /[\s'-]/.test(name[at - 1]) ? 1 : 2 });
+  for (const { option, labels } of SEARCHABLE_NAMES) {
+    let rank = Infinity;
+    for (const label of labels) {
+      const at = label.indexOf(q);
+      if (at >= 0) rank = Math.min(rank, at === 0 ? 0 : /[\s'-]/.test(label[at - 1]) ? 1 : 2);
+    }
+    if (rank !== Infinity) ranked.push({ option, rank });
   }
   return ranked
     .sort((a, b) => a.rank - b.rank || a.option.name.localeCompare(b.option.name))
