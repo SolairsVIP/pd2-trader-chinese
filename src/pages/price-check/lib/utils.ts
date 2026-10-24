@@ -81,7 +81,7 @@ export function getStatKey(stat: Stat): string {
     stat.chance === undefined ? '' : `chance:${stat.chance}`,
     stat.value === undefined ? '' : `value:${stat.value}`,
     stat.range ? `range:${stat.range.min ?? ''}-${stat.range.max ?? ''}` : '',
-    `name:${stat.name.trim().toLowerCase()}`,
+    `name:${typeof stat.name === 'string' ? stat.name.trim().toLowerCase() : ''}`,
   ]
     .filter(Boolean)
     .join(':');

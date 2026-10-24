@@ -12,6 +12,7 @@ export interface Stat {
   corrupted?: boolean; // whether this stat is corrupted
   chance?: number;
   skill?: string; // skill name for skill stats
+  charges?: string; // Some game copies export this separately and omit name/stat_id.
 }
 
 export interface Socketed {

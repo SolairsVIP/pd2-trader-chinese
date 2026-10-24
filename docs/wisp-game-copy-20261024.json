@@ -1,0 +1,57 @@
+{
+  "iLevel": 89,
+  "location": "Equip",
+  "name": "Wisp",
+  "quality": "Unique",
+  "stats": [
+    {
+      "name": "闪电吸收",
+      "range": {
+        "max": 6,
+        "min": 4
+      },
+      "stat_id": 144,
+      "value": 5
+    },
+    {
+      "name": "所有技能",
+      "stat_id": 127,
+      "value": 1
+    },
+    {
+      "name": "寻获魔法物品几率提高",
+      "range": {
+        "max": 15,
+        "min": 10
+      },
+      "stat_id": 80,
+      "value": 13
+    },
+    {
+      "corrupted": 1,
+      "name": "力量",
+      "value": 7
+    },
+    {
+      "charges": "(13\/13 聚气)",
+      "level": 2,
+      "skill": "狼獾之心 (Heart of Wolverine)"
+    },
+    {
+      "charges": "(11\/11 聚气)",
+      "level": 2,
+      "skill": "棘灵 (Spirit of Barbs)"
+    },
+    {
+      "name": "ÿc1已腐化",
+      "stat_id": 360,
+      "value": 68
+    },
+    {
+      "name": "腐化",
+      "stat_id": 361,
+      "value": 1
+    }
+  ],
+  "type": "戒指"
+}

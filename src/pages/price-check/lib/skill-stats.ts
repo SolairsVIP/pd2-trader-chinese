@@ -114,8 +114,30 @@ const TRIGGER_NAMES: Record<string, number> = {
   'on pierce': 205,
 };
 
+function chargeCounts(text: string): { remaining: number; capacity: number } | undefined {
+  const match = /^\(\s*(\d+)\s*\/\s*(\d+)\s+(?:Charges|聚气)\s*\)$/i.exec(text.trim());
+  if (!match) return;
+  const remaining = Number(match[1]),
+    capacity = Number(match[2]);
+  if (!Number.isSafeInteger(remaining) || !Number.isSafeInteger(capacity) || capacity <= 0 || remaining > capacity)
+    return;
+  return { remaining, capacity };
+}
+
 /** Recover only explicit numeric labels, never guess a skill from approximate text. */
 function withSkillLabelData(stat: Stat): Stat {
+  // The game can omit name/stat_id on a charged skill and supply a standalone
+  // charges string instead. Normalize this before any label parsing or display.
+  if (typeof stat.name !== 'string') stat = { ...stat, name: '' };
+  if (stat.charges !== undefined && (stat.stat_id === undefined || stat.stat_id === 204)) {
+    const counts = typeof stat.charges === 'string' ? chargeCounts(stat.charges) : undefined;
+    const hasSkill = typeof stat.skill === 'string' && stat.skill.trim().length > 0;
+    const name =
+      counts && hasSkill && levelNumber(stat.level)
+        ? `Level ${stat.level} ${stat.skill} (${counts.remaining}/${counts.capacity} Charges)`
+        : stat.name || '聚气技能（数据不完整）';
+    stat = { ...stat, name, stat_id: stat.stat_id ?? 204 };
+  }
   const label = stat.name.replace(/ÿc[0-9a-z]/gi, '').trim();
   let inferred: Partial<Stat> | undefined;
   const trigger =
@@ -265,14 +287,24 @@ export function getSkillFilter(stat: Stat): SkillFilter | undefined {
     // Verified against a public PD2 listing: [level, skill, remaining, capacity].
     // Pin the skill and its level; the optional range applies to remaining uses.
     if (!levelNumber(level)) return;
-    const charges = /\((\d+)\s*\/\s*(\d+)\s+Charges\)/i.exec(stat.name);
-    if (charges && (!levelNumber(Number(charges[2])) || Number(charges[1]) > Number(charges[2]))) return;
+    const labelCharges = /\(\d+\s*\/\s*\d+\s+Charges\)/i.exec(stat.name)?.[0];
+    const charges =
+      stat.charges !== undefined
+        ? typeof stat.charges === 'string'
+          ? chargeCounts(stat.charges)
+          : undefined
+        : labelCharges
+          ? chargeCounts(labelCharges)
+          : undefined;
+    // An explicitly supplied but invalid charge count must not become a valid
+    // filter by silently falling back to the label or the generic value field.
+    if ((stat.charges !== undefined || labelCharges !== undefined) && !charges) return;
     return {
       kind: 'charges',
       property: 'item_charged_skill',
       params: [level, id],
       valueIndex: 2,
-      value: charges ? Number(charges[1]) : undefined,
+      value: charges?.remaining,
     };
   }
 }
@@ -294,7 +326,7 @@ export function skillFilterUnavailableReason(stat: Stat): string | undefined {
 export function normalizeSkillStat(stat: Stat): Stat {
   const data = withSkillLabelData(stat);
   const filter = getSkillFilter(data);
-  if (!filter) return stat;
+  if (!filter) return data;
   const directIds: Record<string, number> = {
     item_singleskill: 107,
     item_nonclassskill: 97,

@@ -168,6 +168,7 @@ function normalizeStat(stat: Record<string, any>): Record<string, any> {
     typeof translated.value === 'number' &&
     translated.level == null &&
     translated.chance == null &&
+    translated.charges === undefined &&
     (translated.stat_id == null || [83, 97, 107, 188].includes(translated.stat_id))
   ) {
     const oskill = /oskill|非本职业/i.test(stat.name ?? '');

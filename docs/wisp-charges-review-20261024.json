@@ -1,0 +1,305 @@
+{
+  "scope": "Local reproduction and query generation with the application ESNext target; no game interaction, network requests or test suite run.",
+  "source": "Original UTF-8 CF_TEXT Wisp game copy",
+  "previousVersionError": "Cannot read properties of undefined (reading 'replace')",
+  "converted": {
+    "iLevel": 89,
+    "location": "Equip",
+    "name": "Wisp",
+    "quality": "Unique",
+    "stats": [
+      {
+        "name": "Lightning Absorb",
+        "range": {
+          "max": 6,
+          "min": 4
+        },
+        "stat_id": 144,
+        "value": 5
+      },
+      {
+        "name": "to All Skills",
+        "stat_id": 127,
+        "value": 1
+      },
+      {
+        "name": "Better Chance of Getting Magic Items",
+        "range": {
+          "max": 15,
+          "min": 10
+        },
+        "stat_id": 80,
+        "value": 13
+      },
+      {
+        "corrupted": 1,
+        "name": "to Strength",
+        "value": 7,
+        "stat_id": 0
+      },
+      {
+        "charges": "(13/13 聚气)",
+        "level": 2,
+        "skill": "Heart of Wolverine",
+        "name": "Level 2 Heart of Wolverine (13/13 Charges)",
+        "stat_id": 204,
+        "value": 13
+      },
+      {
+        "charges": "(11/11 聚气)",
+        "level": 2,
+        "skill": "Spirit of Barbs",
+        "name": "Level 2 Spirit of Barbs (11/11 Charges)",
+        "stat_id": 204,
+        "value": 11
+      },
+      {
+        "name": "Corrupted",
+        "stat_id": 360,
+        "value": 68
+      },
+      {
+        "name": "Corrupt",
+        "stat_id": 361,
+        "value": 1
+      }
+    ],
+    "type": "Ring"
+  },
+  "chargeFilters": [
+    {
+      "name": "Level 2 Heart of Wolverine (13/13 Charges)",
+      "key": "skill:item_charged_skill{2,236}",
+      "filter": {
+        "kind": "charges",
+        "property": "item_charged_skill",
+        "params": [
+          2,
+          236
+        ],
+        "valueIndex": 2,
+        "value": 13
+      }
+    },
+    {
+      "name": "Level 2 Spirit of Barbs (11/11 Charges)",
+      "key": "skill:item_charged_skill{2,246}",
+      "filter": {
+        "kind": "charges",
+        "property": "item_charged_skill",
+        "params": [
+          2,
+          246
+        ],
+        "valueIndex": 2,
+        "value": 11
+      }
+    }
+  ],
+  "websiteProperties": [
+    [
+      "properties[item_charged_skill{2,236}][min]",
+      "13"
+    ],
+    [
+      "properties[item_charged_skill{2,246}][min]",
+      "11"
+    ]
+  ],
+  "apiModifiers": {
+    "$all": [
+      {
+        "$elemMatch": {
+          "name": "item_charged_skill",
+          "values.0": 2,
+          "values.1": 236,
+          "values.2": {
+            "$gte": 13
+          }
+        }
+      },
+      {
+        "$elemMatch": {
+          "name": "item_charged_skill",
+          "values.0": 2,
+          "values.1": 246,
+          "values.2": {
+            "$gte": 11
+          }
+        }
+      }
+    ]
+  },
+  "rowCountPreserved": true,
+  "ordinaryValuesPreserved": true,
+  "englishInputUnchanged": true,
+  "additionalShapes": [
+    {
+      "input": {
+        "charges": "(13/13 Charges)",
+        "level": 2,
+        "skill": "Heart of Wolverine"
+      },
+      "normalized": {
+        "charges": "(13/13 Charges)",
+        "level": 2,
+        "skill": "Heart of Wolverine",
+        "name": "Level 2 Heart of Wolverine (13/13 Charges)",
+        "stat_id": 204,
+        "value": 13
+      },
+      "key": "skill:item_charged_skill{2,236}",
+      "filter": {
+        "kind": "charges",
+        "property": "item_charged_skill",
+        "params": [
+          2,
+          236
+        ],
+        "valueIndex": 2,
+        "value": 13
+      },
+      "reason": null
+    },
+    {
+      "input": {
+        "charges": "(11/11 Charges)",
+        "level": 2,
+        "skill": "Spirit of Barbs"
+      },
+      "normalized": {
+        "charges": "(11/11 Charges)",
+        "level": 2,
+        "skill": "Spirit of Barbs",
+        "name": "Level 2 Spirit of Barbs (11/11 Charges)",
+        "stat_id": 204,
+        "value": 11
+      },
+      "key": "skill:item_charged_skill{2,246}",
+      "filter": {
+        "kind": "charges",
+        "property": "item_charged_skill",
+        "params": [
+          2,
+          246
+        ],
+        "valueIndex": 2,
+        "value": 11
+      },
+      "reason": null
+    },
+    {
+      "input": {
+        "charges": "(0/13 Charges)",
+        "level": 2,
+        "skill": "Heart of Wolverine"
+      },
+      "normalized": {
+        "charges": "(0/13 Charges)",
+        "level": 2,
+        "skill": "Heart of Wolverine",
+        "name": "Level 2 Heart of Wolverine (0/13 Charges)",
+        "stat_id": 204,
+        "value": 0
+      },
+      "key": "skill:item_charged_skill{2,236}",
+      "filter": {
+        "kind": "charges",
+        "property": "item_charged_skill",
+        "params": [
+          2,
+          236
+        ],
+        "valueIndex": 2,
+        "value": 0
+      },
+      "reason": null
+    },
+    {
+      "input": {
+        "charges": "(14/13 Charges)",
+        "level": 2,
+        "skill": "Heart of Wolverine"
+      },
+      "normalized": {
+        "charges": "(14/13 Charges)",
+        "level": 2,
+        "skill": "Heart of Wolverine",
+        "name": "聚气技能（数据不完整）",
+        "stat_id": 204
+      },
+      "key": "id:204:skill:heart of wolverine:level:2:name:聚气技能（数据不完整）",
+      "filter": null,
+      "reason": "聚气技能缺少可确认的技能或等级，暂不能精确筛选；可使用其他属性查价。"
+    },
+    {
+      "input": {
+        "charges": "(1/13 Charges)",
+        "level": 2,
+        "skill": "Unknown Skill"
+      },
+      "normalized": {
+        "charges": "(1/13 Charges)",
+        "level": 2,
+        "skill": "Unknown Skill",
+        "name": "Level 2 Unknown Skill (1/13 Charges)",
+        "stat_id": 204
+      },
+      "key": "id:204:skill:unknown skill:level:2:name:level 2 unknown skill (1/13 charges)",
+      "filter": null,
+      "reason": "聚气技能缺少可确认的技能或等级，暂不能精确筛选；可使用其他属性查价。"
+    },
+    {
+      "input": {
+        "charges": "(1/13 Charges)",
+        "skill": "Heart of Wolverine"
+      },
+      "normalized": {
+        "charges": "(1/13 Charges)",
+        "skill": "Heart of Wolverine",
+        "name": "聚气技能（数据不完整）",
+        "stat_id": 204
+      },
+      "key": "id:204:skill:heart of wolverine:name:聚气技能（数据不完整）",
+      "filter": null,
+      "reason": "聚气技能缺少可确认的技能或等级，暂不能精确筛选；可使用其他属性查价。"
+    },
+    {
+      "input": {},
+      "normalized": {
+        "name": ""
+      },
+      "key": "id:undefined:name:",
+      "filter": null,
+      "reason": null
+    },
+    {
+      "input": {
+        "stat_id": 204,
+        "name": "Level 20 Teleport (3/27 Charges)",
+        "skill": "Teleport",
+        "level": 20,
+        "value": 999
+      },
+      "normalized": {
+        "stat_id": 204,
+        "name": "Level 20 Teleport (3/27 Charges)",
+        "skill": "Teleport",
+        "level": 20,
+        "value": 3
+      },
+      "key": "skill:item_charged_skill{20,54}",
+      "filter": {
+        "kind": "charges",
+        "property": "item_charged_skill",
+        "params": [
+          20,
+          54
+        ],
+        "valueIndex": 2,
+        "value": 3
+      },
+      "reason": null
+    }
+  ]
+}
