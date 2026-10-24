@@ -36,6 +36,7 @@ export function localizeItemName(name: string | null | undefined, quality?: stri
 }
 
 export function localizeBaseName(name: string | null | undefined): string {
+  if (name?.trim().toLowerCase() === 'pelt') return '德鲁伊头饰';
   return localizeItemName(name, 'Base');
 }
 

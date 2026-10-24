@@ -1,0 +1,2724 @@
+{
+  "scope": "Static market skill labels only; does not imply game or API integration coverage.",
+  "displayDictionaryNames": 284,
+  "marketSkillLabels": 543,
+  "untranslatedCount": 0,
+  "untranslated": [],
+  "labels": [
+    {
+      "key": "item_allskills",
+      "english": "+{X} to All Skills",
+      "chinese": "+{X} 所有技能"
+    },
+    {
+      "key": "item_aura{98}",
+      "english": "Level {X} Might Aura When Equipped",
+      "chinese": "等级 {X} 力量 灵气当装备时"
+    },
+    {
+      "key": "item_aura{99}",
+      "english": "Level {X} Prayer Aura When Equipped",
+      "chinese": "等级 {X} 祈祷 灵气当装备时"
+    },
+    {
+      "key": "item_aura{100}",
+      "english": "Level {X} Resist Fire Aura When Equipped",
+      "chinese": "等级 {X} 抵抗火焰 灵气当装备时"
+    },
+    {
+      "key": "item_aura{102}",
+      "english": "Level {X} Holy Fire Aura When Equipped",
+      "chinese": "等级 {X} 圣火 灵气当装备时"
+    },
+    {
+      "key": "item_aura{103}",
+      "english": "Level {X} Thorns Aura When Equipped",
+      "chinese": "等级 {X} 荆棘 灵气当装备时"
+    },
+    {
+      "key": "item_aura{104}",
+      "english": "Level {X} Defiance Aura When Equipped",
+      "chinese": "等级 {X} 反抗 灵气当装备时"
+    },
+    {
+      "key": "item_aura{105}",
+      "english": "Level {X} Resist Cold Aura When Equipped",
+      "chinese": "等级 {X} 抵抗冰冷 灵气当装备时"
+    },
+    {
+      "key": "item_aura{108}",
+      "english": "Level {X} Blessed Aim Aura When Equipped",
+      "chinese": "等级 {X} 祝福瞄准 灵气当装备时"
+    },
+    {
+      "key": "item_aura{109}",
+      "english": "Level {X} Cleansing Aura When Equipped",
+      "chinese": "等级 {X} 净化 灵气当装备时"
+    },
+    {
+      "key": "item_aura{110}",
+      "english": "Level {X} Resist Lightning Aura When Equipped",
+      "chinese": "等级 {X} 抵抗闪电 灵气当装备时"
+    },
+    {
+      "key": "item_aura{111}",
+      "english": "Level {X} Vengeance Aura When Equipped",
+      "chinese": "等级 {X} 复仇 灵气当装备时"
+    },
+    {
+      "key": "item_aura{113}",
+      "english": "Level {X} Concentration Aura When Equipped",
+      "chinese": "等级 {X} 专注 灵气当装备时"
+    },
+    {
+      "key": "item_aura{114}",
+      "english": "Level {X} Holy Freeze Aura When Equipped",
+      "chinese": "等级 {X} 神圣冰冻 灵气当装备时"
+    },
+    {
+      "key": "item_aura{115}",
+      "english": "Level {X} Vigor Aura When Equipped",
+      "chinese": "等级 {X} 活力 灵气当装备时"
+    },
+    {
+      "key": "item_aura{118}",
+      "english": "Level {X} Holy Shock Aura When Equipped",
+      "chinese": "等级 {X} 神圣冲击 灵气当装备时"
+    },
+    {
+      "key": "item_aura{119}",
+      "english": "Level {X} Sanctuary Aura When Equipped",
+      "chinese": "等级 {X} 庇护所 灵气当装备时"
+    },
+    {
+      "key": "item_aura{120}",
+      "english": "Level {X} Meditation Aura When Equipped",
+      "chinese": "等级 {X} 冥思 灵气当装备时"
+    },
+    {
+      "key": "item_aura{122}",
+      "english": "Level {X} Fanaticism Aura When Equipped",
+      "chinese": "等级 {X} 狂热 灵气当装备时"
+    },
+    {
+      "key": "item_aura{123}",
+      "english": "Level {X} Conviction Aura When Equipped",
+      "chinese": "等级 {X} 信念 灵气当装备时"
+    },
+    {
+      "key": "item_aura{124}",
+      "english": "Level {X} Redemption Aura When Equipped",
+      "chinese": "等级 {X} 救赎 灵气当装备时"
+    },
+    {
+      "key": "item_aura{125}",
+      "english": "Level {X} Salvation Aura When Equipped",
+      "chinese": "等级 {X} 救助 灵气当装备时"
+    },
+    {
+      "key": "item_skillonequip",
+      "english": "Level {X} When Equipped",
+      "chinese": "等级 {X} 装备时赋予技能"
+    },
+    {
+      "key": "item_skillonattack",
+      "english": "Chance to cast level {X} skill on attack",
+      "chinese": "攻击时有几率施展等级 {X} 技能"
+    },
+    {
+      "key": "item_skillonkill",
+      "english": "Chance to cast level {X} skill when you Kill an Enemy",
+      "chinese": "击杀敌人时有几率施展等级 {X} 技能"
+    },
+    {
+      "key": "item_skillondeath",
+      "english": "Chance to cast level {X} skill when you Die",
+      "chinese": "死亡时有几率施展等级 {X} 技能"
+    },
+    {
+      "key": "item_skillonhit",
+      "english": "Chance to cast level {X} skill on striking",
+      "chinese": "击中敌人时有几率施展等级 {X} 技能"
+    },
+    {
+      "key": "item_skillonlevelup",
+      "english": "Chance to cast level {X} skill when you Level-Up",
+      "chinese": "升级时有几率施展等级 {X} 技能"
+    },
+    {
+      "key": "item_skilloncast",
+      "english": "Chance to cast level {X} skill on casting",
+      "chinese": "施法时有几率施展等级 {X} 技能"
+    },
+    {
+      "key": "item_skillongethit",
+      "english": "Chance to cast level {X} skill when struck",
+      "chinese": "被击中时有几率施展等级 {X} 技能"
+    },
+    {
+      "key": "item_skillonblock",
+      "english": "Chance to cast level {X} skill on block",
+      "chinese": "格挡时有几率施展等级 {X} 技能"
+    },
+    {
+      "key": "item_skilloncrit",
+      "english": "Chance to cast level {X} skill on critical hit",
+      "chinese": "造成致命一击时有几率施展等级 {X} 技能"
+    },
+    {
+      "key": "item_charged_skill",
+      "english": "Level {X} Charged Skill",
+      "chinese": "等级 {X} 聚气技能"
+    },
+    {
+      "key": "item_skillonpierce",
+      "english": "Chance to cast level {X} skill on pierce",
+      "chinese": "穿透敌人时有几率施展等级 {X} 技能"
+    },
+    {
+      "key": "item_elemskill_cold",
+      "english": "+{X} to Cold Skills",
+      "chinese": "+{X} 冰冷技能等级"
+    },
+    {
+      "key": "item_elemskill_fire",
+      "english": "+{X} to Fire Skills",
+      "chinese": "+{X} 火焰技能等级"
+    },
+    {
+      "key": "item_elemskill_lightning",
+      "english": "+{X} to Lightning Skills",
+      "chinese": "+{X} 闪电技能等级"
+    },
+    {
+      "key": "item_elemskill_poison",
+      "english": "+{X} to Poison Skills",
+      "chinese": "+{X} 毒素技能等级"
+    },
+    {
+      "key": "item_elemskill_magic",
+      "english": "+{X} to Magic Skills",
+      "chinese": "+{X} 魔法技能等级"
+    },
+    {
+      "key": "item_addclassskills{0}",
+      "english": "+{X} to Amazon Skills",
+      "chinese": "+{X} 亚马逊技能等级"
+    },
+    {
+      "key": "item_addclassskills{1}",
+      "english": "+{X} to Sorceress Skills",
+      "chinese": "+{X} 法师技能等级"
+    },
+    {
+      "key": "item_addclassskills{2}",
+      "english": "+{X} to Necromancer Skills",
+      "chinese": "+{X} 死灵法师技能等级"
+    },
+    {
+      "key": "item_addclassskills{3}",
+      "english": "+{X} to Paladin Skills",
+      "chinese": "+{X} 圣骑士技能等级"
+    },
+    {
+      "key": "item_addclassskills{4}",
+      "english": "+{X} to Barbarian Skills",
+      "chinese": "+{X} 野蛮人技能等级"
+    },
+    {
+      "key": "item_addclassskills{5}",
+      "english": "+{X} to Druid Skills",
+      "chinese": "+{X} 德鲁伊技能等级"
+    },
+    {
+      "key": "item_addclassskills{6}",
+      "english": "+{X} to Assassin Skills",
+      "chinese": "+{X} 刺客技能等级"
+    },
+    {
+      "key": "item_addskill_tab{0}",
+      "english": "+{X} to Amazon Bow and Crossbow Skills",
+      "chinese": "+{X} 弓和十字弓技能（亚马逊）"
+    },
+    {
+      "key": "item_addskill_tab{1}",
+      "english": "+{X} to Amazon Passive and Magic Skills",
+      "chinese": "+{X} 被动和魔法技能（亚马逊）"
+    },
+    {
+      "key": "item_addskill_tab{2}",
+      "english": "+{X} to Amazon Javelin and Spear Skills",
+      "chinese": "+{X} 标枪和长矛技能（亚马逊）"
+    },
+    {
+      "key": "item_addskill_tab{18}",
+      "english": "+{X} to Sorceress Fire Skills",
+      "chinese": "+{X} 火焰法术（法师）"
+    },
+    {
+      "key": "item_addskill_tab{24}",
+      "english": "+{X} to Sorceress Lightning Skills",
+      "chinese": "+{X} 闪电法术（法师）"
+    },
+    {
+      "key": "item_addskill_tab{25}",
+      "english": "+{X} to Sorceress Cold Skills",
+      "chinese": "+{X} 冰冷法术（法师）"
+    },
+    {
+      "key": "item_addskill_tab{41}",
+      "english": "+{X} to Necromancer Curses Skills",
+      "chinese": "+{X} 诅咒（死灵法师）"
+    },
+    {
+      "key": "item_addskill_tab{42}",
+      "english": "+{X} to Necromancer Poison and Bone Skills",
+      "chinese": "+{X} 毒素和白骨法术（死灵法师）"
+    },
+    {
+      "key": "item_addskill_tab{48}",
+      "english": "+{X} to Necromancer Summoning Skills",
+      "chinese": "+{X} 召唤法术（死灵法师）"
+    },
+    {
+      "key": "item_addskill_tab{64}",
+      "english": "+{X} to Paladin Combat Skills",
+      "chinese": "+{X} 战斗技能（圣骑士）"
+    },
+    {
+      "key": "item_addskill_tab{65}",
+      "english": "+{X} to Paladin Offensive Auras Skills",
+      "chinese": "+{X} 攻击性灵气（圣骑士）"
+    },
+    {
+      "key": "item_addskill_tab{66}",
+      "english": "+{X} to Paladin Defensive Auras Skills",
+      "chinese": "+{X} 防御性灵气（圣骑士）"
+    },
+    {
+      "key": "item_addskill_tab{82}",
+      "english": "+{X} to Barbarian Combat Skills",
+      "chinese": "+{X} 战斗技能（野蛮人）"
+    },
+    {
+      "key": "item_addskill_tab{88}",
+      "english": "+{X} to Barbarian Masteries Skills",
+      "chinese": "+{X} 战斗专家（野蛮人）"
+    },
+    {
+      "key": "item_addskill_tab{89}",
+      "english": "+{X} to Barbarian Warcries Skills",
+      "chinese": "+{X} 呐喊（野蛮人）"
+    },
+    {
+      "key": "item_addskill_tab{105}",
+      "english": "+{X} to Druid Summoning Skills",
+      "chinese": "+{X} 召唤（德鲁伊）"
+    },
+    {
+      "key": "item_addskill_tab{106}",
+      "english": "+{X} to Druid Shape Shifting Skills",
+      "chinese": "+{X} 外型变形（德鲁伊）"
+    },
+    {
+      "key": "item_addskill_tab{112}",
+      "english": "+{X} to Druid Elemental Skills",
+      "chinese": "+{X} 元素（德鲁伊）"
+    },
+    {
+      "key": "item_addskill_tab{128}",
+      "english": "+{X} to Assassin Traps Skills",
+      "chinese": "+{X} 陷阱（刺客）"
+    },
+    {
+      "key": "item_addskill_tab{129}",
+      "english": "+{X} to Assassin Shadow Disciplines Skills",
+      "chinese": "+{X} 影子训练（刺客）"
+    },
+    {
+      "key": "item_addskill_tab{130}",
+      "english": "+{X} to Assassin Martial Arts Skills",
+      "chinese": "+{X} 武学艺术（刺客）"
+    },
+    {
+      "key": "item_singleskill{6}",
+      "english": "+{X} to Magic Arrow (Amazon)",
+      "chinese": "+{X} 魔法箭（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{7}",
+      "english": "+{X} to Fire Arrow (Amazon)",
+      "chinese": "+{X} 火焰箭（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{8}",
+      "english": "+{X} to Inner Sight (Amazon)",
+      "chinese": "+{X} 内视（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{9}",
+      "english": "+{X} to Critical Strike (Amazon)",
+      "chinese": "+{X} 致命攻击（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{10}",
+      "english": "+{X} to Jab (Amazon)",
+      "chinese": "+{X} 戳刺（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{11}",
+      "english": "+{X} to Cold Arrow (Amazon)",
+      "chinese": "+{X} 冰箭（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{12}",
+      "english": "+{X} to Multiple Shot (Amazon)",
+      "chinese": "+{X} 多重箭（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{13}",
+      "english": "+{X} to Dodge (Amazon)",
+      "chinese": "+{X} 闪避（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{14}",
+      "english": "+{X} to Power Strike (Amazon)",
+      "chinese": "+{X} 威力一击（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{15}",
+      "english": "+{X} to Poison Javelin (Amazon)",
+      "chinese": "+{X} 毒枪（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{16}",
+      "english": "+{X} to Exploding Arrow (Amazon)",
+      "chinese": "+{X} 爆裂箭（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{17}",
+      "english": "+{X} to Slow Movement (Amazon)",
+      "chinese": "+{X} 减速（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{18}",
+      "english": "+{X} to Avoid (Amazon)",
+      "chinese": "+{X} 躲避（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{19}",
+      "english": "+{X} to Javelin and Spear Mastery (Amazon)",
+      "chinese": "+{X} 标枪与长矛精通（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{20}",
+      "english": "+{X} to Lightning Bolt (Amazon)",
+      "chinese": "+{X} 闪电球（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{21}",
+      "english": "+{X} to Ice Arrow (Amazon)",
+      "chinese": "+{X} 急冻箭（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{22}",
+      "english": "+{X} to Guided Arrow (Amazon)",
+      "chinese": "+{X} 导引箭（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{23}",
+      "english": "+{X} to Penetrate (Amazon)",
+      "chinese": "+{X} 刺入（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{24}",
+      "english": "+{X} to Charged Strike (Amazon)",
+      "chinese": "+{X} 充能一击（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{25}",
+      "english": "+{X} to Plague Javelin (Amazon)",
+      "chinese": "+{X} 瘟疫标枪（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{26}",
+      "english": "+{X} to Strafe (Amazon)",
+      "chinese": "+{X} 炮轰（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{27}",
+      "english": "+{X} to Immolation Arrow (Amazon)",
+      "chinese": "+{X} 牺牲之箭（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{28}",
+      "english": "+{X} to Decoy (Amazon)",
+      "chinese": "+{X} 诱饵（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{29}",
+      "english": "+{X} to Evade (Amazon)",
+      "chinese": "+{X} 回避（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{30}",
+      "english": "+{X} to Fend (Amazon)",
+      "chinese": "+{X} 击退（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{31}",
+      "english": "+{X} to Freezing Arrow (Amazon)",
+      "chinese": "+{X} 冻结之箭（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{32}",
+      "english": "+{X} to Valkyrie (Amazon)",
+      "chinese": "+{X} 女武神（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{33}",
+      "english": "+{X} to Pierce (Amazon)",
+      "chinese": "+{X} 穿透（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{34}",
+      "english": "+{X} to Lightning Strike (Amazon)",
+      "chinese": "+{X} 闪电攻击（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{35}",
+      "english": "+{X} to Lightning Fury (Amazon)",
+      "chinese": "+{X} 闪电之怒（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{36}",
+      "english": "+{X} to Fire Bolt (Sorceress)",
+      "chinese": "+{X} 火弹（法师）"
+    },
+    {
+      "key": "item_singleskill{37}",
+      "english": "+{X} to Warmth (Sorceress)",
+      "chinese": "+{X} 暖气（法师）"
+    },
+    {
+      "key": "item_singleskill{38}",
+      "english": "+{X} to Charged Bolt (Sorceress)",
+      "chinese": "+{X} 充能弹（法师）"
+    },
+    {
+      "key": "item_singleskill{39}",
+      "english": "+{X} to Ice Bolt (Sorceress)",
+      "chinese": "+{X} 冰弹（法师）"
+    },
+    {
+      "key": "item_singleskill{40}",
+      "english": "+{X} to Cold Enchant (Sorceress)",
+      "chinese": "+{X} 冰冷强化（法师）"
+    },
+    {
+      "key": "item_singleskill{41}",
+      "english": "+{X} to Inferno (Sorceress)",
+      "chinese": "+{X} 地狱之火（法师）"
+    },
+    {
+      "key": "item_singleskill{42}",
+      "english": "+{X} to Static Field (Sorceress)",
+      "chinese": "+{X} 静态力场（法师）"
+    },
+    {
+      "key": "item_singleskill{43}",
+      "english": "+{X} to Telekinesis (Sorceress)",
+      "chinese": "+{X} 心灵传动（法师）"
+    },
+    {
+      "key": "item_singleskill{44}",
+      "english": "+{X} to Frost Nova (Sorceress)",
+      "chinese": "+{X} 霜之新星（法师）"
+    },
+    {
+      "key": "item_singleskill{45}",
+      "english": "+{X} to Ice Blast (Sorceress)",
+      "chinese": "+{X} 冰风暴（法师）"
+    },
+    {
+      "key": "item_singleskill{46}",
+      "english": "+{X} to Blaze (Sorceress)",
+      "chinese": "+{X} 炽烈之径（法师）"
+    },
+    {
+      "key": "item_singleskill{47}",
+      "english": "+{X} to Fire Ball (Sorceress)",
+      "chinese": "+{X} 火球（法师）"
+    },
+    {
+      "key": "item_singleskill{48}",
+      "english": "+{X} to Nova (Sorceress)",
+      "chinese": "+{X} 新星（法师）"
+    },
+    {
+      "key": "item_singleskill{49}",
+      "english": "+{X} to Lightning (Sorceress)",
+      "chinese": "+{X} 闪电法术（法师）"
+    },
+    {
+      "key": "item_singleskill{50}",
+      "english": "+{X} to Shiver Armor (Sorceress)",
+      "chinese": "+{X} 碎冰甲（法师）"
+    },
+    {
+      "key": "item_singleskill{51}",
+      "english": "+{X} to Fire Wall (Sorceress)",
+      "chinese": "+{X} 火墙（法师）"
+    },
+    {
+      "key": "item_singleskill{52}",
+      "english": "+{X} to Enchant (Sorceress)",
+      "chinese": "+{X} 强化（法师）"
+    },
+    {
+      "key": "item_singleskill{53}",
+      "english": "+{X} to Chain Lightning (Sorceress)",
+      "chinese": "+{X} 连锁闪电（法师）"
+    },
+    {
+      "key": "item_singleskill{54}",
+      "english": "+{X} to Teleport (Sorceress)",
+      "chinese": "+{X} 传送（法师）"
+    },
+    {
+      "key": "item_singleskill{55}",
+      "english": "+{X} to Glacial Spike (Sorceress)",
+      "chinese": "+{X} 冰尖柱（法师）"
+    },
+    {
+      "key": "item_singleskill{56}",
+      "english": "+{X} to Meteor (Sorceress)",
+      "chinese": "+{X} 陨石（法师）"
+    },
+    {
+      "key": "item_singleskill{57}",
+      "english": "+{X} to Thunder Storm (Sorceress)",
+      "chinese": "+{X} 雷云风暴（法师）"
+    },
+    {
+      "key": "item_singleskill{58}",
+      "english": "+{X} to Energy Shield (Sorceress)",
+      "chinese": "+{X} 能量护盾（法师）"
+    },
+    {
+      "key": "item_singleskill{59}",
+      "english": "+{X} to Blizzard (Sorceress)",
+      "chinese": "+{X} 暴风雪（法师）"
+    },
+    {
+      "key": "item_singleskill{60}",
+      "english": "+{X} to Chilling Armor (Sorceress)",
+      "chinese": "+{X} 寒冰装甲（法师）"
+    },
+    {
+      "key": "item_singleskill{61}",
+      "english": "+{X} to Fire Mastery (Sorceress)",
+      "chinese": "+{X} 支配火焰（法师）"
+    },
+    {
+      "key": "item_singleskill{62}",
+      "english": "+{X} to Hydra (Sorceress)",
+      "chinese": "+{X} 九头海蛇（法师）"
+    },
+    {
+      "key": "item_singleskill{63}",
+      "english": "+{X} to Lightning Mastery (Sorceress)",
+      "chinese": "+{X} 支配闪电（法师）"
+    },
+    {
+      "key": "item_singleskill{64}",
+      "english": "+{X} to Frozen Orb (Sorceress)",
+      "chinese": "+{X} 冰封球（法师）"
+    },
+    {
+      "key": "item_singleskill{65}",
+      "english": "+{X} to Cold Mastery (Sorceress)",
+      "chinese": "+{X} 支配冰冷（法师）"
+    },
+    {
+      "key": "item_singleskill{66}",
+      "english": "+{X} to Amplify Damage (Necromancer)",
+      "chinese": "+{X} 伤害加深（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{67}",
+      "english": "+{X} to Teeth (Necromancer)",
+      "chinese": "+{X} 牙（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{68}",
+      "english": "+{X} to Bone Armor (Necromancer)",
+      "chinese": "+{X} 白骨装甲（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{69}",
+      "english": "+{X} to Skeleton Mastery (Necromancer)",
+      "chinese": "+{X} 支配骷髅（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{70}",
+      "english": "+{X} to Raise Skeleton (Necromancer)",
+      "chinese": "+{X} 骷髅复苏（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{71}",
+      "english": "+{X} to Dim Vision (Necromancer)",
+      "chinese": "+{X} 微暗灵视（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{72}",
+      "english": "+{X} to Weaken (Necromancer)",
+      "chinese": "+{X} 削弱（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{73}",
+      "english": "+{X} to Poison Strike (Necromancer)",
+      "chinese": "+{X} 剧毒打击（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{74}",
+      "english": "+{X} to Corpse Explosion (Necromancer)",
+      "chinese": "+{X} 尸体爆炸（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{75}",
+      "english": "+{X} to Clay Golem (Necromancer)",
+      "chinese": "+{X} 黏土石魔（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{76}",
+      "english": "+{X} to Iron Maiden (Necromancer)",
+      "chinese": "+{X} 攻击反噬（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{77}",
+      "english": "+{X} to Terror (Necromancer)",
+      "chinese": "+{X} 恐惧（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{78}",
+      "english": "+{X} to Bone Wall (Necromancer)",
+      "chinese": "+{X} 骨墙（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{79}",
+      "english": "+{X} to Golem Mastery (Necromancer)",
+      "chinese": "+{X} 支配石魔（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{80}",
+      "english": "+{X} to Raise Skeletal Mage (Necromancer)",
+      "chinese": "+{X} 复苏骷髅法师（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{81}",
+      "english": "+{X} to Confuse (Necromancer)",
+      "chinese": "+{X} 迷乱（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{82}",
+      "english": "+{X} to Life Tap (Necromancer)",
+      "chinese": "+{X} 偷取生命（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{83}",
+      "english": "+{X} to Desecrate (Necromancer)",
+      "chinese": "+{X} 亵渎（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{84}",
+      "english": "+{X} to Bone Spear (Necromancer)",
+      "chinese": "+{X} 骨矛（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{85}",
+      "english": "+{X} to Blood Golem (Necromancer)",
+      "chinese": "+{X} 鲜血石魔（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{86}",
+      "english": "+{X} to Attract (Necromancer)",
+      "chinese": "+{X} 吸引（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{87}",
+      "english": "+{X} to Decrepify (Necromancer)",
+      "chinese": "+{X} 衰老（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{88}",
+      "english": "+{X} to Bone Prison (Necromancer)",
+      "chinese": "+{X} 骨牢（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{89}",
+      "english": "+{X} to Raise Skeleton Archer (Necromancer)",
+      "chinese": "+{X} 复苏骷髅弓箭手（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{90}",
+      "english": "+{X} to IronGolem (Necromancer)",
+      "chinese": "+{X} 钢铁石魔（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{91}",
+      "english": "+{X} to Lower Resist (Necromancer)",
+      "chinese": "+{X} 降低抵抗（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{92}",
+      "english": "+{X} to Poison Nova (Necromancer)",
+      "chinese": "+{X} 剧毒新星（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{93}",
+      "english": "+{X} to Bone Spirit (Necromancer)",
+      "chinese": "+{X} 白骨之魂（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{94}",
+      "english": "+{X} to Fire Golem (Necromancer)",
+      "chinese": "+{X} 火焰石魔（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{95}",
+      "english": "+{X} to Revive (Necromancer)",
+      "chinese": "+{X} 重生（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{96}",
+      "english": "+{X} to Sacrifice (Paladin)",
+      "chinese": "+{X} 牺牲（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{97}",
+      "english": "+{X} to Smite (Paladin)",
+      "chinese": "+{X} 盾击（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{98}",
+      "english": "+{X} to Might (Paladin)",
+      "chinese": "+{X} 力量（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{99}",
+      "english": "+{X} to Prayer (Paladin)",
+      "chinese": "+{X} 祈祷（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{100}",
+      "english": "+{X} to Resist Fire (Paladin)",
+      "chinese": "+{X} 抵抗火焰（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{101}",
+      "english": "+{X} to Holy Bolt (Paladin)",
+      "chinese": "+{X} 圣光弹（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{102}",
+      "english": "+{X} to Holy Fire (Paladin)",
+      "chinese": "+{X} 圣火（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{103}",
+      "english": "+{X} to Thorns (Paladin)",
+      "chinese": "+{X} 荆棘（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{104}",
+      "english": "+{X} to Defiance (Paladin)",
+      "chinese": "+{X} 反抗（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{105}",
+      "english": "+{X} to Resist Cold (Paladin)",
+      "chinese": "+{X} 抵抗冰冷（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{106}",
+      "english": "+{X} to Zeal (Paladin)",
+      "chinese": "+{X} 热诚（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{107}",
+      "english": "+{X} to Charge (Paladin)",
+      "chinese": "+{X} 冲锋（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{108}",
+      "english": "+{X} to Blessed Aim (Paladin)",
+      "chinese": "+{X} 祝福瞄准（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{109}",
+      "english": "+{X} to Cleansing (Paladin)",
+      "chinese": "+{X} 净化（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{110}",
+      "english": "+{X} to Resist Lightning (Paladin)",
+      "chinese": "+{X} 抵抗闪电（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{111}",
+      "english": "+{X} to Vengeance (Paladin)",
+      "chinese": "+{X} 复仇（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{112}",
+      "english": "+{X} to Blessed Hammer (Paladin)",
+      "chinese": "+{X} 祝福之锤（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{113}",
+      "english": "+{X} to Concentration (Paladin)",
+      "chinese": "+{X} 专注（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{114}",
+      "english": "+{X} to Holy Freeze (Paladin)",
+      "chinese": "+{X} 神圣冰冻（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{115}",
+      "english": "+{X} to Vigor (Paladin)",
+      "chinese": "+{X} 活力（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{116}",
+      "english": "+{X} to Holy Sword (Paladin)",
+      "chinese": "+{X} 神圣之剑（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{117}",
+      "english": "+{X} to Holy Shield (Paladin)",
+      "chinese": "+{X} 神圣之盾（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{118}",
+      "english": "+{X} to Holy Shock (Paladin)",
+      "chinese": "+{X} 神圣冲击（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{119}",
+      "english": "+{X} to Sanctuary (Paladin)",
+      "chinese": "+{X} 庇护所（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{120}",
+      "english": "+{X} to Meditation (Paladin)",
+      "chinese": "+{X} 冥思（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{121}",
+      "english": "+{X} to Fist of the Heavens (Paladin)",
+      "chinese": "+{X} 天堂之拳（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{122}",
+      "english": "+{X} to Fanaticism (Paladin)",
+      "chinese": "+{X} 狂热（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{123}",
+      "english": "+{X} to Conviction (Paladin)",
+      "chinese": "+{X} 信念（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{124}",
+      "english": "+{X} to Redemption (Paladin)",
+      "chinese": "+{X} 救赎（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{125}",
+      "english": "+{X} to Salvation (Paladin)",
+      "chinese": "+{X} 救助（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{126}",
+      "english": "+{X} to Bash (Barbarian)",
+      "chinese": "+{X} 重击（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{127}",
+      "english": "+{X} to Sword Mastery (Barbarian)",
+      "chinese": "+{X} 支配长剑（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{128}",
+      "english": "+{X} to One Hand Mastery (Barbarian)",
+      "chinese": "+{X} 单手武器精通（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{129}",
+      "english": "+{X} to Mace Mastery (Barbarian)",
+      "chinese": "+{X} 支配钉头锤（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{130}",
+      "english": "+{X} to Howl (Barbarian)",
+      "chinese": "+{X} 狂嗥（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{131}",
+      "english": "+{X} to Find Potion (Barbarian)",
+      "chinese": "+{X} 找寻药剂（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{132}",
+      "english": "+{X} to Leap (Barbarian)",
+      "chinese": "+{X} 跳跃（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{133}",
+      "english": "+{X} to Double Swing (Barbarian)",
+      "chinese": "+{X} 双手挥击（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{134}",
+      "english": "+{X} to Two Hand Mastery (Barbarian)",
+      "chinese": "+{X} 双手武器精通（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{135}",
+      "english": "+{X} to Throwing Mastery (Barbarian)",
+      "chinese": "+{X} 支配飞掷（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{136}",
+      "english": "+{X} to Spear Mastery (Barbarian)",
+      "chinese": "+{X} 支配长矛（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{137}",
+      "english": "+{X} to Taunt (Barbarian)",
+      "chinese": "+{X} 嘲弄（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{138}",
+      "english": "+{X} to Shout (Barbarian)",
+      "chinese": "+{X} 大叫（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{139}",
+      "english": "+{X} to Stun (Barbarian)",
+      "chinese": "+{X} 击昏（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{140}",
+      "english": "+{X} to Double Throw (Barbarian)",
+      "chinese": "+{X} 双手投掷（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{141}",
+      "english": "+{X} to Combat Reflexes (Barbarian)",
+      "chinese": "+{X} 战斗反射（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{142}",
+      "english": "+{X} to Find Item (Barbarian)",
+      "chinese": "+{X} 找寻物品（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{143}",
+      "english": "+{X} to Leap Attack (Barbarian)",
+      "chinese": "+{X} 跳跃攻击（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{144}",
+      "english": "+{X} to Concentrate (Barbarian)",
+      "chinese": "+{X} 专心（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{145}",
+      "english": "+{X} to Iron Skin (Barbarian)",
+      "chinese": "+{X} 铁布杉（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{146}",
+      "english": "+{X} to Battle Cry (Barbarian)",
+      "chinese": "+{X} 战嗥（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{147}",
+      "english": "+{X} to Frenzy (Barbarian)",
+      "chinese": "+{X} 狂乱（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{148}",
+      "english": "+{X} to Increased Speed (Barbarian)",
+      "chinese": "+{X} 加速（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{149}",
+      "english": "+{X} to Battle Orders (Barbarian)",
+      "chinese": "+{X} 战斗体制（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{150}",
+      "english": "+{X} to Grim Ward (Barbarian)",
+      "chinese": "+{X} 残酷吓阻（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{151}",
+      "english": "+{X} to Whirlwind (Barbarian)",
+      "chinese": "+{X} 旋风（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{152}",
+      "english": "+{X} to Berserk (Barbarian)",
+      "chinese": "+{X} 狂战士（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{153}",
+      "english": "+{X} to Natural Resistance (Barbarian)",
+      "chinese": "+{X} 自然抵抗（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{154}",
+      "english": "+{X} to War Cry (Barbarian)",
+      "chinese": "+{X} 战斗狂嗥（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{155}",
+      "english": "+{X} to Battle Command (Barbarian)",
+      "chinese": "+{X} 战斗指挥（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{221}",
+      "english": "+{X} to Raven (Druid)",
+      "chinese": "+{X} 乌鸦（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{222}",
+      "english": "+{X} to Poison Creeper (Druid)",
+      "chinese": "+{X} 猛毒花藤（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{223}",
+      "english": "+{X} to Werewolf (Druid)",
+      "chinese": "+{X} 狼人变化（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{224}",
+      "english": "+{X} to Lycanthropy (Druid)",
+      "chinese": "+{X} 变形术（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{225}",
+      "english": "+{X} to Firestorm (Druid)",
+      "chinese": "+{X} 火风暴（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{226}",
+      "english": "+{X} to Oak Sage (Druid)",
+      "chinese": "+{X} 橡木智者（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{227}",
+      "english": "+{X} to Summon Spirit Wolf (Druid)",
+      "chinese": "+{X} 召唤灵狼（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{228}",
+      "english": "+{X} to Werebear (Druid)",
+      "chinese": "+{X} 熊人变化（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{229}",
+      "english": "+{X} to Molten Boulder (Druid)",
+      "chinese": "+{X} 熔浆巨岩（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{230}",
+      "english": "+{X} to Arctic Blast (Druid)",
+      "chinese": "+{X} 极地风暴（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{231}",
+      "english": "+{X} to Carrion Vine (Druid)",
+      "chinese": "+{X} 食尸藤（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{232}",
+      "english": "+{X} to Feral Rage (Druid)",
+      "chinese": "+{X} 野性狂暴（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{233}",
+      "english": "+{X} to Maul (Druid)",
+      "chinese": "+{X} 撞锤（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{234}",
+      "english": "+{X} to Fissure (Druid)",
+      "chinese": "+{X} 火山爆（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{235}",
+      "english": "+{X} to Cyclone Armor (Druid)",
+      "chinese": "+{X} 飓风装甲（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{236}",
+      "english": "+{X} to Heart of Wolverine (Druid)",
+      "chinese": "+{X} 狼獾之心（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{237}",
+      "english": "+{X} to Summon Dire Wolf (Druid)",
+      "chinese": "+{X} 召唤狂狼（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{238}",
+      "english": "+{X} to Rabies (Druid)",
+      "chinese": "+{X} 狂犬病（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{239}",
+      "english": "+{X} to Fire Claws (Druid)",
+      "chinese": "+{X} 焰爪（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{240}",
+      "english": "+{X} to Twister (Druid)",
+      "chinese": "+{X} 小旋风（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{241}",
+      "english": "+{X} to Solar Creeper (Druid)",
+      "chinese": "+{X} 太阳藤（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{242}",
+      "english": "+{X} to Hunger (Druid)",
+      "chinese": "+{X} 饥饿（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{243}",
+      "english": "+{X} to Shock Wave (Druid)",
+      "chinese": "+{X} 震波（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{244}",
+      "english": "+{X} to Volcano (Druid)",
+      "chinese": "+{X} 火山（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{245}",
+      "english": "+{X} to Tornado (Druid)",
+      "chinese": "+{X} 龙卷风（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{246}",
+      "english": "+{X} to Spirit of Barbs (Druid)",
+      "chinese": "+{X} 棘灵（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{247}",
+      "english": "+{X} to Summon Grizzly (Druid)",
+      "chinese": "+{X} 召唤灰熊（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{248}",
+      "english": "+{X} to Fury (Druid)",
+      "chinese": "+{X} 狂怒（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{249}",
+      "english": "+{X} to Armageddon (Druid)",
+      "chinese": "+{X} 毁天灭地（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{250}",
+      "english": "+{X} to Hurricane (Druid)",
+      "chinese": "+{X} 暴风（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{251}",
+      "english": "+{X} to Fire Blast (Assassin)",
+      "chinese": "+{X} 火焰爆震（刺客）"
+    },
+    {
+      "key": "item_singleskill{252}",
+      "english": "+{X} to Claw Mastery (Assassin)",
+      "chinese": "+{X} 支配利爪（刺客）"
+    },
+    {
+      "key": "item_singleskill{253}",
+      "english": "+{X} to Psychic Hammer (Assassin)",
+      "chinese": "+{X} 心灵战锤（刺客）"
+    },
+    {
+      "key": "item_singleskill{254}",
+      "english": "+{X} to Tiger Strike (Assassin)",
+      "chinese": "+{X} 虎击（刺客）"
+    },
+    {
+      "key": "item_singleskill{255}",
+      "english": "+{X} to Dragon Talon (Assassin)",
+      "chinese": "+{X} 龙爪（刺客）"
+    },
+    {
+      "key": "item_singleskill{256}",
+      "english": "+{X} to Shock Web (Assassin)",
+      "chinese": "+{X} 雷电网（刺客）"
+    },
+    {
+      "key": "item_singleskill{257}",
+      "english": "+{X} to Blade Sentinel (Assassin)",
+      "chinese": "+{X} 刃之守卫（刺客）"
+    },
+    {
+      "key": "item_singleskill{258}",
+      "english": "+{X} to Burst of Speed (Assassin)",
+      "chinese": "+{X} 速度爆发（刺客）"
+    },
+    {
+      "key": "item_singleskill{259}",
+      "english": "+{X} to Fists of Fire (Assassin)",
+      "chinese": "+{X} 焰拳（刺客）"
+    },
+    {
+      "key": "item_singleskill{260}",
+      "english": "+{X} to Dragon Claw (Assassin)",
+      "chinese": "+{X} 双龙爪（刺客）"
+    },
+    {
+      "key": "item_singleskill{261}",
+      "english": "+{X} to Charged Bolt Sentry (Assassin)",
+      "chinese": "+{X} 电能守卫（刺客）"
+    },
+    {
+      "key": "item_singleskill{262}",
+      "english": "+{X} to Wake of Fire (Assassin)",
+      "chinese": "+{X} 火焰复苏（刺客）"
+    },
+    {
+      "key": "item_singleskill{263}",
+      "english": "+{X} to Weapon Block (Assassin)",
+      "chinese": "+{X} 武器格挡（刺客）"
+    },
+    {
+      "key": "item_singleskill{264}",
+      "english": "+{X} to Cloak of Shadows (Assassin)",
+      "chinese": "+{X} 魔影斗篷（刺客）"
+    },
+    {
+      "key": "item_singleskill{265}",
+      "english": "+{X} to Cobra Strike (Assassin)",
+      "chinese": "+{X} 眼镜蛇攻击（刺客）"
+    },
+    {
+      "key": "item_singleskill{266}",
+      "english": "+{X} to Blade Fury (Assassin)",
+      "chinese": "+{X} 刃之怒（刺客）"
+    },
+    {
+      "key": "item_singleskill{267}",
+      "english": "+{X} to Fade (Assassin)",
+      "chinese": "+{X} 能量消解（刺客）"
+    },
+    {
+      "key": "item_singleskill{268}",
+      "english": "+{X} to Shadow Warrior (Assassin)",
+      "chinese": "+{X} 影子战士（刺客）"
+    },
+    {
+      "key": "item_singleskill{269}",
+      "english": "+{X} to Claws of Thunder (Assassin)",
+      "chinese": "+{X} 雷电爪（刺客）"
+    },
+    {
+      "key": "item_singleskill{270}",
+      "english": "+{X} to Dragon Tail (Assassin)",
+      "chinese": "+{X} 神龙摆尾（刺客）"
+    },
+    {
+      "key": "item_singleskill{271}",
+      "english": "+{X} to Chain Lightning Sentry (Assassin)",
+      "chinese": "+{X} 连锁闪电哨卫（刺客）"
+    },
+    {
+      "key": "item_singleskill{272}",
+      "english": "+{X} to Wake of Inferno (Assassin)",
+      "chinese": "+{X} 复苏狱火（刺客）"
+    },
+    {
+      "key": "item_singleskill{273}",
+      "english": "+{X} to Mind Blast (Assassin)",
+      "chinese": "+{X} 心灵爆震（刺客）"
+    },
+    {
+      "key": "item_singleskill{274}",
+      "english": "+{X} to Blades of Ice (Assassin)",
+      "chinese": "+{X} 寒冰刃（刺客）"
+    },
+    {
+      "key": "item_singleskill{275}",
+      "english": "+{X} to Dragon Flight (Assassin)",
+      "chinese": "+{X} 飞龙在天（刺客）"
+    },
+    {
+      "key": "item_singleskill{276}",
+      "english": "+{X} to Death Sentry (Assassin)",
+      "chinese": "+{X} 亡者守卫（刺客）"
+    },
+    {
+      "key": "item_singleskill{277}",
+      "english": "+{X} to Blade Shield (Assassin)",
+      "chinese": "+{X} 刀刃之盾（刺客）"
+    },
+    {
+      "key": "item_singleskill{278}",
+      "english": "+{X} to Venom (Assassin)",
+      "chinese": "+{X} 毒牙（刺客）"
+    },
+    {
+      "key": "item_singleskill{279}",
+      "english": "+{X} to Shadow Master (Assassin)",
+      "chinese": "+{X} 影子大师（刺客）"
+    },
+    {
+      "key": "item_singleskill{280}",
+      "english": "+{X} to Phoenix Strike (Assassin)",
+      "chinese": "+{X} 凤凰攻击（刺客）"
+    },
+    {
+      "key": "item_singleskill{358}",
+      "english": "+{X} to Melee attacks deal splash damage",
+      "chinese": "+{X} 近战攻击造成溅射伤害"
+    },
+    {
+      "key": "item_singleskill{359}",
+      "english": "+{X} to RoguePierce",
+      "chinese": "+{X} 萝格穿透"
+    },
+    {
+      "key": "item_singleskill{360}",
+      "english": "+{X} to BattleOrdersCTA",
+      "chinese": "+{X} 战斗体制（战争召唤）"
+    },
+    {
+      "key": "item_singleskill{364}",
+      "english": "+{X} to Holy Nova (Paladin)",
+      "chinese": "+{X} 圣光新星（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{365}",
+      "english": "+{X} to Shattering Arrow (Amazon)",
+      "chinese": "+{X} 碎裂之箭（亚马逊）"
+    },
+    {
+      "key": "item_singleskill{366}",
+      "english": "+{X} to Lightning Sentry (Assassin)",
+      "chinese": "+{X} 雷光守卫（刺客）"
+    },
+    {
+      "key": "item_singleskill{367}",
+      "english": "+{X} to Blood Warp (Necromancer)",
+      "chinese": "+{X} 血腥传送（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{368}",
+      "english": "+{X} to Deep Wounds (Barbarian)",
+      "chinese": "+{X} 深度撕裂伤口（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{369}",
+      "english": "+{X} to Ice Barrage (Sorceress)",
+      "chinese": "+{X} 冰霜弹幕（法师）"
+    },
+    {
+      "key": "item_singleskill{370}",
+      "english": "+{X} to Gust (Druid)",
+      "chinese": "+{X} 风遁（德鲁伊）"
+    },
+    {
+      "key": "item_singleskill{371}",
+      "english": "+{X} to Holy Light (Paladin)",
+      "chinese": "+{X} 圣光（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{374}",
+      "english": "+{X} to Curse Mastery (Necromancer)",
+      "chinese": "+{X} 诅咒精通（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{375}",
+      "english": "+{X} to Split Throw (Barbarian)",
+      "chinese": "+{X} 分裂投掷（野蛮人）"
+    },
+    {
+      "key": "item_singleskill{376}",
+      "english": "+{X} to Combustion (Sorceress)",
+      "chinese": "+{X} 燃烧（法师）"
+    },
+    {
+      "key": "item_singleskill{378}",
+      "english": "+{X} to Joust (Paladin)",
+      "chinese": "+{X} 竞争（圣骑士）"
+    },
+    {
+      "key": "item_singleskill{380}",
+      "english": "+{X} to Blade Dance (Assassin)",
+      "chinese": "+{X} 刃舞（刺客）"
+    },
+    {
+      "key": "item_singleskill{381}",
+      "english": "+{X} to Dark Pact (Necromancer)",
+      "chinese": "+{X} 黑暗契约（死灵法师）"
+    },
+    {
+      "key": "item_singleskill{383}",
+      "english": "+{X} to Lesser Hydra (Sorceress)",
+      "chinese": "+{X} 次级九头蛇（法师）"
+    },
+    {
+      "key": "item_singleskill{442}",
+      "english": "+{X} to Amplify Damage",
+      "chinese": "+{X} 伤害加深"
+    },
+    {
+      "key": "item_singleskill{443}",
+      "english": "+{X} to Weaken",
+      "chinese": "+{X} 削弱"
+    },
+    {
+      "key": "item_singleskill{444}",
+      "english": "+{X} to Iron Maiden",
+      "chinese": "+{X} 攻击反噬"
+    },
+    {
+      "key": "item_singleskill{445}",
+      "english": "+{X} to Life Tap",
+      "chinese": "+{X} 偷取生命"
+    },
+    {
+      "key": "item_singleskill{446}",
+      "english": "+{X} to Decrepify",
+      "chinese": "+{X} 衰老"
+    },
+    {
+      "key": "item_singleskill{447}",
+      "english": "+{X} to Lower Resist",
+      "chinese": "+{X} 降低抵抗"
+    },
+    {
+      "key": "item_singleskill{554}",
+      "english": "+{X} to Energy Shield SelfAura",
+      "chinese": "+{X} 能量护盾（自身灵气）"
+    },
+    {
+      "key": "item_singleskill{555}",
+      "english": "+{X} to Chilling Armor SelfAura",
+      "chinese": "+{X} 寒冰装甲（自身灵气）"
+    },
+    {
+      "key": "item_singleskill{556}",
+      "english": "+{X} to Quickness SelfAura",
+      "chinese": "+{X} 速度爆发（自身灵气）"
+    },
+    {
+      "key": "item_singleskill{557}",
+      "english": "+{X} to Blade Shield SelfAura",
+      "chinese": "+{X} 刀刃之盾（自身灵气）"
+    },
+    {
+      "key": "item_nonclassskill{6}",
+      "english": "+{X} to Magic Arrow (Oskill)",
+      "chinese": "+{X} 魔法箭（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{7}",
+      "english": "+{X} to Fire Arrow (Oskill)",
+      "chinese": "+{X} 火焰箭（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{8}",
+      "english": "+{X} to Inner Sight (Oskill)",
+      "chinese": "+{X} 内视（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{9}",
+      "english": "+{X} to Critical Strike (Oskill)",
+      "chinese": "+{X} 致命攻击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{10}",
+      "english": "+{X} to Jab (Oskill)",
+      "chinese": "+{X} 戳刺（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{11}",
+      "english": "+{X} to Cold Arrow (Oskill)",
+      "chinese": "+{X} 冰箭（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{12}",
+      "english": "+{X} to Multiple Shot (Oskill)",
+      "chinese": "+{X} 多重箭（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{13}",
+      "english": "+{X} to Dodge (Oskill)",
+      "chinese": "+{X} 闪避（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{14}",
+      "english": "+{X} to Power Strike (Oskill)",
+      "chinese": "+{X} 威力一击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{15}",
+      "english": "+{X} to Poison Javelin (Oskill)",
+      "chinese": "+{X} 毒枪（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{16}",
+      "english": "+{X} to Exploding Arrow (Oskill)",
+      "chinese": "+{X} 爆裂箭（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{17}",
+      "english": "+{X} to Slow Movement (Oskill)",
+      "chinese": "+{X} 减速（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{18}",
+      "english": "+{X} to Avoid (Oskill)",
+      "chinese": "+{X} 躲避（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{19}",
+      "english": "+{X} to Javelin and Spear Mastery (Oskill)",
+      "chinese": "+{X} 标枪与长矛精通（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{20}",
+      "english": "+{X} to Lightning Bolt (Oskill)",
+      "chinese": "+{X} 闪电球（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{21}",
+      "english": "+{X} to Ice Arrow (Oskill)",
+      "chinese": "+{X} 急冻箭（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{22}",
+      "english": "+{X} to Guided Arrow (Oskill)",
+      "chinese": "+{X} 导引箭（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{23}",
+      "english": "+{X} to Penetrate (Oskill)",
+      "chinese": "+{X} 刺入（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{24}",
+      "english": "+{X} to Charged Strike (Oskill)",
+      "chinese": "+{X} 充能一击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{25}",
+      "english": "+{X} to Plague Javelin (Oskill)",
+      "chinese": "+{X} 瘟疫标枪（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{26}",
+      "english": "+{X} to Strafe (Oskill)",
+      "chinese": "+{X} 炮轰（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{27}",
+      "english": "+{X} to Immolation Arrow (Oskill)",
+      "chinese": "+{X} 牺牲之箭（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{28}",
+      "english": "+{X} to Decoy (Oskill)",
+      "chinese": "+{X} 诱饵（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{29}",
+      "english": "+{X} to Evade (Oskill)",
+      "chinese": "+{X} 回避（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{30}",
+      "english": "+{X} to Fend (Oskill)",
+      "chinese": "+{X} 击退（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{31}",
+      "english": "+{X} to Freezing Arrow (Oskill)",
+      "chinese": "+{X} 冻结之箭（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{32}",
+      "english": "+{X} to Valkyrie (Oskill)",
+      "chinese": "+{X} 女武神（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{33}",
+      "english": "+{X} to Pierce (Oskill)",
+      "chinese": "+{X} 穿透（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{34}",
+      "english": "+{X} to Lightning Strike (Oskill)",
+      "chinese": "+{X} 闪电攻击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{35}",
+      "english": "+{X} to Lightning Fury (Oskill)",
+      "chinese": "+{X} 闪电之怒（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{36}",
+      "english": "+{X} to Fire Bolt (Oskill)",
+      "chinese": "+{X} 火弹（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{37}",
+      "english": "+{X} to Warmth (Oskill)",
+      "chinese": "+{X} 暖气（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{38}",
+      "english": "+{X} to Charged Bolt (Oskill)",
+      "chinese": "+{X} 充能弹（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{39}",
+      "english": "+{X} to Ice Bolt (Oskill)",
+      "chinese": "+{X} 冰弹（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{40}",
+      "english": "+{X} to Cold Enchant (Oskill)",
+      "chinese": "+{X} 冰冷强化（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{41}",
+      "english": "+{X} to Inferno (Oskill)",
+      "chinese": "+{X} 地狱之火（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{42}",
+      "english": "+{X} to Static Field (Oskill)",
+      "chinese": "+{X} 静态力场（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{43}",
+      "english": "+{X} to Telekinesis (Oskill)",
+      "chinese": "+{X} 心灵传动（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{44}",
+      "english": "+{X} to Frost Nova (Oskill)",
+      "chinese": "+{X} 霜之新星（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{45}",
+      "english": "+{X} to Ice Blast (Oskill)",
+      "chinese": "+{X} 冰风暴（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{46}",
+      "english": "+{X} to Blaze (Oskill)",
+      "chinese": "+{X} 炽烈之径（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{47}",
+      "english": "+{X} to Fire Ball (Oskill)",
+      "chinese": "+{X} 火球（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{48}",
+      "english": "+{X} to Nova (Oskill)",
+      "chinese": "+{X} 新星（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{49}",
+      "english": "+{X} to Lightning (Oskill)",
+      "chinese": "+{X} 闪电（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{50}",
+      "english": "+{X} to Shiver Armor (Oskill)",
+      "chinese": "+{X} 碎冰甲（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{51}",
+      "english": "+{X} to Fire Wall (Oskill)",
+      "chinese": "+{X} 火墙（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{52}",
+      "english": "+{X} to Enchant (Oskill)",
+      "chinese": "+{X} 强化（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{53}",
+      "english": "+{X} to Chain Lightning (Oskill)",
+      "chinese": "+{X} 连锁闪电（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{54}",
+      "english": "+{X} to Teleport (Oskill)",
+      "chinese": "+{X} 传送（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{55}",
+      "english": "+{X} to Glacial Spike (Oskill)",
+      "chinese": "+{X} 冰尖柱（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{56}",
+      "english": "+{X} to Meteor (Oskill)",
+      "chinese": "+{X} 陨石（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{57}",
+      "english": "+{X} to Thunder Storm (Oskill)",
+      "chinese": "+{X} 雷云风暴（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{58}",
+      "english": "+{X} to Energy Shield (Oskill)",
+      "chinese": "+{X} 能量护盾（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{59}",
+      "english": "+{X} to Blizzard (Oskill)",
+      "chinese": "+{X} 暴风雪（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{60}",
+      "english": "+{X} to Chilling Armor (Oskill)",
+      "chinese": "+{X} 寒冰装甲（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{61}",
+      "english": "+{X} to Fire Mastery (Oskill)",
+      "chinese": "+{X} 支配火焰（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{62}",
+      "english": "+{X} to Hydra (Oskill)",
+      "chinese": "+{X} 九头海蛇（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{63}",
+      "english": "+{X} to Lightning Mastery (Oskill)",
+      "chinese": "+{X} 支配闪电（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{64}",
+      "english": "+{X} to Frozen Orb (Oskill)",
+      "chinese": "+{X} 冰封球（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{65}",
+      "english": "+{X} to Cold Mastery (Oskill)",
+      "chinese": "+{X} 支配冰冷（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{66}",
+      "english": "+{X} to Amplify Damage (Oskill)",
+      "chinese": "+{X} 伤害加深（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{67}",
+      "english": "+{X} to Teeth (Oskill)",
+      "chinese": "+{X} 牙（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{68}",
+      "english": "+{X} to Bone Armor (Oskill)",
+      "chinese": "+{X} 白骨装甲（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{69}",
+      "english": "+{X} to Skeleton Mastery (Oskill)",
+      "chinese": "+{X} 支配骷髅（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{70}",
+      "english": "+{X} to Raise Skeleton (Oskill)",
+      "chinese": "+{X} 骷髅复苏（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{71}",
+      "english": "+{X} to Dim Vision (Oskill)",
+      "chinese": "+{X} 微暗灵视（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{72}",
+      "english": "+{X} to Weaken (Oskill)",
+      "chinese": "+{X} 削弱（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{73}",
+      "english": "+{X} to Poison Strike (Oskill)",
+      "chinese": "+{X} 剧毒打击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{74}",
+      "english": "+{X} to Corpse Explosion (Oskill)",
+      "chinese": "+{X} 尸体爆炸（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{75}",
+      "english": "+{X} to Clay Golem (Oskill)",
+      "chinese": "+{X} 黏土石魔（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{76}",
+      "english": "+{X} to Iron Maiden (Oskill)",
+      "chinese": "+{X} 攻击反噬（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{77}",
+      "english": "+{X} to Terror (Oskill)",
+      "chinese": "+{X} 恐惧（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{78}",
+      "english": "+{X} to Bone Wall (Oskill)",
+      "chinese": "+{X} 骨墙（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{79}",
+      "english": "+{X} to Golem Mastery (Oskill)",
+      "chinese": "+{X} 支配石魔（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{80}",
+      "english": "+{X} to Raise Skeletal Mage (Oskill)",
+      "chinese": "+{X} 复苏骷髅法师（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{81}",
+      "english": "+{X} to Confuse (Oskill)",
+      "chinese": "+{X} 迷乱（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{82}",
+      "english": "+{X} to Life Tap (Oskill)",
+      "chinese": "+{X} 偷取生命（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{83}",
+      "english": "+{X} to Desecrate (Oskill)",
+      "chinese": "+{X} 亵渎（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{84}",
+      "english": "+{X} to Bone Spear (Oskill)",
+      "chinese": "+{X} 骨矛（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{85}",
+      "english": "+{X} to Blood Golem (Oskill)",
+      "chinese": "+{X} 鲜血石魔（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{86}",
+      "english": "+{X} to Attract (Oskill)",
+      "chinese": "+{X} 吸引（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{87}",
+      "english": "+{X} to Decrepify (Oskill)",
+      "chinese": "+{X} 衰老（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{88}",
+      "english": "+{X} to Bone Prison (Oskill)",
+      "chinese": "+{X} 骨牢（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{89}",
+      "english": "+{X} to Raise Skeleton Archer (Oskill)",
+      "chinese": "+{X} 复苏骷髅弓箭手（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{90}",
+      "english": "+{X} to IronGolem (Oskill)",
+      "chinese": "+{X} 钢铁石魔（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{91}",
+      "english": "+{X} to Lower Resist (Oskill)",
+      "chinese": "+{X} 降低抵抗（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{92}",
+      "english": "+{X} to Poison Nova (Oskill)",
+      "chinese": "+{X} 剧毒新星（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{93}",
+      "english": "+{X} to Bone Spirit (Oskill)",
+      "chinese": "+{X} 白骨之魂（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{94}",
+      "english": "+{X} to Fire Golem (Oskill)",
+      "chinese": "+{X} 火焰石魔（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{95}",
+      "english": "+{X} to Revive (Oskill)",
+      "chinese": "+{X} 重生（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{96}",
+      "english": "+{X} to Sacrifice (Oskill)",
+      "chinese": "+{X} 牺牲（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{97}",
+      "english": "+{X} to Smite (Oskill)",
+      "chinese": "+{X} 盾击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{98}",
+      "english": "+{X} to Might (Oskill)",
+      "chinese": "+{X} 力量（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{99}",
+      "english": "+{X} to Prayer (Oskill)",
+      "chinese": "+{X} 祈祷（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{100}",
+      "english": "+{X} to Resist Fire (Oskill)",
+      "chinese": "+{X} 抵抗火焰（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{101}",
+      "english": "+{X} to Holy Bolt (Oskill)",
+      "chinese": "+{X} 圣光弹（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{102}",
+      "english": "+{X} to Holy Fire (Oskill)",
+      "chinese": "+{X} 圣火（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{103}",
+      "english": "+{X} to Thorns (Oskill)",
+      "chinese": "+{X} 荆棘（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{104}",
+      "english": "+{X} to Defiance (Oskill)",
+      "chinese": "+{X} 反抗（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{105}",
+      "english": "+{X} to Resist Cold (Oskill)",
+      "chinese": "+{X} 抵抗冰冷（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{106}",
+      "english": "+{X} to Zeal (Oskill)",
+      "chinese": "+{X} 热诚（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{107}",
+      "english": "+{X} to Charge (Oskill)",
+      "chinese": "+{X} 冲锋（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{108}",
+      "english": "+{X} to Blessed Aim (Oskill)",
+      "chinese": "+{X} 祝福瞄准（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{109}",
+      "english": "+{X} to Cleansing (Oskill)",
+      "chinese": "+{X} 净化（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{110}",
+      "english": "+{X} to Resist Lightning (Oskill)",
+      "chinese": "+{X} 抵抗闪电（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{111}",
+      "english": "+{X} to Vengeance (Oskill)",
+      "chinese": "+{X} 复仇（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{112}",
+      "english": "+{X} to Blessed Hammer (Oskill)",
+      "chinese": "+{X} 祝福之锤（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{113}",
+      "english": "+{X} to Concentration (Oskill)",
+      "chinese": "+{X} 专注（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{114}",
+      "english": "+{X} to Holy Freeze (Oskill)",
+      "chinese": "+{X} 神圣冰冻（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{115}",
+      "english": "+{X} to Vigor (Oskill)",
+      "chinese": "+{X} 活力（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{116}",
+      "english": "+{X} to Holy Sword (Oskill)",
+      "chinese": "+{X} 神圣之剑（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{117}",
+      "english": "+{X} to Holy Shield (Oskill)",
+      "chinese": "+{X} 神圣之盾（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{118}",
+      "english": "+{X} to Holy Shock (Oskill)",
+      "chinese": "+{X} 神圣冲击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{119}",
+      "english": "+{X} to Sanctuary (Oskill)",
+      "chinese": "+{X} 庇护所（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{120}",
+      "english": "+{X} to Meditation (Oskill)",
+      "chinese": "+{X} 冥思（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{121}",
+      "english": "+{X} to Fist of the Heavens (Oskill)",
+      "chinese": "+{X} 天堂之拳（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{122}",
+      "english": "+{X} to Fanaticism (Oskill)",
+      "chinese": "+{X} 狂热（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{123}",
+      "english": "+{X} to Conviction (Oskill)",
+      "chinese": "+{X} 信念（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{124}",
+      "english": "+{X} to Redemption (Oskill)",
+      "chinese": "+{X} 救赎（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{125}",
+      "english": "+{X} to Salvation (Oskill)",
+      "chinese": "+{X} 救助（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{126}",
+      "english": "+{X} to Bash (Oskill)",
+      "chinese": "+{X} 重击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{127}",
+      "english": "+{X} to Sword Mastery (Oskill)",
+      "chinese": "+{X} 支配长剑（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{128}",
+      "english": "+{X} to One Hand Mastery (Oskill)",
+      "chinese": "+{X} 单手武器精通（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{129}",
+      "english": "+{X} to Mace Mastery (Oskill)",
+      "chinese": "+{X} 支配钉头锤（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{130}",
+      "english": "+{X} to Howl (Oskill)",
+      "chinese": "+{X} 狂嗥（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{131}",
+      "english": "+{X} to Find Potion (Oskill)",
+      "chinese": "+{X} 找寻药剂（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{132}",
+      "english": "+{X} to Leap (Oskill)",
+      "chinese": "+{X} 跳跃（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{133}",
+      "english": "+{X} to Double Swing (Oskill)",
+      "chinese": "+{X} 双手挥击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{134}",
+      "english": "+{X} to Two Hand Mastery (Oskill)",
+      "chinese": "+{X} 双手武器精通（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{135}",
+      "english": "+{X} to Throwing Mastery (Oskill)",
+      "chinese": "+{X} 支配飞掷（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{136}",
+      "english": "+{X} to Spear Mastery (Oskill)",
+      "chinese": "+{X} 支配长矛（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{137}",
+      "english": "+{X} to Taunt (Oskill)",
+      "chinese": "+{X} 嘲弄（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{138}",
+      "english": "+{X} to Shout (Oskill)",
+      "chinese": "+{X} 大叫（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{139}",
+      "english": "+{X} to Stun (Oskill)",
+      "chinese": "+{X} 击昏（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{140}",
+      "english": "+{X} to Double Throw (Oskill)",
+      "chinese": "+{X} 双手投掷（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{141}",
+      "english": "+{X} to Combat Reflexes (Oskill)",
+      "chinese": "+{X} 战斗反射（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{142}",
+      "english": "+{X} to Find Item (Oskill)",
+      "chinese": "+{X} 找寻物品（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{143}",
+      "english": "+{X} to Leap Attack (Oskill)",
+      "chinese": "+{X} 跳跃攻击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{144}",
+      "english": "+{X} to Concentrate (Oskill)",
+      "chinese": "+{X} 专心（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{145}",
+      "english": "+{X} to Iron Skin (Oskill)",
+      "chinese": "+{X} 铁布杉（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{146}",
+      "english": "+{X} to Battle Cry (Oskill)",
+      "chinese": "+{X} 战嗥（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{147}",
+      "english": "+{X} to Frenzy (Oskill)",
+      "chinese": "+{X} 狂乱（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{148}",
+      "english": "+{X} to Increased Speed (Oskill)",
+      "chinese": "+{X} 加速（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{149}",
+      "english": "+{X} to Battle Orders (Oskill)",
+      "chinese": "+{X} 战斗体制（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{150}",
+      "english": "+{X} to Grim Ward (Oskill)",
+      "chinese": "+{X} 残酷吓阻（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{151}",
+      "english": "+{X} to Whirlwind (Oskill)",
+      "chinese": "+{X} 旋风（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{152}",
+      "english": "+{X} to Berserk (Oskill)",
+      "chinese": "+{X} 狂战士（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{153}",
+      "english": "+{X} to Natural Resistance (Oskill)",
+      "chinese": "+{X} 自然抵抗（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{154}",
+      "english": "+{X} to War Cry (Oskill)",
+      "chinese": "+{X} 战斗狂嗥（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{155}",
+      "english": "+{X} to Battle Command (Oskill)",
+      "chinese": "+{X} 战斗指挥（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{221}",
+      "english": "+{X} to Raven (Oskill)",
+      "chinese": "+{X} 乌鸦（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{222}",
+      "english": "+{X} to Poison Creeper (Oskill)",
+      "chinese": "+{X} 猛毒花藤（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{223}",
+      "english": "+{X} to Werewolf (Oskill)",
+      "chinese": "+{X} 狼人变化（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{224}",
+      "english": "+{X} to Lycanthropy (Oskill)",
+      "chinese": "+{X} 变形术（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{225}",
+      "english": "+{X} to Firestorm (Oskill)",
+      "chinese": "+{X} 火风暴（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{226}",
+      "english": "+{X} to Oak Sage (Oskill)",
+      "chinese": "+{X} 橡木智者（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{227}",
+      "english": "+{X} to Summon Spirit Wolf (Oskill)",
+      "chinese": "+{X} 召唤灵狼（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{228}",
+      "english": "+{X} to Werebear (Oskill)",
+      "chinese": "+{X} 熊人变化（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{229}",
+      "english": "+{X} to Molten Boulder (Oskill)",
+      "chinese": "+{X} 熔浆巨岩（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{230}",
+      "english": "+{X} to Arctic Blast (Oskill)",
+      "chinese": "+{X} 极地风暴（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{231}",
+      "english": "+{X} to Carrion Vine (Oskill)",
+      "chinese": "+{X} 食尸藤（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{232}",
+      "english": "+{X} to Feral Rage (Oskill)",
+      "chinese": "+{X} 野性狂暴（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{233}",
+      "english": "+{X} to Maul (Oskill)",
+      "chinese": "+{X} 撞锤（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{234}",
+      "english": "+{X} to Fissure (Oskill)",
+      "chinese": "+{X} 火山爆（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{235}",
+      "english": "+{X} to Cyclone Armor (Oskill)",
+      "chinese": "+{X} 飓风装甲（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{236}",
+      "english": "+{X} to Heart of Wolverine (Oskill)",
+      "chinese": "+{X} 狼獾之心（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{237}",
+      "english": "+{X} to Summon Dire Wolf (Oskill)",
+      "chinese": "+{X} 召唤狂狼（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{238}",
+      "english": "+{X} to Rabies (Oskill)",
+      "chinese": "+{X} 狂犬病（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{239}",
+      "english": "+{X} to Fire Claws (Oskill)",
+      "chinese": "+{X} 焰爪（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{240}",
+      "english": "+{X} to Twister (Oskill)",
+      "chinese": "+{X} 小旋风（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{241}",
+      "english": "+{X} to Solar Creeper (Oskill)",
+      "chinese": "+{X} 太阳藤（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{242}",
+      "english": "+{X} to Hunger (Oskill)",
+      "chinese": "+{X} 饥饿（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{243}",
+      "english": "+{X} to Shock Wave (Oskill)",
+      "chinese": "+{X} 震波（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{244}",
+      "english": "+{X} to Volcano (Oskill)",
+      "chinese": "+{X} 火山（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{245}",
+      "english": "+{X} to Tornado (Oskill)",
+      "chinese": "+{X} 龙卷风（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{246}",
+      "english": "+{X} to Spirit of Barbs (Oskill)",
+      "chinese": "+{X} 棘灵（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{247}",
+      "english": "+{X} to Summon Grizzly (Oskill)",
+      "chinese": "+{X} 召唤灰熊（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{248}",
+      "english": "+{X} to Fury (Oskill)",
+      "chinese": "+{X} 狂怒（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{249}",
+      "english": "+{X} to Armageddon (Oskill)",
+      "chinese": "+{X} 毁天灭地（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{250}",
+      "english": "+{X} to Hurricane (Oskill)",
+      "chinese": "+{X} 暴风（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{251}",
+      "english": "+{X} to Fire Blast (Oskill)",
+      "chinese": "+{X} 火焰爆震（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{252}",
+      "english": "+{X} to Claw Mastery (Oskill)",
+      "chinese": "+{X} 支配利爪（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{253}",
+      "english": "+{X} to Psychic Hammer (Oskill)",
+      "chinese": "+{X} 心灵战锤（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{254}",
+      "english": "+{X} to Tiger Strike (Oskill)",
+      "chinese": "+{X} 虎击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{255}",
+      "english": "+{X} to Dragon Talon (Oskill)",
+      "chinese": "+{X} 龙爪（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{256}",
+      "english": "+{X} to Shock Web (Oskill)",
+      "chinese": "+{X} 雷电网（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{257}",
+      "english": "+{X} to Blade Sentinel (Oskill)",
+      "chinese": "+{X} 刃之守卫（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{258}",
+      "english": "+{X} to Burst of Speed (Oskill)",
+      "chinese": "+{X} 速度爆发（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{259}",
+      "english": "+{X} to Fists of Fire (Oskill)",
+      "chinese": "+{X} 焰拳（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{260}",
+      "english": "+{X} to Dragon Claw (Oskill)",
+      "chinese": "+{X} 双龙爪（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{261}",
+      "english": "+{X} to Charged Bolt Sentry (Oskill)",
+      "chinese": "+{X} 电能守卫（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{262}",
+      "english": "+{X} to Wake of Fire (Oskill)",
+      "chinese": "+{X} 火焰复苏（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{263}",
+      "english": "+{X} to Weapon Block (Oskill)",
+      "chinese": "+{X} 武器格挡（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{264}",
+      "english": "+{X} to Cloak of Shadows (Oskill)",
+      "chinese": "+{X} 魔影斗篷（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{265}",
+      "english": "+{X} to Cobra Strike (Oskill)",
+      "chinese": "+{X} 眼镜蛇攻击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{266}",
+      "english": "+{X} to Blade Fury (Oskill)",
+      "chinese": "+{X} 刃之怒（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{267}",
+      "english": "+{X} to Fade (Oskill)",
+      "chinese": "+{X} 能量消解（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{268}",
+      "english": "+{X} to Shadow Warrior (Oskill)",
+      "chinese": "+{X} 影子战士（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{269}",
+      "english": "+{X} to Claws of Thunder (Oskill)",
+      "chinese": "+{X} 雷电爪（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{270}",
+      "english": "+{X} to Dragon Tail (Oskill)",
+      "chinese": "+{X} 神龙摆尾（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{271}",
+      "english": "+{X} to Chain Lightning Sentry (Oskill)",
+      "chinese": "+{X} 连锁闪电哨卫（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{272}",
+      "english": "+{X} to Wake of Inferno (Oskill)",
+      "chinese": "+{X} 复苏狱火（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{273}",
+      "english": "+{X} to Mind Blast (Oskill)",
+      "chinese": "+{X} 心灵爆震（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{274}",
+      "english": "+{X} to Blades of Ice (Oskill)",
+      "chinese": "+{X} 寒冰刃（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{275}",
+      "english": "+{X} to Dragon Flight (Oskill)",
+      "chinese": "+{X} 飞龙在天（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{276}",
+      "english": "+{X} to Death Sentry (Oskill)",
+      "chinese": "+{X} 亡者守卫（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{277}",
+      "english": "+{X} to Blade Shield (Oskill)",
+      "chinese": "+{X} 刀刃之盾（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{278}",
+      "english": "+{X} to Venom (Oskill)",
+      "chinese": "+{X} 毒牙（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{279}",
+      "english": "+{X} to Shadow Master (Oskill)",
+      "chinese": "+{X} 影子大师（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{280}",
+      "english": "+{X} to Phoenix Strike (Oskill)",
+      "chinese": "+{X} 凤凰攻击（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{358}",
+      "english": "+{X} to Melee attacks deal splash damage (Oskill)",
+      "chinese": "+{X} 近战攻击造成溅射伤害（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{359}",
+      "english": "+{X} to RoguePierce (Oskill)",
+      "chinese": "+{X} 萝格穿透（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{360}",
+      "english": "+{X} to BattleOrdersCTA (Oskill)",
+      "chinese": "+{X} 战斗体制（战争召唤）（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{364}",
+      "english": "+{X} to Holy Nova (Oskill)",
+      "chinese": "+{X} 圣光新星（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{365}",
+      "english": "+{X} to Shattering Arrow (Oskill)",
+      "chinese": "+{X} 碎裂之箭（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{366}",
+      "english": "+{X} to Lightning Sentry (Oskill)",
+      "chinese": "+{X} 雷光守卫（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{367}",
+      "english": "+{X} to Blood Warp (Oskill)",
+      "chinese": "+{X} 血腥传送（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{368}",
+      "english": "+{X} to Deep Wounds (Oskill)",
+      "chinese": "+{X} 深度撕裂伤口（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{369}",
+      "english": "+{X} to Ice Barrage (Oskill)",
+      "chinese": "+{X} 冰霜弹幕（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{370}",
+      "english": "+{X} to Gust (Oskill)",
+      "chinese": "+{X} 风遁（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{371}",
+      "english": "+{X} to Holy Light (Oskill)",
+      "chinese": "+{X} 圣光（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{374}",
+      "english": "+{X} to Curse Mastery (Oskill)",
+      "chinese": "+{X} 诅咒精通（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{375}",
+      "english": "+{X} to Split Throw (Oskill)",
+      "chinese": "+{X} 分裂投掷（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{376}",
+      "english": "+{X} to Combustion (Oskill)",
+      "chinese": "+{X} 燃烧（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{378}",
+      "english": "+{X} to Joust (Oskill)",
+      "chinese": "+{X} 竞争（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{380}",
+      "english": "+{X} to Blade Dance (Oskill)",
+      "chinese": "+{X} 刃舞（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{381}",
+      "english": "+{X} to Dark Pact (Oskill)",
+      "chinese": "+{X} 黑暗契约（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{383}",
+      "english": "+{X} to Lesser Hydra (Oskill)",
+      "chinese": "+{X} 次级九头蛇（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{442}",
+      "english": "+{X} to Amplify Damage (Oskill)",
+      "chinese": "+{X} 伤害加深（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{443}",
+      "english": "+{X} to Weaken (Oskill)",
+      "chinese": "+{X} 削弱（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{444}",
+      "english": "+{X} to Iron Maiden (Oskill)",
+      "chinese": "+{X} 攻击反噬（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{445}",
+      "english": "+{X} to Life Tap (Oskill)",
+      "chinese": "+{X} 偷取生命（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{446}",
+      "english": "+{X} to Decrepify (Oskill)",
+      "chinese": "+{X} 衰老（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{447}",
+      "english": "+{X} to Lower Resist (Oskill)",
+      "chinese": "+{X} 降低抵抗（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{554}",
+      "english": "+{X} to Energy Shield SelfAura (Oskill)",
+      "chinese": "+{X} 能量护盾（自身灵气）（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{555}",
+      "english": "+{X} to Chilling Armor SelfAura (Oskill)",
+      "chinese": "+{X} 寒冰装甲（自身灵气）（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{556}",
+      "english": "+{X} to Quickness SelfAura (Oskill)",
+      "chinese": "+{X} 速度爆发（自身灵气）（非本职业技能）"
+    },
+    {
+      "key": "item_nonclassskill{557}",
+      "english": "+{X} to Blade Shield SelfAura (Oskill)",
+      "chinese": "+{X} 刀刃之盾（自身灵气）（非本职业技能）"
+    }
+  ]
+}

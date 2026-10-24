@@ -1,5 +1,7 @@
-/** Simplified Chinese names for character skills used in item affixes and proc labels. */
-export const PD2_SKILL_TRANSLATIONS: Readonly<Record<string, string>> = {
+import supplied from './pd2-skill-translations.data.json';
+
+/** PD2 additions and legacy labels; supplied corrected simplified names take precedence. */
+const LEGACY_SKILL_TRANSLATIONS: Readonly<Record<string, string>> = {
   "Decoy": "亚马逊分身",
   "Amplify Damage": "伤害加深",
   "Poison Strike": "剧毒打击",
@@ -258,3 +260,43 @@ export const PD2_SKILL_TRANSLATIONS: Readonly<Record<string, string>> = {
   "Blade Dance": "刃舞"
 };
 
+// Internal English names used by the game for the same skills. Display aliases
+// never replace the English names or IDs stored in item/query data.
+const DISPLAY_ALIASES: Record<string, string> = {
+  Dopplezon: 'Decoy',
+  AmpDmg: 'Amplify Damage',
+  BloodGolem: 'Blood Golem',
+  IronGolem: 'Iron Golem',
+  LowRes: 'Lower Resist',
+  FireGolem: 'Fire Golem',
+  Wearwolf: 'Werewolf',
+  Wearbear: 'Werebear',
+  'Plague Poppy': 'Poison Creeper',
+  'Summon Fenris': 'Summon Dire Wolf',
+  'Fire Trauma': 'Fire Blast',
+  'Shock Field': 'Shock Web',
+  Quickness: 'Burst of Speed',
+  'Wake of Fire Sentry': 'Wake of Fire',
+  'Inferno Sentry': 'Wake of Inferno',
+  'Royal Strike': 'Phoenix Strike',
+};
+
+const corrected: Readonly<Record<string, string>> = supplied.skills;
+export const PD2_SKILL_TRANSLATIONS: Readonly<Record<string, string>> = {
+  ...LEGACY_SKILL_TRANSLATIONS,
+  ...corrected,
+  ...Object.fromEntries(Object.entries(DISPLAY_ALIASES).map(([alias, name]) => [alias, corrected[name]])),
+  'Melee attacks deal splash damage': '近战攻击造成溅射伤害',
+  RoguePierce: '萝格穿透',
+  BattleOrdersCTA: '战斗体制（战争召唤）',
+  'Energy Shield SelfAura': `${corrected['Energy Shield']}（自身灵气）`,
+  'Chilling Armor SelfAura': `${corrected['Chilling Armor']}（自身灵气）`,
+  'Quickness SelfAura': `${corrected['Burst of Speed']}（自身灵气）`,
+  'Blade Shield SelfAura': `${corrected['Blade Shield']}（自身灵气）`,
+};
+
+/** Keep prior Chinese names usable for incoming data; do not fuzzy-match skills. */
+export const PD2_SKILL_TRANSLATION_ALIASES: ReadonlyArray<readonly [string, string]> = [
+  ...Object.entries(LEGACY_SKILL_TRANSLATIONS),
+  ...Object.entries(PD2_SKILL_TRANSLATIONS),
+];

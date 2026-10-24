@@ -1,5 +1,5 @@
 import { PD2_AFFIX_TRANSLATIONS } from './pd2-affix-translations';
-import { PD2_SKILL_TRANSLATIONS } from './pd2-skill-translations';
+import { localizeSkillName } from './localize-skill-name';
 
 /** Simplified Chinese labels for English stat text supplied by PD2 item and market data. */
 const PHRASES: Array<[string, string]> = [
@@ -12,7 +12,7 @@ const PHRASES: Array<[string, string]> = [
   ['Critical Strike', '致命攻击'],
   ['Valkyrie', '女武神'],
   ['Amazon Only', '亚马逊专属'],
-  ['Sorceress Only', '女巫专属'],
+  ['Sorceress Only', '法师专属'],
   ['Necromancer Only', '死灵法师专属'],
   ['Paladin Only', '圣骑士专属'],
   ['Barbarian Only', '野蛮人专属'],
@@ -120,14 +120,6 @@ const TRIGGER_TEXT: Record<string, string> = {
 const TRIGGERED_SKILL_PATTERN =
   /(\d+(?:\.\d+)?%)\s*Chance to cast level\s+(\d+)\s+(.+?)\s+(on attack|when you Kill an Enemy|when you Die|on striking|when you Level-Up|on casting|when struck|on block|on critical hit|on pierce)/gi;
 
-const SKILL_TRANSLATIONS_LOWER = new Map(
-  Object.entries(PD2_SKILL_TRANSLATIONS).map(([english, chinese]) => [english.toLowerCase(), chinese]),
-);
-
-function localizeSkillName(name: string): string {
-  return SKILL_TRANSLATIONS_LOWER.get(name.trim().toLowerCase()) ?? name;
-}
-
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -139,11 +131,11 @@ function createTemplatePattern(template: string): { pattern: RegExp; captures: s
     .map((part) => {
       if (part === '%d%%') {
         captures.push('%d%%');
-        return '([+-]?(?:\\d+(?:\\.\\d+)?|\\.\\d+))%';
+        return '([+-]?(?:\\d+(?:\\.\\d+)?|\\.\\d+|\\{X\\}|%d))%';
       }
       if (part === '%d') {
         captures.push('%d');
-        return '([+-]?(?:\\d+(?:\\.\\d+)?|\\.\\d+))';
+        return '([+-]?(?:\\d+(?:\\.\\d+)?|\\.\\d+|\\{X\\}|%d))';
       }
       if (part === '%s') {
         captures.push('%s');
@@ -182,11 +174,47 @@ function localizeAffixTemplate(text: string): string | undefined {
 export function localizePd2Text(text: string | null | undefined): string {
   if (text == null) return '';
 
-  const skillName = SKILL_TRANSLATIONS_LOWER.get(text.trim().toLowerCase());
-  if (skillName !== undefined) return skillName;
+  const skillName = localizeSkillName(text);
+  if (skillName !== text) return skillName;
+
+  const skillLabel = /^to\s+(.+)$/i.exec(text);
+  if (skillLabel) {
+    const skill = localizeSkillName(skillLabel[1]);
+    if (skill !== skillLabel[1]) return skill;
+  }
+
+  const skillBonus = /^([+-]?(?:\d+(?:\.\d+)?|\{X\}|%d))\s+to\s+(.+)$/i.exec(text);
+  if (skillBonus) {
+    const skill = localizeSkillName(skillBonus[2]);
+    if (skill !== skillBonus[2]) return `${skillBonus[1]} ${skill}`;
+  }
+
+  const charges = /^Level\s+(\d+|%d|\{X\})\s+(.+?)\s+\((\d+|%d)\s*\/\s*(\d+|%d)\s+Charges\)$/i.exec(text);
+  if (charges) return `等级 ${charges[1]} ${localizeSkillName(charges[2])}（聚气：${charges[3]}/${charges[4]}）`;
+
+  const genericSkill = /^Level\s+(\d+|%d|\{X\})\s+(Charged Skill|When Equipped)$/i.exec(text);
+  if (genericSkill)
+    return `等级 ${genericSkill[1]} ${/^charged/i.test(genericSkill[2]) ? '聚气技能' : '装备时赋予技能'}`;
+
+  const triggeredSkill =
+    /^(?:((?:\d+(?:\.\d+)?|\{X\}|%d)%)\s*)?Chance to cast level\s+(\d+|%d|\{X\})\s+(.+?)\s+(on attack|when you kill an enemy|when you die|on striking|when you level-up|on casting|when struck|on block|on critical hit|on pierce)$/i.exec(
+      text,
+    );
+  if (triggeredSkill) {
+    const [, chance, level, skill, trigger] = triggeredSkill;
+    const skillLabel = skill.toLowerCase() === 'skill' ? '技能' : localizeSkillName(skill);
+    return `${TRIGGER_TEXT[trigger.toLowerCase()]}有${chance ?? ''}几率施展等级 ${level} ${skillLabel}`;
+  }
 
   const localizedTemplate = localizeAffixTemplate(text);
   if (localizedTemplate !== undefined) return localizedTemplate;
+
+  // Market labels often add a numeric prefix to an otherwise complete template.
+  const prefixedAffix = /^([+-]?(?:\d+(?:\.\d+)?|\{X\}|%d)%?)\s+(.+)$/.exec(text);
+  if (prefixedAffix) {
+    const affix = localizeAffixTemplate(prefixedAffix[2]);
+    if (affix !== undefined) return `${prefixedAffix[1]} ${affix}`;
+  }
 
   const withTriggeredSkills = text.replace(
     TRIGGERED_SKILL_PATTERN,
