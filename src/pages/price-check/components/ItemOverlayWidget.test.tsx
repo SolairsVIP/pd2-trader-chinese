@@ -642,20 +642,20 @@ describe('ItemOverlayWidget rare appraisal', () => {
   it('shows the appraisal skeleton while loading', () => {
     rareState = { status: 'loading' };
     renderWidget(rareRing());
-    expect(screen.getByText('Appraising rare...')).not.toBeNull();
+    expect(screen.getByText('正在评估稀有物品……')).not.toBeNull();
   });
 
   it('a Keep verdict pre-selects key stats at their threshold and searches immediately', async () => {
     rareState = { status: 'done', response: { appraisal: appraisal(), history: null, reason: null } };
     renderWidget(rareRing());
 
-    expect(screen.getByText('Keep')).not.toBeNull();
+    expect(screen.getByText('建议保留')).not.toBeNull();
     expect(screen.getByText('★★')).not.toBeNull();
-    expect(screen.getByText('valuable from 35')).not.toBeNull();
-    expect((screen.getByLabelText('% Faster Cast Rate minimum') as HTMLInputElement).value).toBe('20');
-    expect((screen.getByLabelText('% Faster Cast Rate maximum') as HTMLInputElement).value).toBe('');
+    expect(screen.getByText('从 35 起有价值')).not.toBeNull();
+    expect((screen.getByLabelText('% 快速施法率最小值') as HTMLInputElement).value).toBe('20');
+    expect((screen.getByLabelText('% 快速施法率最大值') as HTMLInputElement).value).toBe('');
     // only starred stats are pre-selected
-    expect(screen.queryByLabelText('% Better Chance of Getting Magic Items minimum')).toBeNull();
+    expect(screen.getAllByRole('spinbutton')).toHaveLength(2);
 
     await waitFor(() => expect(getMarketListings).toHaveBeenCalledTimes(1));
     expect(JSON.stringify(lastQuery())).toContain('{"name":"item_fastercastrate","values.0":{"$gte":20}}');
@@ -667,16 +667,61 @@ describe('ItemOverlayWidget rare appraisal', () => {
       response: { appraisal: appraisal({ verdict: 'check' }), history: null, reason: null },
     };
     renderWidget(rareRing());
-    expect(screen.getByLabelText('% Faster Cast Rate minimum')).not.toBeNull();
+    expect(screen.getByLabelText('% 快速施法率最小值')).not.toBeNull();
     await act(async () => {});
     expect(getMarketListings).not.toHaveBeenCalled();
   });
 
-  it('shows the server reason when there is no appraisal', () => {
-    rareState = { status: 'done', response: { appraisal: null, history: null, reason: 'unknown base' } };
+  it.each(['unknown base', 'unparsed stats: 2'])('shows the server reason without an optional tooltip: %s', (reason) => {
+    rareState = { status: 'done', response: { appraisal: null, history: null, reason } };
     renderWidget(rareRing());
-    expect(screen.getByText('Appraisal note: unknown base')).not.toBeNull();
-    expect(screen.queryByText('Keep')).toBeNull();
+    const note = screen.getByText(`估价说明：${reason}`);
+    expect(note.getAttribute('title')).toBeNull();
+    expect(screen.queryByText('建议保留')).toBeNull();
+    expect(screen.getByRole('button', { name: '搜索' })).not.toBeNull();
+  });
+
+  it('keeps a filtered corrupted ring searchable after an unavailable appraisal and a later retry', async () => {
+    // Synthetic clipboard fixture using the stats visible in the user's failing screenshot.
+    const ring = rareRing({
+      name: 'ÿc9Ring ÿc1[C]',
+      iLevel: 91,
+      stats: [
+        { stat_id: 19, name: 'ÿc3to Attack Rating', value: 117, range: { min: 10, max: 120 } },
+        { stat_id: 62, name: '% Mana stolen per hit', value: 4, range: { min: 2, max: 6 } },
+        { stat_id: 60, name: '% Life stolen per hit', value: 6, range: { min: 3, max: 8 } },
+        { stat_id: 0, name: 'to Strength', value: 15, range: { min: 1, max: 20 } },
+        { stat_id: 41, name: 'Lightning Resist', value: 24, range: { min: 3, max: 30 } },
+        { stat_id: 39, name: 'Fire Resist', value: 24, range: { min: 3, max: 30 } },
+        { stat_id: 79, name: '% Extra Gold from Monsters', value: 56, corrupted: true },
+        { stat_id: 360, name: 'Corrupted' },
+      ],
+    });
+    rareState = { status: 'loading' };
+    const { rerenderItem } = renderWidget(ring);
+    expect(screen.getByText('正在评估稀有物品……')).not.toBeNull();
+
+    rareState = { status: 'done', response: { appraisal: null, history: null, reason: 'unparsed stats: 2' } };
+    rerenderItem(ring);
+    expect(screen.getByText('估价说明：unparsed stats: 2')).not.toBeNull();
+    // A failed optional appraisal must leave the original stat filters and market search usable.
+    fireEvent.click(statCheckbox('力量'));
+    expect((screen.getByLabelText('力量最小值') as HTMLInputElement).value).toBe('14');
+    fireEvent.click(screen.getByRole('button', { name: '搜索' }));
+    await waitFor(() => expect(getMarketListings).toHaveBeenCalledTimes(1));
+    expect(lastQuery()['item.quality.name']).toBe('Rare');
+    expect(JSON.stringify(lastQuery())).toContain('"strength"');
+
+    rareState = { status: 'loading' };
+    rerenderItem(ring);
+    rareState = {
+      status: 'done',
+      response: { appraisal: appraisal({ verdict: 'vendor', stats: [] }), history: null, reason: null },
+    };
+    rerenderItem(ring);
+    expect(screen.getByText('建议卖商店')).not.toBeNull();
+    expect(screen.queryByText(/^估价说明：/)).toBeNull();
+    expect(screen.getByRole('button', { name: '搜索' })).not.toBeNull();
   });
 
   it('explains a crafted gate-off reason in plain words and keeps the detail on hover', () => {
@@ -686,9 +731,9 @@ describe('ItemOverlayWidget rare appraisal', () => {
       response: { appraisal: null, history: null, reason, quality: 'Crafted', recipe: null },
     };
     renderWidget(rareRing({ name: 'Storm Grip', quality: 'Crafted', type: 'Vampirebone Gloves' }));
-    const note = screen.getByText(/^Appraisal note:/);
+    const note = screen.getByText(/^估价说明：/);
     expect(note.textContent).toBe(
-      "Appraisal note: crafted items in this slot can't be appraised reliably yet (too little crafted data)",
+      '估价说明：此部位的手工物品暂时无法可靠估价（相关数据不足）。',
     );
     expect(note.getAttribute('title')).toBe(reason);
   });

@@ -1224,7 +1224,7 @@ export default function ItemOverlayWidget({ item, statMapper, onClose }: Props) 
             )}
             {appraisalNoteText && (
               <span className="text-[11px] text-muted-foreground/70"
-        title={localizePd2Text(appraisalNoteText.title)}>
+                title={appraisalNoteText.title ? localizePd2Text(appraisalNoteText.title) : undefined}>
                 估价说明：{localizePd2Text(appraisalNoteText.text)}
               </span>
             )}

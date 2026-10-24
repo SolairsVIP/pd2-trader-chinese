@@ -178,8 +178,10 @@ function localizeAffixTemplate(text: string): string | undefined {
   return undefined;
 }
 
-/** Translate known item-stat phrases while retaining values, punctuation and unknown data. */
-export function localizePd2Text(text: string): string {
+/** Translate display text, including optional API labels, while retaining unknown data. */
+export function localizePd2Text(text: string | null | undefined): string {
+  if (text == null) return '';
+
   const localizedTemplate = localizeAffixTemplate(text);
   if (localizedTemplate !== undefined) return localizedTemplate;
 
