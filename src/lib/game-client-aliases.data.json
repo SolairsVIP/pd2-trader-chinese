@@ -1,0 +1,9254 @@
+{
+  "bases": [
+    [
+      "灰木之弓",
+      "Ashwood Bow"
+    ],
+    [
+      "祭典之弓",
+      "Ceremonial Bow"
+    ],
+    [
+      "大院长之弓 Grand Matron Bow",
+      "Grand Matron Bow"
+    ],
+    [
+      "女族长之弓 Matriarchal Bow",
+      "Matriarchal Bow"
+    ],
+    [
+      "反射之弓",
+      "Reflex Bow"
+    ],
+    [
+      "男性之弓",
+      "Stag Bow"
+    ],
+    [
+      "祭典之标枪",
+      "Ceremonial Javelin"
+    ],
+    [
+      "女士标枪",
+      "Maiden Javelin"
+    ],
+    [
+      "女族长之标枪 Matriarchal Javelin",
+      "Matriarchal Javelin"
+    ],
+    [
+      "祭典之长矛",
+      "Ceremonial Pike"
+    ],
+    [
+      "祭典之矛",
+      "Ceremonial Spear"
+    ],
+    [
+      "女士长矛",
+      "Maiden Pike"
+    ],
+    [
+      "女士之矛",
+      "Maiden Spear"
+    ],
+    [
+      "女族长之长矛 Matriarchal Pike",
+      "Matriarchal Pike"
+    ],
+    [
+      "女族长之矛 Matriarchal Spear",
+      "Matriarchal Spear"
+    ],
+    [
+      "古代装甲",
+      "Ancient Armor"
+    ],
+    [
+      "执政官铠甲 Archon Plate",
+      "Archon Plate"
+    ],
+    [
+      "炎魔皮板甲 Balrog Skin",
+      "Balrog Skin"
+    ],
+    [
+      "骸骨链甲 Boneweave",
+      "Boneweave"
+    ],
+    [
+      "胸甲",
+      "Breast Plate"
+    ],
+    [
+      "锁子甲",
+      "Chain Mail"
+    ],
+    [
+      "混沌战甲",
+      "Chaos Armor"
+    ],
+    [
+      "护胸甲",
+      "Cuirass"
+    ],
+    [
+      "魔皮战甲",
+      "Demonhide Armor"
+    ],
+    [
+      "钻石锁子甲 Diamond Mail",
+      "Diamond Mail"
+    ],
+    [
+      "灰暮寿衣 Dusk Shroud",
+      "Dusk Shroud"
+    ],
+    [
+      "凸纹战甲",
+      "Embossed Plate"
+    ],
+    [
+      "实战铠甲",
+      "Field Plate"
+    ],
+    [
+      "高级战甲",
+      "Full Plate Mail"
+    ],
+    [
+      "鬼魂战甲",
+      "Ghost Armor"
+    ],
+    [
+      "哥德战甲",
+      "Gothic Plate"
+    ],
+    [
+      "巨型鳞铠胸甲 Great Hauberk",
+      "Great Hauberk"
+    ],
+    [
+      "硬皮甲",
+      "Hard Leather Armor"
+    ],
+    [
+      "地狱锻甲 Hellforge Plate",
+      "Hellforge Plate"
+    ],
+    [
+      "海妖壳甲 Kraken Shell",
+      "Kraken Shell"
+    ],
+    [
+      "漆甲 Lacquered Plate",
+      "Lacquered Plate"
+    ],
+    [
+      "皮甲",
+      "Leather Armor"
+    ],
+    [
+      "轻型装甲",
+      "Light Plate"
+    ],
+    [
+      "连扣战甲",
+      "Linked Mail"
+    ],
+    [
+      "甲壳铠鳞甲 Loricated Mail",
+      "Loricated Mail"
+    ],
+    [
+      "法师铠甲",
+      "Mage Plate"
+    ],
+    [
+      "织网战甲",
+      "Mesh Armor"
+    ],
+    [
+      "华丽战甲",
+      "Ornate Plate"
+    ],
+    [
+      "铠甲",
+      "Plate Mail"
+    ],
+    [
+      "布甲",
+      "Quilted Armor"
+    ],
+    [
+      "锁环甲",
+      "Ring Mail"
+    ],
+    [
+      "罗瑟战甲",
+      "Russet Armor"
+    ],
+    [
+      "神圣盔甲 Sacred Armor",
+      "Sacred Armor"
+    ],
+    [
+      "鳞甲",
+      "Scale Mail"
+    ],
+    [
+      "圣甲虫壳皮甲 Scarab Husk",
+      "Scarab Husk"
+    ],
+    [
+      "海蛇皮甲",
+      "Serpentskin Armor"
+    ],
+    [
+      "阴影铠甲 Shadow Plate",
+      "Shadow Plate"
+    ],
+    [
+      "鲨齿战甲",
+      "Sharktooth Armor"
+    ],
+    [
+      "板甲",
+      "Splint Mail"
+    ],
+    [
+      "镶嵌甲",
+      "Studded Leather"
+    ],
+    [
+      "圣堂武士外袍",
+      "Templar Coat"
+    ],
+    [
+      "提格莱特战甲",
+      "Tigulated Mail"
+    ],
+    [
+      "盘绕战甲",
+      "Trellised Armor"
+    ],
+    [
+      "线羊毛皮甲 Wire Fleece",
+      "Wire Fleece"
+    ],
+    [
+      "古龙皮 Wyrmhide",
+      "Wyrmhide"
+    ],
+    [
+      "古代之斧",
+      "Ancient Axe"
+    ],
+    [
+      "斧",
+      "Axe"
+    ],
+    [
+      "战斗斧",
+      "Battle Axe"
+    ],
+    [
+      "钩斧",
+      "Bearded Axe"
+    ],
+    [
+      "狂战士斧",
+      "Berserker Axe"
+    ],
+    [
+      "阔斧",
+      "Broad Axe"
+    ],
+    [
+      "豪杰斧 Champion Axe",
+      "Champion Axe"
+    ],
+    [
+      "切肉斧",
+      "Cleaver"
+    ],
+    [
+      "喙钳",
+      "Crowbill"
+    ],
+    [
+      "斩首斧 Decapitator",
+      "Decapitator"
+    ],
+    [
+      "双刃斧",
+      "Double Axe"
+    ],
+    [
+      "双头斧 Ettin Axe",
+      "Ettin Axe"
+    ],
+    [
+      "猛禽斧 Feral Axe",
+      "Feral Axe"
+    ],
+    [
+      "大斧",
+      "Giant Axe"
+    ],
+    [
+      "荣光之斧 Glorious Axe",
+      "Glorious Axe"
+    ],
+    [
+      "哥德之斧",
+      "Gothic Axe"
+    ],
+    [
+      "卓越之斧",
+      "Great Axe"
+    ],
+    [
+      "手斧",
+      "Hand Axe"
+    ],
+    [
+      "小斧",
+      "Hatchet"
+    ],
+    [
+      "巨斧",
+      "Large Axe"
+    ],
+    [
+      "军斧",
+      "Military Axe"
+    ],
+    [
+      "军用锹",
+      "Military Pick"
+    ],
+    [
+      "纳卡",
+      "Naga"
+    ],
+    [
+      "银刃斧 Silver-edged Axe",
+      "Silver-edged Axe"
+    ],
+    [
+      "弯月斧 Small Crescent",
+      "Small Crescent"
+    ],
+    [
+      "战斗斧",
+      "Tabar"
+    ],
+    [
+      "战钺 Tomahawk",
+      "Tomahawk"
+    ],
+    [
+      "强化双斧",
+      "Twin Axe"
+    ],
+    [
+      "巨战斧",
+      "War Axe"
+    ],
+    [
+      "战刺 War Spike",
+      "War Spike"
+    ],
+    [
+      "突击盔",
+      "Assault Helmet"
+    ],
+    [
+      "复仇者之盔",
+      "Avenger Guard"
+    ],
+    [
+      "屠杀头盔 Carnage Helm",
+      "Carnage Helm"
+    ],
+    [
+      "征服者皇冠面甲 Conqueror Crown",
+      "Conqueror Crown"
+    ],
+    [
+      "毁灭者头盔 Destroyer Helm",
+      "Destroyer Helm"
+    ],
+    [
+      "尖牙盔",
+      "Fanged Helm"
+    ],
+    [
+      "暴怒面甲 Fury Visor",
+      "Fury Visor"
+    ],
+    [
+      "守护者皇冠面甲 Guardian Crown",
+      "Guardian Crown"
+    ],
+    [
+      "角盔",
+      "Horned Helm"
+    ],
+    [
+      "颚骨帽",
+      "Jawbone Cap"
+    ],
+    [
+      "颚骨面甲",
+      "Jawbone Visor"
+    ],
+    [
+      "狮头尖盔",
+      "Lion Helm"
+    ],
+    [
+      "狂怒面具刺盔",
+      "Rage Mask"
+    ],
+    [
+      "蛮族头盔",
+      "Savage Helmet"
+    ],
+    [
+      "杀手防护面甲",
+      "Slayer Guard"
+    ],
+    [
+      "战场腰带",
+      "Battle Belt"
+    ],
+    [
+      "扣带",
+      "Belt"
+    ],
+    [
+      "巨神腰带 Colossus Girdle",
+      "Colossus Girdle"
+    ],
+    [
+      "魔皮勋带",
+      "Demonhide Sash"
+    ],
+    [
+      "重扣带",
+      "Heavy Belt"
+    ],
+    [
+      "轻扣带",
+      "Light Belt"
+    ],
+    [
+      "织网腰带",
+      "Mesh Belt"
+    ],
+    [
+      "秘银腰带 Mithril Coil",
+      "Mithril Coil"
+    ],
+    [
+      "金属扣带",
+      "Plated Belt"
+    ],
+    [
+      "饰带",
+      "Sash"
+    ],
+    [
+      "鲨皮腰带",
+      "Sharkskin Belt"
+    ],
+    [
+      "蛛网腰带 Spiderweb Sash",
+      "Spiderweb Sash"
+    ],
+    [
+      "洞穴巨魔腰带 Troll Belt",
+      "Troll Belt"
+    ],
+    [
+      "吸血鬼獠牙腰带 Vampirefang Belt",
+      "Vampirefang Belt"
+    ],
+    [
+      "巨战腰带",
+      "War Belt"
+    ],
+    [
+      "战场之靴",
+      "Battle Boots"
+    ],
+    [
+      "骸骨靴 Boneweave Boots",
+      "Boneweave Boots"
+    ],
+    [
+      "皮靴",
+      "Boots"
+    ],
+    [
+      "锁链靴",
+      "Chain Boots"
+    ],
+    [
+      "魔皮靴",
+      "Demonhide Boots"
+    ],
+    [
+      "护胫",
+      "Greaves"
+    ],
+    [
+      "重靴",
+      "Heavy Boots"
+    ],
+    [
+      "轻型金属靴",
+      "Light Plated Boots"
+    ],
+    [
+      "织网之靴",
+      "Mesh Boots"
+    ],
+    [
+      "镜化靴 Mirrored Boots",
+      "Mirrored Boots"
+    ],
+    [
+      "极速靴 Myrmidon Greaves",
+      "Myrmidon Greaves"
+    ],
+    [
+      "圣甲虫壳靴 Scarabshell Boots",
+      "Scarabshell Boots"
+    ],
+    [
+      "鲨皮之靴",
+      "Sharkskin Boots"
+    ],
+    [
+      "巨战之靴",
+      "War Boots"
+    ],
+    [
+      "飞龙皮靴 Wyrmhide Boots",
+      "Wyrmhide Boots"
+    ],
+    [
+      "刀锋弓 Blade Bow",
+      "Blade Bow"
+    ],
+    [
+      "杉木弓",
+      "Cedar Bow"
+    ],
+    [
+      "组合弓",
+      "Composite Bow"
+    ],
+    [
+      "十字军之弓 Crusader Bow",
+      "Crusader Bow"
+    ],
+    [
+      "钻石弓 Diamond Bow",
+      "Diamond Bow"
+    ],
+    [
+      "双弓",
+      "Double Bow"
+    ],
+    [
+      "锋锐之弓",
+      "Edge Bow"
+    ],
+    [
+      "哥德弓",
+      "Gothic Bow"
+    ],
+    [
+      "巨弓 Great Bow",
+      "Great Bow"
+    ],
+    [
+      "猎弓",
+      "Hunter's Bow"
+    ],
+    [
+      "九头蛇弓 Hydra Bow",
+      "Hydra Bow"
+    ],
+    [
+      "长攻城弓",
+      "Large Siege Bow"
+    ],
+    [
+      "长战斗弓",
+      "Long Battle Bow"
+    ],
+    [
+      "长弓",
+      "Long Bow"
+    ],
+    [
+      "长巨战弓",
+      "Long War Bow"
+    ],
+    [
+      "剃刀之弓",
+      "Razor Bow"
+    ],
+    [
+      "符文之弓",
+      "Rune Bow"
+    ],
+    [
+      "阴影弓 Shadow Bow",
+      "Shadow Bow"
+    ],
+    [
+      "短战斗弓",
+      "Short Battle Bow"
+    ],
+    [
+      "短弓",
+      "Short Bow"
+    ],
+    [
+      "短攻城弓",
+      "Short Siege Bow"
+    ],
+    [
+      "短巨战弓",
+      "Short War Bow"
+    ],
+    [
+      "蜘蛛弓 Spider Bow",
+      "Spider Bow"
+    ],
+    [
+      "庇护之弓 Ward Bow",
+      "Ward Bow"
+    ],
+    [
+      "粗制箭矢",
+      "Blunt Arrows"
+    ],
+    [
+      "锋利箭矢",
+      "Razor Arrows"
+    ],
+    [
+      "精良箭矢",
+      "Sharp Arrows"
+    ],
+    [
+      "超大型护身符",
+      "Grand Charm"
+    ],
+    [
+      "大型护身符",
+      "Large Charm"
+    ],
+    [
+      "小护身符",
+      "Small Charm"
+    ],
+    [
+      "头饰 Circlet",
+      "Circlet"
+    ],
+    [
+      "宝冠 Coronet",
+      "Coronet"
+    ],
+    [
+      "权冠 Diadem",
+      "Diadem"
+    ],
+    [
+      "三重冠 Tiara",
+      "Tiara"
+    ],
+    [
+      "倒钩锤",
+      "Barbed Club"
+    ],
+    [
+      "木棒",
+      "Club"
+    ],
+    [
+      "棍棒",
+      "Cudgel"
+    ],
+    [
+      "狼牙棒",
+      "Spiked Club"
+    ],
+    [
+      "战仪杖 Truncheon",
+      "Truncheon"
+    ],
+    [
+      "暴君之棒 Tyrant Club",
+      "Tyrant Club"
+    ],
+    [
+      "血腥系模组",
+      "Blood Craft Infusion"
+    ],
+    [
+      "丰饶系模组",
+      "Bountiful Craft Infusion"
+    ],
+    [
+      "闪耀系模组",
+      "Brilliant Craft Infusion"
+    ],
+    [
+      "施法系模组",
+      "Caster Craft Infusion"
+    ],
+    [
+      "打击系模组",
+      "Hitpower Craft Infusion"
+    ],
+    [
+      "安全系模组",
+      "Safety Craft Infusion"
+    ],
+    [
+      "妖蝠系模组",
+      "Vampiric Craft Infusion"
+    ],
+    [
+      "石弓",
+      "Arbalest"
+    ],
+    [
+      "弩弓",
+      "Ballista"
+    ],
+    [
+      "巧工弩",
+      "Chu-Ko-Nu"
+    ],
+    [
+      "巨神十字弓 Colossus Crossbow",
+      "Colossus Crossbow"
+    ],
+    [
+      "十字弓",
+      "Crossbow"
+    ],
+    [
+      "恶魔十字弓 Demon Crossbow",
+      "Demon Crossbow"
+    ],
+    [
+      "蛇魔女十字弓 Gorgon Crossbow",
+      "Gorgon Crossbow"
+    ],
+    [
+      "重十字弓",
+      "Heavy Crossbow"
+    ],
+    [
+      "轻十字弓",
+      "Light Crossbow"
+    ],
+    [
+      "弹丸弓 Pellet Bow",
+      "Pellet Bow"
+    ],
+    [
+      "连射十字弓",
+      "Repeating Crossbow"
+    ],
+    [
+      "攻城十字弓",
+      "Siege Crossbow"
+    ],
+    [
+      "重型弩失",
+      "Heavy Bolts"
+    ],
+    [
+      "轻型弩失",
+      "Light Bolts"
+    ],
+    [
+      "战争弩矢",
+      "War Bolts"
+    ],
+    [
+      "短刀",
+      "Blade"
+    ],
+    [
+      "骸骨小刀 Bone Knife",
+      "Bone Knife"
+    ],
+    [
+      "强波刀",
+      "Cinquedeas"
+    ],
+    [
+      "匕首",
+      "Dagger"
+    ],
+    [
+      "长匕首",
+      "Dirk"
+    ],
+    [
+      "齿缘小刀 Fanged Knife",
+      "Fanged Knife"
+    ],
+    [
+      "波形刀",
+      "Kris"
+    ],
+    [
+      "传说尖刺 Legend Spike",
+      "Legend Spike"
+    ],
+    [
+      "秘银小刀 Mithril Point",
+      "Mithril Point"
+    ],
+    [
+      "锐匕",
+      "Poignard"
+    ],
+    [
+      "诗歌匕首",
+      "Rondel"
+    ],
+    [
+      "小剑",
+      "Stiletto"
+    ],
+    [
+      "阿尔发头盔",
+      "Alpha Helm"
+    ],
+    [
+      "鹿角",
+      "Antlers"
+    ],
+    [
+      "血腥之灵 Blood Spirit",
+      "Blood Spirit"
+    ],
+    [
+      "幽梦之灵 Dream Spirit",
+      "Dream Spirit"
+    ],
+    [
+      "大地之灵 Earth Spirit",
+      "Earth Spirit"
+    ],
+    [
+      "猎鹰面具",
+      "Falcon Mask"
+    ],
+    [
+      "狮鹫兽头带",
+      "Griffon Headdress"
+    ],
+    [
+      "飞鹰头盔",
+      "Hawk Helm"
+    ],
+    [
+      "猎人的伪装",
+      "Hunter's Guise"
+    ],
+    [
+      "神圣羽毛头带",
+      "Sacred Feathers"
+    ],
+    [
+      "天空之灵 Sky Spirit",
+      "Sky Spirit"
+    ],
+    [
+      "灵魂狼头面具",
+      "Spirit Mask"
+    ],
+    [
+      "太阳之灵 Sun Spirit",
+      "Sun Spirit"
+    ],
+    [
+      "图腾面具狼盔",
+      "Totemic Mask"
+    ],
+    [
+      "狼头",
+      "Wolf Head"
+    ],
+    [
+      "斗腰刀 Battle Cestus",
+      "Battle Cestus"
+    ],
+    [
+      "刃爪",
+      "Blade Talons"
+    ],
+    [
+      "腰刀",
+      "Cestus"
+    ],
+    [
+      "爪",
+      "Claws"
+    ],
+    [
+      "格斗爪",
+      "Fascia"
+    ],
+    [
+      "猛禽爪 Feral Claws",
+      "Feral Claws"
+    ],
+    [
+      "巨爪",
+      "Greater Claws"
+    ],
+    [
+      "巨鹰爪",
+      "Greater Talons"
+    ],
+    [
+      "手镰",
+      "Hand Scythe"
+    ],
+    [
+      "斧手",
+      "Hatchet Hands"
+    ],
+    [
+      "拳剑",
+      "Katar"
+    ],
+    [
+      "格斗刃",
+      "Quhab"
+    ],
+    [
+      "符文爪 Runic Talons",
+      "Runic Talons"
+    ],
+    [
+      "剪咬刃",
+      "Scissors Katar"
+    ],
+    [
+      "格斗剪",
+      "Scissors Quhab"
+    ],
+    [
+      "近身剪 Scissors Suwayyah",
+      "Scissors Suwayyah"
+    ],
+    [
+      "近身刃 Suwayyah",
+      "Suwayyah"
+    ],
+    [
+      "战拳 War Fist",
+      "War Fist"
+    ],
+    [
+      "腕刃",
+      "Wrist Blade"
+    ],
+    [
+      "腕刺",
+      "Wrist Spike"
+    ],
+    [
+      "腕剑 Wrist Sword",
+      "Wrist Sword"
+    ],
+    [
+      "紫宝石",
+      "Amethyst"
+    ],
+    [
+      "碎裂的紫宝石",
+      "Chipped Amethyst"
+    ],
+    [
+      "碎裂的钻石",
+      "Chipped Diamond"
+    ],
+    [
+      "碎裂的绿宝石",
+      "Chipped Emerald"
+    ],
+    [
+      "碎裂的红宝石",
+      "Chipped Ruby"
+    ],
+    [
+      "碎裂的蓝宝石",
+      "Chipped Sapphire"
+    ],
+    [
+      "碎裂的骷髅",
+      "Chipped Skull"
+    ],
+    [
+      "碎裂的黄宝石",
+      "Chipped Topaz"
+    ],
+    [
+      "钻石",
+      "Diamond"
+    ],
+    [
+      "绿宝石",
+      "Emerald"
+    ],
+    [
+      "裂开的紫宝石",
+      "Flawed Amethyst"
+    ],
+    [
+      "裂开的钻石",
+      "Flawed Diamond"
+    ],
+    [
+      "裂开的绿宝石",
+      "Flawed Emerald"
+    ],
+    [
+      "裂开的红宝石",
+      "Flawed Ruby"
+    ],
+    [
+      "裂开的蓝宝石",
+      "Flawed Sapphire"
+    ],
+    [
+      "裂开的骷髅",
+      "Flawed Skull"
+    ],
+    [
+      "裂开的黄宝石",
+      "Flawed Topaz"
+    ],
+    [
+      "Flawless Amethyst (旧)",
+      "Flawless Amethyst"
+    ],
+    [
+      "无暇疵的紫宝石",
+      "Flawless Amethyst"
+    ],
+    [
+      "红宝石",
+      "Ruby"
+    ],
+    [
+      "蓝宝石",
+      "Sapphire"
+    ],
+    [
+      "骷髅",
+      "Skull"
+    ],
+    [
+      "黄宝石",
+      "Topaz"
+    ],
+    [
+      "战场手套",
+      "Battle Gauntlets"
+    ],
+    [
+      "荆棘连指手套 Bramble Mitts",
+      "Bramble Mitts"
+    ],
+    [
+      "锁链手套",
+      "Chain Gloves"
+    ],
+    [
+      "十字军铁手套 Crusader Gauntlets",
+      "Crusader Gauntlets"
+    ],
+    [
+      "魔皮手套",
+      "Demonhide Gloves"
+    ],
+    [
+      "铁手套",
+      "Gauntlets"
+    ],
+    [
+      "重型手镯",
+      "Heavy Bracers"
+    ],
+    [
+      "重手套",
+      "Heavy Gloves"
+    ],
+    [
+      "皮手套",
+      "Leather Gloves"
+    ],
+    [
+      "轻型铁手套",
+      "Light Gauntlets"
+    ],
+    [
+      "食人魔铁手套 Ogre Gauntlets",
+      "Ogre Gauntlets"
+    ],
+    [
+      "鲨皮手套",
+      "Sharkskin Gloves"
+    ],
+    [
+      "吸血鬼手套 Vambraces",
+      "Vambraces"
+    ],
+    [
+      "吸血鬼骸骨手套 Vampirebone Gloves",
+      "Vampirebone Gloves"
+    ],
+    [
+      "战争护手",
+      "War Gauntlets"
+    ],
+    [
+      "战斗铁锤",
+      "Battle Hammer"
+    ],
+    [
+      "卓越巨棍",
+      "Great Maul"
+    ],
+    [
+      "传说之锤 Legendary Mallet",
+      "Legendary Mallet"
+    ],
+    [
+      "战锤",
+      "Martel de Fer"
+    ],
+    [
+      "大木棍",
+      "Maul"
+    ],
+    [
+      "食人魔之锤 Ogre Maul",
+      "Ogre Maul"
+    ],
+    [
+      "雷锤 Thunder Maul",
+      "Thunder Maul"
+    ],
+    [
+      "巨战木棍",
+      "War Club"
+    ],
+    [
+      "巨战铁锤",
+      "War Hammer"
+    ],
+    [
+      "活动头盔 Armet",
+      "Armet"
+    ],
+    [
+      "轻钢盔",
+      "Basinet"
+    ],
+    [
+      "白骨头盔",
+      "Bone Helm"
+    ],
+    [
+      "骸骨面罩 Bone Visage",
+      "Bone Visage"
+    ],
+    [
+      "帽子",
+      "Cap"
+    ],
+    [
+      "无颊头盔",
+      "Casque"
+    ],
+    [
+      "头冠 Corona",
+      "Corona"
+    ],
+    [
+      "皇冠",
+      "Crown"
+    ],
+    [
+      "死亡面具",
+      "Death Mask"
+    ],
+    [
+      "恶魔头盖骨面具 Demonhead",
+      "Demonhead"
+    ],
+    [
+      "高级头盔",
+      "Full Helm"
+    ],
+    [
+      "巨贝头盔 Giant Conch",
+      "Giant Conch"
+    ],
+    [
+      "巨皇冠",
+      "Grand Crown"
+    ],
+    [
+      "卓越头盔",
+      "Great Helm"
+    ],
+    [
+      "残酷头盔",
+      "Grim Helm"
+    ],
+    [
+      "头盔",
+      "Helm"
+    ],
+    [
+      "九头蛇头盖骨圆帽 Hydraskull",
+      "Hydraskull"
+    ],
+    [
+      "面具",
+      "Mask"
+    ],
+    [
+      "轻便头盔",
+      "Sallet"
+    ],
+    [
+      "军帽 Shako",
+      "Shako"
+    ],
+    [
+      "骷髅帽",
+      "Skull Cap"
+    ],
+    [
+      "螺旋头盔 Spired Helm",
+      "Spired Helm"
+    ],
+    [
+      "战帽",
+      "War Hat"
+    ],
+    [
+      "翼盔",
+      "Winged Helm"
+    ],
+    [
+      "奥术法珠(已充能)",
+      "Infused Arcane Orb"
+    ],
+    [
+      "恶魔宝盒(已充能)",
+      "Infused Demonic Cube"
+    ],
+    [
+      "萨卡兰姆法珠(已充能)",
+      "Infused Zakarum Orb"
+    ],
+    [
+      "炎魔长矛 Balrog Spear",
+      "Balrog Spear"
+    ],
+    [
+      "鬼魂尖枪 Ghost Glaive",
+      "Ghost Glaive"
+    ],
+    [
+      "卓越标枪",
+      "Great Pilum"
+    ],
+    [
+      "鱼叉",
+      "Harpoon"
+    ],
+    [
+      "亥伯龙之枪 Hyperion Javelin",
+      "Hyperion Javelin"
+    ],
+    [
+      "标枪",
+      "Javelin"
+    ],
+    [
+      "短标枪",
+      "Pilum"
+    ],
+    [
+      "短矛",
+      "Short Spear"
+    ],
+    [
+      "锐矛",
+      "Simbilan"
+    ],
+    [
+      "阔针长矛",
+      "Spiculum"
+    ],
+    [
+      "冥河标枪 Stygian Pilum",
+      "Stygian Pilum"
+    ],
+    [
+      "飞矛",
+      "Throwing Spear"
+    ],
+    [
+      "巨战标枪",
+      "War Javelin"
+    ],
+    [
+      "翼鱼叉 Winged Harpoon",
+      "Winged Harpoon"
+    ],
+    [
+      "珠宝",
+      "Jewel"
+    ],
+    [
+      "珠宝碎片",
+      "Jewel Fragments"
+    ],
+    [
+      "项链",
+      "Amulet"
+    ],
+    [
+      "戒指",
+      "Ring"
+    ],
+    [
+      "钥匙",
+      "Key"
+    ],
+    [
+      "黑塔之钥",
+      "The Black Tower Key"
+    ],
+    [
+      "决斗专用超大护身符",
+      "Dueling Grand Charm"
+    ],
+    [
+      "拉苏克的铁锤",
+      "Larzuk's Malus"
+    ],
+    [
+      "恶魔流星锤 Devil Star",
+      "Devil Star"
+    ],
+    [
+      "链枷",
+      "Flail"
+    ],
+    [
+      "凸缘钉头锤",
+      "Flanged Mace"
+    ],
+    [
+      "锯齿流星锤",
+      "Jagged Star"
+    ],
+    [
+      "铁皮鞭",
+      "Knout"
+    ],
+    [
+      "钉头锤",
+      "Mace"
+    ],
+    [
+      "流星锤",
+      "Morning Star"
+    ],
+    [
+      "强化钉头锤 Reinforced Mace",
+      "Reinforced Mace"
+    ],
+    [
+      "天罚之锤 Scourge",
+      "Scourge"
+    ],
+    [
+      "天使法珠",
+      "Angelic Orb"
+    ],
+    [
+      "奥术法珠",
+      "Arcane Orb"
+    ],
+    [
+      "制图师法珠",
+      "Cartographer's Orb"
+    ],
+    [
+      "恶魔宝盒",
+      "Demonic Cube"
+    ],
+    [
+      "赫拉迪姆法珠",
+      "Horadrim Orb"
+    ],
+    [
+      "赫拉迪姆圣甲虫",
+      "Horadrim Scarab"
+    ],
+    [
+      "毁灭法珠",
+      "Orb of Destruction"
+    ],
+    [
+      "强化法珠",
+      "Orb of Fortification"
+    ],
+    [
+      "萨卡兰姆法珠",
+      "Zakarum Orb"
+    ],
+    [
+      "亚瑞特战场",
+      "Arreat Battlefield Map"
+    ],
+    [
+      "卡尔蒂姆的沦陷",
+      "Fall of Caldeum Map"
+    ],
+    [
+      "苦痛大厅",
+      "Halls of Torture Map"
+    ],
+    [
+      "赫拉森的梦境",
+      "Horazon's Memory Map"
+    ],
+    [
+      "皇室墓穴",
+      "Royal Crypts Map"
+    ],
+    [
+      "哈拉加斯下水道",
+      "Sewers of Harrogath Map"
+    ],
+    [
+      "威斯特玛之影",
+      "Shadows of Westmarch Map"
+    ],
+    [
+      "托拉然丛林",
+      "Torajan Jungle Map"
+    ],
+    [
+      "先祖的试炼",
+      "Ancestral Trial Map"
+    ],
+    [
+      "巴斯延要塞",
+      "Bastion Keep Map"
+    ],
+    [
+      "恶魔之路",
+      "Demon Road Map"
+    ],
+    [
+      "失落神庙",
+      "Lost Temple Map"
+    ],
+    [
+      "血河",
+      "River of Blood Map"
+    ],
+    [
+      "维兹郡废墟",
+      "Ruins of Viz-Jun Map"
+    ],
+    [
+      "斯科沃斯要塞",
+      "Skovos Stronghold Map"
+    ],
+    [
+      "佐敦·库勒的墓穴",
+      "Tomb of Zoltun Kulle Map"
+    ],
+    [
+      "灰烬平原",
+      "Ashen Plains Map"
+    ],
+    [
+      "血月",
+      "Blood Moon Map"
+    ],
+    [
+      "赛斯切隆峡谷",
+      "Canyon of Sescheron Map"
+    ],
+    [
+      "凯吉斯坦集市",
+      "Kehjistan Marketplace Map"
+    ],
+    [
+      "火焰之河",
+      "Phlegethon Map"
+    ],
+    [
+      "废弃水道",
+      "Ruined Cistern Map"
+    ],
+    [
+      "萨纳托里姆疯人院",
+      "Sanatorium Map"
+    ],
+    [
+      "疯狂王座",
+      "Throne of Insanity Map"
+    ],
+    [
+      "苦痛平原",
+      "Plains of Torment Map"
+    ],
+    [
+      "罪恶庇佑所",
+      "Sanctuary of Sin Map"
+    ],
+    [
+      "达肯沙尔荒原",
+      "Steppes of Daken-Shar Map"
+    ],
+    [
+      "外虚空",
+      ""
+    ],
+    [
+      "帝国宫殿",
+      ""
+    ],
+    [
+      "堕落花园",
+      "Map"
+    ],
+    [
+      "冥河洞穴",
+      "Map"
+    ],
+    [
+      "扎尔的圣所",
+      "Map"
+    ],
+    [
+      "决斗专用大型护身符",
+      "Dueling Large Charm"
+    ],
+    [
+      "艾文之盾",
+      "Aerin Shield"
+    ],
+    [
+      "亚克南轻圆盾",
+      "Akaran Rondache"
+    ],
+    [
+      "亚克南圆盾",
+      "Akaran Targe"
+    ],
+    [
+      "皇冠之盾",
+      "Crown Shield"
+    ],
+    [
+      "饰金盾牌",
+      "Gilded Shield"
+    ],
+    [
+      "纹章盾",
+      "Heraldic Shield"
+    ],
+    [
+      "库拉斯特之盾 Kurast Shield",
+      "Kurast Shield"
+    ],
+    [
+      "防护者盾牌",
+      "Protector Shield"
+    ],
+    [
+      "轻圆盾",
+      "Rondache"
+    ],
+    [
+      "皇家盾牌",
+      "Royal Shield"
+    ],
+    [
+      "神圣轻圆盾 Sacred Rondache",
+      "Sacred Rondache"
+    ],
+    [
+      "神圣小盾 Sacred Targe",
+      "Sacred Targe"
+    ],
+    [
+      "小盾",
+      "Targe"
+    ],
+    [
+      "旋风盾 Vortex Shield",
+      "Vortex Shield"
+    ],
+    [
+      "撒卡兰姆盾牌 Zakarum Shield",
+      "Zakarum Shield"
+    ],
+    [
+      "大砍刀",
+      "Bardiche"
+    ],
+    [
+      "双锋战戟",
+      "Bec-de-Corbin"
+    ],
+    [
+      "比尔长刀",
+      "Bill"
+    ],
+    [
+      "巨神之斧 Colossus Voulge",
+      "Colossus Voulge"
+    ],
+    [
+      "神秘之斧 Cryptic Axe",
+      "Cryptic Axe"
+    ],
+    [
+      "巨长斧 Great Poleaxe",
+      "Great Poleaxe"
+    ],
+    [
+      "长戟",
+      "Halberd"
+    ],
+    [
+      "罗佳柏斧",
+      "Lochaber Axe"
+    ],
+    [
+      "食人魔之斧 Ogre Axe",
+      "Ogre Axe"
+    ],
+    [
+      "战戟",
+      "Partizan"
+    ],
+    [
+      "长柄战斧",
+      "Poleaxe"
+    ],
+    [
+      "钩镰枪",
+      "Voulge"
+    ],
+    [
+      "拉苏克谜盒",
+      "Larzuk's Puzzlebox"
+    ],
+    [
+      "拉苏克谜盒碎片",
+      "Larzuk's Puzzlepiece"
+    ],
+    [
+      "荒漠竞技场",
+      "Desert Duel Arena"
+    ],
+    [
+      "赫拉迪姆法珠(已充能)",
+      "Infused Horadrim Orb"
+    ],
+    [
+      "神使之杖 Caduceus",
+      "Caduceus"
+    ],
+    [
+      "神属权杖",
+      "Divine Scepter"
+    ],
+    [
+      "雄伟权杖",
+      "Grand Scepter"
+    ],
+    [
+      "圣水喷杖",
+      "Holy Water Sprinkler"
+    ],
+    [
+      "强威权杖 Mighty Scepter",
+      "Mighty Scepter"
+    ],
+    [
+      "符文权杖",
+      "Rune Scepter"
+    ],
+    [
+      "权杖",
+      "Scepter"
+    ],
+    [
+      "炽天使法杖 Seraph Rod",
+      "Seraph Rod"
+    ],
+    [
+      "巨战权杖",
+      "War Scepter"
+    ],
+    [
+      "战斗镰刀",
+      "Battle Scythe"
+    ],
+    [
+      "鲛尾巨斧 Giant Thresher",
+      "Giant Thresher"
+    ],
+    [
+      "残酷镰刀",
+      "Grim Scythe"
+    ],
+    [
+      "镰刀",
+      "Scythe"
+    ],
+    [
+      "锐利之斧 Thresher",
+      "Thresher"
+    ],
+    [
+      "巨战镰刀",
+      "War Scythe"
+    ],
+    [
+      "圣盾 Aegis",
+      "Aegis"
+    ],
+    [
+      "古代之盾",
+      "Ancient Shield"
+    ],
+    [
+      "倒刺护盾",
+      "Barbed Shield"
+    ],
+    [
+      "刀刃刺盾 Blade Barrier",
+      "Blade Barrier"
+    ],
+    [
+      "白骨盾牌",
+      "Bone Shield"
+    ],
+    [
+      "圆盾",
+      "Buckler"
+    ],
+    [
+      "防御盾",
+      "Defender"
+    ],
+    [
+      "龙盾",
+      "Dragon Shield"
+    ],
+    [
+      "哥德盾牌",
+      "Gothic Shield"
+    ],
+    [
+      "冷酷之盾",
+      "Grim Shield"
+    ],
+    [
+      "防寒圆盾 Heater",
+      "Heater"
+    ],
+    [
+      "亥伯龙盾 Hyperion",
+      "Hyperion"
+    ],
+    [
+      "轻盾",
+      "Kite Shield"
+    ],
+    [
+      "大盾牌",
+      "Large Shield"
+    ],
+    [
+      "月精灵护盾 Luna",
+      "Luna"
+    ],
+    [
+      "统治者大盾 Monarch",
+      "Monarch"
+    ],
+    [
+      "大盾",
+      "Pavise"
+    ],
+    [
+      "圆型盾",
+      "Round Shield"
+    ],
+    [
+      "鳞盾",
+      "Scutum"
+    ],
+    [
+      "小盾牌",
+      "Small Shield"
+    ],
+    [
+      "尖刺盾牌",
+      "Spiked Shield"
+    ],
+    [
+      "塔盾",
+      "Tower Shield"
+    ],
+    [
+      "洞穴巨魔巢穴骨盾 Troll Nest",
+      "Troll Nest"
+    ],
+    [
+      "保护盾牌 Ward",
+      "Ward"
+    ],
+    [
+      "血王之骨 Bloodlord Skull",
+      "Bloodlord Skull"
+    ],
+    [
+      "领唱者印记",
+      "Cantor Trophy"
+    ],
+    [
+      "恶魔之首",
+      "Demon Head"
+    ],
+    [
+      "物神印记",
+      "Fetish Trophy"
+    ],
+    [
+      "石像鬼之首",
+      "Gargoyle Head"
+    ],
+    [
+      "地狱恶灵颅骨",
+      "Hellspawn Skull"
+    ],
+    [
+      "祭司印记",
+      "Hierophant Trophy"
+    ],
+    [
+      "随侍之骨 Minion Skull",
+      "Minion Skull"
+    ],
+    [
+      "木乃伊印记",
+      "Mummified Trophy"
+    ],
+    [
+      "监视者之骨 Overseer Skull",
+      "Overseer Skull"
+    ],
+    [
+      "防腐之首",
+      "Preserved Head"
+    ],
+    [
+      "司事印记",
+      "Sexton Trophy"
+    ],
+    [
+      "女妖之骨 Succubus Skull",
+      "Succubus Skull"
+    ],
+    [
+      "揭露者之首",
+      "Unraveller Head"
+    ],
+    [
+      "僵尸之首",
+      "Zombie Head"
+    ],
+    [
+      "决斗专用小护身符",
+      "Dueling Small Charm"
+    ],
+    [
+      "握扣法珠",
+      "Clasped Orb"
+    ],
+    [
+      "云雾之球",
+      "Cloudy Sphere"
+    ],
+    [
+      "水晶天球",
+      "Crystalline Globe"
+    ],
+    [
+      "恶魔之心 Demon Heart",
+      "Demon Heart"
+    ],
+    [
+      "次元碎片 Dimensional Shard",
+      "Dimensional Shard"
+    ],
+    [
+      "鹰之法珠",
+      "Eagle Orb"
+    ],
+    [
+      "怪异之球 Eldritch Orb",
+      "Eldritch Orb"
+    ],
+    [
+      "灵光法珠",
+      "Glowing Orb"
+    ],
+    [
+      "天堂之石 Heavenly Stone",
+      "Heavenly Stone"
+    ],
+    [
+      "杰瑞德之石",
+      "Jared's Stone"
+    ],
+    [
+      "神圣天球",
+      "Sacred Globe"
+    ],
+    [
+      "拢烟之球",
+      "Smoked Sphere"
+    ],
+    [
+      "闪耀之球",
+      "Sparkling Ball"
+    ],
+    [
+      "涡流水晶",
+      "Swirling Crystal"
+    ],
+    [
+      "漩涡球 Vortex Orb",
+      "Vortex Orb"
+    ],
+    [
+      "叉",
+      "Brandistock"
+    ],
+    [
+      "魔鬼之叉",
+      "Fuscina"
+    ],
+    [
+      "鬼魂之矛 Ghost Spear",
+      "Ghost Spear"
+    ],
+    [
+      "亥伯龙之矛 Hyperion Spear",
+      "Hyperion Spear"
+    ],
+    [
+      "长枪",
+      "Lance"
+    ],
+    [
+      "刺人枪 Mancatcher",
+      "Mancatcher"
+    ],
+    [
+      "矛",
+      "Pike"
+    ],
+    [
+      "长矛",
+      "Spear"
+    ],
+    [
+      "大战戟",
+      "Spetum"
+    ],
+    [
+      "冥河之枪 Stygian Pike",
+      "Stygian Pike"
+    ],
+    [
+      "三叉戟",
+      "Trident"
+    ],
+    [
+      "巨战之叉",
+      "War Fork"
+    ],
+    [
+      "战枪 War Pike",
+      "War Pike"
+    ],
+    [
+      "巨战长矛",
+      "War Spear"
+    ],
+    [
+      "三叉长枪",
+      "Yari"
+    ],
+    [
+      "执政官之杖 Archon Staff",
+      "Archon Staff"
+    ],
+    [
+      "战斗法杖",
+      "Battle Staff"
+    ],
+    [
+      "杉木之棍",
+      "Cedar Staff"
+    ],
+    [
+      "长老之杖 Elder Staff",
+      "Elder Staff"
+    ],
+    [
+      "多节棍",
+      "Gnarled Staff"
+    ],
+    [
+      "哥德之棍",
+      "Gothic Staff"
+    ],
+    [
+      "乔木棒",
+      "Jo Staff"
+    ],
+    [
+      "长棍",
+      "Long Staff"
+    ],
+    [
+      "六尺棍",
+      "Quarterstaff"
+    ],
+    [
+      "符文之棍",
+      "Rune Staff"
+    ],
+    [
+      "树皮之杖 Shillelagh",
+      "Shillelagh"
+    ],
+    [
+      "短棍",
+      "Short Staff"
+    ],
+    [
+      "钟乳石之杖 Stalagmite",
+      "Stalagmite"
+    ],
+    [
+      "手杖 Walking Stick",
+      "Walking Stick"
+    ],
+    [
+      "巨战法杖",
+      "War Staff"
+    ],
+    [
+      "古代之剑",
+      "Ancient Sword"
+    ],
+    [
+      "土耳其剑 Ataghan",
+      "Ataghan"
+    ],
+    [
+      "炎魔之刃 Balrog Blade",
+      "Balrog Blade"
+    ],
+    [
+      "巨剑",
+      "Bastard Sword"
+    ],
+    [
+      "战斗剑",
+      "Battle Sword"
+    ],
+    [
+      "阔剑",
+      "Broad Sword"
+    ],
+    [
+      "冠军之剑 Champion Sword",
+      "Champion Sword"
+    ],
+    [
+      "双刃大刀",
+      "Claymore"
+    ],
+    [
+      "巨神之刃 Colossus Blade",
+      "Colossus Blade"
+    ],
+    [
+      "巨神之剑 Colossus Sword",
+      "Colossus Sword"
+    ],
+    [
+      "征服之剑 Conquest Sword",
+      "Conquest Sword"
+    ],
+    [
+      "神秘之剑 Cryptic Sword",
+      "Cryptic Sword"
+    ],
+    [
+      "水晶剑",
+      "Crystal Sword"
+    ],
+    [
+      "微弯剑",
+      "Cutlass"
+    ],
+    [
+      "双刃镰",
+      "Dacian Falx"
+    ],
+    [
+      "空间之刃",
+      "Dimensional Blade"
+    ],
+    [
+      "优雅之剑 Elegant Blade",
+      "Elegant Blade"
+    ],
+    [
+      "斩铁剑",
+      "Espandon"
+    ],
+    [
+      "死刑之剑",
+      "Executioner Sword"
+    ],
+    [
+      "短剑 Falcata",
+      "Falcata"
+    ],
+    [
+      "弯形大刀",
+      "Falchion"
+    ],
+    [
+      "双手饰剑",
+      "Flamberge"
+    ],
+    [
+      "大剑",
+      "Giant Sword"
+    ],
+    [
+      "罗马短剑",
+      "Gladius"
+    ],
+    [
+      "哥德剑",
+      "Gothic Sword"
+    ],
+    [
+      "卓越之剑",
+      "Great Sword"
+    ],
+    [
+      "高地之剑 Highland Blade",
+      "Highland Blade"
+    ],
+    [
+      "九头蛇刃 Hydra Edge",
+      "Hydra Edge"
+    ],
+    [
+      "传说之剑 Legend Sword",
+      "Legend Sword"
+    ],
+    [
+      "长剑",
+      "Long Sword"
+    ],
+    [
+      "秘仪之剑 Mythical Sword",
+      "Mythical Sword"
+    ],
+    [
+      "幻化之刃 Phase Blade",
+      "Phase Blade"
+    ],
+    [
+      "符文剑",
+      "Rune Sword"
+    ],
+    [
+      "军刀",
+      "Sabre"
+    ],
+    [
+      "弯刀",
+      "Scimitar"
+    ],
+    [
+      "虚伪之刃",
+      "Shamshir"
+    ],
+    [
+      "短剑",
+      "Short Sword"
+    ],
+    [
+      "圆月弯刀",
+      "Tulwar"
+    ],
+    [
+      "长牙剑",
+      "Tusk Sword"
+    ],
+    [
+      "双手剑",
+      "Two-Handed Sword"
+    ],
+    [
+      "巨战之剑",
+      "War Sword"
+    ],
+    [
+      "瑞韩德之剑",
+      "Zweihander"
+    ],
+    [
+      "平衡斧",
+      "Balanced Axe"
+    ],
+    [
+      "飞斧 Flying Axe",
+      "Flying Axe"
+    ],
+    [
+      "法兰飞斧",
+      "Francisca"
+    ],
+    [
+      "短战戟",
+      "Hurlbat"
+    ],
+    [
+      "飞斧",
+      "Throwing Axe"
+    ],
+    [
+      "翼斧 Winged Axe",
+      "Winged Axe"
+    ],
+    [
+      "平衡小刀",
+      "Balanced Knife"
+    ],
+    [
+      "战斗飞镖",
+      "Battle Dart"
+    ],
+    [
+      "飞刀 Flying Knife",
+      "Flying Knife"
+    ],
+    [
+      "飞刀",
+      "Throwing Knife"
+    ],
+    [
+      "巨战飞镖",
+      "War Dart"
+    ],
+    [
+      "翼刀 Winged Knife",
+      "Winged Knife"
+    ],
+    [
+      "右键点击以重设属性/技能点数。 赦免徽章",
+      "Token of Absolution"
+    ],
+    [
+      "火炬灰烬",
+      "Hellfire Ashes"
+    ],
+    [
+      "上古遗骸碎片",
+      "Ancient Bone Fragments"
+    ],
+    [
+      "巴尔之眼",
+      "Baal's Eye"
+    ],
+    [
+      "黑色灵魂石",
+      "Black Soulstone"
+    ],
+    [
+      "燃烧的恐惧精华",
+      "Burning Essence of Terror"
+    ],
+    [
+      "圣光大教堂",
+      "Cathedral of Light Map"
+    ],
+    [
+      "充能的憎恨精华",
+      "Charged Essence of Hatred"
+    ],
+    [
+      "恶魔徽章",
+      "Demonic Insignia"
+    ],
+    [
+      "暗黑破坏神之角",
+      "Diablo's Horn"
+    ],
+    [
+      "腐烂的毁灭精华",
+      "Festering Essence of Destruction"
+    ],
+    [
+      "恶意之肉",
+      "Flesh of Malic"
+    ],
+    [
+      "毁灭之钥",
+      "Key of Destruction"
+    ],
+    [
+      "憎恨之钥",
+      "Key of Hate"
+    ],
+    [
+      "恐惧之钥",
+      "Key of Terror"
+    ],
+    [
+      "墨菲斯托之脑",
+      "Mephisto's Brain"
+    ],
+    [
+      "群魔殿护符",
+      "Pandemonium Talisman"
+    ],
+    [
+      "原罪之魂",
+      "Prime Evil Soul"
+    ],
+    [
+      "纯粹的恶魔精髓",
+      "Pure Demonic Essence"
+    ],
+    [
+      "古代人的遗物",
+      "Relic of the Ancients"
+    ],
+    [
+      "憎恨之影",
+      "Shadow of Hatred"
+    ],
+    [
+      "科力克的标志",
+      "Sigil of Korlic"
+    ],
+    [
+      "马道克的标志",
+      "Sigil of Madawc"
+    ],
+    [
+      "塔力克的标志",
+      "Sigil of Talic"
+    ],
+    [
+      "虚空碎片",
+      "Splinter of the Void"
+    ],
+    [
+      "越界护符",
+      "Talisman of Transgression"
+    ],
+    [
+      "塔格奥的下颌骨",
+      "Trang-Oul's Jawbone"
+    ],
+    [
+      "扭曲的痛苦精华",
+      "Twisted Essence of Suffering"
+    ],
+    [
+      "恐怖异象",
+      "Vision of Terror"
+    ],
+    [
+      "虚空石",
+      "Voidstone"
+    ],
+    [
+      "莉莉丝的镜子",
+      "Lilith's Mirror"
+    ],
+    [
+      "骷髅钥匙",
+      "Skeleton Key"
+    ],
+    [
+      "光颂之瓶",
+      "Vial of Lightsong"
+    ],
+    [
+      "天使法珠(已充能)",
+      "Infused Angelic Orb"
+    ],
+    [
+      "骨杖",
+      "Bone Wand"
+    ],
+    [
+      "烧焦之杖",
+      "Burnt Wand"
+    ],
+    [
+      "鬼魂法杖 Ghost Wand",
+      "Ghost Wand"
+    ],
+    [
+      "墓地之杖",
+      "Grave Wand"
+    ],
+    [
+      "残酷之杖",
+      "Grim Wand"
+    ],
+    [
+      "巫妖法杖 Lich Wand",
+      "Lich Wand"
+    ],
+    [
+      "净化之杖",
+      "Petrified Wand"
+    ],
+    [
+      "洗练法杖 Polished Wand",
+      "Polished Wand"
+    ],
+    [
+      "古墓之杖",
+      "Tomb Wand"
+    ],
+    [
+      "破隐法杖 Unearthed Wand",
+      "Unearthed Wand"
+    ],
+    [
+      "法杖",
+      "Wand"
+    ],
+    [
+      "紫杉之杖",
+      "Yew Wand"
+    ],
+    [
+      "催化剂碎片",
+      "Catalyst Shard"
+    ],
+    [
+      "暗之世界石碎片",
+      "Tainted Worldstone Shard"
+    ],
+    [
+      "世界之石碎片",
+      "Worldstone Shard"
+    ]
+  ],
+  "items": [
+    [
+      "Unique",
+      "牙齿 The Gnasher",
+      "The Gnasher"
+    ],
+    [
+      "Unique",
+      "死亡之铲 Deathspade",
+      "Deathspade"
+    ],
+    [
+      "Unique",
+      "肩胛骨 Bladebone",
+      "Bladebone"
+    ],
+    [
+      "Unique",
+      "切开骷髅 Skull Splitter",
+      "Mindrend"
+    ],
+    [
+      "Unique",
+      "火钩之伤 Rakescar",
+      "Rakescar"
+    ],
+    [
+      "Unique",
+      "费屈玛之斧 Axe of Fechmar",
+      "Fechmars Axe"
+    ],
+    [
+      "Unique",
+      "血块之铲 Goreshovel",
+      "Goreshovel"
+    ],
+    [
+      "Unique",
+      "族长 The Chieftain",
+      "The Chieftan"
+    ],
+    [
+      "Unique",
+      "脑袋 Brainhew",
+      "Brainhew"
+    ],
+    [
+      "Unique",
+      "巨大无比 Humongous",
+      "The Humongous"
+    ],
+    [
+      "Unique",
+      "衣洛的火炬 Torch of Iro",
+      "Iros Torch"
+    ],
+    [
+      "Unique",
+      "漩涡 Maelstrom",
+      "Maelstromwrath"
+    ],
+    [
+      "Unique",
+      "墓穴之脊 Gravenspine",
+      "Gravenspine"
+    ],
+    [
+      "Unique",
+      "乌米的恸哭 Ume's Lament",
+      "Umes Lament"
+    ],
+    [
+      "Unique",
+      "凶猛橡树 Felloak",
+      "Felloak"
+    ],
+    [
+      "Unique",
+      "敲击丧钟者 Knell Striker",
+      "Knell Striker"
+    ],
+    [
+      "Unique",
+      "腐蚀的把手 Rusthandle",
+      "Rusthandle"
+    ],
+    [
+      "Unique",
+      "暴风眼 Stormeye",
+      "Stormeye"
+    ],
+    [
+      "Unique",
+      "坚硬的指甲 Stoutnail",
+      "Stoutnail"
+    ],
+    [
+      "Unique",
+      "压碎的凸边 Crushflange",
+      "Crushflange"
+    ],
+    [
+      "Unique",
+      "血升 Bloodrise",
+      "Bloodrise"
+    ],
+    [
+      "Unique",
+      "坦－杜－里－嘎将军 The General's Tan Do Li Ga",
+      "The Generals Tan Do Li Ga"
+    ],
+    [
+      "Unique",
+      "铁石 Ironstone",
+      "Ironstone"
+    ],
+    [
+      "Unique",
+      "碎骨 Bonesnap",
+      "Bonesob"
+    ],
+    [
+      "Unique",
+      "铁制大锤 Steeldriver",
+      "Steeldriver"
+    ],
+    [
+      "Unique",
+      "瑞克撒特的挽歌 Rixot's Keen",
+      "Rixots Keen"
+    ],
+    [
+      "Unique",
+      "血红新月 Blood Crescent",
+      "Blood Crescent"
+    ],
+    [
+      "Unique",
+      "格林提斯的肉叉 Skewer of Krintiz",
+      "Krintizs Skewer"
+    ],
+    [
+      "Unique",
+      "闪耀的镰刀 Gleamscythe",
+      "Gleamscythe"
+    ],
+    [
+      "Unique",
+      "格瑞斯华尔德的锐利 Griswold's Edge",
+      "Griswolds Edge"
+    ],
+    [
+      "Unique",
+      "地狱瘟疫 Hellplague",
+      "Hellplague"
+    ],
+    [
+      "Unique",
+      "库尔温的尖端 Culwen's Point",
+      "Culwens Point"
+    ],
+    [
+      "Unique",
+      "影之牙 Shadowfang",
+      "Shadowfang"
+    ],
+    [
+      "Unique",
+      "剥皮灵魂 Soulflay",
+      "Soulflay"
+    ],
+    [
+      "Unique",
+      "金麦尔的锥子 Kinemil's Awl",
+      "Kinemils Awl"
+    ],
+    [
+      "Unique",
+      "黑色之舌 Blacktongue",
+      "Blacktongue"
+    ],
+    [
+      "Unique",
+      "粗齿大锯 Ripsaw",
+      "Ripsaw"
+    ],
+    [
+      "Unique",
+      "族长 The Patriarch",
+      "The Patriarch"
+    ],
+    [
+      "Unique",
+      "海鸥 Gull",
+      "Gull"
+    ],
+    [
+      "Unique",
+      "迪格勒 The Diggler",
+      "The Diggler"
+    ],
+    [
+      "Unique",
+      "坦杜之玉 The Jade Tan Do",
+      "The Jade Tan Do"
+    ],
+    [
+      "Unique",
+      "妖怪碎片 Spectral Shard",
+      "Irices Shard"
+    ],
+    [
+      "Unique",
+      "张龙 The Dragon Chang",
+      "The Dragon Chang"
+    ],
+    [
+      "Unique",
+      "剃刀之叉 Razortine",
+      "Razortine"
+    ],
+    [
+      "Unique",
+      "血之偷 Bloodthief",
+      "Bloodthief"
+    ],
+    [
+      "Unique",
+      "雅该长矛 Lance of Yaggai",
+      "Lance of Yaggai"
+    ],
+    [
+      "Unique",
+      "坦之血杖 The Tannr Gorerod",
+      "The Tannr Gorerod"
+    ],
+    [
+      "Unique",
+      "迪马克之劈砍 Dimoak's Hew",
+      "Dimoaks Hew"
+    ],
+    [
+      "Unique",
+      "铁刺棒 Steelgoad",
+      "Steelgoad"
+    ],
+    [
+      "Unique",
+      "灵魂采集者 Soul Harvest",
+      "Soul Harvest"
+    ],
+    [
+      "Unique",
+      "战斗支系 The Battlebranch",
+      "The Battlebranch"
+    ],
+    [
+      "Unique",
+      "烦恼诗集 Woestave",
+      "Woestave"
+    ],
+    [
+      "Unique",
+      "冷酷开膛手 The Grim Reaper",
+      "The Grim Reaper"
+    ],
+    [
+      "Unique",
+      "祸根之灰 Bane Ash",
+      "Bane Ash"
+    ],
+    [
+      "Unique",
+      "海蛇之王 Serpent Lord",
+      "Serpent Lord"
+    ],
+    [
+      "Unique",
+      "拉撒罗斯之螺旋 Spire of Lazarus",
+      "Lazarus Spire"
+    ],
+    [
+      "Unique",
+      "火精灵 The Salamander",
+      "The Salamander"
+    ],
+    [
+      "Unique",
+      "铁检棒 The Iron Jang Bong",
+      "The Iron Jang Bong"
+    ],
+    [
+      "Unique",
+      "勇气之眼 Pluckeye",
+      "Pluckeye"
+    ],
+    [
+      "Unique",
+      "凋谢之戒 Witherstring",
+      "Witherstring"
+    ],
+    [
+      "Unique",
+      "渡鸟之爪 Raven Claw",
+      "Rimeraven"
+    ],
+    [
+      "Unique",
+      "萝格之弓 Rogue's Bow",
+      "Piercerib"
+    ],
+    [
+      "Unique",
+      "暴风之击 Stormstrike",
+      "Pullspite"
+    ],
+    [
+      "Unique",
+      "凋谢之画 Wizendraw",
+      "Wizendraw"
+    ],
+    [
+      "Unique",
+      "作响的地狱 Hellclap",
+      "Hellclap"
+    ],
+    [
+      "Unique",
+      "爆裂的吠叫 Blastbark",
+      "Blastbark"
+    ],
+    [
+      "Unique",
+      "引导乌鸦 Leadcrow",
+      "Leadcrow"
+    ],
+    [
+      "Unique",
+      "灵液之刺 Ichorsting",
+      "Ichorsting"
+    ],
+    [
+      "Unique",
+      "投掷地狱 Hellcast",
+      "Hellcast"
+    ],
+    [
+      "Unique",
+      "毁灭投石者 Doomslinger",
+      "Doomspittle"
+    ],
+    [
+      "Unique",
+      "毕格因的软帽 Biggin's Bonnet",
+      "War Bonnet"
+    ],
+    [
+      "Unique",
+      "塔因头盔 Tarnhelm",
+      "Tarnhelm"
+    ],
+    [
+      "Unique",
+      "光荣布帽 Coif of Glory",
+      "Coif of Glory"
+    ],
+    [
+      "Unique",
+      "黄昏深处 Duskdeep",
+      "Duskdeep"
+    ],
+    [
+      "Unique",
+      "蠕虫骷髅 Wormskull",
+      "Wormskull"
+    ],
+    [
+      "Unique",
+      "怒号长牙 Howltusk",
+      "Howltusk"
+    ],
+    [
+      "Unique",
+      "不死皇冠 Undead Crown",
+      "Undead Crown"
+    ],
+    [
+      "Unique",
+      "恐惧之脸 The Face of Horror",
+      "The Face of Horror"
+    ],
+    [
+      "Unique",
+      "薄暮外观 Greyform",
+      "Greyform"
+    ],
+    [
+      "Unique",
+      "眨眼蝙蝠的外观 Blinkbat's Form",
+      "Blinkbats Form"
+    ],
+    [
+      "Unique",
+      "百夫长 The Centurion",
+      "The Centurion"
+    ],
+    [
+      "Unique",
+      "抽动的挣扎 Twitchthroe",
+      "Twitchthroe"
+    ],
+    [
+      "Unique",
+      "扩散黑暗 Darkglow",
+      "Darkglow"
+    ],
+    [
+      "Unique",
+      "鹰甲 Hawkmail",
+      "Hawkmail"
+    ],
+    [
+      "Unique",
+      "火花之甲 Sparking Mail",
+      "Sparking Mail"
+    ],
+    [
+      "Unique",
+      "毒液牢房 Venom Ward",
+      "Venomsward"
+    ],
+    [
+      "Unique",
+      "冰雪眨眼 Iceblink",
+      "Iceblink"
+    ],
+    [
+      "Unique",
+      "骨肉 Boneflesh",
+      "Boneflesh"
+    ],
+    [
+      "Unique",
+      "石之毛 Rockfleece",
+      "Rockfleece"
+    ],
+    [
+      "Unique",
+      "作响之笼 Rattlecage",
+      "Rattlecage"
+    ],
+    [
+      "Unique",
+      "黄金之皮 Goldskin",
+      "Goldskin"
+    ],
+    [
+      "Unique",
+      "胜利者之丝绸 Silks of the Victor",
+      "Victors Silk"
+    ],
+    [
+      "Unique",
+      "天堂装束 Heavenly Garb",
+      "Heavenly Garb"
+    ],
+    [
+      "Unique",
+      "新月小盾 Pelta Lunata",
+      "Pelta Lunata"
+    ],
+    [
+      "Unique",
+      "阴影圆盘 Umbral Disk",
+      "Umbral Disk"
+    ],
+    [
+      "Unique",
+      "暴风公会 Stormguild",
+      "Stormguild"
+    ],
+    [
+      "Unique",
+      "无眼之墙 Wall of the Eyeless",
+      "Wall of the Eyeless"
+    ],
+    [
+      "Unique",
+      "剑背之架 Swordback Hold",
+      "Swordback Hold"
+    ],
+    [
+      "Unique",
+      "作响的金属 Steelclash",
+      "Steelclash"
+    ],
+    [
+      "Unique",
+      "贝弗提的纪念 Bverrit Keep",
+      "Bverrit Keep"
+    ],
+    [
+      "Unique",
+      "囚房 The Ward",
+      "The Ward"
+    ],
+    [
+      "Unique",
+      "柏克之手 The Hand of Broc",
+      "The Hand of Broc"
+    ],
+    [
+      "Unique",
+      "血拳 Bloodfist",
+      "Bloodfist"
+    ],
+    [
+      "Unique",
+      "运气守护 Chance Guards",
+      "Chance Guards"
+    ],
+    [
+      "Unique",
+      "法师之拳 Magefist",
+      "Magefist"
+    ],
+    [
+      "Unique",
+      "霜燃 Frostburn",
+      "Frostburn"
+    ],
+    [
+      "Unique",
+      "热靴刺 Hotspur",
+      "Hotspur"
+    ],
+    [
+      "Unique",
+      "血脚 Gorefoot",
+      "Gorefoot"
+    ],
+    [
+      "Unique",
+      "凯松的征服 Treads of Cthon",
+      "Treads of Cthon"
+    ],
+    [
+      "Unique",
+      "小妖精脚趾 Goblin Toe",
+      "Goblin Toe"
+    ],
+    [
+      "Unique",
+      "泪之臀 Tearhaunch",
+      "Tearhaunch"
+    ],
+    [
+      "Unique",
+      "雷尼摩 Lenymo",
+      "Lenyms Cord"
+    ],
+    [
+      "Unique",
+      "蛇索 Snakecord",
+      "Snakecord"
+    ],
+    [
+      "Unique",
+      "夜烟 Nightsmoke",
+      "Nightsmoke"
+    ],
+    [
+      "Unique",
+      "金色包袱 Goldwrap",
+      "Goldwrap"
+    ],
+    [
+      "Unique",
+      "锋利扣带 Bladebuckle",
+      "Bladebuckle"
+    ],
+    [
+      "Unique",
+      "诺科蓝遗物 Nokozan Relic",
+      "Nokozan Relic"
+    ],
+    [
+      "Unique",
+      "艾利屈之眼 The Eye of Etlich",
+      "The Eye of Etlich"
+    ],
+    [
+      "Unique",
+      "玛哈姆橡木古董 The Mahim-Oak Curio",
+      "The Mahim-Oak Curio"
+    ],
+    [
+      "Unique",
+      "拿各的戒指 Nagelring",
+      "Nagelring"
+    ],
+    [
+      "Unique",
+      "玛那得的治疗 Manald Heal",
+      "Manald Heal"
+    ],
+    [
+      "Unique",
+      "乔丹之石 The Stone of Jordan",
+      "The Stone of Jordan"
+    ],
+    [
+      "Unique",
+      "蝮蛇护符",
+      "Amulet of the Viper"
+    ],
+    [
+      "Unique",
+      "国王之杖",
+      "Staff of Kings"
+    ],
+    [
+      "Unique",
+      "赫拉迪克法杖",
+      "Horadric Staff"
+    ],
+    [
+      "Unique",
+      "地狱熔炉铁锤",
+      "Hell Forge Hammer"
+    ],
+    [
+      "Unique",
+      "克林姆的链枷",
+      "KhalimFlail"
+    ],
+    [
+      "Unique",
+      "克林姆的意志",
+      "SuperKhalimFlail"
+    ],
+    [
+      "Unique",
+      "冷杀 Coldkill",
+      "Coldkill"
+    ],
+    [
+      "Unique",
+      "屠夫之瞳 Butcher's Pupil",
+      "Butcher's Pupil"
+    ],
+    [
+      "Unique",
+      "岛击 Islestrike",
+      "Islestrike"
+    ],
+    [
+      "Unique",
+      "庞贝之怒 Pompeii's Wrath",
+      "Pompe's Wrath"
+    ],
+    [
+      "Unique",
+      "蛇神守护者 Guardian Naga",
+      "Guardian Naga"
+    ],
+    [
+      "Unique",
+      "战爵之证 Warlord's Trust",
+      "Warlord's Trust"
+    ],
+    [
+      "Unique",
+      "钢铁魔咒 Spellsteel",
+      "Spellsteel"
+    ],
+    [
+      "Unique",
+      "暴风骑士 Stormrider",
+      "Stormrider"
+    ],
+    [
+      "Unique",
+      "碎骨者之刃 Boneslayer Blade",
+      "Boneslayer Blade"
+    ],
+    [
+      "Unique",
+      "牛头怪 The Minotaur",
+      "The Minataur"
+    ],
+    [
+      "Unique",
+      "自杀支系 Suicide Branch",
+      "Suicide Branch"
+    ],
+    [
+      "Unique",
+      "凯恩碎片 Carin Shard",
+      "Carin Shard"
+    ],
+    [
+      "Unique",
+      "李奥瑞克王的武器 Arm of King Leoric",
+      "Arm of King Leoric"
+    ],
+    [
+      "Unique",
+      "黑手之钥 Blackhand Key",
+      "Blackhand Key"
+    ],
+    [
+      "Unique",
+      "闇族碎灭者 Dark Clan Crusher",
+      "Dark Clan Crusher"
+    ],
+    [
+      "Unique",
+      "撒卡兰姆之手 Zakarum's Hand",
+      "Zakarum's Hand"
+    ],
+    [
+      "Unique",
+      "恶臭散布者 The Fetid Sprinkler",
+      "The Fetid Sprinkler"
+    ],
+    [
+      "Unique",
+      "祝福之光之手 Hand of Blessed Light",
+      "Hand of Blessed Light"
+    ],
+    [
+      "Unique",
+      "血肉裁决者 Fleshrender",
+      "Fleshrender"
+    ],
+    [
+      "Unique",
+      "尖啸冰霜 Sureshrill Frost",
+      "Sureshrill Frost"
+    ],
+    [
+      "Unique",
+      "落月 Moonfall",
+      "Moonfall"
+    ],
+    [
+      "Unique",
+      "贝西尔的漩涡 Baezil's Vortex",
+      "Baezil's Vortex"
+    ],
+    [
+      "Unique",
+      "撼地者 Earthshaker",
+      "Earthshaker"
+    ],
+    [
+      "Unique",
+      "血树残株 Bloodtree Stump",
+      "Bloodtree Stump"
+    ],
+    [
+      "Unique",
+      "痛苦木锤 The Gavel of Pain",
+      "The Gavel of Pain"
+    ],
+    [
+      "Unique",
+      "血书 Bloodletter",
+      "Bloodletter"
+    ],
+    [
+      "Unique",
+      "冰钢之眼 Coldsteel Eye",
+      "Coldsteel Eye"
+    ],
+    [
+      "Unique",
+      "六角之火 Hexfire",
+      "Hexfire"
+    ],
+    [
+      "Unique",
+      "阿里巴巴之刃 Blade of Ali Baba",
+      "Blade of Ali Baba"
+    ],
+    [
+      "Unique",
+      "金瑟的裂缝 Ginther's Rift",
+      "Ginther's Rift"
+    ],
+    [
+      "Unique",
+      "击头者 Headstriker",
+      "Headstriker"
+    ],
+    [
+      "Unique",
+      "疫病带原者 Plague Bearer",
+      "Plague Bearer"
+    ],
+    [
+      "Unique",
+      "亚特拉斯 The Atlantean",
+      "The Atlantian"
+    ],
+    [
+      "Unique",
+      "克林铁－弗姆 Crainte Vomir",
+      "Crainte Vomir"
+    ],
+    [
+      "Unique",
+      "兵之王 Bing Sz Wang",
+      "Bing Sz Wang"
+    ],
+    [
+      "Unique",
+      "卑劣躯壳 The Vile Husk",
+      "The Vile Husk"
+    ],
+    [
+      "Unique",
+      "云裂 Cloudcrack",
+      "Cloudcrack"
+    ],
+    [
+      "Unique",
+      "特迪斯法雷－芙法米 Todesfaelle Flamme",
+      "Todesfaelle Flamme"
+    ],
+    [
+      "Unique",
+      "剑卫 Swordguard",
+      "Swordguard"
+    ],
+    [
+      "Unique",
+      "裂脊者 Spineripper",
+      "Spineripper"
+    ],
+    [
+      "Unique",
+      "刻心者 Heart Carver",
+      "Heart Carver"
+    ],
+    [
+      "Unique",
+      "黑沼之锋 Blackbog's Sharp",
+      "Blackbog's Sharp"
+    ],
+    [
+      "Unique",
+      "暴风尖刺 Stormspike",
+      "Stormspike"
+    ],
+    [
+      "Unique",
+      "穿刺者 The Impaler",
+      "The Impaler"
+    ],
+    [
+      "Unique",
+      "水魔陷阱 Kelpie Snare",
+      "Kelpie Snare"
+    ],
+    [
+      "Unique",
+      "噬魂叉 Soulfeast Tine",
+      "Soulfeast Tine"
+    ],
+    [
+      "Unique",
+      "宏－森丹 Hone Sundan",
+      "Hone Sundan"
+    ],
+    [
+      "Unique",
+      "荣耀的尖塔 Spire of Honor",
+      "Spire of Honor"
+    ],
+    [
+      "Unique",
+      "刮肉者 The Meat Scraper",
+      "The Meat Scraper"
+    ],
+    [
+      "Unique",
+      "黑水之刃 Blackleach Blade",
+      "Blackleach Blade"
+    ],
+    [
+      "Unique",
+      "雅典娜的忿怒 Athena's Wrath",
+      "Athena's Wrath"
+    ],
+    [
+      "Unique",
+      "皮尔－通把－考恩特 Pierre Tombale Couant",
+      "Pierre Tombale Couant"
+    ],
+    [
+      "Unique",
+      "胡索丹－依弗 Husoldal Evo",
+      "Husoldal Evo"
+    ],
+    [
+      "Unique",
+      "惊怖焰亡灵 Grim's Burning Dead",
+      "Grim's Burning Dead"
+    ],
+    [
+      "Unique",
+      "摆动剃刀 Razorswitch",
+      "Razorswitch"
+    ],
+    [
+      "Unique",
+      "肋骨粉碎者 Ribcracker",
+      "Ribcracker"
+    ],
+    [
+      "Unique",
+      "五彩的怒气 Chromatic Ire",
+      "Chromatic Ire"
+    ],
+    [
+      "Unique",
+      "扭曲之矛 Warpspear",
+      "Warpspear"
+    ],
+    [
+      "Unique",
+      "骷髅收集者 Skull Collector",
+      "Skullcollector"
+    ],
+    [
+      "Unique",
+      "天击 Skystrike",
+      "Skystrike"
+    ],
+    [
+      "Unique",
+      "撕裂之钩 Riphook",
+      "Riphook"
+    ],
+    [
+      "Unique",
+      "社角久子 Kuko Shakaku",
+      "Kuko Shakaku"
+    ],
+    [
+      "Unique",
+      "无休止的冰雹 Endlesshail",
+      "Endlesshail"
+    ],
+    [
+      "Unique",
+      "狂野之弦",
+      "Whichwild String"
+    ],
+    [
+      "Unique",
+      "岩壁杀手 Cliffkiller",
+      "Cliffkiller"
+    ],
+    [
+      "Unique",
+      "巫师之怒 Magewrath",
+      "Magewrath"
+    ],
+    [
+      "Unique",
+      "金击圆弧 Goldstrike Arch",
+      "Godstrike Arch"
+    ],
+    [
+      "Unique",
+      "兰格－布里瑟 Langer Briser",
+      "Langer Briser"
+    ],
+    [
+      "Unique",
+      "毒液怪 Pus Spitter",
+      "Pus Spiter"
+    ],
+    [
+      "Unique",
+      "布理撒－多－凯南 Buriza-Do Kyanon",
+      "Buriza-Do Kyanon"
+    ],
+    [
+      "Unique",
+      "恶魔机器 Demon Machine",
+      "Demon Machine"
+    ],
+    [
+      "Unique",
+      "装甲 Armor",
+      "Armor"
+    ],
+    [
+      "Unique",
+      "粗野之冠 Peasant Crown",
+      "Peasent Crown"
+    ],
+    [
+      "Unique",
+      "岩石制动器 Rockstopper",
+      "Rockstopper"
+    ],
+    [
+      "Unique",
+      "偷取骷髅 Stealskull",
+      "Stealskull"
+    ],
+    [
+      "Unique",
+      "暗视之盔 Darksight Helm",
+      "Darksight Helm"
+    ],
+    [
+      "Unique",
+      "女神之翼 Valkyrie Wing",
+      "Valkiry Wing"
+    ],
+    [
+      "Unique",
+      "盗贼皇冠 Crown of Thieves",
+      "Crown of Thieves"
+    ],
+    [
+      "Unique",
+      "黑角面具 Blackhorn's Face",
+      "Blackhorn's Face"
+    ],
+    [
+      "Unique",
+      "吸血鬼的凝视 Vampire Gaze",
+      "Vampiregaze"
+    ],
+    [
+      "Unique",
+      "灵魂帷幕 The Spirit Shroud",
+      "The Spirit Shroud"
+    ],
+    [
+      "Unique",
+      "蛇魔法师之皮 Skin of the Vipermagi",
+      "Skin of the Vipermagi"
+    ],
+    [
+      "Unique",
+      "剥皮者之皮 Skin of the Flayed One",
+      "Skin of the Flayerd One"
+    ],
+    [
+      "Unique",
+      "掷铁 Iron Pelt",
+      "Ironpelt"
+    ],
+    [
+      "Unique",
+      "灵魂熔炉 Spirit Forge",
+      "Spiritforge"
+    ],
+    [
+      "Unique",
+      "鸦鸣 Crow Caw",
+      "Crow Caw"
+    ],
+    [
+      "Unique",
+      "谢夫特斯坦布 Shaftstop",
+      "Shaftstop"
+    ],
+    [
+      "Unique",
+      "督瑞尔的壳 Duriel's Shell",
+      "Duriel's Shell"
+    ],
+    [
+      "Unique",
+      "诗寇蒂的愤怒 Skullder's Ire",
+      "Skullder's Ire"
+    ],
+    [
+      "Unique",
+      "守护天使 Guardian Angel",
+      "Guardian Angel"
+    ],
+    [
+      "Unique",
+      "排齿 Toothrow",
+      "Toothrow"
+    ],
+    [
+      "Unique",
+      "亚特玛的哭喊 Atma's Wail",
+      "Atma's Wail"
+    ],
+    [
+      "Unique",
+      "黑色黑帝斯 Black Hades",
+      "Black Hades"
+    ],
+    [
+      "Unique",
+      "尸体的哀伤 Corpsemourn",
+      "Corpsemourn"
+    ],
+    [
+      "Unique",
+      "魁黑刚的智慧 Que-Hegan's Wisdom",
+      "Que-Hegan's Wisdon"
+    ],
+    [
+      "Unique",
+      "维斯尔坦特 Visceratuant",
+      "Visceratuant"
+    ],
+    [
+      "Unique",
+      "摩西祝福之环 Moser's Blessed Circle",
+      "Mosers Blessed Circle"
+    ],
+    [
+      "Unique",
+      "风暴追逐者 Stormchaser",
+      "Stormchaser"
+    ],
+    [
+      "Unique",
+      "魔龙的非难 Tiamat's Rebuke",
+      "Tiamat's Rebuke"
+    ],
+    [
+      "Unique",
+      "基尔克的圣堂 Gerke's Sanctuary",
+      "Kerke's Sanctuary"
+    ],
+    [
+      "Unique",
+      "罗达门特之球体 Radament's Sphere",
+      "Radimant's Sphere"
+    ],
+    [
+      "Unique",
+      "警戒之墙 Lidless Wall",
+      "Lidless Wall"
+    ],
+    [
+      "Unique",
+      "长枪守卫 Lance Guard",
+      "Lance Guard"
+    ],
+    [
+      "Unique",
+      "剧毒之抓 Venom Grip",
+      "Venom Grip"
+    ],
+    [
+      "Unique",
+      "墓穴的抚弄 Gravepalm",
+      "Gravepalm"
+    ],
+    [
+      "Unique",
+      "食尸鬼外皮 Ghoulhide",
+      "Ghoulhide"
+    ],
+    [
+      "Unique",
+      "熔岩角羊 Lava Gout",
+      "Lavagout"
+    ],
+    [
+      "Unique",
+      "地狱之嘴 Hellmouth",
+      "Hellmouth"
+    ],
+    [
+      "Unique",
+      "地狱阔步 Infernostride",
+      "Infernostride"
+    ],
+    [
+      "Unique",
+      "水上飘 Waterwalk",
+      "Waterwalk"
+    ],
+    [
+      "Unique",
+      "纱织 Silkweave",
+      "Silkweave"
+    ],
+    [
+      "Unique",
+      "战争旅者 War Traveler",
+      "Wartraveler"
+    ],
+    [
+      "Unique",
+      "蚀肉骑士 Gore Rider",
+      "Gorerider"
+    ],
+    [
+      "Unique",
+      "长串之耳 String of Ears",
+      "String of Ears"
+    ],
+    [
+      "Unique",
+      "剃刀之尾 Razortail",
+      "Razortail"
+    ],
+    [
+      "Unique",
+      "阴影陷阱 Gloom's Trap",
+      "Gloomstrap"
+    ],
+    [
+      "Unique",
+      "雪之冲突 Snowclash",
+      "Snowclash"
+    ],
+    [
+      "Unique",
+      "雷神之力 Thundergod's Vigor",
+      "Thudergod's Vigor"
+    ],
+    [
+      "Unique",
+      "谐角之冠 Harlequin Crest",
+      "Harlequin Crest"
+    ],
+    [
+      "Unique",
+      "钢铁面纱 Veil of Steel",
+      "Veil of Steel"
+    ],
+    [
+      "Unique",
+      "斗士的祸根 The Gladiator's Bane",
+      "The Gladiator's Bane"
+    ],
+    [
+      "Unique",
+      "阿凯尼的荣耀 Arkaine's Valor",
+      "Arkaine's Valor"
+    ],
+    [
+      "Unique",
+      "黑橡树盾 Blackoak Shield",
+      "Blackoak Shield"
+    ],
+    [
+      "Unique",
+      "暴风之盾 Stormshield",
+      "Stormshield"
+    ],
+    [
+      "Unique",
+      "地狱毁灭者 Hellslayer",
+      "Hellslayer"
+    ],
+    [
+      "Unique",
+      "希梅斯特的掠夺 Messerschmidt's Reaver",
+      "Messerschmidt's Reaver"
+    ],
+    [
+      "Unique",
+      "巴拉那之星 Baranar's Star",
+      "Baranar's Star"
+    ],
+    [
+      "Unique",
+      "史恰佛之锤 Schaefer's Hammer",
+      "Schaefer's Hammer"
+    ],
+    [
+      "Unique",
+      "碎脑锤 The Cranium Basher",
+      "The Cranium Basher"
+    ],
+    [
+      "Unique",
+      "光之军刀 Lightsabre",
+      "Lightsabre"
+    ],
+    [
+      "Unique",
+      "末日毁灭者 Doombringer",
+      "Doombringer"
+    ],
+    [
+      "Unique",
+      "祖父 The Grandfather",
+      "The Grandfather"
+    ],
+    [
+      "Unique",
+      "巫师之刺 Wizardspike",
+      "Wizardspike"
+    ],
+    [
+      "Unique",
+      "衔尾蛇之环",
+      "Constricting Ring"
+    ],
+    [
+      "Unique",
+      "暴风尖塔 Stormspire",
+      "Stormspire"
+    ],
+    [
+      "Unique",
+      "鹰号角 Eaglehorn",
+      "Eaglehorn"
+    ],
+    [
+      "Unique",
+      "风之力 Windforce",
+      "Windforce"
+    ],
+    [
+      "Unique",
+      "指环 Rings",
+      "Rings"
+    ],
+    [
+      "Unique",
+      "布尔凯索之戒 Bul-Kathos' Wedding Band",
+      "Bul Katho's Wedding Band"
+    ],
+    [
+      "Unique",
+      "猫眼 The Cat's Eye",
+      "The Cat's Eye"
+    ],
+    [
+      "Unique",
+      "旭日东升 The Rising Sun",
+      "The Rising Sun"
+    ],
+    [
+      "Unique",
+      "新月 Crescent Moon",
+      "Crescent Moon"
+    ],
+    [
+      "Unique",
+      "马拉的万花筒 Mara's Kaleidoscope",
+      "Mara's Kaleidoscope"
+    ],
+    [
+      "Unique",
+      "亚特玛的圣甲虫 Atma's Scarab",
+      "Atma's Scarab"
+    ],
+    [
+      "Unique",
+      "矮人之星 Dwarf Star",
+      "Dwarf Star"
+    ],
+    [
+      "Unique",
+      "乌鸦之霜 Raven Frost",
+      "Raven Frost"
+    ],
+    [
+      "Unique",
+      "大君之怒 Highlord's Wrath",
+      "Highlord's Wrath"
+    ],
+    [
+      "Unique",
+      "萨拉森的机会 Saracen's Chance",
+      "Saracen's Chance"
+    ],
+    [
+      "Unique",
+      "指定职业",
+      "Class Specific"
+    ],
+    [
+      "Unique",
+      "亚瑞特的面容 Arreat's Face",
+      "Arreat's Face"
+    ],
+    [
+      "Unique",
+      "侏儒 Homunculus",
+      "Homunculus"
+    ],
+    [
+      "Unique",
+      "泰坦的复仇 Titan's Revenge",
+      "Titan's Revenge"
+    ],
+    [
+      "Unique",
+      "雷山德的指标 Lycander's Aim",
+      "Lycander's Aim"
+    ],
+    [
+      "Unique",
+      "雷山德的侧腹 Lycander's Flank",
+      "Lycander's Flank"
+    ],
+    [
+      "Unique",
+      "眼球 The Oculus",
+      "The Oculus"
+    ],
+    [
+      "Unique",
+      "撒卡兰姆使者 Herald of Zakarum",
+      "Herald of Zakarum"
+    ],
+    [
+      "Unique",
+      "巴图克的割喉爪",
+      "Cutthroat1"
+    ],
+    [
+      "Unique",
+      "加尔的长发 Jalal's Mane",
+      "Jalal's Mane"
+    ],
+    [
+      "Unique",
+      "圆凿 The Scalper",
+      "The Scalper"
+    ],
+    [
+      "Unique",
+      "血月 Bloodmoon",
+      "Bloodmoon"
+    ],
+    [
+      "Unique",
+      "魔灵杀手 Djinn Slayer",
+      "Djinnslayer"
+    ],
+    [
+      "Unique",
+      "死亡碎片 Deathbit",
+      "Deathbit"
+    ],
+    [
+      "Unique",
+      "战争之鸟 Warshrike",
+      "Warshrike"
+    ],
+    [
+      "Unique",
+      "内脏吸管 Gut Siphon",
+      "Gutsiphon"
+    ],
+    [
+      "Unique",
+      "刀锋边缘 Razor's Edge",
+      "Razoredge"
+    ],
+    [
+      "Unique",
+      "血块撕裂者 Gore Ripper",
+      "Gore Ripper"
+    ],
+    [
+      "Unique",
+      "恶魔爪牙 Demon Limb",
+      "Demonlimb"
+    ],
+    [
+      "Unique",
+      "钢影 Steel Shade",
+      "Steelshade"
+    ],
+    [
+      "Unique",
+      "盗墓者 Tomb Reaver",
+      "Tomb Reaver"
+    ],
+    [
+      "Unique",
+      "死亡之网 Death's Web",
+      "Deaths's Web"
+    ],
+    [
+      "Unique",
+      "大自然的和平 Nature's Peace",
+      "Nature's Peace"
+    ],
+    [
+      "Unique",
+      "碧蓝怒火 Azurewrath",
+      "Azurewrath"
+    ],
+    [
+      "Unique",
+      "炽天使之韵 Seraph's Hymn",
+      "Seraph's Hymn"
+    ],
+    [
+      "Unique",
+      "撒卡兰姆的救赎 Zakarum's Salvation",
+      "Zakarum's Salvation"
+    ],
+    [
+      "Unique",
+      "裂肉者 Fleshripper",
+      "Fleshripper"
+    ],
+    [
+      "Unique",
+      "厌恶 Odium",
+      "Odium"
+    ],
+    [
+      "Unique",
+      "地平线的台风 Horizon's Tornado",
+      "Horizon's Tornado"
+    ],
+    [
+      "Unique",
+      "碎石者 Stone Crusher",
+      "Stone Crusher"
+    ],
+    [
+      "Unique",
+      "碧玉爪 Jade Talon",
+      "Jadetalon"
+    ],
+    [
+      "Unique",
+      "影舞者 Shadow Dancer",
+      "Shadowdancer"
+    ],
+    [
+      "Unique",
+      "地狱之吻 Cerebus' Bite",
+      "Cerebus"
+    ],
+    [
+      "Unique",
+      "泰瑞尔的力量 Tyrael's Might",
+      "Tyrael's Might"
+    ],
+    [
+      "Unique",
+      "吸魂者 Soul Drainer",
+      "Souldrain"
+    ],
+    [
+      "Unique",
+      "符文大师 Rune Master",
+      "Runemaster"
+    ],
+    [
+      "Unique",
+      "死亡之刀 Death Cleaver",
+      "Deathcleaver"
+    ],
+    [
+      "Unique",
+      "刽子手的裁决 Executioner's Justice",
+      "Executioner's Justice"
+    ],
+    [
+      "Unique",
+      "石乌鸦 Stoneraven",
+      "Stoneraven"
+    ],
+    [
+      "Unique",
+      "海王利维亚桑 Leviathan",
+      "Leviathan"
+    ],
+    [
+      "Unique",
+      "拉苏克的斗士 Larzuk's Champion",
+      "Larzuk's Champion"
+    ],
+    [
+      "Unique",
+      "鬼火投射者 Wisp Projector",
+      "Wisp"
+    ],
+    [
+      "Unique",
+      "石像鬼之噬 Gargoyle's Bite",
+      "Gargoyle's Bite"
+    ],
+    [
+      "Unique",
+      "撕裂者 Lacerator",
+      "Lacerator"
+    ],
+    [
+      "Unique",
+      "梅格之歌的教训 Mang Song's Lesson",
+      "Mang Song's Lesson"
+    ],
+    [
+      "Unique",
+      "蝮蛇叉 Viperfork",
+      "Viperfork"
+    ],
+    [
+      "Unique",
+      "永恒边界 Ethereal Edge",
+      "Ethereal Edge"
+    ],
+    [
+      "Unique",
+      "恶魔号角的边缘 Demonhorn's Edge",
+      "Demonhorn's Edge"
+    ],
+    [
+      "Unique",
+      "死神的丧钟 The Reaper's Toll",
+      "The Reaper's Toll"
+    ],
+    [
+      "Unique",
+      "灵魂看守者 Spirit Keeper",
+      "Spiritkeeper"
+    ],
+    [
+      "Unique",
+      "地狱拷问 Hellrack",
+      "Hellrack"
+    ],
+    [
+      "Unique",
+      "阿尔玛－尼格拉 Alma Negra",
+      "Alma Negra"
+    ],
+    [
+      "Unique",
+      "魔力肇生 Darkforce Spawn",
+      "Darkforge Spawn"
+    ],
+    [
+      "Unique",
+      "戮夫刃 Widowmaker",
+      "Widowmaker"
+    ],
+    [
+      "Unique",
+      "血鸟的袭击 Blood Raven's Charge",
+      "Bloodraven's Charge"
+    ],
+    [
+      "Unique",
+      "鬼火焰 Ghostflame",
+      "Ghostflame"
+    ],
+    [
+      "Unique",
+      "影杀者 Shadow Killer",
+      "Shadowkiller"
+    ],
+    [
+      "Unique",
+      "碎片贪婪者 Gimmershred",
+      "Gimmershred"
+    ],
+    [
+      "Unique",
+      "格利风之眼 Griffon's Eye",
+      "Griffon's Eye"
+    ],
+    [
+      "Unique",
+      "风之锤 Windhammer",
+      "Windhammer"
+    ],
+    [
+      "Unique",
+      "雷击 Thunderstroke",
+      "Thunderstroke"
+    ],
+    [
+      "Unique",
+      "末日之刃",
+      "Armageddon Blade"
+    ],
+    [
+      "Unique",
+      "恶魔之王 Demon's Arch",
+      "Demon's Arch"
+    ],
+    [
+      "Unique",
+      "骨焰 Boneflame",
+      "Boneflame"
+    ],
+    [
+      "Unique",
+      "铁柱 Steel Pillar",
+      "Steelpillar"
+    ],
+    [
+      "Unique",
+      "夜翼面纱 Nightwing's Veil",
+      "Nightwing's Veil"
+    ],
+    [
+      "Unique",
+      "年纪之冠 Crown of Ages",
+      "Crown of Ages"
+    ],
+    [
+      "Unique",
+      "安达利尔的面貌 Andariel's Visage",
+      "Andariel's Visage"
+    ],
+    [
+      "Unique",
+      "黑暗恐惧 Darkfear",
+      "Darkfear"
+    ],
+    [
+      "Unique",
+      "龙鳞 Dragonscale",
+      "Dragonscale"
+    ],
+    [
+      "Unique",
+      "钢铁铠甲 Steel Carapace",
+      "Steel Carapice"
+    ],
+    [
+      "Unique",
+      "梅杜莎的凝视 Medusa's Gaze",
+      "Medusa's Gaze"
+    ],
+    [
+      "Unique",
+      "乌鸦之王 Ravenlore",
+      "Ravenlore"
+    ],
+    [
+      "Unique",
+      "白骨阴影 Boneshade",
+      "Boneshade"
+    ],
+    [
+      "Unique",
+      "卡达拉的传家宝",
+      "Nethercrow"
+    ],
+    [
+      "Unique",
+      "火焰号叫 Flamebellow",
+      "Flamebellow"
+    ],
+    [
+      "Unique",
+      "死亡深度 Death's Fathom",
+      "Fathom"
+    ],
+    [
+      "Unique",
+      "狼嚎 Wolfhowl",
+      "Wolfhowl"
+    ],
+    [
+      "Unique",
+      "魂系结界 Spirit Ward",
+      "Spirit Ward"
+    ],
+    [
+      "Unique",
+      "奇拉的守护 Kira's Guardian",
+      "Kira's Guardian"
+    ],
+    [
+      "Unique",
+      "奥玛斯的长袍 Ormus' Robes",
+      "Ormus' Robes"
+    ],
+    [
+      "Unique",
+      "基得的运气 Gheed's Fortune",
+      "Gheed's Fortune"
+    ],
+    [
+      "Unique",
+      "暴风之结 Stormlash",
+      "Stormlash"
+    ],
+    [
+      "Unique",
+      "海拉柏得的国度 Halaberd's Reign",
+      "Halaberd's Reign"
+    ],
+    [
+      "Unique",
+      "瓦瑞夫的令牌 Warriv's Warder",
+      "Warriv's Warder"
+    ],
+    [
+      "Unique",
+      "尖刺根源 Spike Thorn",
+      "Spike Thorn"
+    ],
+    [
+      "Unique",
+      "卓古拉之握 Dracul's Grasp",
+      "Dracul's Grasp"
+    ],
+    [
+      "Unique",
+      "冰霜之风 Frostwind",
+      "Frostwind"
+    ],
+    [
+      "Unique",
+      "圣堂武士的力量 Templar's Might",
+      "Templar's Might"
+    ],
+    [
+      "Unique",
+      "火蜥蜴之爪 Firelizard's Talons",
+      "Firelizard's Talons"
+    ],
+    [
+      "Unique",
+      "沙暴之旅 Sandstorm Trek",
+      "Sandstorm Trek"
+    ],
+    [
+      "Unique",
+      "骨髓行走 Marrowwalk",
+      "Marrowwalk"
+    ],
+    [
+      "Unique",
+      "天堂之光 Heaven's Light",
+      "Heaven's Light"
+    ],
+    [
+      "Unique",
+      "人鱼的齿轮 Merman's Sprocket",
+      "Merman's Speed"
+    ],
+    [
+      "Unique",
+      "蜘蛛之网 Arachnid Mesh",
+      "Arachnid Mesh"
+    ],
+    [
+      "Unique",
+      "吸血圣王之圈 Nosferatu's Coil",
+      "Nosferatu's Coil"
+    ],
+    [
+      "Unique",
+      "金属网格 Metalgrid",
+      "Metalgrid"
+    ],
+    [
+      "Unique",
+      "维尔登戈的心结 Verdungo's Hearty Cord",
+      "Verdugo's Hearty Cord"
+    ],
+    [
+      "Unique",
+      "西加德的坚定",
+      "Sigurd's Staunch"
+    ],
+    [
+      "Unique",
+      "腐肉之风 Carrion Wind",
+      "Carrion Wind"
+    ],
+    [
+      "Unique",
+      "巨骷髅 Giant Skull",
+      "Giantskull"
+    ],
+    [
+      "Unique",
+      "爱斯特龙之铁的保护区 Astreon's Iron Ward",
+      "Ironward"
+    ],
+    [
+      "Unique",
+      "毁灭 Annihilus",
+      "Annihilus"
+    ],
+    [
+      "Unique",
+      "爱理欧克之针 Arioc's Needle",
+      "Arioc's Needle"
+    ],
+    [
+      "Unique",
+      "鹤嘴 Cranebeak",
+      "Cranebeak"
+    ],
+    [
+      "Unique",
+      "诺德的蚀肉药 Nord's Tenderizer",
+      "Nord's Tenderizer"
+    ],
+    [
+      "Unique",
+      "大地变形者 Earth Shifter",
+      "Earthshifter"
+    ],
+    [
+      "Unique",
+      "死灵夜翔 Wraith Flight",
+      "Wraithflight"
+    ],
+    [
+      "Unique",
+      "破骨 Bonehew",
+      "Bonehew"
+    ],
+    [
+      "Unique",
+      "安戴尔的智慧 Ondal's Wisdom",
+      "Ondal's Wisdom"
+    ],
+    [
+      "Unique",
+      "忏悔者 The Redeemer",
+      "The Reedeemer"
+    ],
+    [
+      "Unique",
+      "猎头人的荣耀 Head Hunter's Glory",
+      "Headhunter's Glory"
+    ],
+    [
+      "Unique",
+      "碎钢 Steelrend",
+      "Steelrend"
+    ],
+    [
+      "Unique",
+      "彩虹刻面 Rainbow Facet",
+      "Rainbow Facet"
+    ],
+    [
+      "Unique",
+      "地狱火炬",
+      "Hellfire Torch"
+    ],
+    [
+      "Unique",
+      "伊瑟瑞尔的途径",
+      "Itheraels Path"
+    ],
+    [
+      "Unique",
+      "大君面甲",
+      "Overlords Helm"
+    ],
+    [
+      "Unique",
+      "黑暗深渊",
+      "Dark Abyss"
+    ],
+    [
+      "Unique",
+      "艾丹的伤痕",
+      "Aidans Scar"
+    ],
+    [
+      "Unique",
+      "哈德尔之手",
+      "Hadriels Hand"
+    ],
+    [
+      "Unique",
+      "真银",
+      "True Silver"
+    ],
+    [
+      "Unique",
+      "羽蛇神面",
+      "Quetzalcoatl"
+    ],
+    [
+      "Unique",
+      "独眼巨人的咆哮",
+      "Cyclopean Roar"
+    ],
+    [
+      "Unique",
+      "萨恩凯克的陨落",
+      "Sankekur's Fall"
+    ],
+    [
+      "Unique",
+      "法师杀手",
+      "Mage Slayer"
+    ],
+    [
+      "Unique",
+      "卡兰的遗产",
+      "Kalans Legacy"
+    ],
+    [
+      "Unique",
+      "风暴",
+      "Tempest"
+    ],
+    [
+      "Unique",
+      "骷髅授带",
+      "Band of Skulls"
+    ],
+    [
+      "Unique",
+      "无垢者牢笼",
+      "Cage of the Unsullied"
+    ],
+    [
+      "Unique",
+      "第三只眼",
+      "The Third Eye"
+    ],
+    [
+      "Unique",
+      "泽瑞尔的决心",
+      "Zeraes Resolve"
+    ],
+    [
+      "Unique",
+      "秘术师",
+      "Occultist"
+    ],
+    [
+      "Unique",
+      "硫磺之雨",
+      "Brimstone Rain"
+    ],
+    [
+      "Unique",
+      "阿卡拉特的奉献",
+      "Akarats Devotion"
+    ],
+    [
+      "Unique",
+      "殉道者",
+      "Martyr"
+    ],
+    [
+      "Unique",
+      "炼狱",
+      "Purgatory"
+    ],
+    [
+      "Unique",
+      "蕾蔻的美德",
+      "Raekors Virtue"
+    ],
+    [
+      "Unique",
+      "乌尔萨的噩梦",
+      "Nightmares Feast"
+    ],
+    [
+      "Unique",
+      "疯狂之王扎尔",
+      "Zhar the Mad Map"
+    ],
+    [
+      "Unique",
+      "鲜血督军",
+      "Warlord of Blood Map"
+    ],
+    [
+      "Unique",
+      "命运守护者",
+      "Fallen Gardens Map"
+    ],
+    [
+      "Unique",
+      "乌迪贤的觉醒",
+      "Uldyssian's Awakening"
+    ],
+    [
+      "Unique",
+      "李奥瑞克王的秘银之刃",
+      "Leoric's Mithril Blade"
+    ],
+    [
+      "Unique",
+      "暮光倒影",
+      "Mirror Shield"
+    ],
+    [
+      "Unique",
+      "幽灵之肤",
+      "Wraithskin"
+    ],
+    [
+      "Unique",
+      "泰坦之握",
+      "Titangrip"
+    ],
+    [
+      "Unique",
+      "破碎之刃",
+      "Shatterblade"
+    ],
+    [
+      "Unique",
+      "兽穴之母",
+      "Denmother"
+    ],
+    [
+      "Unique",
+      "灾祸黑檀",
+      "Ebonbane"
+    ],
+    [
+      "Unique",
+      "幻影幽语",
+      "Whispering Mirage"
+    ],
+    [
+      "Unique",
+      "天界卫士",
+      "Skywarden"
+    ],
+    [
+      "Unique",
+      "蔑视",
+      "Skorn"
+    ],
+    [
+      "Unique",
+      "阿喀琉斯之击",
+      "Achilles Strike"
+    ],
+    [
+      "Unique",
+      "荒野语者",
+      "Wildspeaker"
+    ],
+    [
+      "Unique",
+      "芬里斯",
+      "Fenris"
+    ],
+    [
+      "Unique",
+      "神圣图腾",
+      "Sacred Totem"
+    ],
+    [
+      "Unique",
+      "帝国宫殿",
+      "Imperial Palace Map"
+    ],
+    [
+      "Unique",
+      "外虚空",
+      "Outer Void Map"
+    ],
+    [
+      "Unique",
+      "炽燃烽火",
+      "Balefire"
+    ],
+    [
+      "Unique",
+      "疾风利刺",
+      "Swiftwind Needle"
+    ],
+    [
+      "Unique",
+      "墓歌",
+      "Tombsong"
+    ],
+    [
+      "Unique",
+      "天境",
+      "Aetherwing"
+    ],
+    [
+      "Unique",
+      "神蛇之羽",
+      "Basilisk's Quill"
+    ],
+    [
+      "Unique",
+      "末日之指",
+      "Doom's Finger"
+    ],
+    [
+      "Unique",
+      "势如破竹",
+      "Ramfodder"
+    ],
+    [
+      "Unique",
+      "扞卫钢条",
+      "Anvilguard Strap"
+    ],
+    [
+      "Unique",
+      "爆头者",
+      "Shatterhead"
+    ],
+    [
+      "Unique",
+      "深渊结界",
+      "Abyssal Ward"
+    ],
+    [
+      "Unique",
+      "领主令箭",
+      "Bannerlord's Call"
+    ],
+    [
+      "Unique",
+      "霜恸",
+      "Frozen Sorrow"
+    ],
+    [
+      "Unique",
+      "星流霆击",
+      "Crackleshot"
+    ],
+    [
+      "Unique",
+      "乌瑞城",
+      "Ureh City Map"
+    ],
+    [
+      "Unique",
+      "幽冥魂器",
+      "Nethercrux"
+    ],
+    [
+      "Unique",
+      "灰烬之誓",
+      "Embersworn"
+    ],
+    [
+      "Unique",
+      "天陨",
+      "Skyfall"
+    ],
+    [
+      "Unique",
+      "智者的反抗",
+      "Sage's Defiance"
+    ],
+    [
+      "Unique",
+      "精灵领域",
+      "Djinns Domain Map"
+    ],
+    [
+      "Unique",
+      "巨型残虐者",
+      "Giant Maimer"
+    ],
+    [
+      "Unique",
+      "朝露",
+      "Ephemeral"
+    ],
+    [
+      "Unique",
+      "纳克鲁尔深渊",
+      "Na-Krul's Abyss Map"
+    ],
+    [
+      "Set",
+      "希弗柏的防护",
+      "Civerb's Ward"
+    ],
+    [
+      "Set",
+      "希弗伯的圣像",
+      "Civerb's Icon"
+    ],
+    [
+      "Set",
+      "希弗伯的短棍",
+      "Civerb's Cudgel"
+    ],
+    [
+      "Set",
+      "萨鲁斯的铁踵",
+      "Hsarus' Iron Heel"
+    ],
+    [
+      "Set",
+      "萨鲁斯的铁拳",
+      "Hsarus' Iron Fist"
+    ],
+    [
+      "Set",
+      "萨鲁斯的铁固腰",
+      "Hsarus' Iron Stay"
+    ],
+    [
+      "Set",
+      "克雷格劳之牙",
+      "Cleglaw's Tooth"
+    ],
+    [
+      "Set",
+      "克雷格劳之爪",
+      "Cleglaw's Claw"
+    ],
+    [
+      "Set",
+      "克雷格劳之钳",
+      "Cleglaw's Pincers"
+    ],
+    [
+      "Set",
+      "艾蕾萨的护颈圈",
+      "Iratha's Collar"
+    ],
+    [
+      "Set",
+      "艾蕾萨的袖手套",
+      "Iratha's Cuff"
+    ],
+    [
+      "Set",
+      "艾蕾萨的铁围盔",
+      "Iratha's Coil"
+    ],
+    [
+      "Set",
+      "艾蕾萨的束带",
+      "Iratha's Cord"
+    ],
+    [
+      "Set",
+      "依森哈特的光之烙印",
+      "Isenhart's Lightbrand"
+    ],
+    [
+      "Set",
+      "依森哈特的格挡",
+      "Isenhart's Parry"
+    ],
+    [
+      "Set",
+      "依森哈特的胸胄",
+      "Isenhart's Case"
+    ],
+    [
+      "Set",
+      "依森哈特的号角",
+      "Isenhart's Horns"
+    ],
+    [
+      "Set",
+      "维达拉的倒刺",
+      "Vidala's Barb"
+    ],
+    [
+      "Set",
+      "维达拉的扣带靴",
+      "Vidala's Fetlock"
+    ],
+    [
+      "Set",
+      "维达拉的突袭",
+      "Vidala's Ambush"
+    ],
+    [
+      "Set",
+      "维达拉的陷阱",
+      "Vidala's Snare"
+    ],
+    [
+      "Set",
+      "米拉伯佳的宝球",
+      "Milabrega's Orb"
+    ],
+    [
+      "Set",
+      "米拉伯佳的权杖",
+      "Milabrega's Rod"
+    ],
+    [
+      "Set",
+      "米拉伯佳的权冠",
+      "Milabrega's Diadem"
+    ],
+    [
+      "Set",
+      "米拉伯佳的袍甲",
+      "Milabrega's Robe"
+    ],
+    [
+      "Set",
+      "卡珊的统治",
+      "Cathan's Rule"
+    ],
+    [
+      "Set",
+      "卡珊的札甲",
+      "Cathan's Mesh"
+    ],
+    [
+      "Set",
+      "卡珊的面甲",
+      "Cathan's Visage"
+    ],
+    [
+      "Set",
+      "卡珊的符徽",
+      "Cathan's Sigil"
+    ],
+    [
+      "Set",
+      "卡珊的印章",
+      "Cathan's Seal"
+    ],
+    [
+      "Set",
+      "坦克雷的鸦嘴锄",
+      "Tancred's Crowbill"
+    ],
+    [
+      "Set",
+      "坦克雷的脊柱",
+      "Tancred's Spine"
+    ],
+    [
+      "Set",
+      "坦克雷的钉头鞋",
+      "Tancred's Hobnails"
+    ],
+    [
+      "Set",
+      "坦克雷的怪诞",
+      "Tancred's Weird"
+    ],
+    [
+      "Set",
+      "坦克雷的头骨",
+      "Tancred's Skull"
+    ],
+    [
+      "Set",
+      "西刚的挑战",
+      "Sigon's Gage"
+    ],
+    [
+      "Set",
+      "西刚的面甲",
+      "Sigon's Visor"
+    ],
+    [
+      "Set",
+      "西刚的遮蔽",
+      "Sigon's Shelter"
+    ],
+    [
+      "Set",
+      "西刚的木底鞋",
+      "Sigon's Sabot"
+    ],
+    [
+      "Set",
+      "西刚的腰带",
+      "Sigon's Wrap"
+    ],
+    [
+      "Set",
+      "西刚的守护",
+      "Sigon's Guard"
+    ],
+    [
+      "Set",
+      "地狱颅骨",
+      "Infernal Cranium"
+    ],
+    [
+      "Set",
+      "地狱塔尖",
+      "Infernal Spire"
+    ],
+    [
+      "Set",
+      "地狱印记",
+      "Infernal Sign"
+    ],
+    [
+      "Set",
+      "狂战士的头盔",
+      "Berserker's Headgear"
+    ],
+    [
+      "Set",
+      "狂战士的锁甲",
+      "Berserker's Hauberk"
+    ],
+    [
+      "Set",
+      "狂战士的手斧",
+      "Berserker's Hatchet"
+    ],
+    [
+      "Set",
+      "死神之手",
+      "Death's Hand"
+    ],
+    [
+      "Set",
+      "死神之卫",
+      "Death's Guard"
+    ],
+    [
+      "Set",
+      "死神之触",
+      "Death's Touch"
+    ],
+    [
+      "Set",
+      "天使的镰刀",
+      "Angelic Sickle"
+    ],
+    [
+      "Set",
+      "天使的披风",
+      "Angelic Mantle"
+    ],
+    [
+      "Set",
+      "天使的光环",
+      "Angelic Halo"
+    ],
+    [
+      "Set",
+      "天使的飞翼",
+      "Angelic Wings"
+    ],
+    [
+      "Set",
+      "北极号角",
+      "Arctic Horn"
+    ],
+    [
+      "Set",
+      "北极毛皮",
+      "Arctic Furs"
+    ],
+    [
+      "Set",
+      "北极束带",
+      "Arctic Binding"
+    ],
+    [
+      "Set",
+      "北极手套",
+      "Arctic Mitts"
+    ],
+    [
+      "Set",
+      "阿卡娜的符号",
+      "Arcanna's Sign"
+    ],
+    [
+      "Set",
+      "阿卡娜的死亡之杖",
+      "Arcanna's Deathwand"
+    ],
+    [
+      "Set",
+      "阿卡娜的头",
+      "Arcanna's Head"
+    ],
+    [
+      "Set",
+      "阿卡娜的血肉",
+      "Arcanna's Flesh"
+    ],
+    [
+      "Set",
+      "娜塔亚的图腾 Natalya's Totem",
+      "Natalya's Totem"
+    ],
+    [
+      "Set",
+      "娜塔亚的记号 Natalya's Mark",
+      "Natalya's Mark"
+    ],
+    [
+      "Set",
+      "娜塔亚的影子 Natalya's Shadow",
+      "Natalya's Shadow"
+    ],
+    [
+      "Set",
+      "娜塔亚的灵魂 Natalya's Soul",
+      "Natalya's Soul"
+    ],
+    [
+      "Set",
+      "艾尔多的冷酷凝视 Aldur's Stony Gaze",
+      "Aldur's Stony Gaze"
+    ],
+    [
+      "Set",
+      "艾尔多的欺瞒 Aldur's Deception",
+      "Aldur's Deception"
+    ],
+    [
+      "Set",
+      "艾尔多的律动 Aldur's Rhythm",
+      "Aldur's Gauntlet"
+    ],
+    [
+      "Set",
+      "艾尔多的成长 Aldur's Advance",
+      "Aldur's Advance"
+    ],
+    [
+      "Set",
+      "不朽之王的意志 Immortal King's Will",
+      "Immortal King's Will"
+    ],
+    [
+      "Set",
+      "不朽之王的琐事 Immortal King's Detail",
+      "Immortal King's Detail"
+    ],
+    [
+      "Set",
+      "不朽之王的熔炉 Immortal King's Forge",
+      "Immortal King's Forge"
+    ],
+    [
+      "Set",
+      "不朽之王之柱 Immortal King's Pillar",
+      "Immortal King's Pillar"
+    ],
+    [
+      "Set",
+      "不朽之王的碎魂者 Immortal King's Stone Crusher",
+      "Immortal King's Stone Crusher"
+    ],
+    [
+      "Set",
+      "塔－拉夏的纤细衣服 Tal Rasha's Fine-Spun Cloth",
+      "Tal Rasha's Fire-Spun Cloth"
+    ],
+    [
+      "Set",
+      "塔－拉夏的判决 Tal Rasha's Adjudication",
+      "Tal Rasha's Adjudication"
+    ],
+    [
+      "Set",
+      "塔－拉夏的警戒之眼 Tal Rasha's Lidless Eye",
+      "Tal Rasha's Lidless Eye"
+    ],
+    [
+      "Set",
+      "塔－拉夏的守护 Tal Rasha's Guardianship",
+      "Tal Rasha's Howling Wind"
+    ],
+    [
+      "Set",
+      "塔－拉夏的赫拉迪克纹章 Tal Rasha's Horadric Crest",
+      "Tal Rasha's Horadric Crest"
+    ],
+    [
+      "Set",
+      "格瑞斯华尔德的勇气 Griswold's Valor",
+      "Griswold's Valor"
+    ],
+    [
+      "Set",
+      "格瑞斯华尔德之心 Griswold's Heart",
+      "Griswold's Heart"
+    ],
+    [
+      "Set",
+      "格瑞斯华尔德的救赎 Griswold's Redemption",
+      "Griswolds's Redemption"
+    ],
+    [
+      "Set",
+      "格瑞斯华尔德的荣耀 Griswold's Honor",
+      "Griswold's Honor"
+    ],
+    [
+      "Set",
+      "塔格奥之外装 Trang-Oul's Guise",
+      "Trang-Oul's Guise"
+    ],
+    [
+      "Set",
+      "塔格奥之鳞 Trang-Oul's Scales",
+      "Trang-Oul's Scales"
+    ],
+    [
+      "Set",
+      "塔格奥之翼 Trang-Oul's Wing",
+      "Trang-Oul's Wing"
+    ],
+    [
+      "Set",
+      "塔格奥之手 Trang-Oul's Claws",
+      "Trang-Oul's Claws"
+    ],
+    [
+      "Set",
+      "塔格奥之束带 Trang-Oul's Girth",
+      "Trang-Oul's Girth"
+    ],
+    [
+      "Set",
+      "马维娜的真实之眼 M'avina's True Sight",
+      "M'avina's True Sight"
+    ],
+    [
+      "Set",
+      "马维娜的拥抱 M'avina's Embrace",
+      "M'avina's Embrace"
+    ],
+    [
+      "Set",
+      "马维娜的冰握 M'avina's Icy Clutch",
+      "M'avina's Icy Clutch"
+    ],
+    [
+      "Set",
+      "马维娜的教义 M'avina's Tenet",
+      "M'avina's Tenet"
+    ],
+    [
+      "Set",
+      "马维娜的施展 M'avina's Caster",
+      "M'avina's Caster"
+    ],
+    [
+      "Set",
+      "述说之珠 Telling of Beads",
+      "Telling of Beads"
+    ],
+    [
+      "Set",
+      "手掌的安置 Laying of Hands",
+      "Laying of Hands"
+    ],
+    [
+      "Set",
+      "仪式的走道 Rite of Passage",
+      "Rite of Passage"
+    ],
+    [
+      "Set",
+      "黑暗信徒 Dark Adherent",
+      "Spiritual Custodian"
+    ],
+    [
+      "Set",
+      "信条 Credendum",
+      "Credendum"
+    ],
+    [
+      "Set",
+      "丹弓的教导 Dangoon's Teaching",
+      "Dangoon's Teaching"
+    ],
+    [
+      "Set",
+      "泰比克的光荣 Taebaek's Glory",
+      "Heaven's Taebaek"
+    ],
+    [
+      "Set",
+      "黑摩苏的坚决 Haemosu's Adamant",
+      "Haemosu's Adament"
+    ],
+    [
+      "Set",
+      "安戴尔的全灵 Ondal's Almighty",
+      "Ondal's Almighty"
+    ],
+    [
+      "Set",
+      "吉永之脸 Guillaume's Face",
+      "Guillaume's Face"
+    ],
+    [
+      "Set",
+      "威廉的自尊 Wilhelm's Pride",
+      "Wilhelm's Pride"
+    ],
+    [
+      "Set",
+      "马格纳斯之皮 Magnus' Skin",
+      "Magnus' Skin"
+    ],
+    [
+      "Set",
+      "惠斯坦的武装 Whitstan's Guard",
+      "Wihtstan's Guard"
+    ],
+    [
+      "Set",
+      "华宁的光辉 Hwanin's Splendor",
+      "Hwanin's Splendor"
+    ],
+    [
+      "Set",
+      "华宁的保护 Hwanin's Refuge",
+      "Hwanin's Refuge"
+    ],
+    [
+      "Set",
+      "华宁的祝福 Hwanin's Blessing",
+      "Hwanin's Seal"
+    ],
+    [
+      "Set",
+      "华宁的正义 Hwanin's Justice",
+      "Hwanin's Justice"
+    ],
+    [
+      "Set",
+      "沙撒璧的忏悔之钴 Sazabi's Cobalt Redeemer",
+      "Sazabi's Cobalt Redeemer"
+    ],
+    [
+      "Set",
+      "沙撒璧的鬼魂释放者 Sazabi's Ghost Liberator",
+      "Sazabi's Ghost Liberator"
+    ],
+    [
+      "Set",
+      "沙撒璧的精神之鞘 Sazabi's Mental Sheath",
+      "Sazabi's Mental Sheath"
+    ],
+    [
+      "Set",
+      "布尔凯索的神圣代价 Bul-Kathos' Sacred Charge",
+      "Bul-Kathos' Sacred Charge"
+    ],
+    [
+      "Set",
+      "布尔凯索的部族守护 Bul-Kathos' Tribal Guardian",
+      "Bul-Kathos' Tribal Guardian"
+    ],
+    [
+      "Set",
+      "布尔凯索的死亡之戒",
+      "Bul-Kathos' Death Band"
+    ],
+    [
+      "Set",
+      "牛魔王之角 Cow King's Horns",
+      "Cow King's Horns"
+    ],
+    [
+      "Set",
+      "牛魔王之皮 Cow King's Hide",
+      "Cow King's Hide"
+    ],
+    [
+      "Set",
+      "牛魔王之蹄 Cow King's Hooves",
+      "Cow King's Hoofs"
+    ],
+    [
+      "Set",
+      "娜吉解迷杖 Naj's Puzzler",
+      "Naj's Puzzler"
+    ],
+    [
+      "Set",
+      "娜吉的轻铠甲 Naj's Light Plate",
+      "Naj's Light Plate"
+    ],
+    [
+      "Set",
+      "娜吉的小环 Naj's Circlet",
+      "Naj's Circlet"
+    ],
+    [
+      "Set",
+      "山德的模范 Sander's Paragon",
+      "McAuley's Paragon"
+    ],
+    [
+      "Set",
+      "山德的碎石 Sander's Riprap",
+      "McAuley's Riprap"
+    ],
+    [
+      "Set",
+      "山德的禁忌 Sander's Taboo",
+      "McAuley's Taboo"
+    ],
+    [
+      "Set",
+      "山德的迷信 Sander's Superstition",
+      "McAuley's Superstition"
+    ],
+    [
+      "Runeword",
+      "古代人的契约 Ancients' Pledge",
+      "Ancients' Pledge"
+    ],
+    [
+      "Runeword",
+      "黑色 Black",
+      "Black"
+    ],
+    [
+      "Runeword",
+      "狂怒 Fury",
+      "Fury"
+    ],
+    [
+      "Runeword",
+      "神圣雷击 Holy Thunder",
+      "Holy Thunder"
+    ],
+    [
+      "Runeword",
+      "荣耀 Honor",
+      "Honor"
+    ],
+    [
+      "Runeword",
+      "王者的慈悲 King's Grace",
+      "King's Grace"
+    ],
+    [
+      "Runeword",
+      "叶子 Leaf",
+      "Leaf"
+    ],
+    [
+      "Runeword",
+      "狮子心 Lionheart",
+      "Lionheart"
+    ],
+    [
+      "Runeword",
+      "知识 Lore",
+      "Lore"
+    ],
+    [
+      "Runeword",
+      "怨恨 Malice",
+      "Malice"
+    ],
+    [
+      "Runeword",
+      "旋律 Melody",
+      "Melody"
+    ],
+    [
+      "Runeword",
+      "记忆 Memory",
+      "Memory"
+    ],
+    [
+      "Runeword",
+      "天底 Nadir",
+      "Nadir"
+    ],
+    [
+      "Runeword",
+      "光辉 Radiance",
+      "Radiance"
+    ],
+    [
+      "Runeword",
+      "押韵 Rhyme",
+      "Rhyme"
+    ],
+    [
+      "Runeword",
+      "寂静 Silence",
+      "Silence"
+    ],
+    [
+      "Runeword",
+      "烟雾 Smoke",
+      "Smoke"
+    ],
+    [
+      "Runeword",
+      "隐密 Stealth",
+      "Stealth"
+    ],
+    [
+      "Runeword",
+      "钢铁 Steel",
+      "Steel"
+    ],
+    [
+      "Runeword",
+      "力量 Strength",
+      "Strength"
+    ],
+    [
+      "Runeword",
+      "毒液 Venom",
+      "Venom"
+    ],
+    [
+      "Runeword",
+      "财富 Wealth",
+      "Wealth"
+    ],
+    [
+      "Runeword",
+      "白色 White",
+      "White"
+    ],
+    [
+      "Runeword",
+      "和风 Zephyr",
+      "Zephyr"
+    ],
+    [
+      "Runeword",
+      "荣耀之链 Chains of Honor",
+      "Chains of Honor"
+    ],
+    [
+      "Runeword",
+      "野蔷薇 Bramble",
+      "Bramble"
+    ],
+    [
+      "Runeword",
+      "死亡呼吸 Breath of the Dying",
+      "Breath of the Dying"
+    ],
+    [
+      "Runeword",
+      "战争召唤 Call to Arms",
+      "Call to Arms"
+    ],
+    [
+      "Runeword",
+      "新月 Crescent Moon",
+      "Crescent Moon"
+    ],
+    [
+      "Runeword",
+      "谵妄",
+      "Delirium"
+    ],
+    [
+      "Runeword",
+      "末日 Doom",
+      "Doom"
+    ],
+    [
+      "Runeword",
+      "谜团 Enigma",
+      "Enigma"
+    ],
+    [
+      "Runeword",
+      "石块 Stone",
+      "Stone"
+    ],
+    [
+      "Runeword",
+      "永恒 Eternity",
+      "Eternity"
+    ],
+    [
+      "Runeword",
+      "流亡 Exile",
+      "Exile"
+    ],
+    [
+      "Runeword",
+      "饥荒 Famine",
+      "Famine"
+    ],
+    [
+      "Runeword",
+      "正义之手 Hand of Justice",
+      "Hand of Justice"
+    ],
+    [
+      "Runeword",
+      "橡树之心 Heart of the Oak",
+      "Heart of the Oak"
+    ],
+    [
+      "Runeword",
+      "弑王者 Kingslayer",
+      "Kingslayer"
+    ],
+    [
+      "Runeword",
+      "热情 Passion",
+      "Passion"
+    ],
+    [
+      "Runeword",
+      "幽暗 Gloom",
+      "Gloom"
+    ],
+    [
+      "Runeword",
+      "圣堂 Sanctuary",
+      "Sanctuary"
+    ],
+    [
+      "Runeword",
+      "混沌 Chaos",
+      "Chaos"
+    ],
+    [
+      "Runeword",
+      "野兽 Beast",
+      "Beast"
+    ],
+    [
+      "Runeword",
+      "奇遇 Serendipity",
+      "Serendipity"
+    ],
+    [
+      "Runeword",
+      "影子 Shadow",
+      "Shadow"
+    ],
+    [
+      "Runeword",
+      "怀疑之影 Shadow of Doubt",
+      "Shadow of Doubt"
+    ],
+    [
+      "Runeword",
+      "海妖之歌 Siren's Song",
+      "Siren's Song"
+    ],
+    [
+      "Runeword",
+      "哀伤 Sorrow",
+      "Sorrow"
+    ],
+    [
+      "Runeword",
+      "精神 Spirit",
+      "Spirit"
+    ],
+    [
+      "Runeword",
+      "灿烂 Splendor",
+      "Splendor"
+    ],
+    [
+      "Runeword",
+      "星光 Starlight",
+      "Starlight"
+    ],
+    [
+      "Runeword",
+      "寂静之水 Still Water",
+      "Still Water"
+    ],
+    [
+      "Runeword",
+      "强制 Duress",
+      "Duress"
+    ],
+    [
+      "Runeword",
+      "风暴 Storm",
+      "Storm"
+    ],
+    [
+      "Runeword",
+      "暴风雨 Tempest",
+      "Tempest"
+    ],
+    [
+      "Runeword",
+      "诱惑 Temptation",
+      "Temptation"
+    ],
+    [
+      "Runeword",
+      "恐怖 Terror",
+      "Terror"
+    ],
+    [
+      "Runeword",
+      "夜晚 Night",
+      "Night"
+    ],
+    [
+      "Runeword",
+      "誓约 Oath",
+      "Oath"
+    ],
+    [
+      "Runeword",
+      "遵从 Obedience",
+      "Obedience"
+    ],
+    [
+      "Runeword",
+      "湮没 Oblivion",
+      "Oblivion"
+    ],
+    [
+      "Runeword",
+      "着魔 Obsession",
+      "Obsession"
+    ],
+    [
+      "Runeword",
+      "和谐 Harmony",
+      "Harmony"
+    ],
+    [
+      "Runeword",
+      "憎恨 Hatred",
+      "Hatred"
+    ],
+    [
+      "Runeword",
+      "摇曳焰火",
+      "Flickering Flame"
+    ],
+    [
+      "Runeword",
+      "刚毅 Fortitude",
+      "Fortitude"
+    ],
+    [
+      "Runeword",
+      "幸运 Fortune",
+      "Fortune"
+    ],
+    [
+      "Runeword",
+      "天然的王国 Nature's Kingdom",
+      "Nature's Kingdom"
+    ],
+    [
+      "Runeword",
+      "荣誉 Glory",
+      "Glory"
+    ],
+    [
+      "Runeword",
+      "信心 Faith",
+      "Faith"
+    ],
+    [
+      "Runeword",
+      "友情 Friendship",
+      "Friendship"
+    ],
+    [
+      "Runeword",
+      "毁天灭地 Armageddon",
+      "Armageddon"
+    ],
+    [
+      "Runeword",
+      "权威 Authority",
+      "Authority"
+    ],
+    [
+      "Runeword",
+      "美貌 Beauty",
+      "Beauty"
+    ],
+    [
+      "Runeword",
+      "血腥 Blood",
+      "Blood"
+    ],
+    [
+      "Runeword",
+      "白骨 Bone",
+      "Bone"
+    ],
+    [
+      "Runeword",
+      "烙印 Brand",
+      "Brand"
+    ],
+    [
+      "Runeword",
+      "破碎的誓言 Broken Promise",
+      "Broken Promise"
+    ],
+    [
+      "Runeword",
+      "机会 Chance",
+      "Chance"
+    ],
+    [
+      "Runeword",
+      "刺伤 Sting",
+      "Sting"
+    ],
+    [
+      "Runeword",
+      "黑暗 Darkness",
+      "Darkness"
+    ],
+    [
+      "Runeword",
+      "白天 Daylight",
+      "Daylight"
+    ],
+    [
+      "Runeword",
+      "死神 Death",
+      "Death"
+    ],
+    [
+      "Runeword",
+      "欺暪 Deception",
+      "Deception"
+    ],
+    [
+      "Runeword",
+      "渴望 Desire",
+      "Desire"
+    ],
+    [
+      "Runeword",
+      "失望 Despair",
+      "Despair"
+    ],
+    [
+      "Runeword",
+      "兴高彩烈 Elation",
+      "Elation"
+    ],
+    [
+      "Runeword",
+      "毁灭 Destruction",
+      "Destruction"
+    ],
+    [
+      "Runeword",
+      "飞龙 Dragon",
+      "Dragon"
+    ],
+    [
+      "Runeword",
+      "恐惧 Dread",
+      "Dread"
+    ],
+    [
+      "Runeword",
+      "梦境 Dream",
+      "Dream"
+    ],
+    [
+      "Runeword",
+      "复仇 Revenge",
+      "Revenge"
+    ],
+    [
+      "Runeword",
+      "边缘 Edge",
+      "Edge"
+    ],
+    [
+      "Runeword",
+      "教化 Enlightenment",
+      "Enlightenment"
+    ],
+    [
+      "Runeword",
+      "羡慕 Envy",
+      "Envy"
+    ],
+    [
+      "Runeword",
+      "天堂的意识 Heaven's Will",
+      "Heaven's Will"
+    ],
+    [
+      "Runeword",
+      "神圣之泪 Holy Tears",
+      "Holy Tears"
+    ],
+    [
+      "Runeword",
+      "谦恭 Humility",
+      "Humility"
+    ],
+    [
+      "Runeword",
+      "饥饿 Hunger",
+      "Hunger"
+    ],
+    [
+      "Runeword",
+      "冰冻 Ice",
+      "Ice"
+    ],
+    [
+      "Runeword",
+      "无限 Infinity",
+      "Infinity"
+    ],
+    [
+      "Runeword",
+      "天真 Innocence",
+      "Innocence"
+    ],
+    [
+      "Runeword",
+      "洞察 Insight",
+      "Insight"
+    ],
+    [
+      "Runeword",
+      "妒忌 Jealousy",
+      "Jealousy"
+    ],
+    [
+      "Runeword",
+      "审判 Judgement",
+      "Judgement"
+    ],
+    [
+      "Runeword",
+      "骑士的警戒 Knight's Vigil",
+      "Knight's Vigil"
+    ],
+    [
+      "Runeword",
+      "最后希望 Last Wish",
+      "Last Wish"
+    ],
+    [
+      "Runeword",
+      "法律 Law",
+      "Law"
+    ],
+    [
+      "Runeword",
+      "执法者 Lawbringer",
+      "Lawbringer"
+    ],
+    [
+      "Runeword",
+      "闪电 Lightning",
+      "Lightning"
+    ],
+    [
+      "Runeword",
+      "忠诚",
+      "Loyalty"
+    ],
+    [
+      "Runeword",
+      "欲望 Lust",
+      "Lust"
+    ],
+    [
+      "Runeword",
+      "疯狂 Madness",
+      "Madness"
+    ],
+    [
+      "Runeword",
+      "迷雾 Mist",
+      "Mist"
+    ],
+    [
+      "Runeword",
+      "早晨 Morning",
+      "Morning"
+    ],
+    [
+      "Runeword",
+      "神秘 Mystery",
+      "Mystery"
+    ],
+    [
+      "Runeword",
+      "神话 Myth",
+      "Myth"
+    ],
+    [
+      "Runeword",
+      "样式",
+      "Pattern"
+    ],
+    [
+      "Runeword",
+      "和平 Peace",
+      "Peace"
+    ],
+    [
+      "Runeword",
+      "忏悔 Penitence",
+      "Penitence"
+    ],
+    [
+      "Runeword",
+      "危害 Peril",
+      "Peril"
+    ],
+    [
+      "Runeword",
+      "疫病 Pestilence",
+      "Pestilence"
+    ],
+    [
+      "Runeword",
+      "凤凰 Phoenix",
+      "Phoenix"
+    ],
+    [
+      "Runeword",
+      "虔诚 Piety",
+      "Piety"
+    ],
+    [
+      "Runeword",
+      "信念之柱 Pillar of Faith",
+      "Pillar of Faith"
+    ],
+    [
+      "Runeword",
+      "瘟疫 Plague",
+      "Plague"
+    ],
+    [
+      "Runeword",
+      "颂扬 Praise",
+      "Praise"
+    ],
+    [
+      "Runeword",
+      "祈祷 Prayer",
+      "Prayer"
+    ],
+    [
+      "Runeword",
+      "骄傲 Pride",
+      "Pride"
+    ],
+    [
+      "Runeword",
+      "原理 Principle",
+      "Principle"
+    ],
+    [
+      "Runeword",
+      "战斗中的勇气 Prowess in Battle",
+      "Prowess in Battle"
+    ],
+    [
+      "Runeword",
+      "慎重 Prudence",
+      "Prudence"
+    ],
+    [
+      "Runeword",
+      "惩罚 Punishment",
+      "Punishment"
+    ],
+    [
+      "Runeword",
+      "纯洁 Purity",
+      "Purity"
+    ],
+    [
+      "Runeword",
+      "疑问 Question",
+      "Question"
+    ],
+    [
+      "Runeword",
+      "降雨 Rain",
+      "Rain"
+    ],
+    [
+      "Runeword",
+      "理由 Reason",
+      "Reason"
+    ],
+    [
+      "Runeword",
+      "鲜红 Red",
+      "Red"
+    ],
+    [
+      "Runeword",
+      "裂缝 Rift",
+      "Rift"
+    ],
+    [
+      "Runeword",
+      "爱情 Love",
+      "Love"
+    ],
+    [
+      "Runeword",
+      "饥饿 Thirst",
+      "Thirst"
+    ],
+    [
+      "Runeword",
+      "知识 Knowledge",
+      "Knowledge"
+    ],
+    [
+      "Runeword",
+      "思维 Thought",
+      "Thought"
+    ],
+    [
+      "Runeword",
+      "雷电 Thunder",
+      "Thunder"
+    ],
+    [
+      "Runeword",
+      "时间 Time",
+      "Time"
+    ],
+    [
+      "Runeword",
+      "传统 Tradition",
+      "Tradition"
+    ],
+    [
+      "Runeword",
+      "背信 Treachery",
+      "Treachery"
+    ],
+    [
+      "Runeword",
+      "信任 Trust",
+      "Trust"
+    ],
+    [
+      "Runeword",
+      "真实 Truth",
+      "Truth"
+    ],
+    [
+      "Runeword",
+      "坚定意志 Unbending Will",
+      "Unbending Will"
+    ],
+    [
+      "Runeword",
+      "英勇 Valor",
+      "Valor"
+    ],
+    [
+      "Runeword",
+      "复仇 Vengeance",
+      "Vengeance"
+    ],
+    [
+      "Runeword",
+      "胜利 Victory",
+      "Victory"
+    ],
+    [
+      "Runeword",
+      "声音 Voice",
+      "Voice"
+    ],
+    [
+      "Runeword",
+      "虚无 Void",
+      "Void"
+    ],
+    [
+      "Runeword",
+      "战争 War",
+      "War"
+    ],
+    [
+      "Runeword",
+      "清水 Water",
+      "Water"
+    ],
+    [
+      "Runeword",
+      "低语 Whisper",
+      "Whisper"
+    ],
+    [
+      "Runeword",
+      "悔恨 Grief",
+      "Grief"
+    ],
+    [
+      "Runeword",
+      "轻风 Wind",
+      "Wind"
+    ],
+    [
+      "Runeword",
+      "希望之翼 Wings of Hope",
+      "Wings of Hope"
+    ],
+    [
+      "Runeword",
+      "思考之声 Voice of Reason",
+      "Voice of Reason"
+    ],
+    [
+      "Runeword",
+      "智慧 Wisdom",
+      "Wisdom"
+    ],
+    [
+      "Runeword",
+      "悲痛 Woe",
+      "Woe"
+    ],
+    [
+      "Runeword",
+      "惊奇 Wonder",
+      "Wonder"
+    ],
+    [
+      "Runeword",
+      "愤怒 Wrath",
+      "Wrath"
+    ],
+    [
+      "Runeword",
+      "年轻 Youth",
+      "Youth"
+    ],
+    [
+      "Runeword",
+      "残暴",
+      "Ferocity"
+    ],
+    [
+      "Runeword",
+      "圣域",
+      "Dominion"
+    ],
+    [
+      "Runeword",
+      "天顶",
+      "Zenith"
+    ],
+    [
+      "Runeword",
+      "狂暴",
+      "Rampage"
+    ],
+    [
+      "Runeword",
+      "新教徒",
+      "Neophyte"
+    ],
+    [
+      "Runeword",
+      "疾风",
+      "Wind"
+    ],
+    [
+      "Runeword",
+      "凤凰",
+      "Phoenix"
+    ],
+    [
+      "Runeword",
+      "破碎之墙",
+      "Shattered Wall"
+    ],
+    [
+      "Runeword",
+      "庇护",
+      "Asylum"
+    ],
+    [
+      "Runeword",
+      "复仇",
+      "Revenge"
+    ],
+    [
+      "Runeword",
+      "喧嚣",
+      "Hustle"
+    ],
+    [
+      "Runeword",
+      "纯洁",
+      "Purity"
+    ],
+    [
+      "Runeword",
+      "欢欣",
+      "Rapture"
+    ],
+    [
+      "Runeword",
+      "启蒙",
+      "Epiphany"
+    ],
+    [
+      "Runeword",
+      "远古圣痕",
+      "Ancient's Scripture"
+    ],
+    [
+      "Runeword",
+      "远古预兆",
+      "Ancient's Foresight"
+    ],
+    [
+      "Runeword",
+      "回响",
+      "Echo"
+    ]
+  ],
+  "stats": [
+    [
+      "力量",
+      "to Strength",
+      0
+    ],
+    [
+      "精力",
+      "to Energy",
+      1
+    ],
+    [
+      "敏捷",
+      "to Dexterity",
+      2
+    ],
+    [
+      "体力",
+      "to Vitality",
+      3
+    ],
+    [
+      "生命",
+      "to Life",
+      7
+    ],
+    [
+      "法力",
+      "to Mana",
+      9
+    ],
+    [
+      "最大耐力",
+      "Maximum Stamina",
+      11
+    ],
+    [
+      "增强防御 (ed)",
+      "Enhanced Defense",
+      16
+    ],
+    [
+      "增加伤害最大值",
+      "Enhanced Maximum Damage",
+      17
+    ],
+    [
+      "增加伤害最小值",
+      "Enhanced Minimum Damage",
+      18
+    ],
+    [
+      "攻击准确率",
+      "to Attack Rating",
+      19
+    ],
+    [
+      "增加格挡机率",
+      "Increased Chance of Blocking",
+      20
+    ],
+    [
+      "最小伤害值",
+      "to Minimum Damage",
+      21
+    ],
+    [
+      "最大伤害值",
+      "to Maximum Damage",
+      22
+    ],
+    [
+      "最小伤害值",
+      "to Minimum Damage",
+      23
+    ],
+    [
+      "最大伤害值",
+      "to Maximum Damage",
+      24
+    ],
+    [
+      "法力恢复速度提高",
+      "Regenerate Mana",
+      27
+    ],
+    [
+      "耐力恢复速度提高",
+      "Heal Stamina Plus",
+      28
+    ],
+    [
+      "防御",
+      "Defense",
+      31
+    ],
+    [
+      "对远程攻击的防御",
+      "Defense vs. Missile",
+      32
+    ],
+    [
+      "对近身攻击的防御",
+      "Defense vs. Melee",
+      33
+    ],
+    [
+      "物理伤害降低",
+      "Physical Damage Taken Reduced by",
+      34
+    ],
+    [
+      "魔法伤害降低",
+      "Magic Damage Taken Reduced by",
+      35
+    ],
+    [
+      "物理伤害降低",
+      "Physical Damage Taken Reduced by",
+      36
+    ],
+    [
+      "抗魔法",
+      "Magic Resist",
+      37
+    ],
+    [
+      "最大魔法抵抗",
+      "to Maximum Magic Resist",
+      38
+    ],
+    [
+      "抗火",
+      "Fire Resist",
+      39
+    ],
+    [
+      "最大火焰抵抗",
+      "to Maximum Fire Resist",
+      40
+    ],
+    [
+      "抗闪电",
+      "Lightning Resist",
+      41
+    ],
+    [
+      "最大闪电抵抗",
+      "to Maximum Lightning Resist",
+      42
+    ],
+    [
+      "抗寒",
+      "Cold Resist",
+      43
+    ],
+    [
+      "最大冰冻抵抗",
+      "to Maximum Cold Resist",
+      44
+    ],
+    [
+      "抗毒",
+      "Poison Resist",
+      45
+    ],
+    [
+      "最大毒素抵抗",
+      "to Maximum Poison Resist",
+      46
+    ],
+    [
+      "火焰伤害最小值",
+      "to Minimum Fire Damage",
+      48
+    ],
+    [
+      "火焰伤害最大值",
+      "to Maximum Fire Damage",
+      49
+    ],
+    [
+      "闪电伤害最小值",
+      "to Minimum Lightning Damage",
+      50
+    ],
+    [
+      "闪电伤害最大值",
+      "to Maximum Lightning Damage",
+      51
+    ],
+    [
+      "+%d 魔法伤害",
+      "+%d magic damage",
+      52
+    ],
+    [
+      "+%d 魔法伤害",
+      "+%d magic damage",
+      53
+    ],
+    [
+      "冰冻伤害最小值",
+      "to Minimum Cold Damage",
+      54
+    ],
+    [
+      "冰冻伤害最大值",
+      "to Maximum Cold Damage",
+      55
+    ],
+    [
+      "增加毒素伤害最小值",
+      "to Minimum Poison Damage",
+      57
+    ],
+    [
+      "增加毒素伤害最大值",
+      "to Maximum Poison Damage",
+      58
+    ],
+    [
+      "生命于击中时偷取",
+      "Life stolen per hit",
+      60
+    ],
+    [
+      "法力于击中时偷取",
+      "Mana stolen per hit",
+      62
+    ],
+    [
+      "生命恢复速度",
+      "Replenish Life",
+      74
+    ],
+    [
+      "吸取生命",
+      "Drain Life",
+      74
+    ],
+    [
+      "增加耐久性上限",
+      "Increase Maximum Durability",
+      75
+    ],
+    [
+      "增加生命上限",
+      "Increase Maximum Life",
+      76
+    ],
+    [
+      "增加法力上限",
+      "Increase Maximum Mana",
+      77
+    ],
+    [
+      "攻击者受到伤害",
+      "Attacker Takes Damage of",
+      78
+    ],
+    [
+      "怪物金币掉落量提高",
+      "Extra Gold from Monsters",
+      79
+    ],
+    [
+      "寻获魔法物品几率提高",
+      "Better Chance of Getting Magic Items",
+      80
+    ],
+    [
+      "击退",
+      "Knockback",
+      81
+    ],
+    [
+      "亚马逊技能等级",
+      "to Amazon Skill Levels",
+      83
+    ],
+    [
+      "额外经验值获得",
+      "to Experience Gained",
+      85
+    ],
+    [
+      "点生命每杀一敌人后取得",
+      "Life after each Kill",
+      86
+    ],
+    [
+      "所有商人的收费减少",
+      "Reduces all Vendor Prices",
+      87
+    ],
+    [
+      "照亮范围",
+      "to Light Radius",
+      89
+    ],
+    [
+      "需求",
+      "Requirements",
+      91
+    ],
+    [
+      "提升攻击速度",
+      "Increased Attack Speed",
+      93
+    ],
+    [
+      "高速跑步／行走",
+      "Faster Run/Walk",
+      96
+    ],
+    [
+      "快速打击恢复",
+      "Faster Hit Recovery",
+      99
+    ],
+    [
+      "快速格挡速度",
+      "Faster Block Rate",
+      102
+    ],
+    [
+      "快速施法速度",
+      "Faster Cast Rate",
+      105
+    ],
+    [
+      "消灭的怪物就此安息",
+      "Slain Monsters Rest in Peace",
+      108
+    ],
+    [
+      "减少诅咒时间",
+      "Reduced Curse Duration",
+      109
+    ],
+    [
+      "毒素的持续效果降低",
+      "Poison Length Reduced by",
+      110
+    ],
+    [
+      "伤害",
+      "Damage",
+      111
+    ],
+    [
+      "几率命中使怪物逃跑",
+      "Hit Causes Monster to Flee",
+      112
+    ],
+    [
+      "击中使目标失明",
+      "Hit Blinds Target",
+      113
+    ],
+    [
+      "受到的伤害转换为法力",
+      "Damage Taken Gained as Mana when Hit",
+      114
+    ],
+    [
+      "忽视目标防御力",
+      "Ignore Target's Defense",
+      115
+    ],
+    [
+      "目标防御",
+      "Target Defense",
+      116
+    ],
+    [
+      "防止怪物自疗",
+      "Prevent Monster Heal",
+      117
+    ],
+    [
+      "冰冻时间减半",
+      "Half Freeze Duration",
+      118
+    ],
+    [
+      "命中值加成",
+      "Bonus to Attack Rating",
+      119
+    ],
+    [
+      "每次击中降低敌人防御",
+      "to Monster Defense Per Hit",
+      120
+    ],
+    [
+      "对恶魔的伤害",
+      "Damage to Demons",
+      121
+    ],
+    [
+      "对不死生物的伤害",
+      "Damage to Undead",
+      122
+    ],
+    [
+      "对抗恶魔的攻击准确率",
+      "to Attack Rating against Demons",
+      123
+    ],
+    [
+      "对抗不死生物的攻击准确率",
+      "to Attack Rating against Undead",
+      124
+    ],
+    [
+      "可投掷",
+      "Throwable",
+      125
+    ],
+    [
+      "所有技能",
+      "to All Skills",
+      127
+    ],
+    [
+      "攻击者受到电击伤害",
+      "Attacker Takes Lightning Damage of",
+      128
+    ],
+    [
+      "冻结目标",
+      "Freezes target",
+      134
+    ],
+    [
+      "机率撕开敌人伤口",
+      "Chance of Open Wounds",
+      135
+    ],
+    [
+      "机率出现压碎性打击",
+      "Chance of Crushing Blow",
+      136
+    ],
+    [
+      "脚踢伤害",
+      "Kick Damage",
+      137
+    ],
+    [
+      "点法力在杀死每个敌人时获得",
+      "to Mana after each Kill",
+      138
+    ],
+    [
+      "点生命在杀死每个恶魔时获得",
+      "Life after each Demon Kill",
+      139
+    ],
+    [
+      "致命一击几率",
+      "Deadly Strike",
+      141
+    ],
+    [
+      "火焰吸收",
+      "Fire Absorb",
+      142
+    ],
+    [
+      "火焰吸收",
+      "Fire Absorb",
+      143
+    ],
+    [
+      "闪电吸收",
+      "Lightning Absorb",
+      144
+    ],
+    [
+      "闪电吸收",
+      "Lightning Absorb",
+      145
+    ],
+    [
+      "魔法吸收",
+      "Magic Absorb",
+      146
+    ],
+    [
+      "魔法吸收",
+      "Magic Absorb",
+      147
+    ],
+    [
+      "寒冷吸收",
+      "Cold Absorb",
+      148
+    ],
+    [
+      "寒冷吸收",
+      "Cold Absorb",
+      149
+    ],
+    [
+      "使目标减速",
+      "Slows Target by",
+      150
+    ],
+    [
+      "赋予等级%d %s灵气",
+      "Level %d %s Aura When Equipped",
+      151
+    ],
+    [
+      "无法破坏",
+      "Indestructible",
+      152
+    ],
+    [
+      "无法冰冻",
+      "Cannot Be Frozen",
+      153
+    ],
+    [
+      "降低耐力消耗",
+      "Slower Stamina Drain",
+      154
+    ],
+    [
+      "几率复活：",
+      "Reanimate as:",
+      155
+    ],
+    [
+      "穿刺几率",
+      "Chance to Pierce",
+      156
+    ],
+    [
+      "射出魔法箭矢",
+      "Fires Magic Arrows",
+      157
+    ],
+    [
+      "箭矢或十字弓弹火焰爆炸",
+      "Fires Explosive Arrows or Bolts",
+      158
+    ],
+    [
+      "提高命中值, 对",
+      "to Attack Rating versus",
+      179
+    ],
+    [
+      "提高伤害, 对",
+      "to Damage versus",
+      180
+    ],
+    [
+      "秘境的关底BOSS必然掉落一个技能护身符",
+      "Map boss drops a skill charm",
+      186
+    ],
+    [
+      "秘境的关底BOSS必然掉落三个腐化的暗金",
+      "Map boss drops a corrupted unique",
+      187
+    ],
+    [
+      "+%d 标枪和长矛技能",
+      "+%d to Javelin and Spear Skills",
+      188
+    ],
+    [
+      "装备时赋予等级 %d %s 效果",
+      "Level %d %s When Equipped",
+      191
+    ],
+    [
+      "你可以召唤",
+      "You May Summon",
+      192
+    ],
+    [
+      "你可以召唤",
+      "You May Summon",
+      193
+    ],
+    [
+      "攻击时有 %d%% 机会施展等级 %d %s",
+      "%d%% Chance to cast level %d %s on attack",
+      195
+    ],
+    [
+      "%d%%几率在消灭一名敌人时施放%d级%s",
+      "%d%% Chance to cast level %d %s when you Kill an Enemy",
+      196
+    ],
+    [
+      "%d%%几率在死亡时施放%d级%s",
+      "%d%% Chance to cast level %d %s when you Die",
+      197
+    ],
+    [
+      "击中敌人时有 %d%% 机会施展等级 %d %s",
+      "%d%% Chance to cast level %d %s on striking",
+      198
+    ],
+    [
+      "%d%%几率在升级时施放%d级%s",
+      "%d%% Chance to cast level %d %s when you Level-Up",
+      199
+    ],
+    [
+      "施法时有%d%%几率施放等级%d的%s",
+      "%d%% Chance to cast level %d %s on casting",
+      200
+    ],
+    [
+      "被击中时有 %d%% 机会施展等级 %d %s",
+      "%d%% Chance to cast level %d %s when struck",
+      201
+    ],
+    [
+      "格挡时有%d%%几率释放等级%d的%s",
+      "%d%% Chance to cast level %d %s on block",
+      202
+    ],
+    [
+      "致命一击时有%d%%几率释放等级%d的%s",
+      "%d%% Chance to cast level %d %s on critical hit",
+      203
+    ],
+    [
+      "(%d/%d 聚气)",
+      "(%d/%d Charges)",
+      204
+    ],
+    [
+      "穿刺攻击时有%d%%几率释放等级%d的%s",
+      "%d%% Chance to cast level %d %s on pierce",
+      205
+    ],
+    [
+      "已亵渎",
+      "Desecrated",
+      206
+    ],
+    [
+      "腐化",
+      "Corrupt",
+      207
+    ],
+    [
+      "突袭的冷却时间减少1.5秒",
+      "Joust's Cooldown Is Reduced By 1.5 Seconds",
+      209
+    ],
+    [
+      "致命一击几率上限",
+      "Maximum Deadly Strike",
+      210
+    ],
+    [
+      "秘境的关底BOSS必然掉落一个超级BOSS门票碎片",
+      "Map bosses drop an Uber Material",
+      211
+    ],
+    [
+      "秘境的关底BOSS必然掉落一个拉苏克迷盒",
+      "Map boss drops a Larzuk's Puzzlebox",
+      212
+    ],
+    [
+      "最小伤害值",
+      "to Minimum Damage",
+      213
+    ],
+    [
+      "防御",
+      "Defense",
+      214
+    ],
+    [
+      "增强防御 (ed)",
+      "Enhanced Defense",
+      215
+    ],
+    [
+      "生命",
+      "to Life",
+      216
+    ],
+    [
+      "法力",
+      "to Mana",
+      217
+    ],
+    [
+      "最大伤害值",
+      "to Maximum Damage",
+      218
+    ],
+    [
+      "增加伤害最大值",
+      "Enhanced Maximum Damage",
+      219
+    ],
+    [
+      "力量",
+      "to Strength",
+      220
+    ],
+    [
+      "敏捷",
+      "to Dexterity",
+      221
+    ],
+    [
+      "精力",
+      "to Energy",
+      222
+    ],
+    [
+      "体力",
+      "to Vitality",
+      223
+    ],
+    [
+      "攻击准确率",
+      "to Attack Rating",
+      224
+    ],
+    [
+      "命中值加成",
+      "Bonus to Attack Rating",
+      225
+    ],
+    [
+      "冰冻伤害最大值",
+      "to Maximum Cold Damage",
+      226
+    ],
+    [
+      "火焰伤害最大值",
+      "to Maximum Fire Damage",
+      227
+    ],
+    [
+      "闪电伤害最大值",
+      "to Maximum Lightning Damage",
+      228
+    ],
+    [
+      "增加毒素伤害最大值",
+      "to Maximum Poison Damage",
+      229
+    ],
+    [
+      "抗寒",
+      "Cold Resist",
+      230
+    ],
+    [
+      "抗火",
+      "Fire Resist",
+      231
+    ],
+    [
+      "抗闪电",
+      "Lightning Resist",
+      232
+    ],
+    [
+      "抗毒",
+      "Poison Resist",
+      233
+    ],
+    [
+      "吸收冰冻伤害",
+      "Absorbs Cold Damage",
+      234
+    ],
+    [
+      "吸收火焰伤害",
+      "Absorbs Fire Damage",
+      235
+    ],
+    [
+      "吸收闪电伤害",
+      "Absorbs Lightning Damage",
+      236
+    ],
+    [
+      "攻击者受到伤害",
+      "Attacker Takes Damage of",
+      238
+    ],
+    [
+      "怪物金币掉落量提高",
+      "Extra Gold from Monsters",
+      239
+    ],
+    [
+      "寻获魔法物品几率提高",
+      "Better Chance of Getting Magic Items",
+      240
+    ],
+    [
+      "耐力恢复速度提高",
+      "Heal Stamina Plus",
+      241
+    ],
+    [
+      "最大耐力",
+      "Maximum Stamina",
+      242
+    ],
+    [
+      "对恶魔的伤害",
+      "Damage to Demons",
+      243
+    ],
+    [
+      "对不死生物的伤害",
+      "Damage to Undead",
+      244
+    ],
+    [
+      "对抗恶魔的攻击准确率",
+      "to Attack Rating against Demons",
+      245
+    ],
+    [
+      "对抗不死生物的攻击准确率",
+      "to Attack Rating against Undead",
+      246
+    ],
+    [
+      "机率出现压碎性打击",
+      "Chance of Crushing Blow",
+      247
+    ],
+    [
+      "机率撕开敌人伤口",
+      "Chance of Open Wounds",
+      248
+    ],
+    [
+      "脚踢伤害",
+      "Kick Damage",
+      249
+    ],
+    [
+      "致命一击几率",
+      "Deadly Strike",
+      250
+    ],
+    [
+      "每秒恢复装备耐久度 %d",
+      "Repairs %d durability per second",
+      252
+    ],
+    [
+      "自动恢复数量",
+      "Replenishes quantity",
+      253
+    ],
+    [
+      "额外增加数量",
+      "Increased Stack Size",
+      254
+    ],
+    [
+      "粉碎性打击效果",
+      "Crushing Blow Efficiency",
+      268
+    ],
+    [
+      "冰霜箭可以发射",
+      "Cold Arrow fires",
+      269
+    ],
+    [
+      "%dth 周年纪念版",
+      "5th Anniversary Edition",
+      270
+    ],
+    [
+      "突袭的冷却时间降低 0.75 秒",
+      "Joust's Cooldown Is Reduced By 0.75 Seconds",
+      271
+    ],
+    [
+      "怪物有 +%d%% 几率掉落已打孔的装备 秘境的关底BOSS必然掉落已打孔的暗金装备",
+      "Monsters have +%d%% chance to drop socketed itemsMap boss drops a socketed unique",
+      272
+    ],
+    [
+      "增加伤害最大值",
+      "Enhanced Maximum Damage",
+      273
+    ],
+    [
+      "力量",
+      "to Strength",
+      274
+    ],
+    [
+      "敏捷",
+      "to Dexterity",
+      275
+    ],
+    [
+      "精力",
+      "to Energy",
+      276
+    ],
+    [
+      "体力",
+      "to Vitality",
+      277
+    ],
+    [
+      "攻击准确率",
+      "to Attack Rating",
+      278
+    ],
+    [
+      "命中值加成",
+      "Bonus to Attack Rating",
+      279
+    ],
+    [
+      "冰冻伤害最大值",
+      "to Maximum Cold Damage",
+      280
+    ],
+    [
+      "火焰伤害最大值",
+      "to Maximum Fire Damage",
+      281
+    ],
+    [
+      "闪电伤害最大值",
+      "to Maximum Lightning Damage",
+      282
+    ],
+    [
+      "增加毒素伤害最大值",
+      "to Maximum Poison Damage",
+      283
+    ],
+    [
+      "抗寒",
+      "Cold Resist",
+      284
+    ],
+    [
+      "抗火",
+      "Fire Resist",
+      285
+    ],
+    [
+      "抗闪电",
+      "Lightning Resist",
+      286
+    ],
+    [
+      "抗毒",
+      "Poison Resist",
+      287
+    ],
+    [
+      "吸收冰冻伤害",
+      "Absorbs Cold Damage",
+      288
+    ],
+    [
+      "吸收火焰伤害",
+      "Absorbs Fire Damage",
+      289
+    ],
+    [
+      "吸收闪电伤害",
+      "Absorbs Lightning Damage",
+      290
+    ],
+    [
+      "怪物金币掉落量提高",
+      "Extra Gold from Monsters",
+      292
+    ],
+    [
+      "寻获魔法物品几率提高",
+      "Better Chance of Getting Magic Items",
+      293
+    ],
+    [
+      "耐力恢复速度提高",
+      "Heal Stamina Plus",
+      294
+    ],
+    [
+      "最大耐力",
+      "Maximum Stamina",
+      295
+    ],
+    [
+      "对恶魔的伤害",
+      "Damage to Demons",
+      296
+    ],
+    [
+      "对不死生物的伤害",
+      "Damage to Undead",
+      297
+    ],
+    [
+      "对抗恶魔的攻击准确率",
+      "to Attack Rating against Demons",
+      298
+    ],
+    [
+      "对抗不死生物的攻击准确率",
+      "to Attack Rating against Undead",
+      299
+    ],
+    [
+      "机率出现压碎性打击",
+      "Chance of Crushing Blow",
+      300
+    ],
+    [
+      "机率撕开敌人伤口",
+      "Chance of Open Wounds",
+      301
+    ],
+    [
+      "脚踢伤害",
+      "Kick Damage",
+      302
+    ],
+    [
+      "致命一击几率",
+      "Deadly Strike",
+      303
+    ],
+    [
+      "敌人的冰霜抗性",
+      "to Enemy Cold Resistance",
+      305
+    ],
+    [
+      "敌人的火焰抗性",
+      "to Enemy Fire Resistance",
+      306
+    ],
+    [
+      "敌人的闪电抗性",
+      "to Enemy Lightning Resistance",
+      307
+    ],
+    [
+      "敌人的毒素抗性",
+      "to Enemy Poison Resistance",
+      308
+    ],
+    [
+      "火焰技能伤害",
+      "to Fire Skill Damage",
+      329
+    ],
+    [
+      "闪电技能伤害",
+      "to Lightning Skill Damage",
+      330
+    ],
+    [
+      "冰霜技能伤害",
+      "to Cold Skill Damage",
+      331
+    ],
+    [
+      "毒素技能伤害",
+      "to Poison Skill Damage",
+      332
+    ],
+    [
+      "敌人的火焰抗性",
+      "to Enemy Fire Resistance",
+      333
+    ],
+    [
+      "敌人的闪电抗性",
+      "to Enemy Lightning Resistance",
+      334
+    ],
+    [
+      "敌人的冰霜抗性",
+      "to Enemy Cold Resistance",
+      335
+    ],
+    [
+      "敌人的毒素抗性",
+      "to Enemy Poison Resistance",
+      336
+    ],
+    [
+      "致魔法技能伤害",
+      "To Magic Skill Damage",
+      357
+    ],
+    [
+      "近战攻击造成溅射伤害",
+      "Melee Attacks Deal Splash Damage",
+      359
+    ],
+    [
+      "已腐化",
+      "Corrupted",
+      360
+    ],
+    [
+      "腐化",
+      "Corrupt",
+      361
+    ],
+    [
+      "冰冷技能",
+      "to Cold Skills",
+      362
+    ],
+    [
+      "火焰技能",
+      "to Fire Skills",
+      363
+    ],
+    [
+      "闪电技能",
+      "to Lightning Skills",
+      364
+    ],
+    [
+      "毒系技能",
+      "to Poison Skills",
+      365
+    ],
+    [
+      "魔法技能",
+      "to Magic Skills",
+      366
+    ],
+    [
+      "你可以使额外一个诅咒效果一起生效",
+      "You May Apply An Additional Curse",
+      368
+    ],
+    [
+      "腐化",
+      "Corrupt",
+      369
+    ],
+    [
+      "打宝(MF):",
+      "Magic Find:",
+      370
+    ],
+    [
+      "金币(GF):",
+      "Gold Find:",
+      371
+    ],
+    [
+      "怪物密度:",
+      "Monster Density:",
+      372
+    ],
+    [
+      "经验:",
+      "Experience:",
+      373
+    ],
+    [
+      "区域等级",
+      "to Area Level",
+      374
+    ],
+    [
+      "怪物稀有度:",
+      "Monster Rarity:",
+      375
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      376
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      377
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      378
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      379
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      380
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      381
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      382
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      383
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      385
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      386
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      388
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      389
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      390
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      391
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      392
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      393
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      394
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      395
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      396
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      397
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      398
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      399
+    ],
+    [
+      "怪物获得",
+      "Monsters take",
+      400
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      401
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      402
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      403
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      404
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      405
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      406
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      407
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      408
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      409
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      410
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      411
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      412
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      413
+    ],
+    [
+      "怪物无视",
+      "Monsters ignore",
+      414
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      414
+    ],
+    [
+      "怪物无视",
+      "Monsters ignore",
+      415
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      415
+    ],
+    [
+      "怪物无视",
+      "Monsters ignore",
+      416
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      416
+    ],
+    [
+      "怪物无视",
+      "Monsters ignore",
+      417
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      417
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      418
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      419
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      420
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      421
+    ],
+    [
+      "3秒内补充1次充能",
+      "Replenish 1 Charge in 3 Seconds",
+      422
+    ],
+    [
+      "跳跃和跳跃攻击的飞行速度",
+      "to Leap and Leap Attack Movement Speed",
+      423
+    ],
+    [
+      "点生命在每次命中后",
+      "Life after each Hit",
+      424
+    ],
+    [
+      "敌人物理抗性",
+      "to Enemy Physical Resistance",
+      425
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      426
+    ],
+    [
+      "怪物的",
+      "Monster's",
+      427
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      428
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      429
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      430
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      431
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      432
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      433
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      434
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      435
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      436
+    ],
+    [
+      "场景怪物类型必定包含冥河娃娃",
+      "Map contains Stygian Dolls",
+      437
+    ],
+    [
+      "场景怪物类型必定包含女妖",
+      "Map contains Succubus Witches",
+      438
+    ],
+    [
+      "场景怪物类型必定包含吸血鬼领主",
+      "Map contains Vampire Lords",
+      439
+    ],
+    [
+      "场景内怪物类型必定包含地狱牛",
+      "Map contains Hell Bovines",
+      440
+    ],
+    [
+      "场景内怪物类型必定包含复活行尸",
+      "Map contains Reanimated Horde",
+      441
+    ],
+    [
+      "场景内怪物类型必定包含鬼魂类",
+      "Map contains Ghosts",
+      442
+    ],
+    [
+      "骨矛现在可以发射",
+      "Bonespear Now Fires",
+      443
+    ],
+    [
+      "你可以召唤",
+      "You May Summon",
+      444
+    ],
+    [
+      "火焰技能伤害",
+      "to Fire Skill Damage",
+      445
+    ],
+    [
+      "火焰技能伤害",
+      "to Fire Skill Damage",
+      446
+    ],
+    [
+      "火焰技能伤害",
+      "to Fire Skill Damage",
+      447
+    ],
+    [
+      "火焰技能伤害",
+      "to Fire Skill Damage",
+      448
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      449
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      450
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      451
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      452
+    ],
+    [
+      "%d%%几率在死亡时施放%d级%s",
+      "%d%% Chance to cast level %d %s when you Die",
+      453
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      454
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      455
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      456
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      457
+    ],
+    [
+      "英勇",
+      "Heroic",
+      458
+    ],
+    [
+      "你可以召唤",
+      "You May Summon",
+      459
+    ],
+    [
+      "风遁的冷却时间减少2秒",
+      "Gust's Cooldown Is Reduced By 2 Seconds",
+      460
+    ],
+    [
+      "你可以召唤",
+      "You May Summon",
+      461
+    ],
+    [
+      "你可以召唤",
+      "You May Summon",
+      462
+    ],
+    [
+      "你可以召唤",
+      "You May Summon",
+      463
+    ],
+    [
+      "你可以召唤",
+      "You May Summon",
+      464
+    ],
+    [
+      "突袭的冷却时间减少0.5秒",
+      "Joust's Cooldown Is Reduced By 0.5 Seconds",
+      465
+    ],
+    [
+      "你可以召唤6个额外的骷髅法师",
+      "You May Summon 6 Additional Skeleton Mages",
+      466
+    ],
+    [
+      "玩家获得",
+      "Players have",
+      467
+    ],
+    [
+      "血之传送消耗的生命值减少2%",
+      "Bloodwarp Costs 2% Less Health",
+      468
+    ],
+    [
+      "场景内怪物类型必定包含燃烧的灵魂",
+      "Map contains Burning Souls",
+      470
+    ],
+    [
+      "场景内怪物类型必定包含小矮人",
+      "Map contains Fetishes",
+      471
+    ],
+    [
+      "S9赛季迪亚波罗首杀前三(角色限定)",
+      "Top Three Diablo Clone Killer (Class Specific)",
+      472
+    ],
+    [
+      "S9赛季角色99级前三(角色限定)",
+      "Top Three To Reach Level 99 (Class Specific)",
+      473
+    ],
+    [
+      "蕴藏着无穷无尽的力量……",
+      "Untold Power Is Contained Within",
+      474
+    ],
+    [
+      "你可以召唤",
+      "You May Summon",
+      475
+    ],
+    [
+      "你可以召唤",
+      "You May Summon",
+      476
+    ],
+    [
+      "溅射攻击范围提高20%",
+      "Melee Splash Radius Increased by 20%",
+      478
+    ],
+    [
+      "孔[1]",
+      "Socketed [1]",
+      479
+    ],
+    [
+      "S9赛季拉斯玛首杀前三(角色限定)",
+      "Top Three Rathma Killer (Class Specific)",
+      480
+    ],
+    [
+      "飞龙在天的冷却时间减少0.5秒",
+      "Dragon Flight's Cooldown Is Reduced By 0.5 Seconds",
+      483
+    ],
+    [
+      "增强伤害(ED)",
+      "Enhanced Damage",
+      484
+    ],
+    [
+      "尸爆范围增加2码",
+      "Corpse Explosion Radius Increased by 2 Yards",
+      485
+    ],
+    [
+      "已镜像",
+      "Mirrored",
+      486
+    ],
+    [
+      "增强伤害(ED)",
+      "Enhanced Damage",
+      487
+    ],
+    [
+      "当你的生命大于",
+      "You cannot life steal when above",
+      488
+    ],
+    [
+      "增加溅射伤害范围",
+      "Increased Splash Radius",
+      489
+    ],
+    [
+      "你的渡鸦获得",
+      "Your Ravens Deal",
+      490
+    ],
+    [
+      "已强化",
+      "Fortified",
+      493
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      494
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      495
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      496
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      497
+    ],
+    [
+      "地图包含一个额外的BOSS",
+      "Map contains an additional boss",
+      498
+    ],
+    [
+      "场景内怪物类型必定包含毁灭的仆从",
+      "Map contains Minions of Destruction",
+      499
+    ],
+    [
+      "地图包含1个随机事件",
+      "Map contains a random event",
+      500
+    ],
+    [
+      "每秒流血伤害",
+      "Open Wounds Damage Per Second",
+      501
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      502
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      503
+    ],
+    [
+      "诅咒抗性",
+      "Curse Resistance",
+      504
+    ],
+    [
+      "秘境的关底BOSS必然掉落一个彩虹刻面",
+      "Map boss drops a Rainbow Facet",
+      505
+    ],
+    [
+      "怪物获得",
+      "Monsters have",
+      506
+    ],
+    [
+      "怪物的抗性被瓦解",
+      "Monsters have sundered resistances",
+      508
+    ],
+    [
+      "你可以召唤",
+      "You May Summon",
+      509
+    ],
+    [
+      "你无法再召唤任何狼",
+      "You May No Longer Summon Wolves",
+      510
+    ]
+  ],
+  "skills": [
+    [
+      "魔法箭",
+      "Magic Arrow",
+      6
+    ],
+    [
+      "火焰箭",
+      "Fire Arrow",
+      7
+    ],
+    [
+      "内视",
+      "Inner Sight",
+      8
+    ],
+    [
+      "双倍打击",
+      "Critical Strike",
+      9
+    ],
+    [
+      "戳刺",
+      "Jab",
+      10
+    ],
+    [
+      "冰箭",
+      "Cold Arrow",
+      11
+    ],
+    [
+      "多重箭",
+      "Multiple Shot",
+      12
+    ],
+    [
+      "闪避",
+      "Dodge",
+      13
+    ],
+    [
+      "威力一击",
+      "Power Strike",
+      14
+    ],
+    [
+      "毒枪",
+      "Poison Javelin",
+      15
+    ],
+    [
+      "爆裂箭",
+      "Exploding Arrow",
+      16
+    ],
+    [
+      "慢速箭",
+      "Slow Movement",
+      17
+    ],
+    [
+      "躲避",
+      "Avoid",
+      18
+    ],
+    [
+      "刺爆",
+      "Javelin and Spear Mastery",
+      19
+    ],
+    [
+      "闪电球",
+      "Lightning Bolt",
+      20
+    ],
+    [
+      "急冻箭",
+      "Ice Arrow",
+      21
+    ],
+    [
+      "导引箭",
+      "Guided Arrow",
+      22
+    ],
+    [
+      "刺入",
+      "Penetrate",
+      23
+    ],
+    [
+      "充能一击",
+      "Charged Strike",
+      24
+    ],
+    [
+      "瘟疫标枪",
+      "Plague Javelin",
+      25
+    ],
+    [
+      "炮轰",
+      "Strafe",
+      26
+    ],
+    [
+      "牺牲之箭",
+      "Immolation Arrow",
+      27
+    ],
+    [
+      "诱饵",
+      "Dopplezon",
+      28
+    ],
+    [
+      "回避",
+      "Evade",
+      29
+    ],
+    [
+      "击退",
+      "Fend",
+      30
+    ],
+    [
+      "冻结之箭",
+      "Freezing Arrow",
+      31
+    ],
+    [
+      "女武神",
+      "Valkyrie",
+      32
+    ],
+    [
+      "穿透",
+      "Pierce",
+      33
+    ],
+    [
+      "闪电攻击",
+      "Lightning Strike",
+      34
+    ],
+    [
+      "闪电之怒",
+      "Lightning Fury",
+      35
+    ],
+    [
+      "火弹",
+      "Fire Bolt",
+      36
+    ],
+    [
+      "温暖",
+      "Warmth",
+      37
+    ],
+    [
+      "充能弹",
+      "Charged Bolt",
+      38
+    ],
+    [
+      "冰弹",
+      "Ice Bolt",
+      39
+    ],
+    [
+      "冰封装甲",
+      "Cold Enchant",
+      40
+    ],
+    [
+      "地狱之火",
+      "Inferno",
+      41
+    ],
+    [
+      "静态力场",
+      "Static Field",
+      42
+    ],
+    [
+      "心灵传动",
+      "Telekinesis",
+      43
+    ],
+    [
+      "霜之新星",
+      "Frost Nova",
+      44
+    ],
+    [
+      "冰风暴",
+      "Ice Blast",
+      45
+    ],
+    [
+      "炽烈之径",
+      "Blaze",
+      46
+    ],
+    [
+      "火球",
+      "Fire Ball",
+      47
+    ],
+    [
+      "新星",
+      "Nova",
+      48
+    ],
+    [
+      "闪电",
+      "Lightning",
+      49
+    ],
+    [
+      "碎冰甲",
+      "Shiver Armor",
+      50
+    ],
+    [
+      "火墙",
+      "Fire Wall",
+      51
+    ],
+    [
+      "火焰强化",
+      "Enchant",
+      52
+    ],
+    [
+      "连锁闪电",
+      "Chain Lightning",
+      53
+    ],
+    [
+      "传送",
+      "Teleport",
+      54
+    ],
+    [
+      "冰尖柱",
+      "Glacial Spike",
+      55
+    ],
+    [
+      "陨石",
+      "Meteor",
+      56
+    ],
+    [
+      "雷云风暴",
+      "Thunder Storm",
+      57
+    ],
+    [
+      "能量护盾",
+      "Energy Shield",
+      58
+    ],
+    [
+      "暴风雪",
+      "Blizzard",
+      59
+    ],
+    [
+      "寒冰装甲",
+      "Chilling Armor",
+      60
+    ],
+    [
+      "九头海蛇",
+      "Hydra",
+      62
+    ],
+    [
+      "支配闪电",
+      "Lightning Mastery",
+      63
+    ],
+    [
+      "冰封球",
+      "Frozen Orb",
+      64
+    ],
+    [
+      "支配冰冷",
+      "Cold Mastery",
+      65
+    ],
+    [
+      "伤害加深",
+      "AmpDmg",
+      66
+    ],
+    [
+      "牙",
+      "Teeth",
+      67
+    ],
+    [
+      "白骨装甲",
+      "Bone Armor",
+      68
+    ],
+    [
+      "支配骷髅",
+      "Skeleton Mastery",
+      69
+    ],
+    [
+      "骷髅复苏",
+      "Raise Skeleton",
+      70
+    ],
+    [
+      "微暗灵视",
+      "Dim Vision",
+      71
+    ],
+    [
+      "削弱",
+      "Weaken",
+      72
+    ],
+    [
+      "淬毒匕首",
+      "Poison Dagger",
+      73
+    ],
+    [
+      "尸体爆炸",
+      "Corpse Explosion",
+      74
+    ],
+    [
+      "黏土石魔",
+      "Clay Golem",
+      75
+    ],
+    [
+      "攻击反噬",
+      "Iron Maiden",
+      76
+    ],
+    [
+      "恐惧",
+      "Terror",
+      77
+    ],
+    [
+      "骨墙",
+      "Bone Wall",
+      78
+    ],
+    [
+      "支配石魔",
+      "Golem Mastery",
+      79
+    ],
+    [
+      "复苏骷髅法师",
+      "Raise Skeletal Mage",
+      80
+    ],
+    [
+      "迷乱",
+      "Confuse",
+      81
+    ],
+    [
+      "偷取生命",
+      "Life Tap",
+      82
+    ],
+    [
+      "毒爆",
+      "Desecrate",
+      83
+    ],
+    [
+      "骨矛",
+      "Bone Spear",
+      84
+    ],
+    [
+      "鲜血石魔",
+      "BloodGolem",
+      85
+    ],
+    [
+      "吸引",
+      "Attract",
+      86
+    ],
+    [
+      "衰老",
+      "Decrepify",
+      87
+    ],
+    [
+      "骨牢",
+      "Bone Prison",
+      88
+    ],
+    [
+      "召唤抵抗",
+      "Raise Skeleton Archer",
+      89
+    ],
+    [
+      "钢铁石魔",
+      "IronGolem",
+      90
+    ],
+    [
+      "降低抵抗",
+      "LowRes",
+      91
+    ],
+    [
+      "剧毒新星",
+      "Poison Nova",
+      92
+    ],
+    [
+      "白骨之魂",
+      "Bone Spirit",
+      93
+    ],
+    [
+      "火焰石魔",
+      "FireGolem",
+      94
+    ],
+    [
+      "重生",
+      "Revive",
+      95
+    ],
+    [
+      "牺牲",
+      "Sacrifice",
+      96
+    ],
+    [
+      "重击",
+      "Smite",
+      97
+    ],
+    [
+      "力量",
+      "Might",
+      98
+    ],
+    [
+      "祈祷",
+      "Prayer",
+      99
+    ],
+    [
+      "抵抗火焰",
+      "Resist Fire",
+      100
+    ],
+    [
+      "圣光弹",
+      "Holy Bolt",
+      101
+    ],
+    [
+      "圣火",
+      "Holy Fire",
+      102
+    ],
+    [
+      "荆棘",
+      "Thorns",
+      103
+    ],
+    [
+      "反抗",
+      "Defiance",
+      104
+    ],
+    [
+      "抵抗冰冻",
+      "Resist Cold",
+      105
+    ],
+    [
+      "热诚",
+      "Zeal",
+      106
+    ],
+    [
+      "冲锋",
+      "Charge",
+      107
+    ],
+    [
+      "祝福瞄准",
+      "Blessed Aim",
+      108
+    ],
+    [
+      "净化",
+      "Cleansing",
+      109
+    ],
+    [
+      "抵抗闪电",
+      "Resist Lightning",
+      110
+    ],
+    [
+      "复仇",
+      "Vengeance",
+      111
+    ],
+    [
+      "祝福之锤",
+      "Blessed Hammer",
+      112
+    ],
+    [
+      "专注",
+      "Concentration",
+      113
+    ],
+    [
+      "神圣冰冻",
+      "Holy Freeze",
+      114
+    ],
+    [
+      "活力",
+      "Vigor",
+      115
+    ],
+    [
+      "转换",
+      "Holy Sword",
+      116
+    ],
+    [
+      "神圣之盾",
+      "Holy Shield",
+      117
+    ],
+    [
+      "神圣冲击",
+      "Holy Shock",
+      118
+    ],
+    [
+      "庇护所",
+      "Sanctuary",
+      119
+    ],
+    [
+      "冥思",
+      "Meditation",
+      120
+    ],
+    [
+      "天堂之拳",
+      "Fist of the Heavens",
+      121
+    ],
+    [
+      "狂热",
+      "Fanaticism",
+      122
+    ],
+    [
+      "审判",
+      "Conviction",
+      123
+    ],
+    [
+      "救赎",
+      "Redemption",
+      124
+    ],
+    [
+      "救助",
+      "Salvation",
+      125
+    ],
+    [
+      "重击",
+      "Bash",
+      126
+    ],
+    [
+      "支配长剑",
+      "Sword Mastery",
+      127
+    ],
+    [
+      "支配斧头",
+      "General Mastery",
+      128
+    ],
+    [
+      "支配钉头锤",
+      "Mace Mastery",
+      129
+    ],
+    [
+      "狂嗥",
+      "Howl",
+      130
+    ],
+    [
+      "找寻药剂",
+      "Find Potion",
+      131
+    ],
+    [
+      "跳跃",
+      "Leap",
+      132
+    ],
+    [
+      "双手挥击",
+      "Double Swing",
+      133
+    ],
+    [
+      "支配长柄武器",
+      "Pole Arm and Spear Mastery",
+      134
+    ],
+    [
+      "支配飞掷",
+      "Throwing Mastery",
+      135
+    ],
+    [
+      "支配长矛",
+      "Spear Mastery",
+      136
+    ],
+    [
+      "嘲弄",
+      "Taunt",
+      137
+    ],
+    [
+      "大叫",
+      "Shout",
+      138
+    ],
+    [
+      "击昏",
+      "Stun",
+      139
+    ],
+    [
+      "双手投掷",
+      "Double Throw",
+      140
+    ],
+    [
+      "增加耐力",
+      "Combat Reflexes",
+      141
+    ],
+    [
+      "找寻物品",
+      "Find Item",
+      142
+    ],
+    [
+      "跳跃攻击",
+      "Leap Attack",
+      143
+    ],
+    [
+      "专心",
+      "Concentrate",
+      144
+    ],
+    [
+      "铁布杉",
+      "Iron Skin",
+      145
+    ],
+    [
+      "战嗥",
+      "Battle Cry",
+      146
+    ],
+    [
+      "狂乱",
+      "Frenzy",
+      147
+    ],
+    [
+      "加速",
+      "Increased Speed",
+      148
+    ],
+    [
+      "战斗体制",
+      "Battle Orders",
+      149
+    ],
+    [
+      "残酷吓阻",
+      "Grim Ward",
+      150
+    ],
+    [
+      "旋风",
+      "Whirlwind",
+      151
+    ],
+    [
+      "狂战士",
+      "Berserk",
+      152
+    ],
+    [
+      "自然抵抗",
+      "Natural Resistance",
+      153
+    ],
+    [
+      "战斗狂嗥",
+      "War Cry",
+      154
+    ],
+    [
+      "战斗指挥",
+      "Battle Command",
+      155
+    ],
+    [
+      "辨视卷轴",
+      "Scroll of Identify",
+      217
+    ],
+    [
+      "辨视之书",
+      "Book of Identify",
+      218
+    ],
+    [
+      "城镇传送卷轴",
+      "Scroll of Townportal",
+      219
+    ],
+    [
+      "城镇传送之书",
+      "Book of Townportal",
+      220
+    ],
+    [
+      "召唤渡鸦",
+      "Raven",
+      221
+    ],
+    [
+      "变形术 (Lycanthropy)",
+      "Shape Shifting",
+      224
+    ],
+    [
+      "火风暴 (Firestorm)",
+      "Firestorm",
+      225
+    ],
+    [
+      "橡木智者 (Oak Sage)",
+      "Oak Sage",
+      226
+    ],
+    [
+      "召唤狼灵 (Summon Spirit Wolf)",
+      "Summon Spirit Wolf",
+      227
+    ],
+    [
+      "熊人变化 (Werebear)",
+      "Wearbear",
+      228
+    ],
+    [
+      "熔浆巨岩 (Molten Boulder)",
+      "Molten Boulder",
+      229
+    ],
+    [
+      "极地风暴 (Arctic Blast)",
+      "Arctic Blast",
+      230
+    ],
+    [
+      "食尸藤 (Carrion Vine)",
+      "Cycle of Life",
+      231
+    ],
+    [
+      "野性狂暴 (Feral Rage)",
+      "Feral Rage",
+      232
+    ],
+    [
+      "撞锤 (Maul)",
+      "Maul",
+      233
+    ],
+    [
+      "火山爆 (Fissure)",
+      "Eruption",
+      234
+    ],
+    [
+      "飓风装甲 (Cyclone Armor)",
+      "Cyclone Armor",
+      235
+    ],
+    [
+      "狼獾之心 (Heart of Wolverine)",
+      "Heart of Wolverine",
+      236
+    ],
+    [
+      "召唤狂狼 (Summon Dire Wolf)",
+      "Summon Fenris",
+      237
+    ],
+    [
+      "狂犬病 (Rabies)",
+      "Rabies",
+      238
+    ],
+    [
+      "焰爪 (Fire Claws)",
+      "Fire Claws",
+      239
+    ],
+    [
+      "小旋风 (Twister)",
+      "Twister",
+      240
+    ],
+    [
+      "太阳藤 (Solar Creeper)",
+      "Vines",
+      241
+    ],
+    [
+      "饥饿 (Hunger)",
+      "Hunger",
+      242
+    ],
+    [
+      "震波 (Shock Wave)",
+      "Shock Wave",
+      243
+    ],
+    [
+      "火山 (Volcano)",
+      "Volcano",
+      244
+    ],
+    [
+      "龙卷风 (Tornado)",
+      "Tornado",
+      245
+    ],
+    [
+      "棘灵 (Spirit of Barbs)",
+      "Spirit of Barbs",
+      246
+    ],
+    [
+      "召唤灰熊 (Summon Grizzly)",
+      "Summon Grizzly",
+      247
+    ],
+    [
+      "狂怒 (Fury)",
+      "Fury",
+      248
+    ],
+    [
+      "毁天灭地 (Armageddon)",
+      "Armageddon",
+      249
+    ],
+    [
+      "暴风 (Hurricane)",
+      "Hurricane",
+      250
+    ],
+    [
+      "火焰爆震 (Fire Blast)",
+      "Fire Trauma",
+      251
+    ],
+    [
+      "支配利爪 (Claw Mastery)",
+      "Claw Mastery",
+      252
+    ],
+    [
+      "心灵战锤 (Psychic Hammer)",
+      "Psychic Hammer",
+      253
+    ],
+    [
+      "虎击 (Tiger Strike)",
+      "Tiger Strike",
+      254
+    ],
+    [
+      "龙爪 (Dragon Talon)",
+      "Dragon Talon",
+      255
+    ],
+    [
+      "雷电网 (Shock Web)",
+      "Shock Field",
+      256
+    ],
+    [
+      "刃之守卫 (Blade Sentinel)",
+      "Blade Sentinel",
+      257
+    ],
+    [
+      "速度爆发 (Burst of Speed)",
+      "Quickness",
+      258
+    ],
+    [
+      "焰拳 (Fists of Fire)",
+      "Fists of Fire",
+      259
+    ],
+    [
+      "双龙爪 (Dragon Claw)",
+      "Dragon Claw",
+      260
+    ],
+    [
+      "电能守卫 (Charged Bolt Sentry)",
+      "Charged Bolt Sentry",
+      261
+    ],
+    [
+      "火焰复苏 (Wake of Fire)",
+      "Wake of Fire Sentry",
+      262
+    ],
+    [
+      "武器格挡 (Weapon Block)",
+      "Weapon Block",
+      263
+    ],
+    [
+      "魔影斗篷 (Cloak of Shadows)",
+      "Cloak of Shadows",
+      264
+    ],
+    [
+      "眼镜蛇攻击 (Cobra Strike)",
+      "Cobra Strike",
+      265
+    ],
+    [
+      "刃之怒 (Blade Fury)",
+      "Blade Fury",
+      266
+    ],
+    [
+      "能量消解 (Fade)",
+      "Fade",
+      267
+    ],
+    [
+      "影子战士 (Shadow Warrior)",
+      "Shadow Warrior",
+      268
+    ],
+    [
+      "雷电爪 (Claws of Thunder)",
+      "Claws of Thunder",
+      269
+    ],
+    [
+      "神龙摆尾 (Dragon Tail)",
+      "Dragon Tail",
+      270
+    ],
+    [
+      "雷光守卫 (Lightning Sentry)",
+      "Chain Lightning Sentry",
+      271
+    ],
+    [
+      "复苏狱火 (Wake of Inferno)",
+      "Inferno Sentry",
+      272
+    ],
+    [
+      "心灵爆震 (Mind Blast)",
+      "Mind Blast",
+      273
+    ],
+    [
+      "寒冰刃 (Blades of Ice)",
+      "Blades of Ice",
+      274
+    ],
+    [
+      "飞龙在天 (Dragon Flight)",
+      "Dragon Flight",
+      275
+    ],
+    [
+      "亡者守卫 (Death Sentry)",
+      "Death Sentry",
+      276
+    ],
+    [
+      "刀刃之盾 (Blade Shield)",
+      "Blade Shield",
+      277
+    ],
+    [
+      "毒牙 (Venom)",
+      "Venom",
+      278
+    ],
+    [
+      "影子大师 (Shadow Master)",
+      "Shadow Master",
+      279
+    ],
+    [
+      "凤凰攻击 (Phoenix Strike)",
+      "Royal Strike",
+      280
+    ]
+  ]
+}

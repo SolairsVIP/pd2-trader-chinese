@@ -19,13 +19,15 @@ import {
 } from '@/overlay';
 import { useDelist } from '@/pages/delist/DelistHandler';
 import { useMarketAlerts } from '@/pages/market/alerts/useMarketAlerts';
+import { readGameItemText } from '@/lib/browser-clipboard';
+import { normalizeGameItemInput, type GameItemInput } from '@/lib/game-item-input';
 
 /**
  * App-wide behaviour that is not a panel: global hotkeys, clipboard item capture, chat watcher, socket
  * notifications, auth/changelog, and always-on panels (chat button). Renders nothing.
  */
 const AppController: React.FC = () => {
-  const { read, copy } = useClipboard();
+  const { copy } = useClipboard();
   const keyPress = useKeySender();
   const { settings, isLoading } = useOptions();
   const { openPanel, closePanel, togglePanel } = useOverlay();
@@ -57,7 +59,7 @@ const AppController: React.FC = () => {
 
   /** Ctrl+C the item under the cursor, restoring the user's clipboard afterwards. */
   const copyItemUnderCursor = useCallback(
-    async (sendCopy: boolean): Promise<string | null> => {
+    async (sendCopy: boolean): Promise<GameItemInput> => {
       // A panel holding the keyboard (e.g. an open price check) would get the Ctrl+C, and a Ctrl+C hotkey never
       // reached the game: hand focus back and let the game take the foreground before copying.
       const handedBack = isKeyboardClaimed();
@@ -65,24 +67,28 @@ const AppController: React.FC = () => {
         await releaseKeyboard({ focusGame: true });
         await sleep(50);
       }
-      const savedClipboard = await read();
+      const savedClipboard = await readGameItemText();
       if (sendCopy || handedBack) await keyPress('ctrl+c');
       await sleep(250);
-      const raw = await read();
+      const raw = await readGameItemText();
       try {
         if (savedClipboard != null) await copy(savedClipboard);
       } catch {
         /* clipboard restore is best-effort */
       }
-      return raw;
+      const result = normalizeGameItemInput(raw);
+      if (result.error) showToast({ title: '中文物品识别', description: result.error, variant: 'error' });
+      return result;
     },
-    [read, copy, keyPress],
+    [copy, keyPress],
   );
 
   const fireSearch = useCallback(async () => {
     if (!(await checkDiabloFocus())) return;
     // When the price-check hotkey itself is Ctrl+C the game already copied the item
-    const raw = await copyItemUnderCursor(!(settings.hotkeyModifier === 'ctrl' && settings.hotkeyKey === 'c'));
+    const capture = await copyItemUnderCursor(!(settings.hotkeyModifier === 'ctrl' && settings.hotkeyKey === 'c'));
+    if (capture.error) return;
+    const raw = capture.text;
     if (!clipboardContainsValidItem(raw)) {
       showToast({ title: 'PD2 Trader', description: '物品不受支持或数据无效。', variant: 'error' });
       return;
@@ -92,7 +98,9 @@ const AppController: React.FC = () => {
 
   const openQuickList = useCallback(async () => {
     if (!(await checkDiabloFocus())) return;
-    const copied = await copyItemUnderCursor(true);
+    const capture = await copyItemUnderCursor(true);
+    if (capture.error) return;
+    const copied = capture.text;
     const raw = clipboardContainsValidItem(copied) ? copied : null;
 
     let payload: PanelPayloads['quickList'] = { error: 'not_shared_stash' };
@@ -113,7 +121,9 @@ const AppController: React.FC = () => {
 
   const handleDelistItem = useCallback(async () => {
     if (!(await checkDiabloFocus())) return;
-    const copied = await copyItemUnderCursor(true);
+    const capture = await copyItemUnderCursor(true);
+    if (capture.error) return;
+    const copied = capture.text;
     if (!clipboardContainsValidItem(copied)) {
       showToast({ title: '下架物品', description: '光标下未找到有效物品。', variant: 'error' });
       return;

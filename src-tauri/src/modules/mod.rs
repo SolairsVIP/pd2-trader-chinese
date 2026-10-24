@@ -2,6 +2,7 @@ pub mod chat_watcher;
 pub mod commands;
 pub mod config;
 pub mod debug_logger;
+pub mod game_clipboard;
 pub mod keyboard;
 pub mod region;
 pub mod system;

@@ -1,0 +1,40 @@
+{
+  "sources": [
+    {
+      "file": "string.tbl",
+      "rows": 5391
+    },
+    {
+      "file": "expansionstring.tbl",
+      "rows": 2818
+    },
+    {
+      "file": "patchstring.tbl",
+      "rows": 3278
+    }
+  ],
+  "counts": {
+    "bases": 626,
+    "items": 768,
+    "stats": 369,
+    "skills": 211
+  },
+  "ambiguousBases": [
+    {
+      "label": "战斗斧",
+      "candidates": [
+        "Battle Axe",
+        "Tabar"
+      ]
+    }
+  ],
+  "ambiguousSkills": [
+    {
+      "label": "重击",
+      "candidates": [
+        97,
+        126
+      ]
+    }
+  ]
+}

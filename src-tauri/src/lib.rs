@@ -108,6 +108,7 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            commands::read_game_item_clipboard,
             commands::get_diablo_rect,
             commands::press_key,
             commands::is_diablo_focused,

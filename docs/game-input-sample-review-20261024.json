@@ -1,0 +1,309 @@
+{
+  "scope": "Local data transformation review only. Later samples use decoded equivalents of user-supplied clipboard strings; no game or remote API session.",
+  "samples": [
+    {
+      "source": {
+        "defense": 49,
+        "iLevel": 28,
+        "location": "Equip",
+        "name": "末日之 隐藏",
+        "quality": "Rare",
+        "stats": [
+          {
+            "name": "力量",
+            "value": 1
+          },
+          {
+            "name": "敏捷",
+            "stat_id": 2,
+            "value": 2
+          },
+          {
+            "name": "攻击准确率",
+            "stat_id": 19,
+            "value": 61
+          },
+          {
+            "name": "抗寒",
+            "stat_id": 43,
+            "value": 14
+          },
+          {
+            "name": "快速打击恢复",
+            "stat_id": 99,
+            "value": 17
+          }
+        ],
+        "type": "锁环甲"
+      },
+      "converted": {
+        "defense": 49,
+        "iLevel": 28,
+        "location": "Equip",
+        "name": "末日之 隐藏",
+        "quality": "Rare",
+        "stats": [
+          {
+            "name": "to Strength",
+            "value": 1,
+            "stat_id": 0
+          },
+          {
+            "name": "to Dexterity",
+            "stat_id": 2,
+            "value": 2
+          },
+          {
+            "name": "to Attack Rating",
+            "stat_id": 19,
+            "value": 61
+          },
+          {
+            "name": "Cold Resist",
+            "stat_id": 43,
+            "value": 14
+          },
+          {
+            "name": "Faster Hit Recovery",
+            "stat_id": 99,
+            "value": 17
+          }
+        ],
+        "type": "Ring Mail"
+      },
+      "baseQuery": {
+        "type": "tors",
+        "base": "rng",
+        "label": "Ring Mail"
+      },
+      "skillFilters": []
+    },
+    {
+      "source": {
+        "iLevel": 85,
+        "quality": "Rare",
+        "type": "重型手镯",
+        "stats": [
+          {
+            "name": "+%d 标枪和长矛技能",
+            "skill": "Bow and Crossbow Skills (Amazon)",
+            "value": 2
+          },
+          {
+            "chance": 10,
+            "level": 3,
+            "name": "被击中时有 10% 机会施展等级 3 新星"
+          }
+        ]
+      },
+      "converted": {
+        "iLevel": 85,
+        "quality": "Rare",
+        "type": "Heavy Bracers",
+        "stats": [
+          {
+            "name": "+2 to Bow and Crossbow Skills (Amazon)",
+            "skill": "Bow and Crossbow Skills (Amazon)",
+            "value": 2,
+            "stat_id": 188
+          },
+          {
+            "chance": 10,
+            "level": 3,
+            "name": "10% Chance to cast level 3 Nova when struck",
+            "stat_id": 201,
+            "skill": "Nova",
+            "value": 10
+          }
+        ]
+      },
+      "baseQuery": {
+        "type": "glov",
+        "base": "xmg",
+        "label": "Heavy Bracers"
+      },
+      "skillFilters": [
+        {
+          "name": "+2 to Bow and Crossbow Skills (Amazon)",
+          "filter": {
+            "kind": "direct",
+            "property": "item_addskill_tab",
+            "params": [
+              0
+            ],
+            "valueIndex": 1,
+            "value": 2
+          }
+        },
+        {
+          "name": "10% Chance to cast level 3 Nova when struck",
+          "filter": {
+            "kind": "trigger",
+            "property": "item_skillongethit",
+            "params": [
+              3,
+              48
+            ],
+            "valueIndex": 2,
+            "value": 10
+          }
+        }
+      ]
+    },
+    {
+      "source": {
+        "iLevel": 89,
+        "quality": "Set",
+        "name": "M'avina's Embrace",
+        "type": "海妖壳甲 Kraken Shell",
+        "stats": [
+          {
+            "name": "亚马逊技能等级",
+            "skill": "Amazon Skills",
+            "value": 1
+          },
+          {
+            "chance": 10,
+            "level": 13,
+            "name": "被击中时有 10% 机会施展等级 13 冰尖柱"
+          }
+        ]
+      },
+      "converted": {
+        "iLevel": 89,
+        "quality": "Set",
+        "name": "M'avina's Embrace",
+        "type": "Kraken Shell",
+        "stats": [
+          {
+            "name": "+1 to Amazon Skills",
+            "skill": "Amazon Skills",
+            "value": 1,
+            "stat_id": 83
+          },
+          {
+            "chance": 10,
+            "level": 13,
+            "name": "10% Chance to cast level 13 Glacial Spike when struck",
+            "stat_id": 201,
+            "skill": "Glacial Spike",
+            "value": 10
+          }
+        ]
+      },
+      "baseQuery": {
+        "type": "tors",
+        "base": "uld",
+        "label": "Kraken Shell"
+      },
+      "skillFilters": [
+        {
+          "name": "+1 to Amazon Skills",
+          "filter": {
+            "kind": "direct",
+            "property": "item_addclassskills",
+            "params": [
+              0
+            ],
+            "valueIndex": 1,
+            "value": 1
+          }
+        },
+        {
+          "name": "10% Chance to cast level 13 Glacial Spike when struck",
+          "filter": {
+            "kind": "trigger",
+            "property": "item_skillongethit",
+            "params": [
+              13,
+              55
+            ],
+            "valueIndex": 2,
+            "value": 10
+          }
+        }
+      ]
+    },
+    {
+      "source": {
+        "iLevel": 89,
+        "quality": "Rare",
+        "type": "项链",
+        "stats": [
+          {
+            "name": "亚马逊技能等级",
+            "skill": "Necromancer Skills",
+            "value": 1
+          },
+          {
+            "chance": 10,
+            "level": 3,
+            "name": "被击中时有 10% 机会施展等级 3 九头海蛇"
+          }
+        ]
+      },
+      "converted": {
+        "iLevel": 89,
+        "quality": "Rare",
+        "type": "Amulet",
+        "stats": [
+          {
+            "name": "+1 to Necromancer Skills",
+            "skill": "Necromancer Skills",
+            "value": 1,
+            "stat_id": 83
+          },
+          {
+            "chance": 10,
+            "level": 3,
+            "name": "10% Chance to cast level 3 Hydra when struck",
+            "stat_id": 201,
+            "skill": "Hydra",
+            "value": 10
+          }
+        ]
+      },
+      "baseQuery": {
+        "type": "{\"$in\": [\"amul\", \"ring\", \"amus\"]}",
+        "base": "amu",
+        "label": "Amulet"
+      },
+      "skillFilters": [
+        {
+          "name": "+1 to Necromancer Skills",
+          "filter": {
+            "kind": "direct",
+            "property": "item_addclassskills",
+            "params": [
+              2
+            ],
+            "valueIndex": 1,
+            "value": 1
+          }
+        },
+        {
+          "name": "10% Chance to cast level 3 Hydra when struck",
+          "filter": {
+            "kind": "trigger",
+            "property": "item_skillongethit",
+            "params": [
+              3,
+              62
+            ],
+            "valueIndex": 2,
+            "value": 10
+          }
+        }
+      ]
+    }
+  ],
+  "englishInputPreserved": true,
+  "ambiguousBase": {
+    "text": null,
+    "error": "无法唯一识别中文底材“战斗斧”，请提供这件装备的复制数据。"
+  },
+  "unknownBase": {
+    "text": null,
+    "error": "无法唯一识别中文底材“未收录底材”，请提供这件装备的复制数据。"
+  }
+}

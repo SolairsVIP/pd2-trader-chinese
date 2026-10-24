@@ -3,6 +3,11 @@ use tauri::Manager;
 use tauri_plugin_opener::OpenerExt;
 
 #[tauri::command]
+pub fn read_game_item_clipboard() -> Option<String> {
+    crate::modules::game_clipboard::read_utf8_item()
+}
+
+#[tauri::command]
 pub fn get_diablo_rect(app_handle: tauri::AppHandle) -> Option<window::WindowRect> {
     window::get_diablo_rect(&app_handle)
 }

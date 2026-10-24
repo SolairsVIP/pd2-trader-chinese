@@ -2,6 +2,7 @@ import { characterSkillMap, skillNameToIdMap } from '@/assets/character-skills';
 import { classSkillsMap, classSubSkillMap, classSubSkillMap2, getSkillTabIndex } from '@/assets/class-skills';
 import { SITE_STAT_OPTIONS } from '@/pages/market/lib/stat-options.data';
 import { PD2_SKILL_TRANSLATION_ALIASES } from '@/lib/pd2-skill-translations';
+import gameClientAliases from '@/lib/game-client-aliases.data.json';
 import type { Stat } from './interfaces';
 import { statIdToProperty } from './stat-mappings';
 
@@ -51,6 +52,15 @@ function englishSkillId(name: string): number | undefined {
 }
 
 const translatedSkills: AliasIndex = new Map();
+for (const [chinese, , rawId] of gameClientAliases.skills) {
+  const id = Number(rawId);
+  addAlias(translatedSkills, String(chinese), id);
+  const characterClass = characterSkillMap[id]?.class;
+  if (characterClass) {
+    addAlias(translatedSkills, `${chinese} (${characterClass})`, id);
+    addAlias(translatedSkills, `${chinese} (${characterClass} Only)`, id);
+  }
+}
 for (const [english, chinese] of PD2_SKILL_TRANSLATION_ALIASES) {
   const id = englishSkillId(english);
   if (id !== undefined) addAlias(translatedSkills, chinese, id);
