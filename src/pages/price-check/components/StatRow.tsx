@@ -6,14 +6,12 @@ import { Stat } from '@/pages/price-check/lib/interfaces';
 import { statIdToProperty, StatId } from '@/pages/price-check/lib/stat-mappings';
 import { HoverPopover } from '@/components/custom/hover-popover';
 import { Badge } from '@/components/ui/badge';
-import { fuzzyMatchCharacterSkill } from '@/assets/character-skills';
-import { fuzzyClassSkillByName, fuzzyClassSubSkillByName } from '@/assets/class-skills';
 import { X, Check, Info } from 'lucide-react';
 import { DUR, EASE_OUT } from '@/lib/motion';
 import type { AppraisedStat } from '@/lib/rare-appraisal-api';
 import { starsText, starTitle } from '@/components/rares/rares-format';
 import { localizePd2Text } from '@/lib/localize-pd2-text';
-import { getStatKey, isDirectSkillStat } from '../lib/utils';
+import { getStatKey, getDirectSkillFilter, isDirectSkillStat } from '../lib/utils';
 
 interface StatRowProps {
   stat: Stat;
@@ -54,12 +52,7 @@ export const StatRow: React.FC<StatRowProps> = ({
   const isCorrupted = stat.stat_id === StatId.Corrupted;
   const isEthereal = stat.stat_id === StatId.Ethereal;
   const isSkill = isDirectSkillStat(stat);
-  const isUnknownSkill =
-    isSkill &&
-    stat.skill !== undefined &&
-    !fuzzyMatchCharacterSkill(stat.skill.toLowerCase()) &&
-    !fuzzyClassSkillByName(stat.skill.toLowerCase()) &&
-    !fuzzyClassSubSkillByName(stat.skill.toLowerCase());
+  const isUnknownSkill = isSkill && !getDirectSkillFilter(stat);
   const isUnknown = (statIdToProperty[stat.stat_id] === undefined && !isSkill) || isUnknownSkill;
 
   // For corrupted stat, determine checkbox state

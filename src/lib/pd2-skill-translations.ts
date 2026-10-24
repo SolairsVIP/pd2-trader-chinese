@@ -200,6 +200,7 @@ export const PD2_SKILL_TRANSLATIONS: Readonly<Record<string, string>> = {
   "drutemp3": "德鲁伊预留技能三",
   "Fire Trauma": "火焰创伤",
   "Claw Mastery": "支配利爪",
+  "Claw and Dagger Mastery": "利爪与匕首精通",
   "Psychic Hammer": "心灵战锤",
   "Tiger Strike": "虎击",
   "Dragon Talon": "龙爪",

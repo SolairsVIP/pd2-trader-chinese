@@ -182,6 +182,9 @@ function localizeAffixTemplate(text: string): string | undefined {
 export function localizePd2Text(text: string | null | undefined): string {
   if (text == null) return '';
 
+  const skillName = SKILL_TRANSLATIONS_LOWER.get(text.trim().toLowerCase());
+  if (skillName !== undefined) return skillName;
+
   const localizedTemplate = localizeAffixTemplate(text);
   if (localizedTemplate !== undefined) return localizedTemplate;
 

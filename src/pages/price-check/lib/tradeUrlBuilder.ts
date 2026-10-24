@@ -1,9 +1,8 @@
 import { Item, Stat } from './interfaces';
 import { StatId, statIdToProperty, statRemap, statRemapByName, PRIORITY_STATS, STRIP_STATS } from './stat-mappings';
 import { skillNameToIdMap } from '@/assets/character-skills';
-import { classSkillNameToIdMap, fuzzyClassSubSkillByName, getSkillTabIndex } from '@/assets/class-skills';
 import { ItemCharmMap, ItemQuality } from '@/common/types/Item';
-import { getTypeFromBaseType, getStatKey, isDirectSkillStat, isTriggeredSkillStat } from './utils';
+import { getTypeFromBaseType, getStatKey, getDirectSkillFilter, isDirectSkillStat, isTriggeredSkillStat } from './utils';
 import { MarketListingQuery } from '@/common/types/pd2-website/GetMarketListingsCommand';
 import { ItemType as PD2Item } from '@/assets/itemFuzzySearch';
 import { Item as GameStashItem } from '@/common/types/pd2-website/GameStashResponse';
@@ -53,23 +52,9 @@ export function buildTradeUrl(
       if (!property) return;
       propKey = `${property}{${stat.level},${skillEntry.id}}`;
     } else if (isDirectSkillStat(stat) && stat.skill) {
-      const skillEntry = skillNameToIdMap[stat.skill.toLowerCase()];
-      const property = statIdToProperty[stat.stat_id];
-      if (skillEntry && property === 'item_nonclassskill') {
-        propKey = `item_nonclassskill{${skillEntry.id}}`;
-      } else if (skillEntry) {
-        propKey = `item_singleskill{${skillEntry.id}}`;
-      } else {
-        const classEntry = classSkillNameToIdMap[stat.skill.toLowerCase()];
-        if (classEntry) {
-          propKey = `item_addclassskills{${classEntry.id}}`;
-        } else {
-          const subClassEntry = fuzzyClassSubSkillByName(stat.skill.toLowerCase());
-          if (subClassEntry) {
-            propKey = `item_addskill_tab{${getSkillTabIndex(subClassEntry.id)}}`;
-          }
-        }
-      }
+      const skillFilter = getDirectSkillFilter(stat);
+      if (!skillFilter) return;
+      propKey = `${skillFilter.property}{${skillFilter.id}}`;
     } else if (stat.stat_id !== undefined) {
       propKey = getPropertyKey(stat.stat_id, stat, statMapper);
     }
@@ -259,55 +244,18 @@ export function buildGetMarketListingQuery(
       return;
     }
 
-    // Direct skill bonuses use stat ids 83, 97, 107, and 188.
+    // Includes clipboard skill bonuses that omit stat_id.
     if (isDirectSkillStat(stat) && stat.skill) {
-      const skillEntry = skillNameToIdMap[stat.skill.toLowerCase()];
-      const skillProperty = statIdToProperty[stat.stat_id];
-      if (skillEntry && skillProperty === 'item_nonclassskill') {
-        const mod: any = { name: 'item_nonclassskill', 'values.0': skillEntry.id };
-        if ((f.min !== undefined && f.min !== '') || (f.max !== undefined && f.max !== '')) {
-          mod['values.1'] = {};
-          if (f.min !== undefined && f.min !== '') mod['values.1'].$gte = Number(f.min);
-          if (f.max !== undefined && f.max !== '') mod['values.1'].$lte = Number(f.max);
-        }
-        modifiers.push({ $elemMatch: mod });
-        return;
+      const skillFilter = getDirectSkillFilter(stat);
+      if (!skillFilter) return;
+      const mod: any = { name: skillFilter.property, 'values.0': skillFilter.id };
+      if ((f.min !== undefined && f.min !== '') || (f.max !== undefined && f.max !== '')) {
+        mod['values.1'] = {};
+        if (f.min !== undefined && f.min !== '') mod['values.1'].$gte = Number(f.min);
+        if (f.max !== undefined && f.max !== '') mod['values.1'].$lte = Number(f.max);
       }
-      if (skillEntry) {
-        // Single skill
-        const mod: any = { name: 'item_singleskill', 'values.0': skillEntry.id };
-        if ((f.min !== undefined && f.min !== '') || (f.max !== undefined && f.max !== '')) {
-          mod['values.1'] = {};
-          if (f.min !== undefined && f.min !== '') mod['values.1'].$gte = Number(f.min);
-          if (f.max !== undefined && f.max !== '') mod['values.1'].$lte = Number(f.max);
-        }
-        modifiers.push({ $elemMatch: mod });
-        return;
-      }
-      const classEntry = classSkillNameToIdMap[stat.skill.toLowerCase()];
-      if (classEntry) {
-        // Class skill
-        const mod: any = { name: 'item_addclassskills', 'values.0': classEntry.id };
-        if ((f.min !== undefined && f.min !== '') || (f.max !== undefined && f.max !== '')) {
-          mod['values.1'] = {};
-          if (f.min !== undefined && f.min !== '') mod['values.1'].$gte = Number(f.min);
-          if (f.max !== undefined && f.max !== '') mod['values.1'].$lte = Number(f.max);
-        }
-        modifiers.push({ $elemMatch: mod });
-        return;
-      }
-      const subClassEntry = fuzzyClassSubSkillByName(stat.skill.toLowerCase());
-      if (subClassEntry) {
-        // Subclass skill
-        const mod: any = { name: 'item_addskill_tab', 'values.0': getSkillTabIndex(subClassEntry.id) };
-        if ((f.min !== undefined && f.min !== '') || (f.max !== undefined && f.max !== '')) {
-          mod['values.1'] = {};
-          if (f.min !== undefined && f.min !== '') mod['values.1'].$gte = Number(f.min);
-          if (f.max !== undefined && f.max !== '') mod['values.1'].$lte = Number(f.max);
-        }
-        modifiers.push({ $elemMatch: mod });
-        return;
-      }
+      modifiers.push({ $elemMatch: mod });
+      return;
     }
 
     // Normal stat

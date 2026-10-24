@@ -4629,6 +4629,9 @@ export const skillNameToIdMap: Record<string, CharacterSkill> = _.keyBy(Object.v
   skill.name.toLowerCase(),
 );
 
+// PD2 renamed Claw Mastery; both names identify the same skill in market queries.
+skillNameToIdMap['claw and dagger mastery'] = characterSkillMap[252];
+
 export function fuzzyMatchCharacterSkill(
   searchTerm: string,
   characterSkillList: CharacterSkill[] = Object.values(skillNameToIdMap),
