@@ -2,6 +2,7 @@ import type { AppraisedStat } from '@/lib/rare-appraisal-api';
 import type { Stat } from './interfaces';
 import { statIdToProperty } from './stat-mappings';
 import { getStatKey } from './utils';
+import { getSkillFilter } from './skill-stats';
 
 /** "Fire Ball" / "Lightning Skills (Sorceress)" → "fire_ball" / "lightning_skills_sorceress" (feature-key style). */
 const slug = (text: string): string =>
@@ -25,7 +26,7 @@ export function matchRareStats(appraised: AppraisedStat[], rows: Stat[]): Map<st
   for (const stat of appraised) {
     if (!stat.key || (stat.stars === null && stat.keyFrom === null)) continue;
     const [base, suffix = ''] = stat.key.split('__');
-    const candidates = rows.filter((row) => !used.has(row) && statIdToProperty[row.stat_id] === base);
+    const candidates = rows.filter((row) => !used.has(row) && (getSkillFilter(row)?.property ?? statIdToProperty[row.stat_id!]) === base);
     if (candidates.length === 0) continue;
     const matchingSkill = (row: Stat) => Boolean(suffix && row.skill && suffix.startsWith(slug(row.skill)));
     const row =

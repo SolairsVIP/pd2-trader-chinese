@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { AppraisedStat } from '@/lib/rare-appraisal-api';
 import type { Stat } from './interfaces';
 import { keyStatMin, matchRareStats } from './rare-stat-match';
+import { getStatKey } from './utils';
 
 const appraised = (over: Partial<AppraisedStat>): AppraisedStat => ({
   label: 'x',
@@ -55,7 +56,7 @@ describe('matchRareStats', () => {
     ];
     const fb = appraised({ key: 'item_singleskill__fire_ball_sorceress_only', value: 2, stars: 1 as AppraisedStat['stars'] });
     const m = matchRareStats([fb], rows);
-    expect([...m.keys()]).toEqual(['skill:fire ball']);
+    expect([...m.keys()]).toEqual([getStatKey(rows[1])]);
   });
 
   it('falls back to value match, then the first unused row, never reusing a row', () => {
@@ -67,8 +68,8 @@ describe('matchRareStats', () => {
     const b = appraised({ key: 'item_skillonhit', value: 99, stars: 1 as AppraisedStat['stars'] });
     const c = appraised({ key: 'item_skillonhit', value: 1, stars: 1 as AppraisedStat['stars'] });
     const m = matchRareStats([a, b, c], rows);
-    expect(m.get('skill:fire ball')).toBe(a);
-    expect(m.get('skill:teleport')).toBe(b);
+    expect(m.get(getStatKey(rows[1]))).toBe(a);
+    expect(m.get(getStatKey(rows[0]))).toBe(b);
     expect(m.size).toBe(2);
   });
 

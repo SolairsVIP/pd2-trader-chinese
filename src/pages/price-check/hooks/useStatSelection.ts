@@ -3,6 +3,7 @@ import { Stat } from '../lib/interfaces';
 import { StatId, statRemap, statRemapByName, PRIORITY_STATS, STRIP_STATS } from '../lib/stat-mappings';
 import { getStatKey, getTypeFromBaseType, isDirectSkillStat } from '../lib/utils';
 import { useOptions } from '@/hooks/useOptions';
+import { getSkillFilter, normalizeSkillStat, skillFilterUnavailableReason } from '../lib/skill-stats';
 
 /**
  * List of base type labels that cannot be corrupted (special cases)
@@ -393,7 +394,7 @@ export function useStatSelection(item: any) {
 
     // Apply name-based remapping first (e.g., "to Strength" -> stat_id 0)
     // This must happen before combining attributes so the combination can find the remapped stats
-    let combinedStats = (item.stats || []).map((stat: Stat) => {
+    let combinedStats = (item.stats || []).map(normalizeSkillStat).map((stat: Stat) => {
       if (stat.name in statRemapByName) {
         return { ...stat, ...statRemapByName[stat.name] };
       }
@@ -456,7 +457,9 @@ export function useStatSelection(item: any) {
     }));
 
   /** Toggle selection and initialise filter defaults */
-  const toggle = (stat: Stat) => {
+  const toggle = (input: Stat) => {
+    const stat = normalizeSkillStat(input);
+    if (skillFilterUnavailableReason(stat)) return;
     const key = getStatKey(stat);
 
     // Special handling for corrupted stat - three states
@@ -511,8 +514,8 @@ export function useStatSelection(item: any) {
           return {
             ...f,
             [key]: {
-              min: leaveMinEmpty ? '' : minStr,
-              max: leaveMaxEmpty ? '' : maxStr,
+              min: leaveMinEmpty || getSkillFilter(stat)?.kind === 'charges' ? '' : minStr,
+              max: leaveMaxEmpty || getSkillFilter(stat)?.kind === 'charges' ? '' : maxStr,
             },
           };
         });

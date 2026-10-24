@@ -215,6 +215,54 @@ const lastQuery = (fn = getMarketListings) => fn.mock.calls[fn.mock.calls.length
 
 // ---------------------------------------------------------------- tests
 
+describe('ItemOverlayWidget skill filter integration', () => {
+  const katar = (stats: Item['stats']): Item => ({
+    iLevel: 2, location: 'Inventory', quality: 'Normal', sockets: 2, type: 'Katar', stats,
+  });
+
+  it('selects the user Katar skill and carries the same filter through all search actions', async () => {
+    renderWidget(katar([
+      { name: '+2 to Claw and Dagger Mastery', skill: 'Claw and Dagger Mastery', value: 2 },
+      { name: 'Melee Attacks Deal Splash Damage', stat_id: 359, value: 100 },
+    ]));
+    expect(screen.queryByText('暂不可筛选')).toBeNull();
+    const box = statCheckbox('利爪与匕首精通');
+    expect((box as HTMLButtonElement).disabled).toBe(false);
+    fireEvent.click(box);
+    fireEvent.change(screen.getByLabelText('利爪与匕首精通最小值'), { target: { value: '2' } });
+    fireEvent.change(screen.getByLabelText('利爪与匕首精通最大值'), { target: { value: '3' } });
+    fireEvent.click(screen.getByRole('button', { name: '搜索' }));
+    await waitFor(() => expect(getMarketListings).toHaveBeenCalledTimes(1));
+    expect(lastQuery()['item.modifiers']).toEqual({ $all: [
+      { $elemMatch: { name: 'item_singleskill', 'values.0': 252, 'values.1': { $gte: 2, $lte: 3 } } },
+    ] });
+    fireEvent.click(screen.getByRole('button', { name: '在 projectdiablo2.com 上打开搜索' }));
+    const url = new URL(vi.mocked(openUrl).mock.calls.at(-1)![0]);
+    expect(url.searchParams.get('properties[item_singleskill{252}][min]')).toBe('2');
+    expect(url.searchParams.get('properties[item_singleskill{252}][max]')).toBe('3');
+    fireEvent.click(screen.getByRole('button', { name: '在交易市场中打开' }));
+    expect(overlay.openPanel).toHaveBeenLastCalledWith('market', expect.objectContaining({
+      filters: expect.objectContaining({ stats: [expect.objectContaining({ key: 'item_singleskill{252}', min: 2, max: 3 })] }),
+    }));
+  });
+
+  it('keeps an incomplete proc unavailable while other item attributes remain searchable', async () => {
+    renderWidget(katar([
+      { stat_id: 195, name: 'Incomplete proc', skill: 'Fire Ball', chance: 17 },
+      { stat_id: 0, name: 'to Strength', value: 15 },
+    ]));
+    const badge = screen.getByText('暂不可筛选');
+    expect(badge.title).toContain('无法确认触发技能名称或等级');
+    const box = badge.closest('label')!.querySelector('[role="checkbox"]') as HTMLButtonElement;
+    expect(box.disabled).toBe(true);
+    fireEvent.click(statCheckbox('力量'));
+    fireEvent.click(screen.getByRole('button', { name: '搜索' }));
+    await waitFor(() => expect(getMarketListings).toHaveBeenCalledTimes(1));
+    expect(JSON.stringify(lastQuery())).toContain('"strength"');
+    expect(JSON.stringify(lastQuery())).not.toContain('item_skillonattack');
+  });
+});
+
 describe('ItemOverlayWidget header', () => {
   it('shows the item name, defense and every parsed stat', () => {
     renderWidget(shako());

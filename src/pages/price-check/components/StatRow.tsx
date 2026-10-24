@@ -11,7 +11,8 @@ import { DUR, EASE_OUT } from '@/lib/motion';
 import type { AppraisedStat } from '@/lib/rare-appraisal-api';
 import { starsText, starTitle } from '@/components/rares/rares-format';
 import { localizePd2Text } from '@/lib/localize-pd2-text';
-import { getStatKey, getDirectSkillFilter, isDirectSkillStat } from '../lib/utils';
+import { getStatKey } from '../lib/utils';
+import { getSkillFilter, isSkillStat, skillFilterUnavailableReason } from '../lib/skill-stats';
 
 interface StatRowProps {
   stat: Stat;
@@ -51,9 +52,10 @@ export const StatRow: React.FC<StatRowProps> = ({
   const isSocket = stat.stat_id === StatId.Socket;
   const isCorrupted = stat.stat_id === StatId.Corrupted;
   const isEthereal = stat.stat_id === StatId.Ethereal;
-  const isSkill = isDirectSkillStat(stat);
-  const isUnknownSkill = isSkill && !getDirectSkillFilter(stat);
-  const isUnknown = (statIdToProperty[stat.stat_id] === undefined && !isSkill) || isUnknownSkill;
+  const isSkill = isSkillStat(stat);
+  const skillFilter = getSkillFilter(stat);
+  const unavailableReason = skillFilterUnavailableReason(stat);
+  const isUnknown = isSkill ? !skillFilter : stat.stat_id === undefined || statIdToProperty[stat.stat_id] === undefined;
 
   // For corrupted stat, determine checkbox state
   const corruptedChecked = isCorrupted && corruptedState === 1;
@@ -65,6 +67,7 @@ export const StatRow: React.FC<StatRowProps> = ({
   const isSelected = selected.has(statKey);
   const isActive = isCorrupted ? corruptedState !== 0 : isSelected;
   const showRangeInputs = !isCorrupted && !isEthereal && isSelected;
+  const rangeLabel = `${localizePd2Text(stat.name)}${skillFilter?.kind === 'charges' ? '剩余次数' : ''}`;
   const corruptedHint = isCorrupted ? CORRUPTED_STATE_HINT[corruptedState] : undefined;
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -142,6 +145,7 @@ export const StatRow: React.FC<StatRowProps> = ({
           ) : (
             <Checkbox checked={isSelected}
               onCheckedChange={() => toggle(stat)}
+              title={unavailableReason}
               disabled={isUnknown} />
           )}
 
@@ -153,8 +157,9 @@ export const StatRow: React.FC<StatRowProps> = ({
                   {valueParts(true)}
                 </span>
                 <Badge variant="destructive"
+                  title={unavailableReason}
                   className="h-4.5 px-1.5 text-[10px] uppercase tracking-wide">
-                  未知属性
+                  {isSkill ? '暂不可筛选' : '未知属性'}
                 </Badge>
               </div>
             )}
@@ -173,6 +178,11 @@ export const StatRow: React.FC<StatRowProps> = ({
                 >
                   {localizePd2Text(stat.name)}
                   {valueParts(!isCorrupted)}
+                  {skillFilter?.kind === 'charges' && (
+                    <span className="ml-1 text-xs text-muted-foreground" title="固定具体技能和等级；数值框筛选剩余次数，留空表示任意次数。">
+                      （等级固定为 {skillFilter.params[0]}；数值筛选剩余次数）
+                    </span>
+                  )}
                   {/* Rare appraisal: inline after the text so it follows wrapped lines */}
                   {rare?.stars && (
                     <span
@@ -245,8 +255,8 @@ export const StatRow: React.FC<StatRowProps> = ({
               <input
                 type="number"
                 className={numberInputClass}
-                placeholder="最低"
-                aria-label={`${localizePd2Text(stat.name)}最小值`}
+                placeholder={skillFilter?.kind === 'charges' ? '剩余最低' : '最低'}
+                aria-label={`${rangeLabel}最小值`}
                 value={filters[statKey]?.min ?? ''}
                 onChange={(e) => updateFilter(statKey, 'min', e.target.value)}
                 onKeyDown={handleInputKeyDown}
@@ -255,8 +265,8 @@ export const StatRow: React.FC<StatRowProps> = ({
               <input
                 type="number"
                 className={numberInputClass}
-                placeholder="最高"
-                aria-label={`${localizePd2Text(stat.name)}最大值`}
+                placeholder={skillFilter?.kind === 'charges' ? '剩余最高' : '最高'}
+                aria-label={`${rangeLabel}最大值`}
                 value={filters[statKey]?.max ?? ''}
                 onChange={(e) => updateFilter(statKey, 'max', e.target.value)}
                 onKeyDown={handleInputKeyDown}

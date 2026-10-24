@@ -3,6 +3,7 @@ import type { ItemType as PD2Item } from '@/assets/itemFuzzySearch';
 import type { Item as GameStashItem } from '@/common/types/pd2-website/GameStashResponse';
 import type { Item, Stat } from './interfaces';
 import { StatId } from './stat-mappings';
+import { getStatKey } from './utils';
 import {
   buildGetAllUserMarketListingsQuery,
   buildGetMarketListingByStashItemQuery,
@@ -127,7 +128,7 @@ describe('buildTradeUrl', () => {
     ['Fire Skills (Sorceress)', 'item_addskill_tab{8}'],
   ])('maps skill stat %s to %s', (skill, prop) => {
     const item = makeItem({ stats: [{ stat_id: 107, name: skill, skill, value: 2 }] });
-    const key = `skill:${skill.toLowerCase()}`;
+    const key = getStatKey(item.stats[0]);
     expect(urlParams(item, [key], { [key]: { min: '2' } }).p.get(`properties[${prop}][min]`)).toBe('2');
   });
 
@@ -144,10 +145,10 @@ describe('buildTradeUrl', () => {
     expect(p.has('sockets_min')).toBe(false);
   });
 
-  it('adds ethereal=true only when the ethereal row is selected', () => {
+  it('keeps the ethereal item identity in external searches', () => {
     const item = makeItem({ isEthereal: true });
     expect(urlParams(item, ['id:1001']).p.get('ethereal')).toBe('true');
-    expect(urlParams(item, []).p.has('ethereal')).toBe(false);
+    expect(urlParams(item, []).p.get('ethereal')).toBe('true');
   });
 
   it('combines enhanced min/max damage into one maxdamage_percent row', () => {
@@ -379,7 +380,7 @@ describe('buildGetMarketListingQuery', () => {
     ['Fire Skills (Sorceress)', 'item_addskill_tab', 8],
   ])('matches skill %s as %s with the skill id in values.0 and the level range in values.1', (skill, name, id) => {
     const item = makeItem({ stats: [{ stat_id: 107, name: skill, skill, value: 3 }] });
-    const key = `skill:${skill.toLowerCase()}`;
+    const key = getStatKey(item.stats[0]);
     expect(query(item, [key], { [key]: { min: '2', max: '3' } })['item.modifiers'].$all).toEqual([
       { $elemMatch: { name, 'values.0': id, 'values.1': { $gte: 2, $lte: 3 } } },
     ]);
@@ -396,9 +397,7 @@ describe('buildGetMarketListingQuery', () => {
     expect(query(makeItem({ isEthereal: true }), ['id:1001'])['item.is_ethereal']).toBe(true);
   });
 
-  // BUG: tradeUrlBuilder.ts:216 checks `stat.stat_id === StatId.Ethereal || item.isEthereal`, so for an ethereal item
-  // every selected regular/skill stat short-circuits to `is_ethereal` and its modifier filter is silently dropped.
-  it.fails('keeps stat filters for ethereal items', () => {
+  it('keeps stat filters for ethereal items', () => {
     const item = makeItem({ isEthereal: true, stats: [{ stat_id: 105, name: 'FCR', value: 20 }] });
     const q = query(item, ['id:105'], { 'id:105': { min: '10' } });
     expect(q['item.modifiers']).toEqual({

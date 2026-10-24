@@ -49,6 +49,7 @@ import { buildGetMarketListingQuery, buildTradeUrl } from '../lib/tradeUrlBuilde
 import { priceCheckToMarketFilters } from '@/pages/market/store/priceCheckFilters';
 import { RunePricePopover } from './RunePricePopover';
 import { getStatKey } from '../lib/utils';
+import { skillFilterUnavailableReason } from '../lib/skill-stats';
 import moment from 'moment';
 import { HoverPopover } from '@/components/custom/hover-popover';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
@@ -166,7 +167,7 @@ export default function ItemOverlayWidget({ item, statMapper, onClose }: Props) 
     // Check if this is a Rainbow Facet - be robust with the name check
     const isFacet =
       item.name?.toLowerCase().includes('rainbow facet') ||
-      pd2Item?.key === 'Rainbow Facet' ||
+      (pd2Item?.key as string | undefined) === 'Rainbow Facet' ||
       pd2Item?.name === 'Rainbow Facet';
 
     if (!isFacet) {
@@ -506,7 +507,7 @@ export default function ItemOverlayWidget({ item, statMapper, onClose }: Props) 
   // choices kept) and search right away for a Keep rare; other verdicts wait for the user.
   useEffect(() => {
     if (!appraisal) return;
-    const keyRows = sortedStats.filter((s) => rareStats.get(getStatKey(s))?.stars);
+    const keyRows = sortedStats.filter((s) => rareStats.get(getStatKey(s))?.stars && !skillFilterUnavailableReason(s));
     if (keyRows.length > 0) {
       setSelected((prev) => new Set([...prev, ...keyRows.map(getStatKey)]));
       setFilters((prev) => {

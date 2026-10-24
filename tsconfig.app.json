@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["ES2020", "ES2017", "ESNext.Promise", "DOM", "DOM.Iterable"],
+    "lib": ["ES2020", "ES2017", "ESNext.Promise", "ES2023.Array", "DOM", "DOM.Iterable"],
     "composite": true,
     "baseUrl": ".",
     "paths": {

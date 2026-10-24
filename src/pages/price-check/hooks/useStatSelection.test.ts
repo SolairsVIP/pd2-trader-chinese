@@ -5,6 +5,7 @@ import { useOptions, type ISettings } from '@/hooks/useOptions';
 import type { Stat } from '../lib/interfaces';
 import { StatId } from '../lib/stat-mappings';
 import { useStatSelection } from './useStatSelection';
+import { getStatKey } from '../lib/utils';
 
 vi.mock('@/hooks/useOptions', () => ({ useOptions: vi.fn() }));
 
@@ -46,6 +47,47 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
+});
+
+describe('skill normalization and independent selection', () => {
+  it('keeps ordinary and nonclass Teleport checkboxes independent', () => {
+    const stats: Stat[] = [
+      { stat_id: 107, name: '+2 to Teleport', skill: 'Teleport', value: 2 },
+      { stat_id: 97, name: '+2 to Teleport', skill: 'Teleport', value: 2 },
+    ];
+    const { result } = setup({ type: 'Grand Charm', stats });
+    act(() => result.current.toggle(result.current.sortedStats[0]));
+    expect(result.current.selected.has(getStatKey(stats[0]))).toBe(true);
+    expect(result.current.selected.has(getStatKey(stats[1]))).toBe(false);
+    act(() => result.current.toggle(result.current.sortedStats[1]));
+    expect(result.current.selected.size).toBe(2);
+  });
+
+  it('keeps the Oskill marker when shortening a clipboard label without stat_id', () => {
+    const stat: Stat = { name: '+2 to Teleport (Oskill)', skill: 'Teleport', value: 2 };
+    const { result } = setup({ type: 'Grand Charm', stats: [stat] });
+    expect(result.current.sortedStats[0].stat_id).toBe(97);
+    expect(getStatKey(result.current.sortedStats[0])).toBe(getStatKey(stat));
+  });
+
+  it.each([
+    [{ stat_id: 195, name: 'CtC Fire Ball', skill: 'Fire Ball', level: 12, chance: 17, value: 99 }, '16', '18'],
+    [{ stat_id: 151, name: 'Aura', skill: 'Conviction', level: 12, value: 1 }, '11', '13'],
+    [{ stat_id: 204, name: 'Level 20 Teleport (3/27 Charges)', skill: 'Teleport', level: 20, value: 3 }, '', ''],
+  ] as const)('fills numeric bounds from the relevant skill value: %o', (stat, min, max) => {
+    const { result } = setup({ type: 'Grand Charm', stats: [stat] });
+    const row = result.current.sortedStats[0];
+    act(() => result.current.toggle(row));
+    expect(result.current.filters[getStatKey(row)]).toEqual({ min, max });
+  });
+
+  it('does not allow a missing trigger level to be selected by an indirect call', () => {
+    const stat: Stat = { stat_id: 195, name: 'CtC Fire Ball', skill: 'Fire Ball', chance: 17 };
+    const { result } = setup({ type: 'Grand Charm', stats: [stat] });
+    act(() => result.current.toggle(stat));
+    expect(result.current.selected.size).toBe(0);
+    expect(result.current.filters).toEqual({});
+  });
 });
 
 describe('useStatSelection: sortedStats', () => {
@@ -251,7 +293,7 @@ describe('useStatSelection: toggle and filters', () => {
     const { result } = setup(charm);
     act(() => result.current.toggle({ stat_id: 107, name: 'x', skill: 'Frozen Orb', value: 3 }));
     act(() => result.current.toggle({ stat_id: 107, name: 'y', skill: 'Blizzard', value: 2 }));
-    expect([...result.current.selected].sort()).toEqual(['skill:blizzard', 'skill:frozen orb']);
+    expect([...result.current.selected].sort()).toEqual(['skill:item_singleskill{59}', 'skill:item_singleskill{64}']);
   });
 
   it('honours a flat margin from settings', () => {

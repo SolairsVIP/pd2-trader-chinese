@@ -47,15 +47,15 @@ describe('getTypeFromBaseType', () => {
 });
 
 describe('getStatKey', () => {
-  it('keys skill stats by lower-cased skill name, ignoring stat_id', () => {
-    expect(getStatKey({ stat_id: 107, name: 'x', skill: 'Fire Ball' })).toBe('skill:fire ball');
+  it('keys skill stats by modifier and stable skill id', () => {
+    expect(getStatKey({ stat_id: 107, name: 'x', skill: 'Fire Ball' })).toBe('skill:item_singleskill{47}');
   });
 
   it('keys other stats by stat_id', () => {
     expect(getStatKey({ stat_id: 105, name: 'FCR' })).toBe('id:105');
   });
 
-  it('falls back to stat_id when skill is empty', () => {
-    expect(getStatKey({ stat_id: 83, name: 'x', skill: '' })).toBe('id:83');
+  it('keeps an unresolved skill label in its fallback key', () => {
+    expect(getStatKey({ stat_id: 83, name: 'x', skill: '' })).toBe('id:83:name:x');
   });
 });

@@ -4,7 +4,7 @@ export interface Range {
 }
 
 export interface Stat {
-  stat_id: number;
+  stat_id?: number; // Game clipboard skill bonuses can omit the modifier id.
   name: string;
   value?: number;
   range?: Range;

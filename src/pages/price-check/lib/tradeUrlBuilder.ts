@@ -1,8 +1,8 @@
 import { Item, Stat } from './interfaces';
 import { StatId, statIdToProperty, statRemap, statRemapByName, PRIORITY_STATS, STRIP_STATS } from './stat-mappings';
-import { skillNameToIdMap } from '@/assets/character-skills';
 import { ItemCharmMap, ItemQuality } from '@/common/types/Item';
-import { getTypeFromBaseType, getStatKey, getDirectSkillFilter, isDirectSkillStat, isTriggeredSkillStat } from './utils';
+import { getTypeFromBaseType, getStatKey, isDirectSkillStat } from './utils';
+import { getSkillFilter, isSkillStat, normalizeSkillStat } from './skill-stats';
 import { MarketListingQuery } from '@/common/types/pd2-website/GetMarketListingsCommand';
 import { ItemType as PD2Item } from '@/assets/itemFuzzySearch';
 import { Item as GameStashItem } from '@/common/types/pd2-website/GameStashResponse';
@@ -44,17 +44,10 @@ export function buildTradeUrl(
     const f = filters[key] ?? {};
     let propKey = 'stat_undefined';
 
-    if (isTriggeredSkillStat(stat)) {
-      const skillEntry = stat.skill ? skillNameToIdMap[stat.skill.toLowerCase()] : undefined;
-      // Trigger filters identify the level and skill first; the entered range follows both parameters.
-      if (stat.level === undefined || !skillEntry) return;
-      const property = statIdToProperty[stat.stat_id];
-      if (!property) return;
-      propKey = `${property}{${stat.level},${skillEntry.id}}`;
-    } else if (isDirectSkillStat(stat) && stat.skill) {
-      const skillFilter = getDirectSkillFilter(stat);
+    if (isSkillStat(stat)) {
+      const skillFilter = getSkillFilter(stat);
       if (!skillFilter) return;
-      propKey = `${skillFilter.property}{${skillFilter.id}}`;
+      propKey = skillFilter.params.length ? `${skillFilter.property}{${skillFilter.params.join(',')}}` : skillFilter.property;
     } else if (stat.stat_id !== undefined) {
       propKey = getPropertyKey(stat.stat_id, stat, statMapper);
     }
@@ -81,6 +74,9 @@ export function buildTradeUrl(
 
     if (f.min) searchParams.append(`properties[${propKey}][min]`, f.min);
     if (f.max) searchParams.append(`properties[${propKey}][max]`, f.max);
+    // A selected skill with blank bounds still means "has this skill". The
+    // website only applies a property when a bound is present.
+    if (isSkillStat(stat) && !f.min && !f.max) searchParams.append(`properties[${propKey}][min]`, '0');
   });
 
   // Basic item meta
@@ -221,38 +217,16 @@ export function buildGetMarketListingQuery(
       return;
     }
 
-    // Proc modifiers store [level, skill id, chance]. Pin both parameters so the roll range
-    // applies to chance rather than to the level or skill id.
-    if (isTriggeredSkillStat(stat) && stat.stat_id !== undefined) {
-      const prop = statIdToProperty[stat.stat_id];
-      if (!prop) return;
-
-      const mod: any = { name: prop };
-      const skillEntry = stat.skill ? skillNameToIdMap[stat.skill.toLowerCase()] : undefined;
-      if (stat.level !== undefined) mod['values.0'] = stat.level;
-      if (skillEntry) mod['values.1'] = skillEntry.id;
-      if (
-        stat.level !== undefined &&
-        skillEntry &&
-        ((f.min !== undefined && f.min !== '') || (f.max !== undefined && f.max !== ''))
-      ) {
-        mod['values.2'] = {};
-        if (f.min !== undefined && f.min !== '') mod['values.2'].$gte = Number(f.min);
-        if (f.max !== undefined && f.max !== '') mod['values.2'].$lte = Number(f.max);
-      }
-      modifiers.push({ $elemMatch: mod });
-      return;
-    }
-
-    // Includes clipboard skill bonuses that omit stat_id.
-    if (isDirectSkillStat(stat) && stat.skill) {
-      const skillFilter = getDirectSkillFilter(stat);
+    if (isSkillStat(stat)) {
+      const skillFilter = getSkillFilter(stat);
       if (!skillFilter) return;
-      const mod: any = { name: skillFilter.property, 'values.0': skillFilter.id };
+      const mod: any = { name: skillFilter.property };
+      skillFilter.params.forEach((param, index) => { mod[`values.${index}`] = param; });
       if ((f.min !== undefined && f.min !== '') || (f.max !== undefined && f.max !== '')) {
-        mod['values.1'] = {};
-        if (f.min !== undefined && f.min !== '') mod['values.1'].$gte = Number(f.min);
-        if (f.max !== undefined && f.max !== '') mod['values.1'].$lte = Number(f.max);
+        const valueKey = `values.${skillFilter.valueIndex}`;
+        mod[valueKey] = {};
+        if (f.min !== undefined && f.min !== '') mod[valueKey].$gte = Number(f.min);
+        if (f.max !== undefined && f.max !== '') mod[valueKey].$lte = Number(f.max);
       }
       modifiers.push({ $elemMatch: mod });
       return;
@@ -631,7 +605,7 @@ function getSortedStats(item: any): Stat[] {
 
   // Apply name-based remapping first (e.g., "to Strength" -> stat_id 0)
   // This must happen before combining attributes so the combination can find the remapped stats
-  let combinedStats = (item.stats || []).map((stat: Stat) => {
+  let combinedStats = (item.stats || []).map(normalizeSkillStat).map((stat: Stat) => {
     if (stat.name in statRemapByName) {
       return { ...stat, ...statRemapByName[stat.name] };
     }

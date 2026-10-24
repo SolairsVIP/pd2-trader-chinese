@@ -110,10 +110,10 @@ describe('priceCheckToMarketFilters', () => {
   const search = (over: Partial<PriceCheckSearch> = {}): PriceCheckSearch => ({
     item: shako,
     pd2Item: { name: 'Harlequin Crest' } as unknown as PD2Item,
-    selected: new Set(['id:105', 'skill:teleport', 'id:1000']),
+    selected: new Set(['id:105', 'skill:item_singleskill{54}', 'id:1000']),
     filters: {
       'id:105': { min: '20', max: '' },
-      'skill:teleport': { min: '2', max: '3' },
+      'skill:item_singleskill{54}': { min: '2', max: '3' },
       'id:1000': { min: '1', max: '1' },
     },
     settings: { mode: 'softcore', ladder: 'ladder' },

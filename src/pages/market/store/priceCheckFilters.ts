@@ -73,7 +73,7 @@ function readRange(value: unknown): { min?: number; max?: number } {
 function statRows(match: ElemMatch): Omit<StatFilter, 'id'>[] {
   // Proc modifiers store [level, skill id, chance], so both parameters must be
   // fixed before the market filter's range is applied to the chance value.
-  if (/^item_skillon\w+$/.test(match.name)) {
+  if (/^item_skillon(attack|kill|death|hit|levelup|cast|gethit|block|crit|pierce)$/.test(match.name) || match.name === 'item_charged_skill') {
     const level = match['values.0'];
     const skillId = match['values.1'];
     if (typeof level !== 'number' || typeof skillId !== 'number') return [];
@@ -92,6 +92,9 @@ function statRows(match: ElemMatch): Omit<StatFilter, 'id'>[] {
     return [{ kind: 'mod', key: `${match.name}{${param}}`, ...readRange(match['values.1']), enabled: true }];
   }
   const range = readRange(param);
+  if (match.name.startsWith('item_elemskill_')) {
+    return [{ kind: 'mod', key: match.name, ...readRange(match['values.1']), enabled: true }];
+  }
   const names = COMBINED_MODIFIERS[match.name] ?? [modifierName(match.name)];
   return names.map((key) => ({ kind: 'mod', key, ...range, enabled: true }));
 }

@@ -1,8 +1,8 @@
 import { Stat } from './interfaces';
 import { itemTypes } from '@/common/item-types';
 import { ItemCharmMap, ItemQuality } from '@/common/types/Item';
-import { skillNameToIdMap } from '@/assets/character-skills';
-import { classSkillNameToIdMap, fuzzyClassSubSkillByName, getSkillTabIndex } from '@/assets/class-skills';
+import { getSkillFilter, isSkillStat } from './skill-stats';
+export { getDirectSkillFilter, isDirectSkillStat, isTriggeredSkillStat } from './skill-stats';
 
 /**
  * Cleans item type strings by removing color codes and special formatting characters.
@@ -66,52 +66,17 @@ export function getTypeFromBaseType(
   return { type: typeValue, base: baseValue, label: base.label };
 }
 
-const DIRECT_SKILL_STAT_IDS = new Set([83, 97, 107, 188]);
-
-/** Only direct skill bonuses use a skill name as their identity. Proc stats also carry skills. */
-export function isDirectSkillStat(
-  stat: Pick<Stat, 'stat_id' | 'skill'> & Partial<Pick<Stat, 'name' | 'value' | 'level' | 'chance'>>,
-): boolean {
-  if (!stat.skill) return false;
-  if (DIRECT_SKILL_STAT_IDS.has(stat.stat_id)) return true;
-  // Game clipboard data can omit stat_id for a plain skill bonus. Require its
-  // specific shape so charges, auras and chance-to-cast modifiers stay distinct.
-  if (stat.stat_id != null || stat.level !== undefined || stat.chance !== undefined || typeof stat.value !== 'number') {
-    return false;
-  }
-  const name = stat.name?.trim().replace(/^[+-]?\d+\s+to\s+/i, '').toLowerCase();
-  return name === stat.skill.trim().toLowerCase();
-}
-
-/** Shared by row availability and both query builders to keep selectable filters usable. */
-export function getDirectSkillFilter(stat: Stat): { property: string; id: number } | undefined {
-  if (!isDirectSkillStat(stat) || !stat.skill) return;
-  const name = stat.skill.trim().toLowerCase();
-  const skill = skillNameToIdMap[name];
-  if (skill) {
-    return { property: stat.stat_id === 97 ? 'item_nonclassskill' : 'item_singleskill', id: skill.id };
-  }
-  const classSkill = classSkillNameToIdMap[name];
-  if (classSkill) return { property: 'item_addclassskills', id: classSkill.id };
-  const tab = fuzzyClassSubSkillByName(name);
-  if (tab) return { property: 'item_addskill_tab', id: getSkillTabIndex(tab.id) };
-}
-
-const TRIGGERED_SKILL_STAT_IDS = new Set([195, 196, 197, 198, 199, 200, 201, 202, 203, 205]);
-
-export function isTriggeredSkillStat(stat: Pick<Stat, 'stat_id'>): boolean {
-  return TRIGGERED_SKILL_STAT_IDS.has(stat.stat_id);
-}
-
 export function getStatKey(stat: Stat): string {
-  const skill = stat.skill?.trim().toLowerCase();
-  if (isDirectSkillStat(stat) && skill) return `skill:${skill}`;
-  if (!skill && !isTriggeredSkillStat(stat)) return `id:${stat.stat_id}`;
+  const filter = getSkillFilter(stat);
+  if (filter) {
+    return `skill:${filter.property}{${filter.params.join(',')}}${stat.corrupted ? ':corrupted' : ''}`;
+  }
+  if (!isSkillStat(stat) && stat.stat_id !== undefined) return `id:${stat.stat_id}`;
 
   // Trigger rows may share a skill name but represent different modifiers and rolls.
   return [
     `id:${stat.stat_id}`,
-    skill ? `skill:${skill}` : '',
+    stat.skill ? `skill:${stat.skill.trim().toLowerCase()}` : '',
     stat.level === undefined ? '' : `level:${stat.level}`,
     stat.chance === undefined ? '' : `chance:${stat.chance}`,
     stat.value === undefined ? '' : `value:${stat.value}`,
