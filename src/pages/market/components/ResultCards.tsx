@@ -7,6 +7,7 @@ import { isUserOnlineIngame } from '@/lib/user-online-status';
 import { cn } from '@/lib/utils';
 import { localizePd2Text, localizeQuality } from '@/lib/localize-pd2-text';
 import { localizeBaseName, localizeMarketItemName } from '@/lib/localize-item-name';
+import { localizeItemType } from '@/lib/localize-item-type';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -295,10 +296,10 @@ const ResultCard = React.memo(function ResultCard({
 
   const price = formatHrPrice(listing.hr_price);
   const quality = localizeQuality(item.is_runeword ? 'Runeword' : (item.quality?.name ?? ''));
-  const handType = item.damage?.two_handed ? 'Two-Hand' : item.damage?.one_handed ? 'One-Hand' : null;
+  const handType = item.damage?.two_handed ? '双手' : item.damage?.one_handed ? '单手' : null;
   const subtitle = [
     [quality, item.base?.name && item.base.name !== item.name ? localizeBaseName(item.base.name) : null].filter(Boolean).join(' '),
-    [handType, item.base?.type].filter(Boolean).join(' '),
+    [handType, localizeItemType(item.base?.type)].filter(Boolean).join(' '),
   ]
     .filter(Boolean)
     .join(' · ');

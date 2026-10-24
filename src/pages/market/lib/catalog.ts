@@ -1,3 +1,4 @@
+import { localizeItemType } from '@/lib/localize-item-type';
 import { runeWords, setItems, uniqueItems } from '@/assets/items';
 import { modifierByName } from '@/assets/modifiers';
 import { SITE_BASE_NAMES, SITE_ITEM_TYPES } from './catalog.data';
@@ -11,80 +12,11 @@ export interface CatalogOption {
   label: string;
 }
 
-const TYPE_LABELS_ZH: Record<string, string> = {
-  '2H Crystal Sword': '双手水晶剑',
-  'Amazon Bow': '亚马逊弓',
-  'Amazon Javelin': '亚马逊标枪',
-  'Amazon Spear': '亚马逊长矛',
-  Armor: '护甲',
-  Axe: '斧头',
-  'Barbarian Helm': '野蛮人头盔',
-  Belt: '腰带',
-  Boots: '靴子',
-  Bow: '弓',
-  'Bow Quiver': '弓箭袋',
-  Charm: '护身符',
-  Circlet: '头环',
-  Club: '木棒',
-  'Craft Ingredient': '手工材料',
-  Crossbow: '弩',
-  'Crossbow Quiver': '弩箭袋',
-  Dagger: '匕首',
-  'Druid Pelt': '德鲁伊头饰',
-  'Fist Weapon': '拳套',
-  Gem: '宝石',
-  Gloves: '手套',
-  Hammer: '锤子',
-  Helm: '头盔',
-  'ImbueMag Ready': '可注入魔法物品',
-  'ImbueRandom Ready': '可随机注入物品',
-  'ImbueRare Ready': '可注入稀有物品',
-  Javelin: '标枪',
-  Jewel: '珠宝',
-  'Jewel Fragments': '珠宝碎片',
-  Jewelry: '首饰',
-  Key: '钥匙',
-  'Large Charm PVP': '大型 PvP 护身符',
-  "Larzuks Malus": '拉苏克的惩罚',
-  Mace: '钉头锤',
-  'Map Orb': '地图宝珠',
-  'Map T1': 'T1 地图',
-  'Map T2': 'T2 地图',
-  'Map T3': 'T3 地图',
-  'Map T4': 'T4 地图',
-  'Map T5': 'T5 地图',
-  'Medium Charm PVP': '中型 PvP 护身符',
-  'Paladin Shield': '圣骑士盾牌',
-  Polearm: '长柄武器',
-  Puzzlebox: '拼图盒',
-  Puzzlepiece: '拼图碎片',
-  'Pvp Map Desert': 'PvP 沙漠地图',
-  'RerollRare Ready': '可重掷稀有物品',
-  Rune: '符文',
-  Scepter: '权杖',
-  Scythe: '镰刀',
-  Shield: '盾牌',
-  'Shrunken Head': '缩小的头颅',
-  'Small Charm PVP': '小型 PvP 护身符',
-  'Sorceress Orb': '女巫法球',
-  Spear: '长矛',
-  Staff: '法杖',
-  Sword: '剑',
-  'Throwing Axe': '飞斧',
-  'Throwing Knife': '飞刀',
-  Token: '代币',
-  'Torch Fragment': '火炬碎片',
-  'Uber Ingredient': '超级首领材料',
-  'Uber Unique': '超级暗金物品',
-  'UpgradeMag Ready': '可升级魔法物品',
-  Wand: '魔杖',
-  'Worldstone Shard': '世界之石碎片',
-};
 
 /** The site's Type select (without "Any"), sorted by label. */
 export const ITEM_TYPES: CatalogOption[] = SITE_ITEM_TYPES.map(({ code, label }) => ({
   code,
-  label: TYPE_LABELS_ZH[label] ?? label,
+  label: localizeItemType(label),
 }));
 
 const BASES_BY_TYPE = new Map(SITE_ITEM_TYPES.map((t) => [t.code, t.bases]));
@@ -270,7 +202,7 @@ const SLOTS: Map<string, string> = (() => {
           : base.label === 'Amulet'
             ? '项链'
             : base.label
-        : (SLOT_RENAMES[type.label] ?? TYPE_LABELS_ZH[type.label] ?? type.label);
+        : (SLOT_RENAMES[type.label] ?? localizeItemType(type.label));
       for (const code of optionCodes(base.code)) if (!map.has(code)) map.set(code, slot);
       if (!map.has(base.label)) map.set(base.label, slot);
     }

@@ -1,4 +1,4 @@
-import translations from './pd2-item-translations.data.json';
+import { PD2_ITEM_TRANSLATIONS as translations } from './pd2-item-translations';
 
 type NameKind = keyof typeof translations;
 const normalize = (name: string) => name.trim().replace(/[’‘]/g, "'").replace(/\s+/g, ' ').toLowerCase();

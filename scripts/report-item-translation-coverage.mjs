@@ -14,7 +14,13 @@ function loadData(file) {
 }
 const items = loadData('src/assets/items.ts');
 const catalog = loadData('src/pages/market/lib/catalog.data.ts');
-const translations = JSON.parse(fs.readFileSync(path.join(root, 'src/lib/pd2-item-translations.data.json'), 'utf8'));
+const reference = JSON.parse(fs.readFileSync(path.join(root, 'src/lib/pd2-item-translations.data.json'), 'utf8'));
+const supplements = JSON.parse(fs.readFileSync(path.join(root, 'src/lib/pd2-item-supplements.data.json'), 'utf8'));
+const translations = {
+  ...reference,
+  Unique: { ...supplements.Unique, ...reference.Unique },
+  Base: { ...supplements.Base, ...reference.Base },
+};
 const normalize = (name) => name.trim().replace(/[’‘]/g, "'").replace(/\s+/g, ' ').toLowerCase();
 const groups = {
   Runeword: [...new Set(items.runeWords.map((item) => item.name))],
