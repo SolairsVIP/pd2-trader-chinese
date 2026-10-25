@@ -64,31 +64,107 @@ export function collectRegion(root: ParentNode = document, dpr = window.devicePi
   );
 }
 
-// ---- scheduler (module level so Panel drag/resize can drive the rAF loop) ----
+// ---- scheduler (state changes must work even while the native host is hidden) ----
 
 let lastSent: RegionRect[] | null = null;
 let frame: number | null = null;
 let loopHolders = 0;
 let enabled = false;
+let inFlight = false;
+let retryTimer: ReturnType<typeof setTimeout> | null = null;
+let failures = 0;
+let scheduled = false;
+let generation = 0;
+let motionFallback: ReturnType<typeof setTimeout> | null = null;
+const readyWaiters = new Set<{ resolve(): void; reject(error: Error): void }>();
 
-function flush() {
-  frame = null;
-  if (!enabled) return;
-  const rects = collectRegion();
-  if (!regionsEqual(lastSent, rects)) {
-    lastSent = rects;
-    invoke('set_interactive_region', { rects }).catch((error) => {
-      lastSent = null; // resend next time
-      console.warn('[overlay] set_interactive_region failed:', error);
-    });
-  }
-  if (loopHolders > 0) frame = requestAnimationFrame(flush);
+/** Resolve only after the current DOM region has been acknowledged by the native host. */
+export function syncRegionBeforeFocus(): Promise<void> {
+  if (!isTauri()) return Promise.resolve();
+  if (!enabled) return Promise.reject(new Error('Overlay region synchronization is not running'));
+  return new Promise<void>((resolve, reject) => {
+    const timer = setTimeout(() => waiter.reject(new Error('Overlay presentation timed out')), 2500);
+    const waiter = {
+      resolve: () => {
+        clearTimeout(timer);
+        readyWaiters.delete(waiter);
+        resolve();
+      },
+      reject: (error: Error) => {
+        clearTimeout(timer);
+        readyWaiters.delete(waiter);
+        reject(error);
+      },
+    };
+    readyWaiters.add(waiter);
+    requestRegionSync();
+  });
 }
 
-/** Coalesced: at most one region send per animation frame. No-op outside Tauri. */
-export function requestRegionSync(): void {
-  if (!enabled || frame !== null) return;
+function cancelMotionFrame() {
+  if (frame !== null) cancelAnimationFrame(frame);
+  frame = null;
+  if (motionFallback !== null) clearTimeout(motionFallback);
+  motionFallback = null;
+}
+
+function scheduleMotionFrame() {
+  if (frame !== null) return;
   frame = requestAnimationFrame(flush);
+  // The renderer may stop frames when fully occluded. Gestures must still release/update their region.
+  motionFallback = setTimeout(flush, 32);
+}
+
+function flush() {
+  cancelMotionFrame();
+  if (!enabled) return;
+  const rects = collectRegion();
+  if (!inFlight && regionsEqual(lastSent, rects)) {
+    for (const waiter of readyWaiters) waiter.resolve();
+  }
+  if (!inFlight && !regionsEqual(lastSent, rects)) {
+    inFlight = true;
+    const sentGeneration = generation;
+    // Serialize native resize/region updates. A slow earlier response must not restore an old menu size.
+    invoke('set_interactive_region', { rects })
+      .then(() => {
+        if (sentGeneration !== generation) return;
+        lastSent = rects;
+        failures = 0;
+      })
+      .catch((error) => {
+        if (sentGeneration !== generation) return;
+        lastSent = null;
+        failures += 1;
+        console.warn('[overlay] set_interactive_region failed:', error);
+      })
+      .finally(() => {
+        inFlight = false;
+        if (!enabled) return;
+        if (failures > 0) {
+          // Retry transient native failures even if the DOM stops changing. Do not spin on a permanent failure.
+          if (failures <= 3)
+            retryTimer = setTimeout(() => {
+              retryTimer = null;
+              requestRegionSync();
+            }, failures * 100);
+          else for (const waiter of readyWaiters) waiter.reject(new Error('Native region update failed'));
+        } else requestRegionSync();
+      });
+  }
+  if (loopHolders > 0) scheduleMotionFrame();
+}
+
+/** Coalesce DOM state changes in a microtask. Never wait for a paint to show a hidden native window. */
+export function requestRegionSync(): void {
+  if (!enabled || scheduled) return;
+  scheduled = true;
+  const requestedGeneration = generation;
+  queueMicrotask(() => {
+    if (requestedGeneration !== generation) return;
+    scheduled = false;
+    flush();
+  });
 }
 
 /** Keep syncing every frame while a drag/resize is active. Returns the release function. */
@@ -109,7 +185,10 @@ export function useRegionSync(): void {
   useEffect(() => {
     if (!isTauri()) return;
     enabled = true;
+    generation += 1;
+    scheduled = false;
     lastSent = null;
+    failures = 0;
     const sync = () => requestRegionSync();
 
     const mutations = new MutationObserver(sync);
@@ -117,19 +196,25 @@ export function useRegionSync(): void {
     const resizes = new ResizeObserver(sync);
     resizes.observe(document.body);
     window.addEventListener('resize', sync);
+    document.addEventListener('visibilitychange', sync);
     document.addEventListener('transitionend', sync, true);
     document.addEventListener('animationend', sync, true);
     sync();
 
     return () => {
       enabled = false;
+      for (const waiter of readyWaiters) waiter.reject(new Error('Overlay region synchronization stopped'));
+      generation += 1;
+      scheduled = false;
       mutations.disconnect();
       resizes.disconnect();
       window.removeEventListener('resize', sync);
+      document.removeEventListener('visibilitychange', sync);
       document.removeEventListener('transitionend', sync, true);
       document.removeEventListener('animationend', sync, true);
-      if (frame !== null) cancelAnimationFrame(frame);
-      frame = null;
+      cancelMotionFrame();
+      if (retryTimer !== null) clearTimeout(retryTimer);
+      retryTimer = null;
     };
   }, []);
 }

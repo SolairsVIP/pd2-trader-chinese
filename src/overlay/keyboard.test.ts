@@ -201,6 +201,8 @@ describe('trackKeyboardFocus', () => {
   });
 
   it('ignores switches that are not leaving: into the game, repeats and unknown foregrounds', async () => {
+    // Start outside the game. The seeded game context otherwise makes the first 'other' a real departure.
+    commands.is_diablo_focused = false;
     const { seen, stop } = await track();
     foreground('other');
     foreground('diablo');

@@ -21,7 +21,7 @@ pub fn press_key(sequence: String) -> Result<(), String> {
 /// (see `window::focus`). Same value as the `diablo-focus-changed` event.
 #[tauri::command]
 pub fn is_diablo_focused() -> bool {
-    window::is_game_context()
+    window::refresh_game_context()
 }
 
 /// Raw foreground owner used to keep the full-work-area overlay out of other applications' z-order.
@@ -33,10 +33,7 @@ pub fn get_foreground_owner() -> window::Foreground {
 /// Keep the overlay topmost while it is being used over Diablo II, then yield it without activation
 /// as soon as another application becomes foreground.
 #[tauri::command]
-pub fn set_overlay_z_order(
-    overlay: tauri::WebviewWindow,
-    topmost: bool,
-) -> Result<(), String> {
+pub fn set_overlay_z_order(overlay: tauri::Window, topmost: bool) -> Result<(), String> {
     #[cfg(target_os = "windows")]
     {
         let hwnd = overlay.hwnd().map_err(|error| error.to_string())?;
@@ -61,7 +58,7 @@ pub fn focus_diablo() -> bool {
 #[tauri::command]
 pub fn set_outside_click_watch(
     app_handle: tauri::AppHandle,
-    overlay: tauri::WebviewWindow,
+    overlay: tauri::Window,
     enabled: bool,
 ) {
     #[cfg(target_os = "windows")]
@@ -75,17 +72,35 @@ pub fn set_outside_click_watch(
 /// Brings the overlay to the foreground so a panel gets the keyboard; false when the OS refused.
 /// Sync on purpose: runs on the main thread, which owns the overlay window.
 #[tauri::command]
-pub fn focus_overlay(overlay: tauri::WebviewWindow) -> bool {
+pub fn focus_overlay(overlay: tauri::Window) -> bool {
     #[cfg(target_os = "windows")]
     {
         if let Ok(hwnd) = overlay.hwnd() {
+            debug_logger::overlay_trace(&format!("native focus-overlay visible={}", unsafe {
+                windows_sys::Win32::UI::WindowsAndMessaging::IsWindowVisible(hwnd.0 as isize) != 0
+            }));
             if window::bring_to_foreground(hwnd.0 as isize) {
+                // Child-webview hosts don't have WebviewWindow's WM_SETFOCUS forwarding.
+                if let Some(webview) = overlay.app_handle().get_webview(overlay.label()) {
+                    let _ = webview.set_focus();
+                }
+                debug_logger::overlay_trace("native focus-overlay success=true");
                 return true;
             }
         }
         // Last resort, Tauri's own path (SetForegroundWindow, then a simulated Alt press)
         let _ = overlay.set_focus();
-        overlay.is_focused().unwrap_or(false)
+        let focused = overlay.is_focused().unwrap_or(false);
+        if focused {
+            if let Some(webview) = overlay.app_handle().get_webview(overlay.label()) {
+                let _ = webview.set_focus();
+            }
+        }
+        debug_logger::overlay_trace(&format!(
+            "native focus-overlay fallback-success={}",
+            focused
+        ));
+        focused
     }
     #[cfg(not(target_os = "windows"))]
     {
@@ -93,32 +108,76 @@ pub fn focus_overlay(overlay: tauri::WebviewWindow) -> bool {
     }
 }
 
-/// Fits the Main overlay to the monitor containing Diablo II (primary monitor fallback).
-/// No-op when the window already covers that rect.
+/// Refreshes the virtual work area and fits the native host to its currently visible content.
+/// Other platforms retain their original work-area window sizing.
 #[tauri::command]
 pub fn update_window_bounds(app_handle: tauri::AppHandle) -> Result<(), String> {
-    let Some(bounds) = window::get_appropriate_window_bounds(&app_handle) else {
-        return Ok(());
-    };
-    let Some(main_window) =
-        app_handle.get_webview_window(&crate::modules::config::WINDOW_CONFIG.labels.Main)
-    else {
-        return Ok(());
-    };
-
-    let position = main_window.outer_position().map_err(|e| e.to_string())?;
-    if position.x != bounds.x || position.y != bounds.y {
-        main_window
-            .set_position(tauri::PhysicalPosition::new(bounds.x, bounds.y))
-            .map_err(|e| e.to_string())?;
+    #[cfg(target_os = "windows")]
+    {
+        return crate::region::refresh_window_bounds(&app_handle);
     }
-    // Read the size only after moving: crossing onto a monitor with a different DPI makes
-    // WM_DPICHANGED rescale the window, so a size read before the move would be stale.
-    let size = main_window.outer_size().map_err(|e| e.to_string())?;
-    if size.width as i32 != bounds.width || size.height as i32 != bounds.height {
-        main_window
-            .set_size(tauri::PhysicalSize::new(bounds.width as u32, bounds.height as u32))
-            .map_err(|e| e.to_string())?;
+    #[cfg(not(target_os = "windows"))]
+    {
+        let Some(bounds) = window::get_appropriate_window_bounds(&app_handle) else {
+            return Ok(());
+        };
+        let Some(main_window) =
+            app_handle.get_webview_window(&crate::modules::config::WINDOW_CONFIG.labels.Main)
+        else {
+            return Ok(());
+        };
+
+        let position = main_window.outer_position().map_err(|e| e.to_string())?;
+        if position.x != bounds.x || position.y != bounds.y {
+            main_window
+                .set_position(tauri::PhysicalPosition::new(bounds.x, bounds.y))
+                .map_err(|e| e.to_string())?;
+        }
+        // Read the size only after moving: crossing onto a monitor with a different DPI makes
+        // WM_DPICHANGED rescale the window, so a size read before the move would be stale.
+        let size = main_window.outer_size().map_err(|e| e.to_string())?;
+        if size.width as i32 != bounds.width || size.height as i32 != bounds.height {
+            main_window
+                .set_size(tauri::PhysicalSize::new(
+                    bounds.width as u32,
+                    bounds.height as u32,
+                ))
+                .map_err(|e| e.to_string())?;
+        }
+        Ok(())
+    }
+}
+
+/// Origin of the virtual webview canvas. The native host may be a small window far from this origin.
+#[tauri::command]
+pub fn get_overlay_viewport(app_handle: tauri::AppHandle) -> Option<window::WindowRect> {
+    window::get_appropriate_window_bounds(&app_handle)
+}
+
+/// An explicit tray/menu/hotkey action may bring existing UI forward without claiming the keyboard.
+#[tauri::command]
+pub fn raise_overlay(overlay: tauri::Window) -> Result<(), String> {
+    #[cfg(target_os = "windows")]
+    {
+        use windows_sys::Win32::UI::WindowsAndMessaging::{
+            IsWindowVisible, SetWindowPos, HWND_TOP, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE,
+        };
+        let hwnd = overlay.hwnd().map_err(|e| e.to_string())?.0 as isize;
+        unsafe {
+            if IsWindowVisible(hwnd) != 0
+                && SetWindowPos(
+                    hwnd,
+                    HWND_TOP,
+                    0,
+                    0,
+                    0,
+                    0,
+                    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE,
+                ) == 0
+            {
+                return Err("Failed to raise the overlay".into());
+            }
+        }
     }
     Ok(())
 }

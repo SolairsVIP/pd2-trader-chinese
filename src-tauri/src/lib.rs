@@ -1,5 +1,9 @@
 use tauri::webview::PageLoadEvent;
-use tauri::{Manager, WebviewUrl, WebviewWindowBuilder};
+#[cfg(not(target_os = "windows"))]
+use tauri::WebviewWindowBuilder;
+use tauri::{Manager, WebviewUrl};
+#[cfg(target_os = "windows")]
+use tauri::{WebviewBuilder, WindowBuilder};
 use tauri_plugin_global_shortcut::GlobalShortcutExt;
 
 pub mod modules;
@@ -24,7 +28,7 @@ pub fn run() {
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             let _ = app
-                .get_webview_window(&modules::config::WINDOW_CONFIG.labels.Main)
+                .get_window(&modules::config::WINDOW_CONFIG.labels.Main)
                 .expect("no main window")
                 .set_focus();
         }))
@@ -60,9 +64,39 @@ pub fn run() {
                     }
                 };
 
-            // Single transparent overlay hosting every UI panel. Start it as a normal window; the
-            // frontend raises it only while the game context is active. It never takes focus on its
-            // own and only receives clicks inside the region set via `set_interactive_region`.
+            // Windows: the native host starts hidden at 1x1, then fits only the visible UI. The
+            // child webview keeps a stable virtual work-area canvas so panel coordinates and poppers
+            // don't change as the native host shrinks around a dock/menu/panel.
+            #[cfg(target_os = "windows")]
+            let main_window = WindowBuilder::new(app, &modules::config::WINDOW_CONFIG.labels.Main)
+                .title(&modules::config::WINDOW_CONFIG.titles.Main)
+                .inner_size(1.0, 1.0)
+                .position(x, y)
+                .decorations(false)
+                .transparent(true)
+                .visible(false)
+                .focused(false)
+                .focusable(false)
+                .resizable(false)
+                .shadow(false)
+                .always_on_top(false)
+                .skip_taskbar(true)
+                .build()?;
+            #[cfg(target_os = "windows")]
+            let main_webview = main_window.add_child(
+                WebviewBuilder::new(
+                    &modules::config::WINDOW_CONFIG.labels.Main,
+                    WebviewUrl::default(),
+                )
+                .transparent(true)
+                .focused(false),
+                tauri::PhysicalPosition::new(0, 0),
+                tauri::PhysicalSize::new(width as u32, height as u32),
+            )?;
+            #[cfg(target_os = "windows")]
+            main_webview.set_auto_resize(false)?;
+
+            #[cfg(not(target_os = "windows"))]
             let main_window = WebviewWindowBuilder::new(
                 app,
                 &modules::config::WINDOW_CONFIG.labels.Main,
@@ -88,10 +122,12 @@ pub fn run() {
                 window::set_overlay_window(hwnd.0 as isize);
             }
             // Click-through until the frontend reports its interactive rects.
-            if let Err(e) = region::apply_region(&main_window, &[]) {
+            if let Err(e) = region::apply_region(&app.get_window(main_window.label()).unwrap(), &[])
+            {
                 eprintln!("Failed to seed empty interactive region: {}", e);
+                let _ = main_window.hide();
             }
-            // The builder takes logical units; snap to the exact physical work-area rect.
+            // Refresh the virtual work area; Windows keeps the native host hidden until content exists.
             let _ = commands::update_window_bounds(app.app_handle().clone());
 
             // Game focus context (emits `diablo-focus-changed`, see window::focus); re-fit the overlay
@@ -100,21 +136,28 @@ pub fn run() {
             window::initialize_diablo_focus_monitoring(
                 app.app_handle().clone(),
                 Box::new(move |_in_game| {
-                    let _ = commands::update_window_bounds(app_handle_bounds.clone());
+                    if let Err(error) = commands::update_window_bounds(app_handle_bounds.clone()) {
+                        debug_logger::overlay_trace(&format!("native recovery failed: {}", error));
+                    }
                 }),
             );
 
-            #[cfg(debug_assertions)]
+            #[cfg(all(debug_assertions, not(target_os = "windows")))]
             main_window.open_devtools();
+            #[cfg(all(debug_assertions, target_os = "windows"))]
+            main_webview.open_devtools();
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
             commands::read_game_item_clipboard,
             commands::get_diablo_rect,
+            commands::get_overlay_viewport,
             commands::press_key,
             commands::is_diablo_focused,
+            debug_logger::report_overlay_health,
             commands::get_foreground_owner,
             commands::set_overlay_z_order,
+            commands::raise_overlay,
             commands::focus_diablo,
             commands::focus_overlay,
             commands::set_outside_click_watch,

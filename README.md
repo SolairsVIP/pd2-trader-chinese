@@ -12,11 +12,11 @@
 >
 > **汉化作者：Solaris · 开源许可：[MIT License](LICENSE)**。保留原项目版权声明与许可证。
 
-**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.4/PD2.Trader.CN_0.11.4_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.4/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.4)**
+**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.5/PD2.Trader.CN_0.11.5_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.5/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.5)**
 
-当前版本：**0.11.4 正式版**，发布于 2026-10-25。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
+当前版本：**0.11.5 正式版**，发布于 2026-10-26。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
 
-本版新增游戏右下角浮窗的**交易大厅入口**，位于聊天图标上方，点击即可打开市场；修复古尔等全部 33 种中文符文及同类条目的识别，并保留 0.11.3 的上架、搜索与提示汉化修复。[完整更新说明](docs/releases/v0.11.4.md)。
+本版优化小窗覆盖层，修复其他窗口黑屏、切回游戏无法激活及托盘设置打开异常，并完善右下角小窗的“更多”二级菜单。[完整更新说明](docs/releases/v0.11.5.md)。
 
 ## 快速开始
 
@@ -171,6 +171,8 @@
 
 ## 7. 游戏浮窗、皮肤与通知
 
+点击小窗底部的**“更多”箭头**可展开或收起二级菜单：**聊天、交易大厅、仓库估值、仓库价值、报价、管理上架物品、设置、关闭悬浮按钮**。选择“关闭悬浮按钮”后，可在“设置 → 界面”重新启用。
+
 在“**设置 → 界面**”中开关游戏右下角聊天浮窗，选择主题皮肤并调整窗口透明度；透明度 **0% 表示不透明**。
 
 <p>
@@ -204,6 +206,8 @@
 
 ## 更新记录与源码
 
+正式版更新说明按版本汇总，测试阶段的改动合并为简短内容；后续发布遵循[更新记录约定](docs/RELEASING.md)。
+
 **0.11.2：默认自动检查并提示更新，点击后安装。** 增加“设置 → 更新”页、独立签名校验和 GitHub 自动发布流程，包含 0.11.1 的技能复查修复。详见[本版说明](docs/releases/v0.11.2.md)和[自动更新维护说明](docs/自动更新维护.md)。
 
 **0.11.1 技能复查修正：** 修复标枪技能拼写、职业技能错名与缺失编号，并校正市场技能树筛选目录。完整范围与验证结果见[技能全面复查记录](docs/技能全面复查-20261025.md)。
@@ -215,7 +219,7 @@
 - [0.11.0 兼容范围与历史校验值](docs/releases/v0.11.0.md)
 - [0.11 大版本更新记录](docs/发布记录-0.11.0.md)
 - [历史修复与阶段性验证记录](docs/历史修复记录.md)
-- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.4/SHA256SUMS.txt)
+- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.5/SHA256SUMS.txt)
 - [上游原项目](https://github.com/errolgr/pd2-trade) · [本项目开源仓库](https://github.com/SolairsVIP/pd2-trader-chinese) · [MIT 许可证](LICENSE)
 
 <details>

@@ -3,6 +3,7 @@ import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { MotionGlobalConfig } from 'framer-motion';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ChatButton } from './ChatButton';
+import { collectRegion } from '@/overlay/region';
 
 beforeAll(() => {
   MotionGlobalConfig.skipAnimations = true;
@@ -55,6 +56,35 @@ describe('ChatButton', () => {
     expect(menu()).not.toBeNull();
     fireEvent.click(screen.getByRole('button', { name: '打开交易大厅' }));
     expect(onMarketClick).toHaveBeenCalledTimes(1);
+    expect(caret().getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('keeps the caret clickable despite small pointer movement when dragging is enabled', () => {
+    const onDrag = vi.fn();
+    renderDock({ onDrag, onSettingsClick: vi.fn() });
+    fireEvent.click(caret());
+    fireEvent.pointerDown(caret(), { button: 0, clientY: 100, pointerId: 1 });
+    fireEvent.pointerMove(window, { clientY: 106, pointerId: 1 });
+    fireEvent.pointerUp(window, { pointerId: 1 });
+    fireEvent.click(caret());
+    expect(caret().getAttribute('aria-expanded')).toBe('false');
+    expect(onDrag).not.toHaveBeenCalled();
+  });
+
+  it('includes the expanded menu outside the dock in the native window region', () => {
+    renderDock({ onSettingsClick: vi.fn() });
+    const box = (x: number, y: number, width: number, height: number) =>
+      ({ x, y, left: x, top: y, right: x + width, bottom: y + height, width, height } as DOMRect);
+    dock().getBoundingClientRect = () => box(1200, 800, 40, 110);
+    fireEvent.click(caret());
+    menu()!.getBoundingClientRect = () => box(1032, 600, 208, 190);
+    expect(collectRegion(document, 1)).toEqual([
+      { x: 1196, y: 796, width: 48, height: 118 },
+      { x: 1028, y: 596, width: 216, height: 198 },
+    ]);
+    fireEvent.click(caret());
+    // AnimatePresence may keep the exit node until the animation completes; it must eventually leave.
+    act(() => vi.runOnlyPendingTimers());
     expect(caret().getAttribute('aria-expanded')).toBe('false');
   });
 

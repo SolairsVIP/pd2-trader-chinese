@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import { traceActivation } from './activation';
 import { invoke, isTauri } from '@tauri-apps/api/core';
 import { listen } from '@/lib/browser-events';
 import { cursorPosition, getCurrentWindow } from '@tauri-apps/api/window';
 import type { OverlayRect } from './types';
+import { overlayScreenOrigin } from './coordinates';
 
 /** Same debounce the old visibility manager used before hiding windows on focus loss. */
 export const GAME_BLUR_DEBOUNCE_MS = 500;
@@ -53,7 +55,7 @@ export async function getCursorPoint(): Promise<{ x: number; y: number }> {
   if (isTauri()) {
     try {
       const win = getCurrentWindow();
-      const [cursor, outer, sf] = await Promise.all([cursorPosition(), win.outerPosition(), win.scaleFactor()]);
+      const [cursor, outer, sf] = await Promise.all([cursorPosition(), overlayScreenOrigin(), win.scaleFactor()]);
       return { x: (cursor.x - outer.x) / sf, y: (cursor.y - outer.y) / sf };
     } catch (error) {
       console.warn('[overlay] cursorPosition failed:', error);
@@ -66,7 +68,7 @@ async function fetchGameRect(): Promise<OverlayRect> {
   const rect = await invoke<ScreenRect | null>('get_diablo_rect');
   if (!rect) return viewportRect();
   const win = getCurrentWindow();
-  const [outer, sf] = await Promise.all([win.outerPosition(), win.scaleFactor()]);
+  const [outer, sf] = await Promise.all([overlayScreenOrigin(), win.scaleFactor()]);
   return screenToOverlayRect(rect, outer, sf);
 }
 
@@ -81,6 +83,8 @@ export function useGameState(): { gameRect: OverlayRect; gameFocused: boolean } 
   // Tauri: hidden until the game context is known, so in-game panels don't flash at startup outside the game
   const [gameFocused, setGameFocused] = useState(() => !isTauri());
   const rectRef = useRef(gameRect);
+
+  useEffect(() => traceActivation('focusCommitted', gameFocused), [gameFocused]);
 
   useEffect(() => {
     let disposed = false;
@@ -138,18 +142,24 @@ export function useGameState(): { gameRect: OverlayRect; gameFocused: boolean } 
     };
 
     refreshRect();
-    invoke<boolean>('is_diablo_focused')
-      .then((focused) => {
-        inGame = focused;
-        updateFocus();
-      })
-      .catch(() => updateFocus());
-
+    let observedFocusEvent = false;
     track(
       listen<boolean>('diablo-focus-changed', ({ payload }) => {
+        traceActivation('focusReceived', payload);
+        observedFocusEvent = true;
         inGame = payload;
         updateFocus();
         refreshRect();
+      }).then((off) => {
+        if (!disposed)
+          void invoke<boolean>('is_diablo_focused')
+            .then((focused) => {
+              if (disposed || observedFocusEvent) return;
+              inGame = focused;
+              updateFocus();
+            })
+            .catch(() => updateFocus());
+        return off;
       }),
     );
     const win = getCurrentWindow();

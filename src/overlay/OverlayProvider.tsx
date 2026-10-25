@@ -24,12 +24,9 @@ import { getCursorPoint, sameRect, useGameState, viewportRect } from './game';
 import { clampRectInto, loadPanelRect, savePanelRect } from './layout-storage';
 import { setToastBridge } from './toast';
 import { installDevHook } from './dev';
+import { syncRegionBeforeFocus } from './region';
 import { browserLaunchFromUrl } from './browser-launch';
-import {
-  getOverlayYieldedToOtherApps,
-  setOverlayYieldedToOtherApps,
-  subscribeOverlayYield,
-} from './foreground-yield';
+import { getOverlayYieldedToOtherApps, setOverlayYieldedToOtherApps, subscribeOverlayYield } from './foreground-yield';
 import type { OpenOptions, OverlayRect, PanelDef, PanelDefs, PanelId, PanelPayloads, Placement } from './types';
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -226,11 +223,7 @@ export function usePanelOpen(id: PanelId): boolean {
 
 export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.ReactNode }> = ({ defs, children }) => {
   const [state, setState] = useState(() => initialOverlayState(defs));
-  const yieldedToOtherApps = useSyncExternalStore(
-    subscribeOverlayYield,
-    getOverlayYieldedToOtherApps,
-    () => false,
-  );
+  const yieldedToOtherApps = useSyncExternalStore(subscribeOverlayYield, getOverlayYieldedToOtherApps, () => false);
   const { toasts } = useSonner();
   const stateRef = useRef(state);
   const { gameRect, gameFocused } = useGameState();
@@ -240,9 +233,10 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
     gameRef.current = { gameRect, gameFocused };
   }, [gameRect, gameFocused]);
   const placeTokens = useRef<Partial<Record<PanelId, number>>>({});
+  const pendingFocus = useRef<{ id: PanelId; version: number } | null>(null);
 
-  // Main spans the whole work area. Any visible panel can make that transparent window topmost,
-  // so yield it as soon as Windows reports another app in the foreground. The game-focus state is
+  // The webview uses a work-area canvas; Windows fits the native host to the visible content.
+  // Yield it as soon as another app becomes foreground. The game-focus state is
   // intentionally debounced for panel visibility; it must not control the native z-order.
   const visiblePanels = Object.entries(state.panels).filter(([id, panel]) =>
     isPanelVisible(defs[id as PanelId], panel, gameFocused),
@@ -252,7 +246,7 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
   // from the tray while Diablo is not active must behave like an ordinary desktop window.
   const shouldFloatOverlay = hasVisibleUi && gameFocused && !yieldedToOtherApps;
 
-  // The full-monitor overlay must yield for every panel category, including sign-in and settings.
+  // The host must yield for every panel category, including sign-in and settings.
   // Unlike gameFocused, this foreground signal has no blur debounce.
   useEffect(() => {
     if (!isTauri()) return;
@@ -318,6 +312,10 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
 
   const openPanel = useCallback(
     <K extends PanelId>(id: K, payload?: PanelPayloads[K], opts: OpenOptions = {}) => {
+      if (isTauri() && !opts.focus)
+        void invoke('raise_overlay').catch((error) =>
+          console.warn('[overlay] could not raise an explicitly opened panel:', error),
+        );
       const def = defs[id];
       const current = stateRef.current.panels[id];
 
@@ -353,10 +351,43 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
 
       // Opening never takes focus from the game (it would mute it): panels claim the keyboard only when the user
       // clicks into a text field (Panel).
-      if (opts.focus) void claimKeyboard();
+      if (opts.focus) {
+        pendingFocus.current = { id, version: stateRef.current.panels[id]!.payloadVersion };
+      }
     },
     [apply, defs],
   );
+
+  // Tray actions may start while the host is hidden or still a 1px wake window. Rendering the
+  // panel and acknowledging its native region must finish before attempting to activate it.
+  useEffect(() => {
+    const request = pendingFocus.current;
+    if (!request) return;
+    const panel = state.panels[request.id];
+    if (!panel?.open || panel.payloadVersion !== request.version) {
+      pendingFocus.current = null;
+      return;
+    }
+    if (!isPanelVisible(defs[request.id], panel, gameFocused)) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        await syncRegionBeforeFocus();
+        if (cancelled || pendingFocus.current !== request) return;
+        const current = stateRef.current.panels[request.id];
+        if (!current?.open || current.payloadVersion !== request.version) return;
+        if (isTauri()) await invoke('raise_overlay');
+        if (!cancelled && pendingFocus.current === request) await claimKeyboard();
+      } catch (error) {
+        if (!cancelled) console.warn('[overlay] explicit panel activation failed:', error);
+      } finally {
+        if (!cancelled && pendingFocus.current === request) pendingFocus.current = null;
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [state, defs, gameFocused]);
 
   // Open panels stay on screen: game-anchored ones (default game* placement, not moved by the user) follow the
   // game window; the rest are clamped into the overlay when it shrinks. Only the live rect changes: the saved
@@ -428,16 +459,24 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
       clearTimeout(blurTimer);
       blurTimer = undefined;
       if (focused || handoff) return;
+      // A blur that preceded a tray action must never dismiss a newly opened panel. Capture
+      // the exact open versions now, rather than closing whatever happens to be open later.
+      const candidates = Object.entries(stateRef.current.panels)
+        .filter(([id, panel]) => panel.open && defs[id as PanelId].closeOnBlur)
+        .map(([id, panel]) => [id as PanelId, panel.payloadVersion] as const);
       blurTimer = setTimeout(() => {
         blurTimer = undefined;
-        closeDismissablePanels();
+        for (const [id, version] of candidates) {
+          const panel = stateRef.current.panels[id];
+          if (panel?.open && panel.payloadVersion === version) closePanel(id, { focusGame: false });
+        }
       }, CLOSE_ON_BLUR_MS);
     });
     return () => {
       clearTimeout(blurTimer);
       stop();
     };
-  }, [closeDismissablePanels]);
+  }, [closePanel, defs]);
 
   // A click outside every panel (into the game or another app) closes closeOnBlur panels even though the overlay
   // never took focus from the game. The Rust mouse hook behind it only runs while one is open.

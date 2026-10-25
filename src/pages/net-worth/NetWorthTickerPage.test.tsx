@@ -61,7 +61,7 @@ function session(overrides: Partial<SessionSummary>): SessionSummary {
 }
 
 function pill(): HTMLButtonElement {
-  return screen.getByTitle('Net worth — click for details, drag to move') as HTMLButtonElement;
+  return screen.getByTitle('仓库估值 — 点击查看详情，拖动以移动') as HTMLButtonElement;
 }
 
 function dot(): HTMLElement {
@@ -135,20 +135,20 @@ describe('NetWorthTicker pill', () => {
   it('shows the open session gain and HR/hour', () => {
     netWorth = { ...netWorth, currentSession: session({ startHr: 10, endHr: 12.04, hrPerHour: 4.06 }) };
     render(<NetWorthTickerPage />);
-    expect(pill().textContent).toContain('▲ +2.0 session');
+    expect(pill().textContent).toContain('▲ +2.0 本次会话');
     expect(pill().textContent).toContain('4.1 HR/h');
   });
 
   it('shows a session loss with a down arrow', () => {
     netWorth = { ...netWorth, currentSession: session({ startHr: 10, endHr: 9.5 }) };
     render(<NetWorthTickerPage />);
-    expect(pill().textContent).toContain('▼ -0.5 session');
+    expect(pill().textContent).toContain('▼ -0.5 本次会话');
   });
 
   it('hides session stats once the session is closed', () => {
     netWorth = { ...netWorth, currentSession: session({ isOpen: false }) };
     render(<NetWorthTickerPage />);
-    expect(pill().textContent).not.toContain('session');
+    expect(pill().textContent).not.toContain('本次会话');
     expect(pill().textContent).not.toContain('HR/h');
   });
 
@@ -179,7 +179,7 @@ describe('NetWorthTicker freshness dot', () => {
   it('is green while the last snapshot is within the auto-snapshot interval plus a minute', () => {
     render(<NetWorthTickerPage />);
     expect(dot().className).toContain('bg-success');
-    expect(dot().title).toBe(`Last snapshot ${new Date(NOW - 60_000).toLocaleTimeString()}`);
+    expect(dot().title).toBe(`最近快照：${new Date(NOW - 60_000).toLocaleTimeString()}`);
   });
 
   it('turns amber once the snapshot is overdue, re-checked every 30 seconds', () => {
@@ -204,14 +204,14 @@ describe('NetWorthTicker freshness dot', () => {
     netWorth = { ...netWorth, lastSnapshotAt: null };
     render(<NetWorthTickerPage />);
     expect(dot().className).toContain('bg-warning');
-    expect(dot().title).toBe('No snapshot yet');
+    expect(dot().title).toBe('暂无快照');
   });
 
   it.each(['error', 'signed-out'] as const)('is red when the status is %s', (status) => {
     netWorth = { ...netWorth, status };
     render(<NetWorthTickerPage />);
     expect(dot().className).toContain('bg-destructive');
-    expect(dot().title).toBe('Snapshot failed');
+    expect(dot().title).toBe('快照记录失败');
   });
 
   it('pulses while loading', () => {
@@ -233,8 +233,8 @@ describe('NetWorthTicker placement', () => {
     ['top-right', { x: 100 + 1280 - 181 - 12, y: 62 }],
     ['bottom-left', { x: 112, y: 50 + 720 - 28 - 12 }],
     ['bottom-right', { x: 100 + 1280 - 181 - 12, y: 50 + 720 - 28 - 12 }],
-    // right-aligned 4px above the chat dock (720px tall game: 29x80 tab flush on the right edge, 6px up)
-    ['above-chat', { x: 100 + 1280 - 181, y: 50 + 720 - 6 - 80 - 28 - 4 }],
+    // right-aligned 4px above the chat dock (720px tall game: 29x109 tab flush on the right edge, 6px up)
+    ['above-chat', { x: 100 + 1280 - 181, y: 50 + 720 - 6 - 109 - 28 - 4 }],
   ] as const)('anchors %s on the game', (anchor, position) => {
     settings = { netWorthTickerAnchor: anchor };
     render(<NetWorthTickerPage />);

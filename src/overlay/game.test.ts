@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { act, cleanup, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { invoke } from '@tauri-apps/api/core';
 import { GAME_BLUR_DEBOUNCE_MS, useGameState } from './game';
 
 const state = vi.hoisted(() => ({
@@ -46,6 +47,9 @@ const gameContext = (inGame: boolean) => act(() => state.gameContext!({ payload:
 beforeEach(() => {
   vi.useFakeTimers();
   vi.clearAllMocks();
+  vi.mocked(invoke).mockImplementation(async (command: string) =>
+    command === 'is_diablo_focused' ? state.inGame : null,
+  );
   state.inGame = true;
   state.gameContext = null;
   state.overlayFocus = null;
@@ -57,6 +61,42 @@ afterEach(() => {
 });
 
 describe('useGameState focus', () => {
+  it('recovers from a missed return event on a later native pulse without a tray action', async () => {
+    const { result } = await renderGameState();
+    gameContext(false);
+    await advance(GAME_BLUR_DEBOUNCE_MS);
+    expect(result.current.gameFocused).toBe(false);
+    // The first native true was not delivered to this renderer; a later pulse replays it.
+    gameContext(true);
+    expect(result.current.gameFocused).toBe(true);
+    await act(async () => {});
+    expect(invoke).toHaveBeenCalledWith('report_overlay_health', {
+      stage: 'focusReceived',
+      focused: true,
+      count: 0,
+    });
+    expect(invoke).toHaveBeenCalledWith('report_overlay_health', {
+      stage: 'focusCommitted',
+      focused: true,
+      count: 0,
+    });
+  });
+  it('keeps a newer game-return event when the initial background query completes late', async () => {
+    let finish!: (focused: boolean) => void;
+    vi.mocked(invoke).mockImplementation(async (command: string) =>
+      command === 'is_diablo_focused'
+        ? new Promise<boolean>((resolve) => {
+            finish = resolve;
+          })
+        : null,
+    );
+    const { result } = await renderGameState();
+    gameContext(true);
+    await act(async () => finish(false));
+    await advance(GAME_BLUR_DEBOUNCE_MS * 2);
+    expect(result.current.gameFocused).toBe(true);
+  });
+
   it('starts with in-game panels hidden until the game context is known (no flash at launch)', async () => {
     state.inGame = false;
     const outside = renderHook(() => useGameState());

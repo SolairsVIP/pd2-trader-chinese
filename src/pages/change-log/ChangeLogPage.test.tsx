@@ -58,8 +58,8 @@ describe('ChangelogPage', () => {
   it('lists every version newest first and marks only the running one as current', async () => {
     await renderPage('1.9.0', '1.9.0');
     expect(screen.getAllByText(/^v\d/).map((el) => el.textContent)).toEqual(['v2.0.0', 'v1.9.0', 'v1.8.0']);
-    expect(within(section('1.9.0')).queryByText('Current')).not.toBeNull();
-    expect(screen.getAllByText('Current')).toHaveLength(1);
+    expect(within(section('1.9.0')).queryByText('当前版本')).not.toBeNull();
+    expect(screen.getAllByText('当前版本')).toHaveLength(1);
   });
 
   it('records the running version as seen when it changed', async () => {
@@ -84,15 +84,15 @@ describe('ChangelogPage', () => {
     expect(older[0].className).toContain('border-border');
   });
 
-  it('pluralises the change count', async () => {
+  it('shows the localized change count', async () => {
     await renderPage('2.0.0', '2.0.0');
-    expect(within(section('2.0.0')).queryByText('3 changes')).not.toBeNull();
-    expect(within(section('1.9.0')).queryByText('1 change')).not.toBeNull();
+    expect(within(section('2.0.0')).queryByText('3 项更新')).not.toBeNull();
+    expect(within(section('1.9.0')).queryByText('1 项更新')).not.toBeNull();
   });
 
   it('closes the panel on close', async () => {
     await renderPage('2.0.0', '2.0.0');
-    fireEvent.click(screen.getByRole('button', { name: 'Close changelog' }));
+    fireEvent.click(screen.getByRole('button', { name: '关闭更新日志' }));
     expect(close).toHaveBeenCalledTimes(1);
   });
 });

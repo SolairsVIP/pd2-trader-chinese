@@ -170,7 +170,7 @@ describe('settings panel', () => {
   it('the tray menu opens the settings panel', async () => {
     await renderTray();
     await act(async () => menuItem('settings').action());
-    expect(openPanel).toHaveBeenCalledWith('settings');
+    expect(openPanel).toHaveBeenCalledWith('settings', undefined, { focus: true });
   });
 });
 

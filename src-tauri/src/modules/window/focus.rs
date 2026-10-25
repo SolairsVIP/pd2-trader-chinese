@@ -10,7 +10,7 @@
 
 use serde::Serialize;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex, OnceLock};
 use tauri::{AppHandle, Emitter};
 
 use super::{diablo_running, foreground, initialize_foreground_monitoring};
@@ -56,6 +56,17 @@ pub fn next_game_context(current: bool, foreground: Foreground) -> bool {
 static GAME_CONTEXT: AtomicBool = AtomicBool::new(false);
 /// Serializes read-update-emit so concurrent foreground callbacks can't emit out of order.
 static TRANSITION: Mutex<()> = Mutex::new(());
+static LAST_OWNER: Mutex<Foreground> = Mutex::new(Foreground::Unknown);
+type FocusRefresh = dyn Fn(bool) + Send + Sync;
+static REFRESH: OnceLock<Arc<FocusRefresh>> = OnceLock::new();
+
+/// Reconcile live OS state before a hotkey/focus query, even if a WinEvent was missed.
+pub fn refresh_game_context() -> bool {
+    if let Some(refresh) = REFRESH.get() {
+        refresh(false);
+    }
+    is_game_context()
+}
 
 /// True while the user is in the game: Diablo II is in front, or one of our windows was focused from it.
 pub fn is_game_context() -> bool {
@@ -66,28 +77,68 @@ pub fn is_game_context() -> bool {
 /// foreground change; `on_change` runs after each emitted value (initial one included).
 pub fn initialize_diablo_focus_monitoring(
     app_handle: AppHandle,
-    on_change: Box<dyn Fn(bool) + Send + 'static>,
+    on_change: Box<dyn Fn(bool) + Send + Sync + 'static>,
 ) {
-    let update = move |force_emit: bool| {
-        let _transition = TRANSITION
-            .lock()
-            .unwrap_or_else(|poisoned| poisoned.into_inner());
+    let poll_app = app_handle.clone();
+    let last_emit = Mutex::new(std::time::Instant::now());
+    let update: Arc<FocusRefresh> = Arc::new(move |force_emit: bool| {
+        // Hiding/moving a native window can re-enter the WinEvent hook. Never block it on ourselves.
+        let Ok(transition) = TRANSITION.try_lock() else {
+            return;
+        };
         let owner = foreground();
+        let mut last_owner = LAST_OWNER.lock().unwrap_or_else(|p| p.into_inner());
+        let owner_changed = owner != Foreground::Unknown && owner != *last_owner;
         if owner != Foreground::Unknown {
-            let _ = app_handle.emit(FOREGROUND_EVENT, owner);
+            *last_owner = owner;
         }
         let current = GAME_CONTEXT.load(Ordering::SeqCst);
         let next = next_game_context(current, game_owner(owner, diablo_running()));
-        if next == current && !force_emit {
-            return;
-        }
         GAME_CONTEXT.store(next, Ordering::SeqCst);
-        let _ = app_handle.emit(FOCUS_EVENT, next);
-        on_change(next);
-    };
+        let context_changed = next != current || force_emit;
+        let mut emitted_at = last_emit.lock().unwrap_or_else(|p| p.into_inner());
+        let heartbeat = next && emitted_at.elapsed() >= std::time::Duration::from_secs(2);
+        let notify = context_changed || heartbeat;
+        if notify {
+            *emitted_at = std::time::Instant::now();
+        }
+        drop(emitted_at);
+        drop(last_owner);
+        drop(transition);
+        if context_changed || owner_changed {
+            crate::debug_logger::overlay_trace(&format!("native owner={:?} game={}", owner, next));
+        }
+        // Wake/re-fit the native host BEFORE asking a previously hidden renderer to render UI.
+        if notify {
+            on_change(next);
+        }
+        if owner != Foreground::Unknown && (owner_changed || notify) {
+            let _ = app_handle.emit(FOREGROUND_EVENT, owner);
+        }
+        if notify {
+            let delivered = app_handle.emit(FOCUS_EVENT, next).is_ok();
+            crate::debug_logger::overlay_trace(&format!(
+                "native focus-send game={} pulse={} accepted={}",
+                next, heartbeat, delivered
+            ));
+        }
+    });
 
+    if REFRESH.set(update.clone()).is_err() {
+        return;
+    }
     update(true);
-    initialize_foreground_monitoring(move || update(false));
+    let event_update = update.clone();
+    initialize_foreground_monitoring(move || event_update(false));
+    // WinEvent remains the fast path. Reconcile on the native main loop even when the WebView is
+    // hidden/occluded, so browser/video -> game never relies on a tray action to repair a missed event.
+    std::thread::spawn(move || loop {
+        std::thread::sleep(std::time::Duration::from_millis(250));
+        let refresh = update.clone();
+        if poll_app.run_on_main_thread(move || refresh(false)).is_err() {
+            break;
+        }
+    });
 }
 
 #[cfg(test)]

@@ -84,6 +84,20 @@ afterEach(() => {
 });
 
 describe('useShortcuts', () => {
+  it('retries a failed game-return registration on the native reconciliation pulse', async () => {
+    state.focused = false;
+    const shortcuts = [{ modifier: 'ctrl' as const, key: 'd', handler: vi.fn() }];
+    renderHook(() => useShortcuts(shortcuts));
+    await flush();
+    state.registerErrors.set('Control+D', new Error('temporary registration failure'));
+    await focus(true);
+    expect(state.registered.size).toBe(0);
+    state.registerErrors.clear();
+    await focus(true);
+    expect([...state.registered.keys()]).toEqual(['Control+D']);
+    press('Control+D');
+    expect(shortcuts[0].handler).toHaveBeenCalledTimes(1);
+  });
   it('registers Control+KEY for ctrl and both Alt and AltGr (Control+Alt) chords for alt', async () => {
     const shortcuts = [
       { modifier: 'ctrl' as const, key: 'd', handler: vi.fn() },
@@ -131,6 +145,42 @@ describe('useShortcuts', () => {
 
     await focus(true);
     expect(vi.mocked(register).mock.calls.length).toBe(registerCalls);
+  });
+
+  it('keeps shortcuts active when an old background snapshot arrives after a return-to-game event', async () => {
+    let resolveSnapshot!: (focused: boolean) => void;
+    state.focused = new Promise<boolean>((resolve) => {
+      resolveSnapshot = resolve;
+    });
+    const handler = vi.fn();
+    const shortcuts = [{ modifier: 'ctrl' as const, key: 'd', handler }];
+    renderHook(() => useShortcuts(shortcuts));
+    await flush();
+    await focus(true);
+    await act(async () => resolveSnapshot(false));
+    await flush();
+    press('Control+D');
+    expect(handler).toHaveBeenCalledTimes(1);
+  });
+
+  it('restores all shortcut handlers across repeated browser/video and game switches without Settings', async () => {
+    const search = vi.fn();
+    const market = vi.fn();
+    const shortcuts = [
+      { modifier: 'ctrl' as const, key: 'd', handler: search },
+      { modifier: 'ctrl' as const, key: 'm', handler: market },
+    ];
+    renderHook(() => useShortcuts(shortcuts));
+    await flush();
+    for (let i = 0; i < 3; i++) {
+      await focus(false);
+      expect(state.registered.size).toBe(0);
+      await focus(true);
+      press('Control+D');
+      press('Control+M');
+    }
+    expect(search).toHaveBeenCalledTimes(3);
+    expect(market).toHaveBeenCalledTimes(3);
   });
 
   it('applies rapid focus toggles in order', async () => {

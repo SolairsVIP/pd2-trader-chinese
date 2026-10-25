@@ -3,6 +3,7 @@ import { isTauri, invoke } from '@tauri-apps/api/core';
 import { register, unregister } from '@tauri-apps/plugin-global-shortcut';
 import { listen } from '@/lib/browser-events';
 import { useOptions } from './useOptions';
+import { traceActivation } from '@/overlay/activation';
 
 type ShortcutHandler = () => void | Promise<void>;
 
@@ -61,6 +62,7 @@ export const useShortcuts = (shortcuts: ShortcutConfig[]) => {
               try {
                 await register(shortcut, (e) => {
                   if (e.state === 'Pressed') {
+                    traceActivation('shortcutPressed', true);
                     handler();
                   }
                 });
@@ -82,38 +84,30 @@ export const useShortcuts = (shortcuts: ShortcutConfig[]) => {
     };
 
     let cancelled = false;
+    let observedFocusEvent = false;
+    lastFocusState.current = null;
+
+    const applyFocus = (isFocused: boolean) =>
+      scheduleOperation(async () => {
+        if (cancelled) return;
+        const complete = shortcutsRef.current.every(({ modifier, key }) =>
+          formatShortcuts(modifier, key).every((shortcut) => registeredShortcuts.current.includes(shortcut)),
+        );
+        // Native reconciliation pulses also retry a registration that failed on game re-entry.
+        if (lastFocusState.current === isFocused && (!isFocused || complete)) return;
+        lastFocusState.current = isFocused;
+        if (isFocused) await registerShortcuts();
+        else await unregisterAllShortcuts();
+        traceActivation('shortcutsReady', isFocused, registeredShortcuts.current.length);
+      });
 
     const setup = async () => {
       try {
-        // OP REQ: Always initialize assuming D2 is focused
-        // We schedule registration immediately.
-        scheduleOperation(async () => {
-          // Optimistically set focused
-          lastFocusState.current = true;
-          await registerShortcuts();
-        });
-
-        // 1. Check actual state to correct if needed
-        const isFocused = await invoke<boolean>('is_diablo_focused');
-
-        scheduleOperation(async () => {
-          // Update state based on reality
-          if (lastFocusState.current !== isFocused) {
-            lastFocusState.current = isFocused;
-            if (isFocused) await registerShortcuts();
-            else await unregisterAllShortcuts();
-          }
-        });
-
-        // 2. Listen for changes
+        // Subscribe before querying: returning to the game during initialization must not be lost,
+        // and a delayed old snapshot must never unregister shortcuts after a newer focus event.
         const unlisten = await listen<boolean>('diablo-focus-changed', async ({ payload: isFocused }) => {
-          scheduleOperation(async () => {
-            if (lastFocusState.current === isFocused) return;
-            lastFocusState.current = isFocused;
-
-            if (isFocused) await registerShortcuts();
-            else await unregisterAllShortcuts();
-          });
+          observedFocusEvent = true;
+          applyFocus(isFocused);
         });
         // Effect was cleaned up while listen() was pending: release the listener now instead of
         // storing it, so a later cleanup can never call an already-released Tauri listener.
@@ -123,6 +117,8 @@ export const useShortcuts = (shortcuts: ShortcutConfig[]) => {
             .catch((error) => console.warn('Failed to release diablo-focus-changed listener:', error));
         } else {
           unlistenRef.current = unlisten;
+          const isFocused = await invoke<boolean>('is_diablo_focused');
+          if (!cancelled && !observedFocusEvent) applyFocus(isFocused);
         }
       } catch (error) {
         console.error('Failed to setup shortcut listener:', error);

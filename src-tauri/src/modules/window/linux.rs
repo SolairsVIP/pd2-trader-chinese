@@ -205,9 +205,10 @@ pub fn get_appropriate_window_bounds(app: &AppHandle) -> Option<WindowRect> {
 
     if let Some(d2) = get_diablo_rect(app) {
         let (cx, cy) = (d2.x + d2.width / 2, d2.y + d2.height / 2);
-        let containing = app.available_monitors().ok().and_then(|monitors| {
-            monitors.iter().find(|m| contains(m, cx, cy)).map(work_area)
-        });
+        let containing = app
+            .available_monitors()
+            .ok()
+            .and_then(|monitors| monitors.iter().find(|m| contains(m, cx, cy)).map(work_area));
         if containing.is_some() {
             return containing;
         }
@@ -244,7 +245,10 @@ pub fn focus_diablo() -> bool {
         )?;
 
         // Fallback for WMs that ignore the request.
-        conn.configure_window(window, &ConfigureWindowAux::new().stack_mode(StackMode::ABOVE))?;
+        conn.configure_window(
+            window,
+            &ConfigureWindowAux::new().stack_mode(StackMode::ABOVE),
+        )?;
         conn.set_input_focus(InputFocus::PARENT, window, x11rb::CURRENT_TIME)?;
         conn.flush()?;
         Ok(true)

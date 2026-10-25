@@ -19,6 +19,7 @@ import {
 import { OverlayRoot } from './OverlayRoot';
 import { usePanel } from './Panel';
 import { claimKeyboard, isKeyboardClaimed, releaseKeyboard } from './keyboard';
+import { syncRegionBeforeFocus } from './region';
 import { LAYOUT_STORAGE_KEY, savePanelRect } from './layout-storage';
 import type { PanelDef, PanelDefs, PanelId } from './types';
 
@@ -43,7 +44,10 @@ vi.mock('./game', async (importOriginal) => {
 });
 /** Main's OS focus listener registered through trackKeyboardFocus (Tauri). */
 const focus = vi.hoisted(() => ({ onChange: null as ((focused: boolean, handoff?: boolean) => void) | null }));
-const nativeOverlay = vi.hoisted(() => ({ calls: [] as Array<{ command: string; args?: unknown }>, foregroundOwner: 'diablo' }));
+const nativeOverlay = vi.hoisted(() => ({
+  calls: [] as Array<{ command: string; args?: unknown }>,
+  foregroundOwner: 'diablo',
+}));
 vi.mock('./keyboard', () => ({
   FOREGROUND_EVENT: 'foreground-changed',
   claimKeyboard: vi.fn(async () => {}),
@@ -56,7 +60,11 @@ vi.mock('./keyboard', () => ({
     };
   },
 }));
-vi.mock('./region', () => ({ useRegionSync: () => {}, holdRegionLoop: () => () => {} }));
+vi.mock('./region', () => ({
+  useRegionSync: () => {},
+  holdRegionLoop: () => () => {},
+  syncRegionBeforeFocus: vi.fn(async () => {}),
+}));
 vi.mock('./toast', () => ({ ToastLayer: () => null, setToastBridge: vi.fn(), showToast: vi.fn() }));
 const tauri = vi.hoisted(() => ({ on: false }));
 vi.mock('@tauri-apps/api/core', () => ({
@@ -354,13 +362,48 @@ describe('OverlayProvider', () => {
     expect(JSON.parse(localStorage.getItem(LAYOUT_STORAGE_KEY)!).currency).toMatchObject({ x: 42 });
   });
 
-  it('opening a panel leaves the game in front; only an explicit focus claims', () => {
+  it('opening a panel leaves the game in front; only an explicit focus claims', async () => {
     mount();
     act(() => api.openPanel('currency'));
     act(() => api.openPanel('chatButton'));
     expect(claimKeyboard).not.toHaveBeenCalled();
     act(() => api.openPanel('settings', undefined, { focus: true }));
+    await act(async () => {});
     expect(claimKeyboard).toHaveBeenCalledTimes(1);
+  });
+
+  it('waits for native presentation before raising and focusing tray Settings', async () => {
+    tauri.on = true;
+    let ready!: () => void;
+    vi.mocked(syncRegionBeforeFocus).mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          ready = resolve;
+        }),
+    );
+    mount();
+    act(() => api.openPanel('settings', undefined, { focus: true }));
+    expect(shown('settings')).toBe(true);
+    expect(claimKeyboard).not.toHaveBeenCalled();
+    expect(invoke).not.toHaveBeenCalledWith('raise_overlay');
+    await act(async () => ready());
+    expect(invoke).toHaveBeenCalledWith('raise_overlay');
+    expect(claimKeyboard).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not focus a panel closed while its native presentation was pending', async () => {
+    let ready!: () => void;
+    vi.mocked(syncRegionBeforeFocus).mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          ready = resolve;
+        }),
+    );
+    mount();
+    act(() => api.openPanel('settings', undefined, { focus: true }));
+    act(() => api.closePanel('settings'));
+    await act(async () => ready());
+    expect(claimKeyboard).not.toHaveBeenCalled();
   });
 
   it('closing the last keyboard panel releases a claim', () => {
@@ -528,8 +571,7 @@ describe('OverlayProvider', () => {
   });
 
   it("drags 'children' panels fully inside the overlay, other panels only partly", () => {
-    const Handle: React.FC = () => <div data-panel-drag
-      className="h-full w-full" />;
+    const Handle: React.FC = () => <div data-panel-drag className="h-full w-full" />;
     render(
       <OverlayProvider
         defs={{
@@ -568,6 +610,27 @@ describe('OverlayProvider', () => {
 describe('closeOnBlur', () => {
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
+
+  it('does not let a preceding tray blur close newly opened Settings', () => {
+    mount();
+    act(() => {
+      api.openPanel('chat');
+    });
+    act(() => focus.onChange!(false));
+    act(() => api.openPanel('settings'));
+    act(() => vi.advanceTimersByTime(CLOSE_ON_BLUR_MS * 2));
+    expect(api.isOpen('chat')).toBe(false);
+    expect(api.isOpen('settings')).toBe(true);
+  });
+
+  it('does not apply an old blur to a reopened version of the same panel', () => {
+    mount();
+    act(() => api.openPanel('settings'));
+    act(() => focus.onChange!(false));
+    act(() => api.openPanel('settings'));
+    act(() => vi.advanceTimersByTime(CLOSE_ON_BLUR_MS * 2));
+    expect(api.isOpen('settings')).toBe(true);
+  });
 
   it('closes closeOnBlur panels shortly after Main loses OS focus; keepMounted ones keep their state', () => {
     mount();
@@ -679,8 +742,7 @@ describe('panel portal layer', () => {
   );
   const SheetProbe: React.FC = () => (
     <Sheet open>
-      <SheetContent side="left"
-        aria-describedby={undefined}>
+      <SheetContent side="left" aria-describedby={undefined}>
         <SheetTitle>Macros</SheetTitle>
       </SheetContent>
     </Sheet>

@@ -1,6 +1,6 @@
 use super::{Foreground, WindowRect};
 use std::sync::atomic::{AtomicIsize, Ordering};
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 use std::{ffi::OsStr, iter, os::windows::prelude::OsStrExt, ptr};
 use tauri::AppHandle;
 
@@ -15,8 +15,8 @@ use windows_sys::Win32::{
     UI::WindowsAndMessaging::{
         BringWindowToTop, FindWindowW, GetForegroundWindow, GetWindowRect,
         GetWindowThreadProcessId, IsIconic, SetForegroundWindow, SetWindowPos, ShowWindow,
-        EVENT_SYSTEM_FOREGROUND, HWND_NOTOPMOST, HWND_TOPMOST, SWP_NOACTIVATE, SWP_NOMOVE,
-        SWP_NOSIZE, SW_RESTORE, WINEVENT_OUTOFCONTEXT,
+        EVENT_SYSTEM_FOREGROUND, HWND_BOTTOM, HWND_NOTOPMOST, HWND_TOPMOST, SWP_NOACTIVATE,
+        SWP_NOMOVE, SWP_NOSIZE, SW_RESTORE, WINEVENT_OUTOFCONTEXT,
     },
 };
 
@@ -57,9 +57,9 @@ pub fn set_overlay_window(hwnd: HWND) {
     OVERLAY_WINDOW.store(hwnd, Ordering::SeqCst);
 }
 
-/// Move the full-area overlay between topmost and normal z-order without activating it.
+/// Float only in the game context. A stale frontend request must not cover a newly focused app.
 pub fn set_overlay_z_order(hwnd: HWND, topmost: bool) -> Result<(), String> {
-    let insert_after = if topmost { HWND_TOPMOST } else { HWND_NOTOPMOST };
+    let insert_after = overlay_z_order_target(foreground(), super::is_game_context(), topmost);
     let ok = unsafe {
         SetWindowPos(
             hwnd,
@@ -75,6 +75,19 @@ pub fn set_overlay_z_order(hwnd: HWND, topmost: bool) -> Result<(), String> {
         Err("SetWindowPos failed while changing overlay z-order".to_string())
     } else {
         Ok(())
+    }
+}
+
+fn overlay_z_order_target(owner: Foreground, in_game: bool, topmost: bool) -> HWND {
+    let can_float = matches!(owner, Foreground::Diablo | Foreground::OwnWindow) && in_game;
+    if topmost && can_float {
+        HWND_TOPMOST
+    } else if owner == Foreground::OwnWindow {
+        // Desktop Settings has explicitly taken focus. Remove topmost status without
+        // burying the active window below the game or browser that launched the tray action.
+        HWND_NOTOPMOST
+    } else {
+        HWND_BOTTOM
     }
 }
 
@@ -193,7 +206,7 @@ pub fn get_appropriate_window_bounds(_app: &AppHandle) -> Option<WindowRect> {
 
 static mut FOREGROUND_HOOK: Option<HWINEVENTHOOK> = None;
 
-static CALLBACK: Mutex<Option<Box<dyn Fn() + Send>>> = Mutex::new(None);
+static CALLBACK: Mutex<Option<Arc<dyn Fn() + Send + Sync>>> = Mutex::new(None);
 
 /// Window named by the last EVENT_SYSTEM_FOREGROUND.
 static LAST_FOREGROUND_EVENT: AtomicIsize = AtomicIsize::new(0);
@@ -208,12 +221,18 @@ unsafe extern "system" fn win_event_proc(
     _event_time: u32,
 ) {
     LAST_FOREGROUND_EVENT.store(hwnd, Ordering::SeqCst);
-    if let Some(cb) = &*CALLBACK.lock().unwrap() {
+    // Yield natively before React processes the event; no debounce or webview responsiveness needed.
+    let overlay = OVERLAY_WINDOW.load(Ordering::SeqCst);
+    if overlay != 0 && foreground() == Foreground::Other {
+        let _ = set_overlay_z_order(overlay, false);
+    }
+    let callback = CALLBACK.lock().unwrap_or_else(|p| p.into_inner()).clone();
+    if let Some(cb) = callback {
         cb();
     }
 }
 
-pub fn initialize_foreground_monitoring<F: Fn() + Send + 'static>(callback: F) {
+pub fn initialize_foreground_monitoring<F: Fn() + Send + Sync + 'static>(callback: F) {
     unsafe {
         let hook = SetWinEventHook(
             EVENT_SYSTEM_FOREGROUND,
@@ -225,7 +244,7 @@ pub fn initialize_foreground_monitoring<F: Fn() + Send + 'static>(callback: F) {
             WINEVENT_OUTOFCONTEXT,
         );
         FOREGROUND_HOOK = Some(hook);
-        *CALLBACK.lock().unwrap() = Some(Box::new(callback));
+        *CALLBACK.lock().unwrap() = Some(Arc::new(callback));
     }
 }
 
@@ -247,6 +266,30 @@ mod tests {
     const DIABLO: HWND = 20;
     const TRAY_MENU_OWNER: HWND = 30;
     const BROWSER: HWND = 40;
+
+    #[test]
+    fn desktop_settings_loses_topmost_status_without_being_buried() {
+        assert_eq!(
+            overlay_z_order_target(Foreground::OwnWindow, false, false),
+            HWND_NOTOPMOST
+        );
+        assert_eq!(
+            overlay_z_order_target(Foreground::OwnWindow, false, true),
+            HWND_NOTOPMOST
+        );
+    }
+
+    #[test]
+    fn another_application_always_wins_over_a_stale_float_request() {
+        assert_eq!(
+            overlay_z_order_target(Foreground::Other, true, true),
+            HWND_BOTTOM
+        );
+        assert_eq!(
+            overlay_z_order_target(Foreground::Diablo, true, true),
+            HWND_TOPMOST
+        );
+    }
 
     #[test]
     fn only_the_overlay_counts_as_our_window() {

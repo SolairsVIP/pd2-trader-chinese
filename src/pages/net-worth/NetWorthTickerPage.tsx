@@ -7,6 +7,7 @@ import { useNetWorth } from '@/hooks/useNetWorth';
 import { useWealthRank } from '@/hooks/useWealthRank';
 import { usePanel, useOverlay, type OverlayRect } from '@/overlay';
 import { screenToOverlayRect } from '@/overlay/game';
+import { overlayScreenOrigin } from '@/overlay/coordinates';
 import { loadPanelRect } from '@/overlay/layout-storage';
 import { cn } from '@/lib/utils';
 import { AnimatedNumber, useChangeFlash } from '@/pages/currency/components/AnimatedNumber';
@@ -35,7 +36,7 @@ async function legacyTickerOrigin(position: { x: number; y: number }): Promise<{
   if (!isTauri()) return position;
   try {
     const win = getCurrentWindow();
-    const [outer, scaleFactor] = await Promise.all([win.outerPosition(), win.scaleFactor()]);
+    const [outer, scaleFactor] = await Promise.all([overlayScreenOrigin(), win.scaleFactor()]);
     const { x, y } = screenToOverlayRect({ ...position, width: 0, height: 0 }, outer, scaleFactor);
     return { x, y };
   } catch (error) {
