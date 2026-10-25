@@ -295,7 +295,7 @@ describe('undoToast', () => {
     const onUndo = vi.fn();
     await renderLayer();
     await show(() => undoToast({ title: 'Deleted', description: 'undo me', duration: 6000, onUndo }));
-    await click(within(toastEl('undo me')!).getByText('Undo'));
+    await click(within(toastEl('undo me')!).getByText('撤销'));
     expect(onUndo).toHaveBeenCalledTimes(1);
 
     // sonner removes a dismissed toast on a later animation frame: check the dismissal itself

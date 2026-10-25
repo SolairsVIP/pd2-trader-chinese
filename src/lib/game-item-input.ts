@@ -6,6 +6,7 @@ import { classSkillsMap, classSubSkillMap } from '@/assets/class-skills';
 import skillReference from './pd2-skill-translations.data.json';
 import { normalizeSkillStat, resolveCharacterSkillId } from '@/pages/price-check/lib/skill-stats';
 import type { Stat } from '@/pages/price-check/lib/interfaces';
+import { restoreGameItemStrings } from './game-text-encoding';
 
 type Aliases = Map<string, Set<string>>;
 const clean = (s: string) => s.replace(/ÿc./g, '').replace(/\s+/g, ' ').trim();
@@ -184,10 +185,10 @@ export interface GameItemInput {
 
 /** The sole input boundary for game copies; never applied to website responses. */
 export function normalizeGameItemInput(raw: string | null): GameItemInput {
-  if (!raw || !hasChinese(raw)) return { text: raw };
+  if (!raw) return { text: raw };
   let item: Record<string, any>;
   try {
-    item = JSON.parse(raw);
+    item = restoreGameItemStrings(JSON.parse(raw));
   } catch {
     return { text: raw };
   }
@@ -199,6 +200,8 @@ export function normalizeGameItemInput(raw: string | null): GameItemInput {
     typeof item.iLevel !== 'number'
   )
     return { text: raw };
+  // Preserve the established English-input path exactly.
+  if (!hasChinese(JSON.stringify(item))) return { text: raw };
   try {
     const normalizeItem = (source: Record<string, any>): Record<string, any> => {
       const result = { ...source };

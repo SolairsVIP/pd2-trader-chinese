@@ -339,7 +339,7 @@ describe('Pd2WebsiteProvider auth', () => {
       pd2RefreshToken: undefined,
       pd2TokenExpiry: undefined,
     });
-    expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ description: 'Logged out successfully.' }));
+    expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ description: '已成功退出登录。' }));
     expect(Sentry.setUser).toHaveBeenLastCalledWith(null);
   });
 });

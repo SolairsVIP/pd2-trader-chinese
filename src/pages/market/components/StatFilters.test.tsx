@@ -44,6 +44,29 @@ const mount = (initial: StatFilter[]) => {
 afterEach(cleanup);
 
 describe('StatFilters', () => {
+  it('Chinese search selects the correct website skill-tab key by keyboard', () => {
+    const { latest } = mount([]);
+    const search = screen.getByRole('combobox', { name: '添加属性筛选' });
+    fireEvent.focus(search);
+    fireEvent.change(search, { target: { value: '召唤' } });
+    const options = screen.getAllByRole('option');
+    const necromancer = options.find((option) => /召唤.*死灵法师/.test(option.textContent ?? ''));
+    expect(necromancer).toBeTruthy();
+    fireEvent.click(necromancer!);
+    expect(latest()).toMatchObject([{ kind: 'mod', key: 'item_addskill_tab{18}', enabled: true }]);
+  });
+
+  it('Chinese search supports keyboard selection without translating the submitted key', () => {
+    const { latest } = mount([]);
+    const search = screen.getByRole('combobox', { name: '添加属性筛选' });
+    fireEvent.focus(search);
+    fireEvent.change(search, { target: { value: '力量' } });
+    fireEvent.keyDown(search, { key: 'Enter', isComposing: true });
+    expect(latest()).toEqual([]);
+    fireEvent.keyDown(search, { key: 'Enter' });
+    expect(latest()[0]).toMatchObject({ kind: 'mod', key: 'strength' });
+  });
+
   it('removes a row with its always-present remove button', () => {
     const { latest } = mount([row('a'), row('b', { key: 'maxhp' })]);
     fireEvent.click(screen.getByRole('button', { name: 'Remove Faster Cast Rate' }));

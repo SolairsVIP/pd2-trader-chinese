@@ -12,9 +12,11 @@
 >
 > **汉化作者：Solaris · 开源许可：[MIT License](LICENSE)**。保留原项目版权声明与许可证。
 
-**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.2/PD2.Trader.CN_0.11.2_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.2/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.2)**
+**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.3/PD2.Trader.CN_0.11.3_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.3/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.3)**
 
-当前版本：**0.11.2 自动更新引导版**，发布于 2026-10-25。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
+当前版本：**0.11.3 正式版**，发布于 2026-10-25。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
+
+本版已通过用户测试，由 0.11.3-beta.2 转为正式版：修复中文客户端上架匹配与队列刷新，补齐通知和错误提示汉化，支持使用“召唤”等中文及中英混合搜索市场属性。[完整更新说明](docs/releases/v0.11.3.md)。
 
 ## 快速开始
 
@@ -23,7 +25,7 @@
 3. 从右下角托盘右键打开**设置**，核对游戏目录、赛季、天梯与普通／专家模式。
 4. 回到游戏，将鼠标指向装备，按 **<kbd>Ctrl</kbd> + <kbd>D</kbd> 查价**；按 **<kbd>Ctrl</kbd> + <kbd>M</kbd> 打开交易大厅**。
 
-**首次请手动安装一次 0.11.2。此后默认自动检查中文版更新并弹出中文提示，由用户点击“下载并安装”后才更新及重启。** 在“设置 → 更新”中可以关闭自动检查或随时手动检查。启动约 5 秒后检查一次，运行中每隔 30 分钟检查一次；需要能连接 GitHub。安装后请核对现有账号和游戏分区设置。
+**0.11.2 及以上版本可通过自动更新升级；更早版本请手动安装当前正式版。默认自动检查中文版更新并弹出中文提示，由用户点击“下载并安装”后才更新及重启。** 在“设置 → 更新”中可以关闭自动检查或随时手动检查。启动约 5 秒后检查一次，运行中每隔 30 分钟检查一次；需要能连接 GitHub。安装后请核对现有账号和游戏分区设置。
 
 本文将原 PDF 整理为可直接阅读的图文说明。截图及 PDF 来自原使用指南，旧图中“关闭自动更新”的说明已由 0.11.2 的更新设置取代，部分译名、按钮和设置可能与新版略有不同；**快捷键与行为以当前程序设置及本文说明为准**。[查看仓库内 PDF 原件](docs/PD2查价器中文版功能介绍.pdf)。
 
@@ -213,7 +215,7 @@
 - [0.11.0 兼容范围与历史校验值](docs/releases/v0.11.0.md)
 - [0.11 大版本更新记录](docs/发布记录-0.11.0.md)
 - [历史修复与阶段性验证记录](docs/历史修复记录.md)
-- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.2/SHA256SUMS.txt)
+- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.3/SHA256SUMS.txt)
 - [上游原项目](https://github.com/errolgr/pd2-trade) · [本项目开源仓库](https://github.com/SolairsVIP/pd2-trader-chinese) · [MIT 许可证](LICENSE)
 
 <details>

@@ -270,7 +270,7 @@ export function StatFilters({
         <Autocomplete<StatChoice>
           inputRef={searchRef}
           ariaLabel="添加属性筛选"
-          placeholder="添加属性…（?）"
+          placeholder="搜索中英文属性…（?）"
           value={query}
           onQuery={(q) => {
             setQuery(q);

@@ -57,23 +57,23 @@ describe('useNetWorthQuery', () => {
     expect(load).toHaveBeenCalledTimes(1);
   });
 
-  it('maps a 401 to a sign-in message and passes other errors through', async () => {
+  it('presents sign-in, permission and unexpected errors in Chinese', async () => {
     const { load, calls } = queuedLoader<string>();
     const { result } = setup({ load });
     await act(async () => calls[0].reject(new NetWorthApiError('Unauthorized', 401)));
     expect(result.current).toMatchObject({
       data: null,
       loading: false,
-      error: 'Your PD2 session expired. Sign in again.',
+      error: '登录已失效，请重新登录后重试。',
     });
 
     act(() => result.current.reload());
     await act(async () => calls[1].reject(new NetWorthApiError('Account not linked', 403)));
-    expect(result.current.error).toBe('Account not linked');
+    expect(result.current.error).toBe('没有执行此操作的权限，请检查账号授权。（HTTP 403）');
 
     act(() => result.current.reload());
     await act(async () => calls[2].reject('plain string failure'));
-    expect(result.current.error).toBe('plain string failure');
+    expect(result.current.error).toBe('加载估值数据失败，请稍后重试。');
   });
 
   it('keeps the previous data visible while a reload is in flight, and clears the stale error', async () => {
@@ -88,7 +88,7 @@ describe('useNetWorthQuery', () => {
 
     act(() => result.current.reload());
     await act(async () => calls[2].reject(new Error('boom')));
-    expect(result.current).toMatchObject({ data: null, loading: false, error: 'boom' });
+    expect(result.current).toMatchObject({ data: null, loading: false, error: '加载估值数据失败，请稍后重试。' });
 
     act(() => result.current.reload());
     expect(result.current).toMatchObject({ loading: true, error: null });

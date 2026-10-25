@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { NetWorthApiError } from '@/lib/networth-api';
+import { describeUiError } from '@/lib/ui-error';
 
 export interface NetWorthQuery<T> {
   data: T | null;
@@ -33,12 +33,7 @@ export function useNetWorthQuery<T>(load: (() => Promise<T>) | null, refreshKey?
       },
       (err: unknown) => {
         if (cancelled) return;
-        const error =
-          err instanceof NetWorthApiError && err.status === 401
-            ? 'Your PD2 session expired. Sign in again.'
-            : err instanceof Error
-              ? err.message
-              : String(err);
+        const error = describeUiError(err, '加载估值数据失败，请稍后重试。');
         setSettled({ load, nonce, refreshKey, data: null, error });
       },
     );

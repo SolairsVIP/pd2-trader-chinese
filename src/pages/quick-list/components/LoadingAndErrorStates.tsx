@@ -73,7 +73,7 @@ const LoadingAndErrorStates: React.FC<LoadingAndErrorStatesProps> = ({
                 </p>
                 <p>
                   <strong>重要：</strong>重新登录前，请先清除此网站的浏览器 Cookie：{' '}
-                  <span className="rounded bg-destructive/10 px-1 font-mono">api.projectdiablo2.com</span> — otherwise
+                  <span className="rounded bg-destructive/10 px-1 font-mono">api.projectdiablo2.com</span>；
                   否则系统会自动恢复到当前会话。
                 </p>
               </AlertDescription>

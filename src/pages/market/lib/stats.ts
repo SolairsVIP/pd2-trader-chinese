@@ -2,6 +2,7 @@ import type { Modifier } from '@/common/types/pd2-website/GetMarketListingsRespo
 import { PSEUDO_STATS } from './pseudo';
 import { SITE_STAT_OPTIONS } from './stat-options.data';
 import type { CorruptionOption, PseudoDef, StatOption } from './types';
+import { localizePd2Text } from '@/lib/localize-pd2-text';
 
 /** A stat picker entry: a property, a pseudo stat or a cube corruption. */
 export type StatChoice = StatOption | PseudoDef | CorruptionOption;
@@ -119,6 +120,11 @@ export function isCorruption(option: StatChoice): option is CorruptionOption {
 
 /** Shorthands players type, expanded before matching. */
 const ALIASES: Record<string, string> = {
+  攻速: 'increased attack speed',
+  施法速度: 'faster cast rate',
+  施法率: 'faster cast rate',
+  打击恢复: 'faster hit recovery',
+  全抗: 'all resist',
   fcr: 'faster cast rate',
   fhr: 'faster hit recovery',
   fbr: 'faster block rate',
@@ -144,7 +150,7 @@ const ALIASES: Record<string, string> = {
 };
 
 function normalize(text: string): string {
-  return text.replace(/\{X\}/g, ' ').replace(/[+%]/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+  return text.normalize('NFKC').replace(/\{X\}/g, ' ').replace(/[+%]/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
 /** A normalized label without filler: leading "to " / "total ", trailing "(…)" notes ("+{X} to Life" → "life"). */
@@ -179,7 +185,22 @@ function scoreMatch(haystack: string, tokens: string[]): number | null {
 }
 
 /** Query words asking for corruptions ("corrupt", "corrupted", "corruption"). */
-const CORRUPT_WORD = /^corrupt/;
+const CORRUPT_WORD = /^(?:corrupt|腐化)/;
+
+const chineseLabels = new Map<string, string>();
+function scoreLabel(label: string, tokens: string[]): number | null {
+  const english = normalize(label);
+  const score = scoreMatch(english, tokens);
+  if (score !== null || !tokens.some((token) => /[\u3400-\u9fff]/u.test(token))) return score;
+  let chinese = chineseLabels.get(label);
+  if (chinese === undefined) {
+    chinese = normalize(localizePd2Text(label));
+    chineseLabels.set(label, chinese);
+  }
+  // Match what the picker displays, including mixed Chinese/English queries.
+  // The catalogue objects and their website property keys stay untouched.
+  return scoreMatch(chinese, tokens) ?? scoreMatch(`${english} ${chinese}`, tokens);
+}
 
 /**
  * Picker search: every query word (aliases like `fcr`, `res`, `mf` expanded) must appear in the label. Pseudo
@@ -188,25 +209,25 @@ const CORRUPT_WORD = /^corrupt/;
  * properties.
  */
 export function searchStats(query: string, limit = 50, corruptions: readonly CorruptionOption[] = []): StatChoice[] {
-  const words = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  const words = normalize(query).split(/\s+/).filter(Boolean);
   if (words.length === 0) return [...PSEUDO_STATS, ...STAT_OPTIONS].slice(0, limit);
   const tokens = words.flatMap((w) => normalize(ALIASES[w] ?? w).split(' '));
   const hits: { option: StatChoice; score: number }[] = [];
   for (const pseudo of PSEUDO_STATS) {
     // "Total …" frames the pseudo, so rank on the rest; still match when the user typed "total"
     const label = normalize(pseudo.label);
-    const score = scoreMatch(label.replace(/^total /, ''), tokens) ?? scoreMatch(label, tokens);
+    const score = scoreMatch(label.replace(/^total /, ''), tokens) ?? scoreLabel(pseudo.label, tokens);
     if (score !== null) hits.push({ option: pseudo, score: score - 0.5 });
   }
   for (const option of STAT_OPTIONS) {
-    const score = scoreMatch(normalize(option.label), tokens) ?? scoreMatch(option.key.toLowerCase(), words);
+    const score = scoreLabel(option.label, tokens) ?? scoreMatch(option.key.toLowerCase(), words);
     if (score !== null) hits.push({ option, score });
   }
   const wantsCorruption = words.some((w) => CORRUPT_WORD.test(w));
   const corruptionTokens = tokens.filter((t) => !CORRUPT_WORD.test(t));
   for (const option of corruptions) {
     const score =
-      scoreMatch(normalize(option.label), corruptionTokens) ?? scoreMatch(option.value.toLowerCase(), corruptionTokens);
+      scoreLabel(option.label, corruptionTokens) ?? scoreMatch(option.value.toLowerCase(), corruptionTokens);
     if (score !== null) hits.push({ option, score: score + (wantsCorruption ? -1 : 0.25) });
   }
   return hits

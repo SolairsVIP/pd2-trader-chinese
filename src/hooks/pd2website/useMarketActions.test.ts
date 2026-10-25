@@ -122,6 +122,51 @@ describe('findMatchingItems', () => {
     await expect(actions.findMatchingItems(priceCheckItem)).resolves.toEqual([shako]);
     expect(fetchAndCacheStash).toHaveBeenCalledTimes(1);
   });
+
+  it('forces a fresh stash read during queue polling even if an old match is cached', async () => {
+    const { actions, fetchAndCacheStash } = market({
+      cache: { data: { items: [cachedItem] } as GameData, timestamp: NOW.getTime() },
+    });
+    await expect(actions.findMatchingItems(priceCheckItem, { forceRefresh: true })).resolves.toEqual([shako]);
+    expect(fetchAndCacheStash).toHaveBeenCalledTimes(1);
+  });
+
+  it('shares a concurrent refresh and allows a new refresh after a failed request', async () => {
+    const { actions, fetchAndCacheStash } = market();
+    let reject!: (reason: Error) => void;
+    fetchAndCacheStash.mockImplementationOnce(() => new Promise((_, r) => { reject = r; }));
+    const first = actions.findMatchingItems(priceCheckItem, { forceRefresh: true });
+    const second = actions.findMatchingItems(priceCheckItem, { forceRefresh: true });
+    expect(fetchAndCacheStash).toHaveBeenCalledTimes(1);
+    reject(new Error('503'));
+    expect((await Promise.allSettled([first, second])).every((r) => r.status === 'rejected')).toBe(true);
+    await expect(actions.findMatchingItems(priceCheckItem, { forceRefresh: true })).resolves.toEqual([shako]);
+    expect(fetchAndCacheStash).toHaveBeenCalledTimes(2);
+  });
+
+  it('repairs historic queued game input before matching, preserving the official stash object for POST', async () => {
+    const official = { hash: 'official-tomb', name: 'Tomb Reaver', base: { name: 'Cryptic Axe' },
+      quality: { name: 'Unique' }, socket_count: 3, modifiers: [{ name: 'item_fasterattackrate', values: [60] }] } as GameStashItem;
+    const { actions, findItemsByName, fetchAndCacheStash } = market({
+      findItemsByName: (items, item) => item.type === 'Cryptic Axe' ? items : [],
+    });
+    fetchAndCacheStash.mockResolvedValueOnce({ items: [official] } as GameData);
+    const input = { iLevel: 90, location: 'Stash', quality: 'Unique', name: 'Tomb Reaver',
+      sockets: 3, stats: [], type: 'ç¥žç§˜ä¹‹æ–§ Cryptic Axe' };
+    const matches = await actions.findMatchingItems(input, { forceRefresh: true });
+    expect(findItemsByName).toHaveBeenCalledWith([official], expect.objectContaining({ type: 'Cryptic Axe' }));
+    expect(matches[0]).toBe(official);
+    await actions.listSpecificItem(matches[0], 0, '2wss', 'note');
+    expect(JSON.parse(lastCall().init.body as string).item).toEqual({ ...official, account_id: 'myacc' });
+    expect(official).not.toHaveProperty('account_id');
+  });
+
+  it('reports an unknown base before a network read or listing POST', async () => {
+    const { actions, fetchAndCacheStash } = market();
+    await expect(actions.findMatchingItems({ ...priceCheckItem, type: 'ç¥ž? Cryptic Axe' })).rejects.toThrow('无法识别装备底材');
+    expect(fetchAndCacheStash).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });
 
 describe('listSpecificItem', () => {

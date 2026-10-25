@@ -10,9 +10,14 @@ import { fetch as tauriFetch } from '@/lib/browser-http';
 import { searchMarketListings } from '@/lib/market-search-api';
 import qs from 'qs';
 import { AuthenticationError, handleApiResponse } from './usePD2Website';
+import { normalizeItemForStashMatching } from '@/lib/game-stash-input';
+
+export interface StashMatchOptions {
+  forceRefresh?: boolean;
+}
 
 interface UseMarketActionsReturn {
-  findMatchingItems: (item: PriceCheckItem) => Promise<GameStashItem[]>;
+  findMatchingItems: (item: PriceCheckItem, options?: StashMatchOptions) => Promise<GameStashItem[]>;
   listSpecificItem: (
     stashItem: GameStashItem,
     hrPrice: number,
@@ -65,24 +70,32 @@ export function useMarketActions({
   CACHE_TTL,
   onAuthError,
 }: UseMarketActionsProps): UseMarketActionsReturn {
+  // Parallel queue entries share one read. A changed account/session gets a new holder.
+  const stashRequest = useMemo(() => ({ current: null as Promise<GameData> | null }), [fetchAndCacheStash]);
   // Find matching items
   const findMatchingItems = useCallback(
-    async (item: PriceCheckItem): Promise<GameStashItem[]> => {
+    async (input: PriceCheckItem, options?: StashMatchOptions): Promise<GameStashItem[]> => {
+      const item = normalizeItemForStashMatching(input);
       let items: GameStashItem[] = [];
       const now = Date.now();
-      if (stashCache.current && now - stashCache.current.timestamp < CACHE_TTL) {
+      if (!options?.forceRefresh && stashCache.current && now - stashCache.current.timestamp < CACHE_TTL) {
         items = stashCache.current.data?.items || [];
         const matching = findItemsByName(items, item);
         if (matching.length > 0) {
           return matching;
         }
       }
-      const stashData = await fetchAndCacheStash();
+      if (!stashRequest.current) {
+        stashRequest.current = fetchAndCacheStash().finally(() => {
+          stashRequest.current = null;
+        });
+      }
+      const stashData = await stashRequest.current;
       items = stashData.items || [];
       const matching = findItemsByName(items, item);
       return matching;
     },
-    [settings, authData, fetchAndCacheStash, findItemsByName, stashCache, CACHE_TTL],
+    [settings, authData, fetchAndCacheStash, findItemsByName, stashCache, CACHE_TTL, stashRequest],
   );
 
   // List specific item (POST /market/listing)

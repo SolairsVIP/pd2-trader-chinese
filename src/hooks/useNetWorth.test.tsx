@@ -25,8 +25,8 @@ vi.mock('@/overlay', () => ({ useOverlay: vi.fn() }));
 vi.mock('@/hooks/useOptions', () => ({ useOptions: vi.fn() }));
 vi.mock('@/hooks/useOAuth', () => ({ useOAuth: vi.fn() }));
 vi.mock('@/hooks/pd2website/usePD2Website', () => {
-  class AuthenticationError extends Error {}
-  class AccountMismatchError extends Error {}
+  class AuthenticationError extends Error { name = 'AuthenticationError'; }
+  class AccountMismatchError extends Error { name = 'AccountMismatchError'; }
   return {
     AuthenticationError,
     AccountMismatchError,
@@ -214,10 +214,10 @@ describe('NetWorthProvider snapshots', () => {
   });
 
   it.each([
-    ['rate limit', new NetWorthApiError('slow down', 429), 'Too many requests. Try again in a minute.'],
-    ['other API error', new NetWorthApiError('Stash unavailable', 502), 'Stash unavailable'],
-    ['account mismatch', new AccountMismatchError('Account "x" is not yours'), 'Account "x" is not yours'],
-    ['non-Error throw', 'boom', 'boom'],
+    ['rate limit', new NetWorthApiError('slow down', 429), '请求过于频繁，请稍后重试。（HTTP 429）'],
+    ['other API error', new NetWorthApiError('Stash unavailable', 502), '服务器暂时无法处理请求，请稍后重试。（HTTP 502）'],
+    ['account mismatch', new AccountMismatchError('Account "x" is not yours'), '所选游戏账号未关联当前登录的网站账号，请检查账号和分区设置。'],
+    ['non-Error throw', 'boom', '仓库估值失败，请稍后重试。'],
   ])('maps a %s to a readable error', async (_label, failure, message) => {
     vi.mocked(syncSnapshot).mockRejectedValue(failure);
     const { result } = await renderHost();
@@ -241,7 +241,7 @@ describe('NetWorthProvider snapshots', () => {
     vi.mocked(syncSnapshot).mockRejectedValue(new NetWorthApiError('unauthorized', 401));
     const { result } = await renderHost();
 
-    expect(result.current.error).toBe('Your PD2 session expired. Sign in again.');
+    expect(result.current.error).toBe('登录已失效，请重新登录后重试。');
     expect(refreshTokens).not.toHaveBeenCalled();
     expect(openPanel.mock.calls.filter(([id]) => id === 'signIn')).toHaveLength(1);
   });

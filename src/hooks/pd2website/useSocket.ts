@@ -1,3 +1,4 @@
+import { describeUiError } from '@/lib/ui-error';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import io, { Socket } from 'socket.io-client';
 import { useOptions } from '../useOptions';
@@ -118,7 +119,7 @@ export const useSocket = (props?: UseSocketProps) => {
       // Transport-level failures (timeout, "websocket error") are network/upstream conditions and
       // socket.io retries automatically; they are not app bugs, so don't report them to Sentry.
       console.warn('[Socket] Connection error - will retry automatically:', error.message);
-      setError(error.message);
+      setError(describeUiError(error, '连接失败，正在自动重试。'));
       setIsConnected(false);
     });
 

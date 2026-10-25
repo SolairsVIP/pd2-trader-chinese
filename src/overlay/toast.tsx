@@ -156,7 +156,7 @@ export interface UndoToastOptions {
 
 /** A toast with an Undo button; returns a function that dismisses it (e.g. once the undo window closed). */
 export function undoToast({ title, description, duration, onUndo }: UndoToastOptions): () => void {
-  const id = toast(title, { description, duration, action: { label: 'Undo', onClick: onUndo } });
+  const id = toast(title, { description, duration, action: { label: '撤销', onClick: onUndo } });
   return () => toast.dismiss(id);
 }
 

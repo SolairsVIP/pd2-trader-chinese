@@ -2,7 +2,8 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useR
 import { invoke, isTauri } from '@tauri-apps/api/core';
 import { useOptions } from '@/hooks/useOptions';
 import { useOAuth } from '@/hooks/useOAuth';
-import { AccountMismatchError, AuthenticationError, usePd2Website } from '@/hooks/pd2website/usePD2Website';
+import { usePd2Website } from '@/hooks/pd2website/usePD2Website';
+import { describeUiError } from '@/lib/ui-error';
 import { useOverlay } from '@/overlay';
 import {
   getSeasons,
@@ -56,16 +57,7 @@ const FAILURE_BACKOFF_MAX_MS = 60 * 60 * 1000;
 const NetWorthContext = createContext<NetWorthContextValue | undefined>(undefined);
 
 function describeError(error: unknown): string {
-  if (error instanceof AccountMismatchError) {
-    return error.message || 'The selected account is not linked to your PD2 login. Check your account settings.';
-  }
-  if (error instanceof AuthenticationError) return 'Your PD2 session expired. Sign in again.';
-  if (error instanceof NetWorthApiError) {
-    if (error.status === 401) return 'Your PD2 session expired. Sign in again.';
-    if (error.status === 429) return 'Too many requests. Try again in a minute.';
-    return error.message;
-  }
-  return error instanceof Error ? error.message : String(error);
+  return describeUiError(error, '仓库估值失败，请稍后重试。');
 }
 
 /** Holdings fingerprint (prices excluded) used to detect "nothing changed since last snapshot". */

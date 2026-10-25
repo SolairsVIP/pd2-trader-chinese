@@ -25,7 +25,7 @@ describe('shortcutFormSchema', () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.issues[0].path).toEqual(['note']);
-      expect(result.error.issues[0].message).toBe('Please fill in either the note or HR price field.');
+      expect(result.error.issues[0].message).toBe('请至少填写价格备注或 HR 价格中的一项。');
     }
   });
 

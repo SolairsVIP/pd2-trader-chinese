@@ -13,6 +13,7 @@ import type { MarketListingEntry } from '@/common/types/pd2-website/GetMarketLis
 import type { MarketListingQuery } from '@/common/types/pd2-website/GetMarketListingsCommand';
 import type { Item as PriceCheckItem } from '@/pages/price-check/lib/interfaces';
 import ListItemShortcutForm from './ListItemShortcut';
+import { GameItemMatchingError } from '@/lib/game-stash-input';
 
 const panel = vi.hoisted(() => ({ close: (() => {}) as () => void }));
 vi.mock('@/overlay', () => ({ showToast: vi.fn(), usePanel: () => panel }));
@@ -568,4 +569,101 @@ it('Manage tab receives the prefetched first page', async () => {
   await selectTab(/Manage/);
   await waitFor(() => expect(screen.queryByText('Shako #5')).not.toBeNull());
   expect(screen.queryByText('Shako #6')).not.toBeNull();
+});
+
+describe('listing compatibility experiment', () => {
+  it('shows the listing success title, explanation and action in Chinese', async () => {
+    renderForm();
+    await flush();
+    fireEvent.change(priceInput(), { target: { value: '1' } });
+    await submit();
+    expect(toasts().at(-1)).toMatchObject({
+      title: '物品已上架！', description: '已添加到 PD2 交易市场。',
+      action: { label: '查看挂单', type: ToastActionType.OPEN_MARKET_LISTING, data: { listingId: 'NEW' } },
+    });
+    expect(api.listSpecificItem).toHaveBeenCalledWith(stash(1), 1, '', 'exact');
+  });
+
+  function seed(hashes?: string[]) {
+    const entry = {
+      id: 'experiment-queue',
+      item: { name: 'Tomb Reaver', type: 'ç¥žç§˜ä¹‹æ–§ Cryptic Axe', quality: 'Unique', iLevel: 90, stats: [] },
+      formData: { type: 'note', note: '2wss', price: '', currency: 'HR' },
+      createdAt: Date.now(), lastPolled: Date.now(), initialMatchingHashes: hashes,
+    };
+    localStorage.setItem(QUEUE_KEY, JSON.stringify([entry]));
+    return entry;
+  }
+
+  it('refreshes a historic queue, retains multiple candidates and lists only the chosen website item', async () => {
+    seed();
+    api.findMatchingItems.mockResolvedValue([stash(1), stash(2)]);
+    renderForm(null);
+    await flush();
+    expect(api.findMatchingItems).toHaveBeenCalledWith(expect.any(Object), { forceRefresh: true });
+    expect(api.listSpecificItem).not.toHaveBeenCalled();
+    expect(storedQueue()).toHaveLength(1);
+    await selectTab(/排队中/);
+    expect(screen.queryByText('找到多个物品')).not.toBeNull();
+    await act(async () => { fireEvent.click(screen.getAllByRole('button', { name: '选择' })[1]); });
+    await flush();
+    expect(api.listSpecificItem.mock.calls).toEqual([[stash(2), 0, '2wss', 'note']]);
+    expect(storedQueue()).toEqual([]);
+    await tick(POLL_INTERVAL * 2);
+    expect(api.listSpecificItem).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps excluded hashes excluded, including when several new candidates appear', async () => {
+    seed(['h1', 'h2']);
+    api.findMatchingItems.mockResolvedValue([stash(1), stash(2)]);
+    renderForm(null);
+    await flush();
+    expect(api.listSpecificItem).not.toHaveBeenCalled();
+    await selectTab(/排队中/);
+    expect(screen.queryByText(/已排除入队时的候选/)).not.toBeNull();
+    api.findMatchingItems.mockResolvedValue([stash(1), stash(3), stash(4)]);
+    await tick(POLL_INTERVAL);
+    expect(api.listSpecificItem).not.toHaveBeenCalled();
+    expect(screen.getAllByRole('button', { name: '选择' })).toHaveLength(2);
+  });
+
+  it('shows lookup errors instead of a sync-only message and recovers on the next poll', async () => {
+    seed();
+    api.findMatchingItems.mockRejectedValueOnce(new Error('503'));
+    renderForm(null);
+    await flush();
+    await selectTab(/排队中/);
+    expect(screen.getByRole('alert').textContent).toContain('检查仓库失败');
+    expect(screen.queryByText('自动等待期限：还剩约 15 分钟')).not.toBeNull();
+    expect(api.listSpecificItem).not.toHaveBeenCalled();
+    api.findMatchingItems.mockResolvedValue([stash(4)]);
+    await tick(POLL_INTERVAL);
+    expect(api.listSpecificItem.mock.calls).toEqual([[stash(4), 0, '2wss', 'note']]);
+  });
+
+  it('shows unrepairable input errors and never lists a fallback item', async () => {
+    seed();
+    api.findMatchingItems.mockRejectedValue(new GameItemMatchingError('无法识别装备底材：数据损坏'));
+    renderForm(null);
+    await flush();
+    await selectTab(/排队中/);
+    expect(screen.getByRole('alert').textContent).toContain('无法识别装备底材');
+    await tick(POLL_INTERVAL);
+    expect(api.listSpecificItem).not.toHaveBeenCalled();
+    expect(storedQueue()).toHaveLength(1);
+  });
+
+  it('does not auto-list an item cancelled while a stash read is still in flight', async () => {
+    seed();
+    let resolve!: (items: GameStashItem[]) => void;
+    api.findMatchingItems.mockImplementationOnce(() => new Promise((r) => { resolve = r; }));
+    renderForm(null);
+    await flush();
+    await selectTab(/排队中/);
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: '取消' })); });
+    await act(async () => { resolve([stash(1)]); });
+    await flush();
+    expect(api.listSpecificItem).not.toHaveBeenCalled();
+    expect(storedQueue()).toEqual([]);
+  });
 });

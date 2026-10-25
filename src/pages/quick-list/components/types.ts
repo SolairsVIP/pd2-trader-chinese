@@ -15,7 +15,7 @@ export const shortcutFormSchema = z
       return hasNote || hasPrice;
     },
     {
-      message: 'Please fill in either the note or HR price field.',
+      message: '请至少填写价格备注或 HR 价格中的一项。',
       path: ['note'],
     },
   );
@@ -23,6 +23,6 @@ export const shortcutFormSchema = z
 export type ShortcutFormData = z.infer<typeof shortcutFormSchema>;
 
 export const priceTypeOptions = [
-  { value: 'exact', label: 'Exact Price' },
-  { value: 'note', label: 'Note' },
+  { value: 'exact', label: '固定价格' },
+  { value: 'note', label: '价格备注' },
 ] as const;

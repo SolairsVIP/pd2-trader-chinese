@@ -215,7 +215,7 @@ export function RangeField({
     <Field label={label}>
       <div className="flex items-center gap-1">
         <NumberInput
-          ariaLabel={`${label} min`}
+          ariaLabel={`${label}最小值`}
           placeholder="最小值"
           value={min}
           step={step}
@@ -223,7 +223,7 @@ export function RangeField({
         />
         <span className="text-xs text-muted-foreground">–</span>
         <NumberInput
-          ariaLabel={`${label} max`}
+          ariaLabel={`${label}最大值`}
           placeholder="最大值"
           value={max}
           step={step}
@@ -352,6 +352,8 @@ export function Autocomplete<T>({
             setActive(0);
           }}
           onKeyDown={(e) => {
+            // Enter confirms the Chinese IME candidate before it selects a filter.
+            if (e.nativeEvent.isComposing || e.keyCode === 229) return;
             if (show && e.key === 'ArrowDown') {
               e.preventDefault();
               setActive(Math.min(options.length - 1, active + 1));

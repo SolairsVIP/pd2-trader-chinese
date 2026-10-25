@@ -171,9 +171,9 @@ describe('useSocketNotifications offer notifications', () => {
     expect(sounds).toEqual([0.4]);
     expect(toasts()).toEqual([
       {
-        title: 'New Offer',
+        title: '收到新报价',
         description: 'Bob offered 2 ist',
-        action: { label: 'View Listing', type: ToastActionType.OPEN_MARKET_LISTING, data: { listingId: 'listing-1' } },
+        action: { label: '查看挂单', type: ToastActionType.OPEN_MARKET_LISTING, data: { listingId: 'listing-1' } },
       },
     ]);
     expect(pd2.refresh).toHaveBeenCalledTimes(1);
@@ -226,7 +226,7 @@ describe('useSocketNotifications offer notifications', () => {
   it('shows the default description when the notification has no text', async () => {
     await renderNotifications({ isConnected: true });
     await fire(OFFER_EVENT, offer('n1', { meta: {} }));
-    expect(toasts()).toEqual([expect.objectContaining({ description: 'New offer received' })]);
+    expect(toasts()).toEqual([expect.objectContaining({ description: '收到一条新报价' })]);
   });
 
   it('only listens while connected', async () => {
@@ -269,10 +269,10 @@ describe('useSocketNotifications whispers', () => {
     expect(sounds).toEqual([1]);
     expect(toasts()).toEqual([
       {
-        title: 'Whisper from Bob',
+        title: '来自 Bob 的密语',
         description: `${'x'.repeat(80)}...`,
         duration: 5000,
-        action: { label: 'Reply', type: ToastActionType.OPEN_CHAT_CONVERSATION, data: { threadId: 'whisper:bob' } },
+        action: { label: '回复', type: ToastActionType.OPEN_CHAT_CONVERSATION, data: { threadId: 'whisper:bob' } },
       },
     ]);
   });
@@ -286,7 +286,7 @@ describe('useSocketNotifications whispers', () => {
     await fire('whisper-received', whisper({ from: 'Carl' }));
 
     expect(sounds).toHaveLength(1);
-    expect(toasts()).toEqual([expect.objectContaining({ title: 'Whisper from Carl' })]);
+    expect(toasts()).toEqual([expect.objectContaining({ title: '来自 Carl 的密语' })]);
   });
 
   it('keeps an 80-character whisper intact', async () => {
@@ -350,10 +350,10 @@ describe('useSocketNotifications whispers', () => {
     expect(sounds).toHaveLength(3);
     expect(toasts()).toEqual([
       {
-        title: 'Trade Whisper',
+        title: '交易密语',
         description: 'Bob: Shako',
         duration: 5000,
-        action: { label: 'Reply', type: ToastActionType.OPEN_CHAT_CONVERSATION, data: { threadId: 'whisper:bob' } },
+        action: { label: '回复', type: ToastActionType.OPEN_CHAT_CONVERSATION, data: { threadId: 'whisper:bob' } },
       },
     ]);
   });
@@ -380,7 +380,7 @@ describe('useSocketNotifications whispers', () => {
 
     expect(sounds).toHaveLength(1);
     expect(toasts()).toEqual([
-      { title: 'Player Joined', description: 'Bob joined the game', duration: 5000, variant: 'default' },
+      { title: '玩家加入游戏', description: 'Bob 加入了游戏', duration: 5000, variant: 'default' },
     ]);
   });
 
@@ -421,9 +421,9 @@ describe('useSocketNotifications chat messages', () => {
 
     expect(toasts()).toEqual([
       {
-        title: 'New Chat Message',
+        title: '收到新聊天消息',
         description: 'hi there',
-        action: { label: 'Reply', type: ToastActionType.OPEN_CHAT_CONVERSATION, data: { conversationId: 'c1' } },
+        action: { label: '回复', type: ToastActionType.OPEN_CHAT_CONVERSATION, data: { conversationId: 'c1' } },
       },
     ]);
   });

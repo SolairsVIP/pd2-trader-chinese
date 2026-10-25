@@ -95,7 +95,7 @@ describe('useOAuth startOAuthFlow', () => {
       pd2RefreshToken: 'ref',
       pd2TokenExpiry: NOW + 2000 * 4 + 3600 * 1000,
     });
-    expect(toasts().map((t) => t.description)).toEqual(['Authentication successful!']);
+    expect(toasts().map((t) => t.description)).toEqual(['登录验证成功！']);
   });
 
   it('outside Tauri opens the sign-in tab during the click, then points it at PD2', async () => {
@@ -135,7 +135,7 @@ describe('useOAuth startOAuthFlow', () => {
 
     expect(outcome).toBe(false);
     expect(pollCount()).toBe(0);
-    expect(toasts().at(-1)?.description).toMatch(/blocked the sign-in window/);
+    expect(toasts().at(-1)?.description).toMatch(/浏览器阻止了登录窗口/);
   });
 
   it('times out after 10 minutes with a warning toast and stores nothing', async () => {
@@ -155,7 +155,7 @@ describe('useOAuth startOAuthFlow', () => {
     expect(pollCount()).toBe(300);
     expect(updateSettings).not.toHaveBeenCalled();
     expect(toasts()).toEqual([
-      expect.objectContaining({ variant: 'warning', description: 'Login timed out. Please try again.' }),
+      expect.objectContaining({ variant: 'warning', description: '登录超时，请重试。' }),
     ]);
   });
 
@@ -188,7 +188,7 @@ describe('useOAuth startOAuthFlow', () => {
     });
     expect(pollCount()).toBe(0);
     expect(toasts()).toEqual([
-      expect.objectContaining({ variant: 'error', description: 'Authentication failed. Please try again.' }),
+      expect.objectContaining({ variant: 'error', description: '登录验证失败，请重试。' }),
     ]);
 
     routeFetch([jsonResponse({ accessToken: 'acc2', expiresIn: 60 })]);
@@ -223,7 +223,7 @@ describe('useOAuth startOAuthFlow', () => {
     });
     // The aborted flow never polled again; only the new flow did.
     expect(pollCount()).toBe(1);
-    expect(toasts().map((t) => t.description)).toEqual(['Authentication successful!']);
+    expect(toasts().map((t) => t.description)).toEqual(['登录验证成功！']);
   });
 
   it('ignores tokens that arrive after the caller aborted', async () => {

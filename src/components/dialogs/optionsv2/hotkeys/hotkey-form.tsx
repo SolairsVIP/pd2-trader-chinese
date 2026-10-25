@@ -233,7 +233,7 @@ export function HotkeyForm() {
                             <Tabs defaultValue={'ctrl'}
                               value={modField.value as string}>
                               <TabsList className="h-8"
-                                aria-label={`${row.label} modifier`}>
+                                aria-label={`${row.label} 的组合修饰键`}>
                                 <TabsTrigger
                                   value={'ctrl'}
                                   className="px-2.5"

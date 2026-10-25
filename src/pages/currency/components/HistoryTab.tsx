@@ -1,3 +1,4 @@
+import { describeUiError } from '@/lib/ui-error';
 import React, { useCallback, useMemo, useState } from 'react';
 import { localizeItemName } from '@/lib/localize-item-name';
 import { Area, AreaChart, CartesianGrid, ReferenceLine, Tooltip as ChartTooltip, XAxis, YAxis } from 'recharts';
@@ -835,7 +836,7 @@ function DeleteHistory({
       setResult({ ok: true, text: `已删除 ${deletedPoints} 个估值快照。` });
       onDeleted();
     } catch (err) {
-      setResult({ ok: false, text: err instanceof Error ? err.message : String(err) });
+      setResult({ ok: false, text: describeUiError(err, '快照操作失败，请稍后重试。') });
     } finally {
       setBusy(false);
     }

@@ -84,7 +84,7 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
     const text = newText.trim();
     if (!label || !text) return;
     if (macros.some((m) => m.label === label)) {
-      setError(`A macro named "${label}" already exists.`);
+      setError(`已存在名为“${label}”的宏。`);
       return;
     }
     setError(null);

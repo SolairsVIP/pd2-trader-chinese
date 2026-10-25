@@ -77,11 +77,11 @@ function VersionSection({
           <Badge variant="outline"
             className="gap-1 border-primary/50 text-xs text-primary">
             <Sparkles />
-            Current
+            当前版本
           </Badge>
         )}
         <span className="ml-auto text-[11px] tabular-nums text-muted-foreground">
-          {entries.length} change{entries.length === 1 ? '' : 's'}
+          {entries.length} 项更新
         </span>
       </div>
       <ul className="space-y-1.5">

@@ -367,7 +367,7 @@ export const OptionsProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         showToast({
           title: 'PD2 Trader',
-          description: 'Token loaded from URL successfully!',
+          description: '登录授权已成功载入！',
         });
       }
     }

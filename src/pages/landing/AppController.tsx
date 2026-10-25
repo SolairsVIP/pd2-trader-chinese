@@ -113,8 +113,8 @@ const AppController: React.FC = () => {
       showToast({ title: '无法上架物品', description: '物品不受支持或数据无效。', variant: 'error' });
     } else if (!isStashItem(raw)) {
       showToast({
-        title: 'Cannot List Item',
-        description: 'This item is not in your shared stash and cannot be listed.',
+        title: '无法上架物品',
+        description: '该物品不在共享仓库中，无法上架。',
         variant: 'error',
       });
     }

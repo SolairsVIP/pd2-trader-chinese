@@ -1,3 +1,4 @@
+import { describeUiError } from '@/lib/ui-error';
 import { PopoverKeyValue, PopoverSectionTitle, PopoverTile } from '@/components/custom/popover-parts';
 import { encodeItemForQuickList, isStashItem } from '@/lib/item-utils';
 import { useInView } from 'react-intersection-observer';
@@ -567,12 +568,12 @@ export default function ItemOverlayWidget({ item, statMapper, onClose }: Props) 
           setAveragePriceData(priceData);
           setAveragePriceLoading(false);
         } else {
-          setAveragePriceError('No price data available');
+          setAveragePriceError('暂无价格数据。');
           setAveragePriceLoading(false);
         }
       } catch (error: any) {
         console.error('[ItemOverlayWidget] Error fetching average price:', error);
-        setAveragePriceError(error.message || 'Failed to fetch price data');
+        setAveragePriceError(describeUiError(error, '获取价格数据失败，请稍后重试。'));
         setAveragePriceLoading(false);
       }
     };
@@ -859,7 +860,7 @@ export default function ItemOverlayWidget({ item, statMapper, onClose }: Props) 
           { outcome: 'error', archived: searchArchived, search_mode: shouldUseToggle ? searchMode : 0 },
         );
         console.log(e.message || 'Failed to fetch market listings');
-        setMarketError(e.message || 'Failed to fetch market listings');
+        setMarketError(describeUiError(e, '加载市场挂单失败，请稍后重试。'));
       } finally {
         setMarketLoading(false);
       }

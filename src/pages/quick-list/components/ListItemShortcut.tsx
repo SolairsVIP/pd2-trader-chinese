@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { localizeItemName } from '@/lib/localize-item-name';
+import { GameItemMatchingError } from '@/lib/game-stash-input';
+import { describeUiError } from '@/lib/ui-error';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
@@ -66,6 +68,8 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
     pendingListings,
     POLL_INTERVAL,
   } = usePendingListingsQueue();
+  const pendingListingsRef = useRef(pendingListings);
+  pendingListingsRef.current = pendingListings;
   const [matchingItems, setMatchingItems] = useState<GameStashItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<GameStashItem | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -80,14 +84,12 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
   const [isQueued, setIsQueued] = useState(false);
   const [queuedListingIds, setQueuedListingIds] = useState<Set<string>>(new Set());
   const [isPolling, setIsPolling] = useState(false);
-  const [showMultipleMatchSelector, setShowMultipleMatchSelector] = useState(false);
-  const [pendingMatches, setPendingMatches] = useState<GameStashItem[]>([]);
-  const [pendingMatchListingId, setPendingMatchListingId] = useState<string | null>(null);
+  const [queueErrors, setQueueErrors] = useState<Record<string, string>>({});
+  const [queueCandidates, setQueueCandidates] = useState<Record<string, GameStashItem[]>>({});
   const [showQueueOption, setShowQueueOption] = useState(false); // Track if user explicitly revealed queue option
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const isPollRunningRef = useRef(false); // Prevent overlapping poll cycles
   const isProcessingRef = useRef<Set<string>>(new Set()); // Track which items are being processed
-  const pendingListingDataRef = useRef<PendingListing | null>(null);
 
   const form = useForm<ShortcutFormData>({
     resolver: zodResolver(shortcutFormSchema),
@@ -107,12 +109,8 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
     setExpandedItems(new Set());
     setIsMarketListingsLoading(false);
     setSubmitLoading(false);
-    setShowMultipleMatchSelector(false);
-    setPendingMatches([]);
-    setPendingMatchListingId(null);
     setShowQueueOption(false);
     isProcessingRef.current = new Set();
-    pendingListingDataRef.current = null;
     form.reset({ type: 'exact', note: '', price: '', currency: 'HR' });
   }, [form]);
 
@@ -152,21 +150,19 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
 
       // Handle account mismatch error with user-friendly message
       if (err instanceof AccountMismatchError) {
-        const errorMessage =
-          err.message ||
-          'The selected account is not associated with your logged-in account. Please check your account settings.';
+        const errorMessage = describeUiError(err);
         setError(errorMessage);
         setIsAccountMismatch(true);
 
         const toastPayload: GenericToastPayload = {
-          title: 'Account Mismatch',
+          title: '账号不匹配',
           description: errorMessage,
           variant: 'error',
           duration: 8000,
         };
         showToast(toastPayload);
       } else {
-        setError(err instanceof Error ? err.message : 'Failed to find items');
+        setError(describeUiError(err, '查找仓库物品失败，请稍后重试。'));
       }
     } finally {
       setIsLoading(false);
@@ -295,9 +291,9 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
           // Check if user has reached the maximum number of listings (50)
           if (currentTotalCount >= 50) {
             const warningToast: GenericToastPayload = {
-              title: 'Maximum listings reached',
+              title: '挂单数量已达上限',
               description:
-                'You can only have 50 active listings. Please remove an existing listing before adding a new one.',
+                '最多可保留 50 个有效挂单，请先下架现有物品后再上架。',
               variant: 'error',
             };
             showToast(warningToast);
@@ -322,10 +318,10 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
 
         // Emit custom toast with listing data
         const toastPayload: CustomToastPayload = {
-          title: 'Item listed!',
-          description: `Your queued item has been listed on the PD2 marketplace.`,
+          title: '物品已上架！',
+          description: `排队物品已成功上架到 PD2 交易市场。`,
           action: {
-            label: stashItem?.name || 'Go to listing',
+            label: '查看挂单',
             type: ToastActionType.OPEN_MARKET_LISTING,
             data: {
               listingId: listing._id,
@@ -342,8 +338,8 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
           { outcome: 'error', source: 'queued' },
         );
         const errorToast: GenericToastPayload = {
-          title: 'Failed to list item',
-          description: err instanceof Error ? err.message : 'Failed to list queued item',
+          title: '物品上架失败',
+          description: describeUiError(err, '排队物品上架失败，请稍后重试。'),
           variant: 'error',
         };
         showToast(errorToast);
@@ -351,6 +347,22 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
     },
     [listSpecificItem, fetchAllListings, allListingsQuery, getMarketListings, totalListingsCount],
   );
+
+  const completeQueuedListing = useCallback(async (pending: PendingListing, stashItem: GameStashItem) => {
+    if (isProcessingRef.current.has(pending.id) || !pendingListingsRef.current.some((p) => p.id === pending.id)) return;
+    isProcessingRef.current.add(pending.id);
+    setQueuedListingIds((prev) => {
+      const next = new Set(prev);
+      next.delete(pending.id);
+      return next;
+    });
+    removePendingListing(pending.id);
+    try {
+      await processQueuedListing(pending, stashItem);
+    } finally {
+      isProcessingRef.current.delete(pending.id);
+    }
+  }, [processQueuedListing, removePendingListing]);
 
   // Poll for all queued items
   const pollForAllQueuedItems = useCallback(async () => {
@@ -405,8 +417,8 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
 
         // Show error toast
         const timeoutToast: GenericToastPayload = {
-          title: 'Listing timeout',
-          description: `The item "${pendingListing.item.name || pendingListing.item.type}" could not be listed. The server did not sync the item within the timeout period. Please try again.`,
+          title: '上架等待超时',
+          description: `“${pendingListing.item.name || pendingListing.item.type}”在等待期限内未完成匹配或上架。请检查账号、分区和共享仓库后重新尝试。`,
           variant: 'error',
         };
         showToast(timeoutToast);
@@ -416,60 +428,24 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
       updateLastPolled(pendingId);
 
       try {
-        const items = await findMatchingItems(pendingListing.item);
-
-        // Determine which item to use based on whether we have initial matching hashes
-        let itemToUse: GameStashItem | null = null;
-
-        if (pendingListing.initialMatchingHashes && pendingListing.initialMatchingHashes.size > 0) {
-          // We queued with multiple matches - look for a NEW item (not in initial set)
-          const newItems = items.filter((item) => !pendingListing.initialMatchingHashes!.has(item.hash));
-
-          if (newItems.length > 0) {
-            // Found a new item! Use the first one (or could use the most recent if we had timestamps)
-            itemToUse = newItems[0];
-          }
-        } else {
-          // No initial matching hashes - this was queued with 0 matches, use first item found
-          if (items.length > 0) {
-            itemToUse = items[0];
-          }
-        }
-
-        if (itemToUse) {
-          // Mark as processing immediately to prevent duplicates
-          isProcessingRef.current.add(pendingId);
-
-          // Remove from tracked queue IMMEDIATELY
-          setQueuedListingIds((prev) => {
-            const next = new Set(prev);
-            next.delete(pendingId);
-            return next;
-          });
-          removePendingListing(pendingId);
-
-          // Process the found item
-          await processQueuedListing(pendingListing, itemToUse);
-          isProcessingRef.current.delete(pendingId);
-        } else if (items.length > 1 && !pendingListing.initialMatchingHashes) {
-          // Multiple matches but no initial hashes (shouldn't happen, but handle gracefully)
-          // This means we queued with 0 matches but now have multiple - show selector
-          isProcessingRef.current.add(pendingId);
-          setQueuedListingIds((prev) => {
-            const next = new Set(prev);
-            next.delete(pendingId);
-            return next;
-          });
-          removePendingListing(pendingId);
-          pendingListingDataRef.current = pendingListing;
-          setPendingMatchListingId(pendingId);
-          setPendingMatches(items);
-          setShowMultipleMatchSelector(true);
-          setMatchingItems(items);
-        }
+        const items = await findMatchingItems(pendingListing.item, { forceRefresh: true });
+        if (isProcessingRef.current.has(pendingId)) return;
+        const eligible = items.filter((candidate) => !pendingListing.initialMatchingHashes?.has(candidate.hash));
+        setQueueErrors((prev) => ({ ...prev, [pendingId]: '' }));
+        setQueueCandidates((prev) => ({ ...prev, [pendingId]: eligible.length > 1 ? eligible : [] }));
+        if (eligible.length === 1) await completeQueuedListing(pendingListing, eligible[0]);
       } catch (err) {
         console.error('[Queue] Error polling for queued item:', pendingId, err);
         isProcessingRef.current.delete(pendingId);
+        setQueueCandidates((prev) => ({ ...prev, [pendingId]: [] }));
+        setQueueErrors((prev) => ({
+          ...prev,
+          [pendingId]: err instanceof AuthenticationError
+            ? '登录已失效，请重新登录后重试。'
+            : err instanceof GameItemMatchingError
+              ? err.message
+              : '检查仓库失败，将在下一轮重试。请检查网络连接和登录状态。',
+        }));
 
         // Handle account mismatch error with user-friendly message
         if (err instanceof AccountMismatchError) {
@@ -482,10 +458,8 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
           });
 
           const toastPayload: GenericToastPayload = {
-            title: 'Account Mismatch',
-            description:
-              err.message ||
-              'The selected account is not associated with your logged-in account. Please check your account settings.',
+            title: '账号不匹配',
+            description: describeUiError(err),
             variant: 'error',
             duration: 8000,
           };
@@ -511,9 +485,12 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
     updateLastPolled,
     removePendingListing,
     queuedListingIds,
-    processQueuedListing,
+    completeQueuedListing,
     POLL_INTERVAL,
   ]);
+
+  const pollCallbackRef = useRef(pollForAllQueuedItems);
+  pollCallbackRef.current = pollForAllQueuedItems;
 
   // Start polling for all queued items
   useEffect(() => {
@@ -522,11 +499,11 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
     // Set up polling if we have queued items and no interval is running
     if (hasQueuedItems && !pollIntervalRef.current) {
       // Poll immediately first
-      pollForAllQueuedItems();
+      pollCallbackRef.current();
 
       // Then set up interval
       pollIntervalRef.current = setInterval(() => {
-        pollForAllQueuedItems();
+        pollCallbackRef.current();
       }, POLL_INTERVAL);
     } else if (!hasQueuedItems && pollIntervalRef.current) {
       // Stop polling if no queued items
@@ -553,9 +530,9 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
       await fetchAllListings();
       if (totalListingsCount >= 50) {
         const warningToast: GenericToastPayload = {
-          title: 'Maximum listings reached',
+          title: '挂单数量已达上限',
           description:
-            'You can only have 50 active listings. Please remove an existing listing before adding a new one.',
+            '最多可保留 50 个有效挂单，请先下架现有物品后再上架。',
           variant: 'error',
         };
         showToast(warningToast);
@@ -575,11 +552,11 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
 
       trackEvent('list_item_queued', { has_multiple_matches: matchingItems.length > 0 });
       const queuedToast: GenericToastPayload = {
-        title: 'Item queued',
+        title: '物品已加入队列',
         description:
           matchingItems.length > 0
-            ? "We're waiting for the new item to appear in your stash (usually takes a few minutes). Once it appears, it will be listed automatically."
-            : "We're waiting for the server to sync your item (usually takes a few minutes). Once synced, it will be listed automatically.",
+            ? "正在等待官网仓库出现新物品。入队时的候选已排除；出现多个新候选时需要手动选择。"
+            : "正在检查官网共享仓库。找到单件候选后自动上架；多个候选需要手动选择。",
         variant: 'default',
       };
       showToast(queuedToast);
@@ -594,7 +571,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
     }
 
     if (!selectedItem) {
-      setError('Please select an item to list');
+      setError('请先选择要上架的物品。');
       trackEvent('list_item_submit_rejected', { reason: 'no_item_selected' });
       return;
     }
@@ -640,9 +617,9 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
         // Check if user has reached the maximum number of listings (50)
         if (totalListingsCount >= 50) {
           const warningToast: GenericToastPayload = {
-            title: 'Maximum listings reached',
+            title: '挂单数量已达上限',
             description:
-              'You can only have 50 active listings. Please remove an existing listing before adding a new one.',
+              '最多可保留 50 个有效挂单，请先下架现有物品后再上架。',
             variant: 'error',
           };
           showToast(warningToast);
@@ -665,10 +642,10 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
 
         // Emit custom toast with listing data
         const toastPayload: CustomToastPayload = {
-          title: 'Item listed!',
-          description: `Added to the PD2 marketplace.`,
+          title: '物品已上架！',
+          description: `已添加到 PD2 交易市场。`,
           action: {
-            label: selectedItem?.name || 'Go to listing',
+            label: '查看挂单',
             type: ToastActionType.OPEN_MARKET_LISTING,
             data: {
               listingId: listing._id,
@@ -688,7 +665,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
         { outcome: 'error', source: isAlreadyListed ? undefined : 'direct' },
       );
       console.error(err instanceof Error ? err.message : 'Failed to list/update item');
-      setError(err instanceof Error ? err.message : 'Failed to list/update item');
+      setError(describeUiError(err, '上架或更新挂单失败，请稍后重试。'));
     } finally {
       setSubmitLoading(false);
     }
@@ -736,28 +713,6 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
     await getMarketListingsForStashItems();
     await findMatchingItemsInStash();
   };
-
-  // Handle selection from multiple matches
-  const handleMultipleMatchSelection = useCallback(
-    async (stashItem: GameStashItem) => {
-      if (!pendingListingDataRef.current || !pendingMatchListingId) {
-        return;
-      }
-
-      const pendingListing = pendingListingDataRef.current;
-      const listingId = pendingMatchListingId;
-
-      setShowMultipleMatchSelector(false);
-      setPendingMatches([]);
-      setPendingMatchListingId(null);
-      pendingListingDataRef.current = null;
-
-      // Remove from processing set after processing
-      await processQueuedListing(pendingListing, stashItem);
-      isProcessingRef.current.delete(listingId);
-    },
-    [processQueuedListing, pendingMatchListingId],
-  );
 
   // Find the current market listing for the selected item
   const currentListingForSelected = useMemo(
@@ -830,7 +785,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
           </span>
           <div className="text-base font-semibold tracking-tight">等待上架的物品</div>
           <div className="text-sm text-muted-foreground max-w-md leading-relaxed">
-            正在等待服务器同步物品（通常需要几分钟）。同步完成后，物品会自动上架。
+            每 15 秒检查一次官网仓库。找到单件候选后自动上架；多个候选需手动选择。
           </div>
           <AnimatePresence>
             {isPolling && (
@@ -860,7 +815,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                 const age = Date.now() - pendingListing.createdAt;
                 const maxAge = 60 * POLL_INTERVAL;
                 const timeRemaining = Math.max(0, maxAge - age);
-                const minutesRemaining = Math.floor(timeRemaining / 60000);
+                const minutesRemaining = Math.ceil(timeRemaining / 60000);
                 const elapsedPct = Math.min(100, Math.max(0, (age / maxAge) * 100));
                 const { note, price } = pendingListing.formData;
 
@@ -870,7 +825,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                     variants={listItem}
                     exit={{ opacity: 0, x: -12, transition: { duration: DUR.fast } }}
                     key={pendingListing.id}
-                    className={itemCard({ className: 'flex items-center justify-between gap-3' })}
+                    className={itemCard({ className: 'flex flex-wrap items-center justify-between gap-3' })}
                   >
                     <div className="flex-1 min-w-0">
                       <div className="truncate font-medium" title={itemName}>{localizeItemName(pendingListing.item.isRuneword ? pendingListing.item.runeword ?? itemName : itemName, pendingListing.item.isRuneword ? 'Runeword' : pendingListing.item.quality)}</div>
@@ -886,7 +841,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                       )}
                       <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
                         <Clock className="size-3 shrink-0" />
-                        <span className="shrink-0">剩余时间：约 {minutesRemaining} 分钟</span>
+                        <span className="shrink-0">自动等待期限：还剩约 {minutesRemaining} 分钟</span>
                         <div
                           className="h-1 flex-1 overflow-hidden rounded-full bg-muted"
                           role="progressbar"
@@ -901,6 +856,11 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                           />
                         </div>
                       </div>
+                      {queueErrors[pendingListing.id] ? (
+                        <p role="alert" className="mt-2 text-sm text-destructive">{queueErrors[pendingListing.id]}</p>
+                      ) : pendingListing.initialMatchingHashes?.size ? (
+                        <p className="mt-2 text-xs text-muted-foreground">已排除入队时的候选，正在等待新物品；若目标已在其中，请取消排队后重新选择。</p>
+                      ) : null}
                     </div>
                     <Button
                       variant="outline"
@@ -928,6 +888,18 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                       <X className="size-3.5" />
                       取消
                     </Button>
+                    {queueCandidates[pendingListing.id]?.length > 1 && (
+                      <div className="w-full">
+                        <MultipleMatchSelector
+                          matchingItems={queueCandidates[pendingListing.id]}
+                          expandedItems={expandedItems}
+                          onItemSelect={(candidate) => completeQueuedListing(pendingListing, candidate)}
+                          onToggleExpanded={toggleExpandedStats}
+                          onExpandAll={expandAllStats}
+                          onCollapseAll={collapseAllStats}
+                        />
+                      </div>
+                    )}
                   </motion.div>
                 );
               })}
@@ -960,24 +932,6 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
           onRetry={findMatchingItemsInStash}
           isAccountMismatch={isAccountMismatch}
         />
-      );
-    }
-
-    // 3. Multiple Matches Selector
-    if (showMultipleMatchSelector && pendingMatches.length > 0) {
-      return (
-        <Form {...form}>
-          <form>
-            <MultipleMatchSelector
-              matchingItems={pendingMatches}
-              expandedItems={expandedItems}
-              onItemSelect={handleMultipleMatchSelection}
-              onToggleExpanded={toggleExpandedStats}
-              onExpandAll={expandAllStats}
-              onCollapseAll={collapseAllStats}
-            />
-          </form>
-        </Form>
       );
     }
 

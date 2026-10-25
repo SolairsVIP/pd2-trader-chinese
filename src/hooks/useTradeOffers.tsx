@@ -419,8 +419,8 @@ export const useTradeOffers = ({ settings, authData, onAuthError }: UseTradeOffe
 
         // Show success toast
         showToast({
-          title: 'Offer Revoked',
-          description: offer ? `Your offer on ${offer.itemName || 'item'} has been revoked` : 'Offer has been revoked',
+          title: '报价已撤回',
+          description: offer ? `你对「${offer.itemName || '该物品'}」的报价已撤回。` : '报价已撤回。',
           variant: 'success',
         });
 
@@ -431,8 +431,8 @@ export const useTradeOffers = ({ settings, authData, onAuthError }: UseTradeOffe
         void refresh();
         // Show error toast
         showToast({
-          title: 'Failed to Revoke Offer',
-          description: 'An error occurred while revoking the offer',
+          title: '撤回报价失败',
+          description: '撤回报价时发生错误，请稍后重试。',
           variant: 'error',
         });
         throw error;
@@ -454,10 +454,10 @@ export const useTradeOffers = ({ settings, authData, onAuthError }: UseTradeOffe
 
         // Show success toast
         showToast({
-          title: 'Offer Accepted',
+          title: '报价已接受',
           description: offer
-            ? `You accepted ${offer.playerName}'s offer on ${offer.itemName || 'item'}`
-            : 'Offer has been accepted',
+            ? `你已接受 ${offer.playerName} 对「${offer.itemName || '该物品'}」的报价。`
+            : '报价已接受。',
           variant: 'success',
         });
 
@@ -466,8 +466,8 @@ export const useTradeOffers = ({ settings, authData, onAuthError }: UseTradeOffe
         console.error('Failed to accept offer:', error);
         // Show error toast
         showToast({
-          title: 'Failed to Accept Offer',
-          description: 'An error occurred while accepting the offer',
+          title: '接受报价失败',
+          description: '接受报价时发生错误，请稍后重试。',
           variant: 'error',
         });
         throw error;
@@ -493,10 +493,10 @@ export const useTradeOffers = ({ settings, authData, onAuthError }: UseTradeOffe
 
         // Show success toast
         showToast({
-          title: 'Offer Rejected',
+          title: '报价已拒绝',
           description: offer
-            ? `You rejected ${offer.playerName}'s offer on ${offer.itemName || 'item'}`
-            : 'Offer has been rejected',
+            ? `你已拒绝 ${offer.playerName} 对「${offer.itemName || '该物品'}」的报价。`
+            : '报价已拒绝。',
           variant: 'success',
         });
 
@@ -507,8 +507,8 @@ export const useTradeOffers = ({ settings, authData, onAuthError }: UseTradeOffe
         void refresh();
         // Show error toast
         showToast({
-          title: 'Failed to Reject Offer',
-          description: 'An error occurred while rejecting the offer',
+          title: '拒绝报价失败',
+          description: '拒绝报价时发生错误，请稍后重试。',
           variant: 'error',
         });
         throw error;
@@ -530,10 +530,10 @@ export const useTradeOffers = ({ settings, authData, onAuthError }: UseTradeOffe
 
         // Show success toast
         showToast({
-          title: 'Offer Unaccepted',
+          title: '已取消接受报价',
           description: offer
-            ? `You unaccepted ${offer.playerName}'s offer on ${offer.itemName || 'item'}`
-            : 'Offer has been unaccepted',
+            ? `你已取消接受 ${offer.playerName} 对「${offer.itemName || '该物品'}」的报价。`
+            : '已取消接受报价。',
           variant: 'success',
         });
 
@@ -542,8 +542,8 @@ export const useTradeOffers = ({ settings, authData, onAuthError }: UseTradeOffe
         console.error('Failed to unaccept offer:', error);
         // Show error toast
         showToast({
-          title: 'Failed to Unaccept Offer',
-          description: 'An error occurred while unaccepting the offer',
+          title: '取消接受报价失败',
+          description: '取消接受报价时发生错误，请稍后重试。',
           variant: 'error',
         });
         throw error;
@@ -568,10 +568,10 @@ export const useTradeOffers = ({ settings, authData, onAuthError }: UseTradeOffe
 
       // Show success toast
       showToast({
-        title: 'Offer Hidden',
+        title: '报价已隐藏',
         description: offer
-          ? `Your offer on ${offer.itemName || 'item'} has been hidden. It will be removed after 7 days.`
-          : 'Offer has been hidden',
+          ? `你对「${offer.itemName || '该物品'}」的报价已隐藏，7 天后将从隐藏列表移除。`
+          : '报价已隐藏。',
         variant: 'success',
       });
     },
@@ -594,8 +594,8 @@ export const useTradeOffers = ({ settings, authData, onAuthError }: UseTradeOffe
 
       // Show success toast
       showToast({
-        title: 'Offer Restored',
-        description: offer ? `Your offer on ${offer.itemName || 'item'} has been restored` : 'Offer has been restored',
+        title: '报价已恢复',
+        description: offer ? `你对「${offer.itemName || '该物品'}」的报价已恢复。` : '报价已恢复。',
         variant: 'success',
       });
     },

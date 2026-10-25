@@ -1,3 +1,4 @@
+import { describeUiError } from '@/lib/ui-error';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ExternalLink, Loader2, RotateCw } from 'lucide-react';
@@ -53,7 +54,7 @@ export function PublicProfileGroup() {
     } catch (err) {
       if (err instanceof NetWorthApiError && err.status === 404) setState({ kind: 'not-live' });
       else if (err instanceof NetWorthApiError && err.status === 401) setState({ kind: 'signed-out' });
-      else setState({ kind: 'error', message: err instanceof Error ? err.message : '无法加载个人资料设置。' });
+      else setState({ kind: 'error', message: describeUiError(err, '无法加载个人资料设置。') });
     }
   }, [token, form]);
 
@@ -76,7 +77,7 @@ export function PublicProfileGroup() {
       setProfile(p);
       form.reset(toValues(p));
     } catch (err) {
-      setSaveError(err instanceof Error ? err.message : '保存失败。');
+      setSaveError(describeUiError(err, '保存失败，请稍后重试。'));
       if (profile) form.reset(toValues(profile));
     } finally {
       setSaving(false);

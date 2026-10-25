@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useOptions } from '../useOptions';
 import { useStashCache } from './useStashCache';
-import { useMarketActions } from './useMarketActions';
+import { useMarketActions, type StashMatchOptions } from './useMarketActions';
 import { useSocialActions, type SocialActions } from './useSocialActions';
 import { useTradeOffers, type TradeOffer } from '../useTradeOffers';
 import { useSocket, type SubscribeSocket } from './useSocket';
@@ -50,7 +50,7 @@ export class AccountMismatchError extends Error {
 }
 
 interface Pd2WebsiteContextType extends SocialActions {
-  findMatchingItems: (item: PriceCheckItem) => Promise<GameStashItem[]>;
+  findMatchingItems: (item: PriceCheckItem, options?: StashMatchOptions) => Promise<GameStashItem[]>;
   listSpecificItem: (
     stashItem: GameStashItem,
     hrPrice: number,
@@ -167,7 +167,7 @@ export const Pd2WebsiteProvider = ({ children }: Pd2WebsiteProviderProps) => {
     // Show toast notification
     const toastPayload: GenericToastPayload = {
       title: 'PD2 Trader',
-      description: 'Logged out successfully.',
+      description: '已成功退出登录。',
       variant: 'default',
       duration: 3000,
     };

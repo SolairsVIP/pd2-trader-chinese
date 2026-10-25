@@ -270,7 +270,7 @@ describe('useTradeOffers hidden outgoing offers', () => {
     act(() => first.result.current.deleteOutgoingOffer('a'));
     expect(first.result.current.outgoingOffers.map((o) => o.id)).toEqual(['b']);
     expect(first.result.current.hiddenOutgoingOffers.map((o) => o.id)).toEqual(['a']);
-    expect(toasts().at(-1)).toMatchObject({ title: 'Offer Hidden', description: expect.stringContaining('Item a') });
+    expect(toasts().at(-1)).toMatchObject({ title: '报价已隐藏', description: expect.stringContaining('Item a') });
     first.unmount();
 
     // A fresh mount (app restart) still hides it.
@@ -306,7 +306,7 @@ describe('useTradeOffers actions', () => {
 
     expect(patchCalls()).toEqual([['offer/a', { rejected: true }]]);
     expect(toasts()).toEqual([
-      { title: 'Offer Revoked', description: 'Your offer on Item a has been revoked', variant: 'success' },
+      { title: '报价已撤回', description: '你对「Item a」的报价已撤回。', variant: 'success' },
     ]);
     expect(result.current.outgoingOffers.map((o) => o.id)).toEqual(['b']);
   });
@@ -321,7 +321,7 @@ describe('useTradeOffers actions', () => {
     });
 
     expect(result.current.outgoingOffers.map((o) => o.id)).toEqual(['a']);
-    expect(toasts()).toEqual([expect.objectContaining({ title: 'Failed to Revoke Offer', variant: 'error' })]);
+    expect(toasts()).toEqual([expect.objectContaining({ title: '撤回报价失败', variant: 'error' })]);
   });
 
   it('accepts an offer on its listing and names the buyer in the toast', async () => {
@@ -332,7 +332,7 @@ describe('useTradeOffers actions', () => {
 
     expect(patchCalls()).toEqual([['listing/L1', { accepted_offer_id: 'o1' }]]);
     expect(toasts()).toEqual([
-      { title: 'Offer Accepted', description: "You accepted buyer-o1's offer on Shako", variant: 'success' },
+      { title: '报价已接受', description: "你已接受 buyer-o1 对「Shako」的报价。", variant: 'success' },
     ]);
   });
 
@@ -371,7 +371,7 @@ describe('useTradeOffers actions', () => {
     await act(async () => {
       await expect(result.current.acceptOffer('L1', 'o1')).rejects.toThrow();
     });
-    expect(toasts()).toEqual([expect.objectContaining({ title: 'Failed to Accept Offer', variant: 'error' })]);
+    expect(toasts()).toEqual([expect.objectContaining({ title: '接受报价失败', variant: 'error' })]);
   });
 
   it('rejects optimistically and restores the offer on failure', async () => {
@@ -385,7 +385,7 @@ describe('useTradeOffers actions', () => {
 
     expect(patchCalls()).toEqual([['offer/o1', { rejected: true }]]);
     expect(result.current.incomingOffers.map((o) => o.id)).toEqual(['o1', 'o2']);
-    expect(toasts()).toEqual([expect.objectContaining({ title: 'Failed to Reject Offer' })]);
+    expect(toasts()).toEqual([expect.objectContaining({ title: '拒绝报价失败' })]);
   });
 
   it('removes a rejected offer and names the buyer', async () => {
@@ -398,7 +398,7 @@ describe('useTradeOffers actions', () => {
 
     expect(result.current.incomingOffers.map((o) => o.id)).toEqual(['o2']);
     expect(toasts()).toEqual([
-      { title: 'Offer Rejected', description: "You rejected buyer-o1's offer on Shako", variant: 'success' },
+      { title: '报价已拒绝', description: "你已拒绝 buyer-o1 对「Shako」的报价。", variant: 'success' },
     ]);
   });
 
@@ -411,7 +411,7 @@ describe('useTradeOffers actions', () => {
 
     expect(patchCalls()).toEqual([['listing/L1', { accepted_offer_id: null }]]);
     expect(toasts()).toEqual([
-      { title: 'Offer Unaccepted', description: "You unaccepted buyer-o2's offer on Shako", variant: 'success' },
+      { title: '已取消接受报价', description: "你已取消接受 buyer-o2 对「Shako」的报价。", variant: 'success' },
     ]);
   });
 
@@ -422,7 +422,7 @@ describe('useTradeOffers actions', () => {
     await act(async () => {
       await expect(result.current.unacceptOffer('L1')).rejects.toThrow();
     });
-    expect(toasts()).toEqual([expect.objectContaining({ title: 'Failed to Unaccept Offer' })]);
+    expect(toasts()).toEqual([expect.objectContaining({ title: '取消接受报价失败' })]);
   });
 
   it('does nothing without a token', async () => {

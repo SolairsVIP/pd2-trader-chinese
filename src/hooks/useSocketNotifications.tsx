@@ -92,7 +92,7 @@ export const useSocketNotifications = ({
       }
 
       const listingId = notification.data.listing_id;
-      const offerMessage = notification.meta?.string || 'New offer received';
+      const offerMessage = notification.meta?.string || '收到一条新报价';
 
       // Play notification sound if trade notifications are enabled
       const tradeEnabled = settings?.tradeNotificationsEnabled ?? true;
@@ -104,10 +104,10 @@ export const useSocketNotifications = ({
       // Show toast notification with link to listing
       if (isToastEnabled(settings, 'offers')) {
         showToast({
-          title: 'New Offer',
+          title: '收到新报价',
           description: offerMessage,
           action: {
-            label: 'View Listing',
+            label: '查看挂单',
             type: ToastActionType.OPEN_MARKET_LISTING,
             data: {
               listingId: listingId,
@@ -151,7 +151,7 @@ export const useSocketNotifications = ({
           const threadId = whisperThreadId(personKey(whisper.from));
           if (isThreadMuted([threadId])) return;
           const reply = {
-            label: 'Reply',
+            label: '回复',
             type: ToastActionType.OPEN_CHAT_CONVERSATION,
             data: { threadId },
           };
@@ -167,8 +167,8 @@ export const useSocketNotifications = ({
 
               if (isToastEnabled(settings, 'joins')) {
                 const toastPayload: GenericToastPayload = {
-                  title: 'Player Joined',
-                  description: `${whisper.from} joined the game`,
+                  title: '玩家加入游戏',
+                  description: `${whisper.from} 加入了游戏`,
                   duration: 5000,
                   variant: 'default',
                 };
@@ -227,7 +227,7 @@ export const useSocketNotifications = ({
               // Show toast with item name only if Diablo is not focused
               if (whisper.itemName && !isDiabloFocused && isToastEnabled(settings, 'trade')) {
                 showToast({
-                  title: 'Trade Whisper',
+                  title: '交易密语',
                   description: `${whisper.from}: ${whisper.itemName}`,
                   duration: 5000,
                   action: reply,
@@ -247,7 +247,7 @@ export const useSocketNotifications = ({
             // Show toast when tabbed out of Diablo
             if (!isDiabloFocused && isToastEnabled(settings, 'whispers')) {
               showToast({
-                title: `Whisper from ${whisper.from}`,
+                title: `来自 ${whisper.from} 的密语`,
                 description: whisper.message.length > 80 ? whisper.message.slice(0, 80) + '...' : whisper.message,
                 duration: 5000,
                 action: reply,
@@ -306,10 +306,10 @@ export const useSocketNotifications = ({
 
       // Toasts can't take typing: Reply opens the conversation with the composer focused
       showToast({
-        title: 'New Chat Message',
+        title: '收到新聊天消息',
         description: messagePreview,
         action: {
-          label: 'Reply',
+          label: '回复',
           type: ToastActionType.OPEN_CHAT_CONVERSATION,
           data: { conversationId: msg.conversation_id },
         },

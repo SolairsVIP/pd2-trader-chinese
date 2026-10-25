@@ -10,7 +10,7 @@ export const otherParticipant = (conversation: Conversation, currentUserId: stri
   currentUserId ? conversation.participants.find((p) => p._id !== currentUserId) : undefined;
 
 export const participantName = (participant: Participant | null | undefined) =>
-  participant?.display_name || participant?.username || 'Unknown';
+  participant?.display_name || participant?.username || '未知玩家';
 
 /** PD2 website pages of a user (opened with openUrl). */
 export const profileUrl = (username: string) => `https://www.projectdiablo2.com/@${encodeURIComponent(username)}`;

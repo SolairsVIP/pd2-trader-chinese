@@ -1,3 +1,4 @@
+import { describeUiError } from '@/lib/ui-error';
 import React, { useEffect, useId, useMemo, useState } from 'react';
 import { motion, MotionConfig } from 'framer-motion';
 import { AlertTriangle, Camera, ExternalLink, LogIn, Loader2, Play, Square, TrendingUp } from 'lucide-react';
@@ -132,7 +133,7 @@ const NetWorthPanel: React.FC = () => {
         setPointsError(null);
       })
       .catch((err: Error) => {
-        if (!cancelled) setPointsError(err.message);
+        if (!cancelled) setPointsError(describeUiError(err, '加载估值历史失败，请稍后重试。'));
       });
     return () => {
       cancelled = true;
@@ -241,7 +242,7 @@ const NetWorthPanel: React.FC = () => {
                     {formatSignedHr(sessionDelta)} HR 本次收益
                   </span>
                   <span className="text-muted-foreground tabular-nums">
-                    {formatHr(currentSession.hrPerHour)} HR/h · {Math.round(currentSession.durationMinutes)} min
+                    {formatHr(currentSession.hrPerHour)} HR/h · {Math.round(currentSession.durationMinutes)} 分钟
                   </span>
                 </div>
               )}

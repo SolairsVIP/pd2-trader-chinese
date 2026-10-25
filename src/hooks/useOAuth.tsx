@@ -111,7 +111,7 @@ export function useOAuth() {
           if (!tab) {
             showToast({
               title: 'PD2 Trader',
-              description: 'Your browser blocked the sign-in window. Allow pop-ups for this site and try again.',
+              description: '浏览器阻止了登录窗口，请允许此站点弹出窗口后重试。',
               variant: 'error',
             });
             return false;
@@ -125,7 +125,7 @@ export function useOAuth() {
         if (!tokens) {
           const timeoutToast: GenericToastPayload = {
             title: 'PD2 Trader',
-            description: 'Login timed out. Please try again.',
+            description: '登录超时，请重试。',
             variant: 'warning',
           };
           showToast(timeoutToast);
@@ -141,7 +141,7 @@ export function useOAuth() {
 
         const successToast: GenericToastPayload = {
           title: 'PD2 Trader',
-          description: 'Authentication successful!',
+          description: '登录验证成功！',
         };
         showToast(successToast);
         return tokens.accessToken;
@@ -150,7 +150,7 @@ export function useOAuth() {
         console.error('[OAuth] Flow failed:', error);
         const errorToast: GenericToastPayload = {
           title: 'PD2 Trader',
-          description: 'Authentication failed. Please try again.',
+          description: '登录验证失败，请重试。',
           variant: 'error',
         };
         showToast(errorToast);

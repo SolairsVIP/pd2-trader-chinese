@@ -1,3 +1,4 @@
+import { describeUiError } from '@/lib/ui-error';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { localizeMarketItemName } from '@/lib/localize-item-name';
 import { useForm } from 'react-hook-form';
@@ -184,7 +185,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
       const duration = performance.now() - startTime;
       trackMeasurement('listed_items_fetch', { duration_ms: duration }, { outcome: 'error', page: currentPage });
       console.error('Failed to fetch market listings:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch listings');
+      setError(describeUiError(err, '加载挂单失败，请稍后重试。'));
     } finally {
       setIsLoading(false);
     }

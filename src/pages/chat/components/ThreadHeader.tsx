@@ -99,7 +99,7 @@ export function ThreadHeader({
         <button
           type="button"
           tabIndex={-1}
-          aria-label={`Trader details for ${name}`}
+          aria-label={`${name} 的交易者详情`}
           onClick={traderOpen ? undefined : onToggleTrader}
           className="shrink-0 rounded-full outline-none transition-transform duration-(--dur-fast) hover:scale-105 active:scale-95"
         >
