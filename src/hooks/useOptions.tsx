@@ -3,6 +3,7 @@ import { Dialog } from '@/components/ui/dialog';
 import { useCallback, useEffect } from 'react';
 import { readTextFile, writeTextFile, BaseDirectory, mkdir, exists } from '@/lib/browser-fs';
 import mergeWith from 'lodash/mergeWith';
+import { migrateUpdatePreference } from '@/lib/update-preference';
 import { startDebugLogging, stopDebugLogging } from '@/lib/debug-logger';
 import SettingsLayout from '@/components/dialogs/optionsv2/options-layout';
 import { isTauri } from '@tauri-apps/api/core';
@@ -87,7 +88,8 @@ export interface ISettings {
   hotkeyModifierMarket?: 'ctrl' | 'alt';
   hotkeyKeyMarket?: string; // '' = unbound
   themeId?: string; // Color theme id from src/lib/themes.ts
-  autoUpdateEnabled?: boolean; // Legacy preference; update checks are disabled in the localized build.
+  autoUpdateEnabled?: boolean; // Check and notify only; installation always requires a click.
+  autoUpdatePreferenceVersion?: number;
   windowTransparency?: number; // 0-WINDOW_TRANSPARENCY_MAX (%) from src/lib/themes.ts; 0 = opaque
 }
 
@@ -147,7 +149,8 @@ const DEFAULT_SETTINGS: ISettings = {
   hotkeyModifierMarket: 'ctrl',
   hotkeyKeyMarket: 'm',
   themeId: DEFAULT_THEME_ID,
-  autoUpdateEnabled: false,
+  autoUpdateEnabled: true,
+  autoUpdatePreferenceVersion: 1,
   windowTransparency: 0,
 };
 
@@ -315,7 +318,7 @@ export const OptionsProvider: React.FC<{ children: React.ReactNode }> = ({ child
           ),
         );
         const withEnglishChatTemplates = migrateDefaultChatTemplates(withMarketHotkey);
-        const merged = migrateDefaultOfferTemplates(parsed, withEnglishChatTemplates);
+        const merged = migrateUpdatePreference(parsed, migrateDefaultOfferTemplates(parsed, withEnglishChatTemplates));
 
         const mergedJson = JSON.stringify(merged, null, 2);
 

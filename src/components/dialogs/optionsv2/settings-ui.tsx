@@ -17,6 +17,7 @@ export type SettingsSectionId =
   | 'Price Check'
   | 'Net Worth'
   | 'Hotkeys'
+  | 'Updates'
   | 'About';
 
 /** Lets a form jump to another settings section (e.g. "configured under Hotkeys"). */

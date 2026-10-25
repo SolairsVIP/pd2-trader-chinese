@@ -1,135 +1,55 @@
 // @vitest-environment happy-dom
-import { act, cleanup, renderHook } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { showToast } from '@/overlay';
+import { beforeEach, expect, it, vi } from 'vitest';
 import { check } from '@tauri-apps/plugin-updater';
-import type { DownloadEvent, Update } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
 import { toast } from 'sonner';
-import { useOptions } from '@/hooks/useOptions';
-import type { ISettings } from '@/hooks/useOptions';
-import { CustomToastPayload } from '@/common/types/Events';
-import { resetUpdateNotification, useAppUpdates } from '@/hooks/useAppUpdates';
-import { installUpdateAndRelaunch } from './updater';
-
-vi.mock('@/overlay', () => ({ showToast: vi.fn() }));
+import { checkForAvailableUpdate, installUpdateAndRelaunch } from './updater';
+import { migrateUpdatePreference, resetUpdateNotification, shouldNotifyUpdate } from './update-preference';
+vi.mock('@tauri-apps/api/core', () => ({ isTauri: () => true }));
 vi.mock('@tauri-apps/plugin-updater', () => ({ check: vi.fn() }));
 vi.mock('@tauri-apps/plugin-process', () => ({ relaunch: vi.fn() }));
-vi.mock('@tauri-apps/api/core', () => ({ isTauri: () => true }));
-vi.mock('sonner', () => ({
-  toast: { loading: vi.fn(), success: vi.fn(), error: vi.fn() },
-}));
-vi.mock('@/hooks/useOptions', () => ({ useOptions: vi.fn() }));
-vi.mock('@/hooks/useDialog', () => ({
-  useDialog: () => ({ openDialog: vi.fn(), closeDialog: vi.fn() }),
-}));
-
-let calls: string[];
-
-function fakeUpdate(events: DownloadEvent[], failure?: Error): Update {
-  const downloadAndInstall = vi.fn(async (onEvent?: (event: DownloadEvent) => void) => {
-    events.forEach((event) => onEvent?.(event));
-    if (failure) throw failure;
-    calls.push('install');
-  });
-  return { available: true, version: '1.2.0', downloadAndInstall } as unknown as Update;
-}
-
-const fullDownload: DownloadEvent[] = [
-  { event: 'Started', data: { contentLength: 200 } },
-  { event: 'Progress', data: { chunkLength: 100 } },
-  { event: 'Progress', data: { chunkLength: 100 } },
-  { event: 'Finished' },
-];
-
+vi.mock('sonner', () => ({ toast: { loading: vi.fn(), success: vi.fn(), error: vi.fn() } }));
+let order: string[];
+let update: any;
 beforeEach(() => {
-  calls = [];
-  resetUpdateNotification();
-  vi.spyOn(console, 'warn').mockImplementation(() => {});
+  vi.clearAllMocks(); order = []; resetUpdateNotification();
   vi.spyOn(console, 'error').mockImplementation(() => {});
-  vi.mocked(toast.loading).mockReturnValue('download-toast');
-  vi.mocked(relaunch).mockImplementation(async () => {
-    calls.push('relaunch');
-  });
+  update = { version: '1.2.0', body: '更新说明', close: vi.fn(async () => {}), downloadAndInstall: vi.fn(async (onEvent) => {
+    onEvent({ event: 'Finished' }); order.push('install');
+  }) };
+  vi.mocked(check).mockResolvedValue(update);
+  vi.mocked(relaunch).mockImplementation(async () => { order.push('relaunch'); });
 });
-
-afterEach(() => {
-  cleanup();
-  vi.useRealTimers();
+it('coalesces checks and closes the native resource without downloading', async () => {
+  const a = checkForAvailableUpdate(), b = checkForAvailableUpdate();
+  expect(a).toBe(b); expect(await a).toEqual({ version: '1.2.0', notes: '更新说明' });
+  expect(update.close).toHaveBeenCalledTimes(1); expect(update.downloadAndInstall).not.toHaveBeenCalled();
 });
-
-describe('installUpdateAndRelaunch', () => {
-  it('installs an available update before relaunching, reporting progress', async () => {
-    vi.mocked(check).mockResolvedValue(fakeUpdate(fullDownload));
-
-    await installUpdateAndRelaunch();
-
-    expect(calls).toEqual(['install', 'relaunch']);
-    const loadingMessages = vi.mocked(toast.loading).mock.calls.map(([message]) => message);
-    expect(loadingMessages).toEqual([
-      'Downloading update...',
-      'Downloading update... 50%',
-      'Downloading update... 100%',
-    ]);
-    expect(toast.success).toHaveBeenCalledWith('Update downloaded! Restarting...', expect.anything());
-    expect(toast.error).not.toHaveBeenCalled();
-  });
-
-  it('reports 0% instead of NaN when the content length is unknown', async () => {
-    vi.mocked(check).mockResolvedValue(
-      fakeUpdate([
-        { event: 'Started', data: {} },
-        { event: 'Progress', data: { chunkLength: 50 } },
-        { event: 'Finished' },
-      ]),
-    );
-
-    await installUpdateAndRelaunch();
-
-    expect(vi.mocked(toast.loading).mock.calls.map(([message]) => message)).toContain('Downloading update... 0%');
-    expect(calls).toEqual(['install', 'relaunch']);
-  });
-
-  it('relaunches directly when no update is available', async () => {
-    vi.mocked(check).mockResolvedValue(null);
-
-    await installUpdateAndRelaunch();
-
-    expect(calls).toEqual(['relaunch']);
-    expect(toast.loading).not.toHaveBeenCalled();
-    expect(toast.error).not.toHaveBeenCalled();
-  });
-
-  it('shows an error, does not relaunch, and lets the same version notify again when the download fails', async () => {
-    vi.useFakeTimers();
-    vi.mocked(check).mockResolvedValue(fakeUpdate(fullDownload.slice(0, 2), new Error('download failed')));
-    vi.mocked(useOptions).mockReturnValue({
-      isOpen: false,
-      setIsOpen: vi.fn(),
-      isLoading: false,
-      settings: { autoUpdateEnabled: false } as ISettings,
-      updateSettings: vi.fn(),
-    });
-    const toastVersions = () =>
-      vi.mocked(showToast).mock.calls.map(([payload]) => (payload as CustomToastPayload).action?.data?.version);
-    const advance = (ms: number) =>
-      act(async () => {
-        await vi.advanceTimersByTimeAsync(ms);
-      });
-
-    renderHook(() => useAppUpdates());
-    await advance(5000);
-    await advance(5 * 60 * 1000);
-    expect(toastVersions()).toEqual(['1.2.0']);
-
-    // false lets windows without a Toaster (price check pill) show the failure
-    expect(await installUpdateAndRelaunch()).toBe(false);
-
-    expect(toast.error).toHaveBeenCalledWith('Failed to download update. Please try again later.', expect.anything());
-    expect(relaunch).not.toHaveBeenCalled();
-    expect(calls).toEqual([]);
-
-    await advance(5 * 60 * 1000);
-    expect(toastVersions()).toEqual(['1.2.0', '1.2.0']);
-  });
+it('only explicit install performs download, installation then relaunch', async () => {
+  expect(await installUpdateAndRelaunch()).toBe(true); expect(order).toEqual(['install', 'relaunch']);
+  expect(update.close).toHaveBeenCalledTimes(1);
+});
+it('no available update never restarts', async () => {
+  vi.mocked(check).mockResolvedValue(null);
+  expect(await installUpdateAndRelaunch()).toBe(false); expect(relaunch).not.toHaveBeenCalled();
+  expect(toast.success).toHaveBeenCalledWith('当前已是最新版本', expect.anything());
+});
+it.each(['network', 'signature', 'installer'])('%s failure after download never restarts and permits retry', async () => {
+  shouldNotifyUpdate('1.2.0');
+  update.downloadAndInstall.mockImplementationOnce(async (onEvent: any) => { onEvent({ event: 'Finished' }); throw new Error('failed'); });
+  expect(await installUpdateAndRelaunch()).toBe(false); expect(relaunch).not.toHaveBeenCalled();
+  expect(toast.error).toHaveBeenCalled(); expect(shouldNotifyUpdate('1.2.0')).toBe(true);
+  expect(await installUpdateAndRelaunch()).toBe(true);
+});
+it('a check failure never restarts', async () => {
+  vi.mocked(check).mockRejectedValueOnce(new Error('offline'));
+  expect(await installUpdateAndRelaunch()).toBe(false); expect(relaunch).not.toHaveBeenCalled();
+});
+it('repeated install clicks share one download', async () => {
+  const a = installUpdateAndRelaunch(), b = installUpdateAndRelaunch();
+  expect(a).toBe(b); await Promise.all([a,b]); expect(update.downloadAndInstall).toHaveBeenCalledTimes(1);
+});
+it('migrates old forced-off settings once and preserves a later explicit opt-out', () => {
+  expect(migrateUpdatePreference({ autoUpdateEnabled: false }, { autoUpdateEnabled: false })).toMatchObject({ autoUpdateEnabled: true, autoUpdatePreferenceVersion: 1 });
+  expect(migrateUpdatePreference({ autoUpdateEnabled: false, autoUpdatePreferenceVersion: 1 }, { autoUpdateEnabled: false })).toEqual({ autoUpdateEnabled: false });
 });

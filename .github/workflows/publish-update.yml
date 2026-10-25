@@ -1,0 +1,40 @@
+name: Build and publish signed Chinese update
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: signed-update-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install locked frontend dependencies
+        run: npm ci
+      - name: Verify updater identity, behavior and release signatures
+        run: |
+          node scripts/verify-updater.mjs config
+          node node_modules/typescript/bin/tsc -p tsconfig.app.json --noEmit --pretty false
+          node node_modules/vitest/vitest.mjs run src/hooks/useAppUpdates.test.tsx src/lib/updater.test.ts scripts/verify-updater.test.mjs src/components/dialogs/optionsv2/updates/layout.test.tsx
+      - name: Build signed Windows x64 installer
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: npm run tauri -- build --bundles nsis -- --locked
+      - name: Verify uploaded assets and publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/publish-update.mjs
+      - name: Verify public update feed
+        run: |
+          $taskVersion = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          node scripts/verify-updater.mjs live --expect-version $taskVersion

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Guards the auto-update pipeline. A broken update can only be fixed by users re-downloading the
  * installer, because the updater that would fetch the fix lives in the already-installed build.
@@ -25,13 +24,13 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // Installed builds have these baked in. Changing any of them strands every existing install:
 // a new key fails signature checks, a new identifier/binary name installs a second copy, and old
 // builds keep polling the old endpoint. Only change them alongside a manual-reinstall migration plan.
-export const EXPECTED_KEY_ID = '26B56390B49E9A08';
-export const EXPECTED_ENDPOINT = 'https://github.com/errolgr/pd2-trade/releases/latest/download/latest.json';
-export const EXPECTED_IDENTIFIER = 'com.pd2-trader.app';
+export const EXPECTED_KEY_ID = 'C4778CD189119CE3';
+export const EXPECTED_ENDPOINT = 'https://github.com/SolairsVIP/pd2-trader-chinese/releases/latest/download/latest.json';
+export const EXPECTED_IDENTIFIER = 'com.pd2-trader.chinese';
 export const EXPECTED_MAIN_BINARY = 'pd2-trader-installer';
-// Platforms built by .github/workflows/publish-to-manual-release.yml.
-export const REQUIRED_PLATFORMS = ['windows-x86_64', 'linux-x86_64'];
-const DEFAULT_REPO = 'errolgr/pd2-trade';
+// Platforms built by .github/workflows/publish-update.yml.
+export const REQUIRED_PLATFORMS = ['windows-x86_64'];
+const DEFAULT_REPO = 'SolairsVIP/pd2-trader-chinese';
 
 const ED25519_SPKI_PREFIX = Buffer.from('302a300506032b6570032100', 'hex');
 

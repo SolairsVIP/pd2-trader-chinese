@@ -169,11 +169,11 @@ describe('OptionsProvider loading', () => {
     state.files.set('settings.json', JSON.stringify({ hotkeyKey: 'q' }));
     const { result } = await renderLoaded();
     expect(result.current.settings.chatTemplates?.map((t) => [t.name, !!t.favorite])).toEqual([
-      ['Still available?', true],
-      ['Sold, sorry', true],
-      ['Inv me', true],
-      ['ty gl', true],
-      ['Price check', false],
+      ['还在吗？ / Still available?', true],
+      ['抱歉，已售出 / Sold, sorry', true],
+      ['邀请我 / Invite me', true],
+      ['谢谢，祝好运 / Thanks, good luck', true],
+      ['询价 / Price check', false],
     ]);
     expect(savedSettings().chatTemplates).toEqual(result.current.settings.chatTemplates);
   });

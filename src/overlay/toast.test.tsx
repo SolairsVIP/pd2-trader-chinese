@@ -272,7 +272,7 @@ describe('confirmToast', () => {
     const onConfirm = vi.fn();
     await renderLayer();
     await show(() => confirmToast({ title: 'A', description: 'cancel me', onConfirm }));
-    await click(screen.getByText('Cancel'));
+    await click(screen.getByText('取消'));
     await show(() => confirmToast({ title: 'B', description: 'time out', duration: 1000, onConfirm }));
     await advance(2000);
     expect(onConfirm).not.toHaveBeenCalled();
@@ -285,7 +285,7 @@ describe('confirmToast', () => {
     await show(() =>
       confirmToast({ title: 'A', description: 'x', onConfirm: () => Promise.reject(new Error('boom')) }),
     );
-    await click(screen.getByText('Confirm'));
+    await click(screen.getByText('确认'));
     expect(console.error).toHaveBeenCalledWith('[overlay] confirm action failed:', expect.any(Error));
   });
 });

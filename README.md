@@ -12,9 +12,9 @@
 >
 > **汉化作者：Solaris · 开源许可：[MIT License](LICENSE)**。保留原项目版权声明与许可证。
 
-**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.0/PD2.Trader.CN_0.11.0_dual-client_charges-fix_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.0/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.0)**
+**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.2/PD2.Trader.CN_0.11.2_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.2/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.2)**
 
-当前正式版：**0.11.0 双客户端兼容·聚气修正版**，发布于 2026-10-24。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
+当前版本：**0.11.2 自动更新引导版**，发布于 2026-10-25。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
 
 ## 快速开始
 
@@ -23,9 +23,9 @@
 3. 从右下角托盘右键打开**设置**，核对游戏目录、赛季、天梯与普通／专家模式。
 4. 回到游戏，将鼠标指向装备，按 **<kbd>Ctrl</kbd> + <kbd>D</kbd> 查价**；按 **<kbd>Ctrl</kbd> + <kbd>M</kbd> 打开交易大厅**。
 
-**自动更新已关闭，新版本请从本仓库手动下载安装。** 安装后请核对现有账号和游戏分区设置。
+**首次请手动安装一次 0.11.2。此后默认自动检查中文版更新并弹出中文提示，由用户点击“下载并安装”后才更新及重启。** 在“设置 → 更新”中可以关闭自动检查或随时手动检查。启动约 5 秒后检查一次，运行中每隔 30 分钟检查一次；需要能连接 GitHub。安装后请核对现有账号和游戏分区设置。
 
-本文将原 PDF 整理为可直接阅读的图文说明。截图来自原使用指南，部分译名、按钮和设置可能与新版略有不同；**快捷键与行为以当前程序设置及本文说明为准**。[查看仓库内 PDF 原件](docs/PD2查价器中文版功能介绍.pdf)。
+本文将原 PDF 整理为可直接阅读的图文说明。截图及 PDF 来自原使用指南，旧图中“关闭自动更新”的说明已由 0.11.2 的更新设置取代，部分译名、按钮和设置可能与新版略有不同；**快捷键与行为以当前程序设置及本文说明为准**。[查看仓库内 PDF 原件](docs/PD2查价器中文版功能介绍.pdf)。
 
 **阅读导航：**[登录](#1-登录并关联-pd2-账号) · [设置](#2-设置游戏目录与账号分区) · [装备查价](#3-装备查价与词缀中文化) · [交易大厅与聊天](#4-交易大厅搜索筛选与联系卖家) · [上架](#5-上架与下架自己的物品) · [仓库估值](#6-仓库估值与财富追踪) · [浮窗与通知](#7-游戏浮窗皮肤与通知)
 
@@ -202,14 +202,18 @@
 
 ## 更新记录与源码
 
-**0.11.1 技能复查修正版已完成本地构建，待游戏内复测。** 修复标枪技能拼写、职业技能错名与缺失编号，并校正市场技能树筛选目录。完整范围与验证结果见[技能全面复查记录](docs/技能全面复查-20261025.md)。上方下载入口仍为已发布的 0.11.0 正式版。
+**0.11.2：默认自动检查并提示更新，点击后安装。** 增加“设置 → 更新”页、独立签名校验和 GitHub 自动发布流程，包含 0.11.1 的技能复查修复。详见[本版说明](docs/releases/v0.11.2.md)和[自动更新维护说明](docs/自动更新维护.md)。
+
+**0.11.1 技能复查修正：** 修复标枪技能拼写、职业技能错名与缺失编号，并校正市场技能树筛选目录。完整范围与验证结果见[技能全面复查记录](docs/技能全面复查-20261025.md)。
 
 **0.11.0 本次重点：**修复中文装备复制乱码，补充中文底材、固定名称与技能识别，修复鬼火投射者等聚气技能装备的缺失字段报错，并整合技能和部分 PD2 暗金名称汉化。预设交易消息继续发送英文。
 
-- [当前发布说明、兼容范围与校验值](docs/releases/v0.11.0.md)
+- [当前发布说明](docs/releases/v0.11.2.md)
+- [更新专项验证记录](docs/自动更新验证-20261025.md)
+- [0.11.0 兼容范围与历史校验值](docs/releases/v0.11.0.md)
 - [0.11 大版本更新记录](docs/发布记录-0.11.0.md)
 - [历史修复与阶段性验证记录](docs/历史修复记录.md)
-- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.0/SHA256SUMS.txt)
+- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.2/SHA256SUMS.txt)
 - [上游原项目](https://github.com/errolgr/pd2-trade) · [本项目开源仓库](https://github.com/SolairsVIP/pd2-trader-chinese) · [MIT 许可证](LICENSE)
 
 <details>
@@ -222,7 +226,7 @@ npm ci
 npm run tauri -- build --bundles nsis
 ```
 
-安装包输出目录：`src-tauri/target/release/bundle/nsis/`。
+签名安装包还需要维护者通过环境变量提供更新私钥与密码；请参见[自动更新维护说明](docs/自动更新维护.md)。普通界面开发可使用 `npm run tauri -- dev`。安装包输出目录：`src-tauri/target/release/bundle/nsis/`。
 
 `main` 分支包含后续源码和文档更新；发布页自动提供对应标签的源码 ZIP／TAR.GZ。仓库早期的 `pd2-trader-cn-0.10.7-src.zip` 与 `.bundle` 是初始源码快照，最新内容请使用 Git 分支或发布标签。
 

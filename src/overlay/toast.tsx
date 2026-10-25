@@ -42,8 +42,11 @@ async function runToastAction(action: NonNullable<CustomToastPayload['action']>)
       case ToastActionType.OPEN_MARKET_PANEL:
         bridge?.openMarket(action.data);
         break;
-      case ToastActionType.UPDATE_AVAILABLE:
+      case ToastActionType.UPDATE_AVAILABLE: {
+        const { installUpdateAndRelaunch } = await import('@/lib/updater');
+        await installUpdateAndRelaunch();
         break;
+      }
       default:
         console.warn('Unknown toast action type:', action.type);
     }
@@ -88,8 +91,6 @@ export function showToast(payload: ToastPayload): void {
 
   const custom = payload as CustomToastPayload;
   const action = custom.action;
-  // This localized build distributes updates manually; hide updater notices from upstream events.
-  if (action?.type === ToastActionType.UPDATE_AVAILABLE) return;
   if (!action) {
     // An object with a falsy `action` keeps the old ToastPage behaviour: a plain PD2 Trader toast.
     toast(DEFAULT_TITLE, { description: custom.description, closeButton: true });

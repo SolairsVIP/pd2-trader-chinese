@@ -3,6 +3,7 @@ import { motion, MotionConfig } from 'framer-motion';
 import {
   Check,
   Info,
+  Download,
   Keyboard,
   LayoutPanelTop,
   MessageSquare,
@@ -21,6 +22,7 @@ import { cn } from '@/lib/utils';
 import SettingGenereal from './appearance/layout';
 import SettingsHotkeys from './hotkeys/layout';
 import SettingsAbout from './about/layout';
+import SettingsUpdates from './updates/layout';
 import SettingsAccount from './account/layout';
 import SettingsChat from './chat/layout';
 import SettingsInterface from './interface/layout';
@@ -43,6 +45,7 @@ const sidebarNavItems: INavItem[] = [
   { title: 'Net Worth', label: '仓库估值', icon: TrendingUp, content: <SettingsNetWorth /> },
   { title: 'Hotkeys', label: '快捷键', icon: Keyboard, content: <SettingsHotkeys /> },
   { title: 'About', label: '关于', icon: Info, content: <SettingsAbout /> },
+  { title: 'Updates', label: '更新', icon: Download, content: <SettingsUpdates /> },
 ];
 
 const NAV_KEYS: Record<string, (i: number, n: number) => number> = {

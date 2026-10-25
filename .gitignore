@@ -40,3 +40,9 @@ docs/.vitepress/dist
 
 # Local Agent context
 .agent/*coverage/
+
+# Updater signing material must never enter source control
+*.key
+*.dpapi
+update-signing-private/
+.vite-node/

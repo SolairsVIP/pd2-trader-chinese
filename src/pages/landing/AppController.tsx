@@ -6,6 +6,7 @@ import { useKeySender } from '@/hooks/useKeySender';
 import { useAppShortcuts } from '@/hooks/useShortcuts';
 import { usePD2Auth } from '@/hooks/usePD2Auth';
 import { useChangelog } from '@/hooks/useChangelog';
+import { useAppUpdates } from '@/hooks/useAppUpdates';
 import { useSocketNotifications } from '@/hooks/useSocketNotifications';
 import { useNetWorth } from '@/hooks/useNetWorth';
 import { clipboardContainsValidItem, isStashItem, encodeItem, encodeItemForQuickList, sleep } from '@/lib/item-utils';
@@ -165,6 +166,7 @@ const AppController: React.FC = () => {
   useAppShortcuts(onItemSearch, onQuickList, onCurrency, onChat, onOffers, onDelist, onSnapshot, onMarket);
 
   usePD2Auth();
+  useAppUpdates();
 
   // Chat button overlay follows its setting (chat is a keepMounted panel: no warm-up needed)
   useEffect(() => {
