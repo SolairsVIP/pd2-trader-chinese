@@ -4,6 +4,7 @@ import { StatId, statRemap, statRemapByName, PRIORITY_STATS, STRIP_STATS } from 
 import { getStatKey, getTypeFromBaseType, isDirectSkillStat } from '../lib/utils';
 import { useOptions } from '@/hooks/useOptions';
 import { getSkillFilter, normalizeSkillStat, skillFilterUnavailableReason } from '../lib/skill-stats';
+import { normalizeItemSkillStat } from '../lib/item-skill-stats';
 
 /**
  * List of base type labels that cannot be corrupted (special cases)
@@ -394,7 +395,7 @@ export function useStatSelection(item: any) {
 
     // Apply name-based remapping first (e.g., "to Strength" -> stat_id 0)
     // This must happen before combining attributes so the combination can find the remapped stats
-    let combinedStats = (item.stats || []).map(normalizeSkillStat).map((stat: Stat) => {
+    let combinedStats = (item.stats || []).map((stat: Stat) => normalizeItemSkillStat(item, stat)).map((stat: Stat) => {
       if (stat.name in statRemapByName) {
         return { ...stat, ...statRemapByName[stat.name] };
       }

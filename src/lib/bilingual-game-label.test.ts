@@ -44,7 +44,7 @@ describe('complete bilingual client labels', () => {
     expect(item.stats.map((s: { value: number }) => s.value)).toEqual([20, 87, 164, 12, 20, 4, 10, 10]);
     expect(item.stats[0].range).toEqual({ min: 20, max: 40 });
     expect(item.stats[3].skill).toBe('Raise Skeleton Archer');
-    expect(getSkillFilter(item.stats[3])?.params).toEqual([89]);
+    expect(getSkillFilter(item.stats[3])).toMatchObject({ property: 'item_nonclassskill', params: [89], value: 12 });
     expect(normalizeItemForStashMatching(item)).toEqual(item);
     const query = buildGetMarketListingQuery(
       item,

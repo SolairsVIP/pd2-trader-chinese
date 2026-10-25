@@ -2,7 +2,8 @@ import { Item, Stat } from './interfaces';
 import { StatId, statIdToProperty, statRemap, statRemapByName, PRIORITY_STATS, STRIP_STATS } from './stat-mappings';
 import { ItemCharmMap, ItemQuality } from '@/common/types/Item';
 import { getTypeFromBaseType, getStatKey, isDirectSkillStat } from './utils';
-import { getSkillFilter, isSkillStat, normalizeSkillStat } from './skill-stats';
+import { getSkillFilter, isSkillStat } from './skill-stats';
+import { normalizeItemSkillStat } from './item-skill-stats';
 import { MarketListingQuery } from '@/common/types/pd2-website/GetMarketListingsCommand';
 import { ItemType as PD2Item } from '@/assets/itemFuzzySearch';
 import { Item as GameStashItem } from '@/common/types/pd2-website/GameStashResponse';
@@ -605,7 +606,7 @@ function getSortedStats(item: any): Stat[] {
 
   // Apply name-based remapping first (e.g., "to Strength" -> stat_id 0)
   // This must happen before combining attributes so the combination can find the remapped stats
-  let combinedStats = (item.stats || []).map(normalizeSkillStat).map((stat: Stat) => {
+  let combinedStats = (item.stats || []).map((stat: Stat) => normalizeItemSkillStat(item, stat)).map((stat: Stat) => {
     if (stat.name in statRemapByName) {
       return { ...stat, ...statRemapByName[stat.name] };
     }

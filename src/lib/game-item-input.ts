@@ -5,10 +5,12 @@ import { itemTypes } from '@/common/item-types';
 import { characterSkillMap } from '@/assets/character-skills';
 import { classSkillsMap, classSubSkillMap } from '@/assets/class-skills';
 import skillReference from './pd2-skill-translations.data.json';
-import { normalizeSkillStat, resolveCharacterSkillId } from '@/pages/price-check/lib/skill-stats';
+import { resolveCharacterSkillId } from '@/pages/price-check/lib/skill-stats';
 import type { Stat } from '@/pages/price-check/lib/interfaces';
 import { restoreGameItemStrings } from './game-text-encoding';
 import { bilingualGameLabel } from './bilingual-game-label';
+import { normalizeItemSkillStat } from '@/pages/price-check/lib/item-skill-stats';
+import type { Item } from '@/pages/price-check/lib/interfaces';
 
 type Aliases = Map<string, Set<string>>;
 const clean = (s: string) => s.replace(/ÿc./g, '').replace(/\s+/g, ' ').trim();
@@ -150,7 +152,7 @@ function normalizeSkill(name: string, statId?: number): string | undefined {
   return undefined;
 }
 
-function normalizeStat(stat: Record<string, any>): Record<string, any> {
+function normalizeStat(stat: Record<string, any>, item: Item): Record<string, any> {
   if (!stat || typeof stat !== 'object') return stat;
   const result = { ...stat };
   if (typeof stat.name === 'string' && hasChinese(stat.name)) {
@@ -201,7 +203,7 @@ function normalizeStat(stat: Record<string, any>): Record<string, any> {
     const oskill = /oskill|非本职业/i.test(`${stat.name ?? ''} ${stat.skill ?? ''}`);
     translated = { ...translated, name: `+${translated.value} to ${translated.skill}${oskill ? ' (Oskill)' : ''}` };
   }
-  return normalizeSkillStat(translated as Stat);
+  return normalizeItemSkillStat(item, translated as Stat);
 }
 
 export interface GameItemInput {
@@ -244,7 +246,7 @@ export function normalizeGameItemInput(raw: string | null): GameItemInput {
         result[field] = english;
       }
       // Random rare/magic names do not determine item identity; retain them.
-      if (Array.isArray(source.stats)) result.stats = source.stats.map(normalizeStat);
+      if (Array.isArray(source.stats)) result.stats = source.stats.map(stat => normalizeStat(stat, result as Item));
       // Socket contents are ancillary; an unknown rune/gem must not prevent a
       // valid parent item from being queried. Keep such child records intact.
       if (Array.isArray(source.socketed))

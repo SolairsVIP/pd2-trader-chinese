@@ -50,6 +50,15 @@ afterEach(() => {
 });
 
 describe('skill normalization and independent selection', () => {
+  it('selects the same Tombsong oskill key used by the market query', () => {
+    const item = {iLevel:85,quality:'Unique',name:'Tombsong',type:'Sharp Arrows',stats:[{name:'+12 to Raise Skeleton Archer',skill:'Raise Skeleton Archer',value:12}]};
+    const {result} = setup(item);
+    const row = result.current.sortedStats.find(stat => stat.stat_id === 97)!;
+    expect(row).toBeDefined();
+    expect(getStatKey(row)).toBe('skill:item_nonclassskill{89}');
+    act(() => result.current.toggle(row));
+    expect(result.current.selected.has('skill:item_nonclassskill{89}')).toBe(true);
+  });
   it('keeps ordinary and nonclass Teleport checkboxes independent', () => {
     const stats: Stat[] = [
       { stat_id: 107, name: '+2 to Teleport', skill: 'Teleport', value: 2 },
