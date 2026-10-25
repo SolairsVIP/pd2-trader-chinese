@@ -1,0 +1,354 @@
+[
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      0,
+      1
+    ],
+    "label": "+1 to Bow and Crossbow Skills (Amazon Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      10,
+      1
+    ],
+    "label": "+1 to Cold Skills (Sorceress Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      24,
+      1
+    ],
+    "label": "+1 to Combat Skills (Paladin Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      2,
+      1
+    ],
+    "label": "+1 to Javelin and Spear Skills (Amazon Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      9,
+      1
+    ],
+    "label": "+1 to Lightning Skills (Sorceress Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      50,
+      1
+    ],
+    "label": "+1 to Martial Arts Skills (Assassin Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      17,
+      1
+    ],
+    "label": "+1 to Poison and Bone Skills (Necromancer Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      41,
+      1
+    ],
+    "label": "+1 to Shape Shifting Skills (Druid Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      40,
+      1
+    ],
+    "label": "+1 to Summoning Skills (Druid Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      48,
+      1
+    ],
+    "label": "+1 to Traps Skills (Assassin Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      34,
+      1
+    ],
+    "label": "+1 to Warcries Skills (Barbarian Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      0,
+      2
+    ],
+    "label": "+2 to Bow and Crossbow Skills (Amazon Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      10,
+      2
+    ],
+    "label": "+2 to Cold Skills (Sorceress Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      24,
+      2
+    ],
+    "label": "+2 to Combat Skills (Paladin Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      16,
+      2
+    ],
+    "label": "+2 to Curses Skills (Necromancer Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      26,
+      2
+    ],
+    "label": "+2 to Defensive Auras Skills (Paladin Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      42,
+      2
+    ],
+    "label": "+2 to Elemental Skills (Druid Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      8,
+      2
+    ],
+    "label": "+2 to Fire Skills (Sorceress Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      2,
+      2
+    ],
+    "label": "+2 to Javelin and Spear Skills (Amazon Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      9,
+      2
+    ],
+    "label": "+2 to Lightning Skills (Sorceress Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      50,
+      2
+    ],
+    "label": "+2 to Martial Arts Skills (Assassin Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      17,
+      2
+    ],
+    "label": "+2 to Poison and Bone Skills (Necromancer Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      49,
+      2
+    ],
+    "label": "+2 to Shadow Disciplines Skills (Assassin Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      41,
+      2
+    ],
+    "label": "+2 to Shape Shifting Skills (Druid Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      34,
+      2
+    ],
+    "label": "+2 to Warcries Skills (Barbarian Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      0,
+      3
+    ],
+    "label": "+3 to Bow and Crossbow Skills (Amazon Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      10,
+      3
+    ],
+    "label": "+3 to Cold Skills (Sorceress Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      32,
+      3
+    ],
+    "label": "+3 to Combat Skills (Barbarian Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      16,
+      3
+    ],
+    "label": "+3 to Curses Skills (Necromancer Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      42,
+      3
+    ],
+    "label": "+3 to Elemental Skills (Druid Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      8,
+      3
+    ],
+    "label": "+3 to Fire Skills (Sorceress Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      2,
+      3
+    ],
+    "label": "+3 to Javelin and Spear Skills (Amazon Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      9,
+      3
+    ],
+    "label": "+3 to Lightning Skills (Sorceress Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      50,
+      3
+    ],
+    "label": "+3 to Martial Arts Skills (Assassin Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      33,
+      3
+    ],
+    "label": "+3 to Masteries Skills (Barbarian Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      25,
+      3
+    ],
+    "label": "+3 to Offensive Auras Skills (Paladin Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      1,
+      3
+    ],
+    "label": "+3 to Passive and Magic Skills (Amazon Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      17,
+      3
+    ],
+    "label": "+3 to Poison and Bone Skills (Necromancer Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      49,
+      3
+    ],
+    "label": "+3 to Shadow Disciplines Skills (Assassin Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      41,
+      3
+    ],
+    "label": "+3 to Shape Shifting Skills (Druid Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      18,
+      3
+    ],
+    "label": "+3 to Summoning Skills (Necromancer Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      34,
+      3
+    ],
+    "label": "+3 to Warcries Skills (Barbarian Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      0,
+      4
+    ],
+    "label": "+4 to Bow and Crossbow Skills (Amazon Only)"
+  },
+  {
+    "name": "item_addskill_tab",
+    "values": [
+      2,
+      4
+    ],
+    "label": "+4 to Javelin and Spear Skills (Amazon Only)"
+  }
+]

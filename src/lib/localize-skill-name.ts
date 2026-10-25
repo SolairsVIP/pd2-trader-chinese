@@ -1,7 +1,8 @@
 import supplied from './pd2-skill-translations.data.json';
 import { PD2_SKILL_TRANSLATIONS } from './pd2-skill-translations';
+import { canonicalizeSkillName } from './skill-name-aliases';
 
-const normalize = (name: string) => name.trim().replace(/\s+/g, ' ').toLowerCase();
+const normalize = (name: string) => canonicalizeSkillName(name).toLowerCase();
 const skills = new Map(Object.entries(PD2_SKILL_TRANSLATIONS).map(([en, zh]) => [normalize(en), zh]));
 const classes: Record<string, string> = {
   amazon: '亚马逊',

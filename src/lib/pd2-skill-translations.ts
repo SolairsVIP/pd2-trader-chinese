@@ -293,6 +293,12 @@ export const PD2_SKILL_TRANSLATIONS: Readonly<Record<string, string>> = {
   'Chilling Armor SelfAura': `${corrected['Chilling Armor']}（自身灵气）`,
   'Quickness SelfAura': `${corrected['Burst of Speed']}（自身灵气）`,
   'Blade Shield SelfAura': `${corrected['Blade Shield']}（自身灵气）`,
+  'AmpDmg Proc': `${corrected['Amplify Damage']}（触发版本）`,
+  'Weaken Proc': `${corrected['Weaken']}（触发版本）`,
+  'Iron Maiden Proc': `${corrected['Iron Maiden']}（触发版本）`,
+  'Life Tap Proc': `${corrected['Life Tap']}（触发版本）`,
+  'Decrepify Proc': `${corrected['Decrepify']}（触发版本）`,
+  'LowRes Proc': `${corrected['Lower Resist']}（触发版本）`,
 };
 
 /** Keep prior Chinese names usable for incoming data; do not fuzzy-match skills. */

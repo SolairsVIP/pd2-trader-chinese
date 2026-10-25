@@ -3,6 +3,7 @@ import { classSkillsMap, classSubSkillMap, classSubSkillMap2, getSkillTabIndex }
 import { SITE_STAT_OPTIONS } from '@/pages/market/lib/stat-options.data';
 import { PD2_SKILL_TRANSLATION_ALIASES } from '@/lib/pd2-skill-translations';
 import gameClientAliases from '@/lib/game-client-aliases.data.json';
+import { canonicalizeSkillName } from '@/lib/skill-name-aliases';
 import type { Stat } from './interfaces';
 import { statIdToProperty } from './stat-mappings';
 
@@ -14,7 +15,7 @@ const CLASS_NAMES = 'Amazon|Sorceress|Necromancer|Paladin|Barbarian|Druid|Assass
 const CLASS_SUFFIX = new RegExp(`\\s*\\((?:${CLASS_NAMES})(?: Only)?\\)$`, 'i');
 
 export function cleanSkillName(name: string): string {
-  return name
+  return canonicalizeSkillName(name)
     .replace(/ÿc[0-9a-z]/gi, '')
     .replace(/\s+/g, ' ')
     .trim()
@@ -51,23 +52,28 @@ function englishSkillId(name: string): number | undefined {
   return uniqueId(characterAliases, full) ?? skillNameToIdMap[key]?.id ?? uniqueId(characterAliases, key);
 }
 
-const translatedSkills: AliasIndex = new Map();
+const clientSkills: AliasIndex = new Map();
 for (const [chinese, , rawId] of gameClientAliases.skills) {
   const id = Number(rawId);
-  addAlias(translatedSkills, String(chinese), id);
+  addAlias(clientSkills, String(chinese), id);
   const characterClass = characterSkillMap[id]?.class;
   if (characterClass) {
-    addAlias(translatedSkills, `${chinese} (${characterClass})`, id);
-    addAlias(translatedSkills, `${chinese} (${characterClass} Only)`, id);
+    addAlias(clientSkills, `${chinese} (${characterClass})`, id);
+    addAlias(clientSkills, `${chinese} (${characterClass} Only)`, id);
   }
 }
+const translatedSkills: AliasIndex = new Map();
 for (const [english, chinese] of PD2_SKILL_TRANSLATION_ALIASES) {
   const id = englishSkillId(english);
   if (id !== undefined) addAlias(translatedSkills, chinese, id);
 }
 
 export function resolveCharacterSkillId(name: string): number | undefined {
-  return englishSkillId(name) ?? uniqueId(translatedSkills, name);
+  const english = englishSkillId(name);
+  if (english !== undefined) return english;
+  // A verified client label can differ from our display dictionary (Battle Cry
+  // vs War Cry). Do not mix those dictionaries into one ambiguous identity.
+  return clientSkills.has(cleanSkillName(name)) ? uniqueId(clientSkills, name) : uniqueId(translatedSkills, name);
 }
 
 const classes: AliasIndex = new Map();
@@ -85,8 +91,14 @@ addAlias(classes, '法师技能等级', 1);
 const tabs: AliasIndex = new Map();
 for (const entry of [...Object.values(classSubSkillMap), ...Object.values(classSubSkillMap2)]) {
   const id = getSkillTabIndex(entry.id);
-  addAlias(tabs, entry.name, id);
-  addAlias(tabs, entry.name.replace(/Shape Shifting/i, 'Shapeshifting'), id);
+  const stem = entry.name.replace(/ Skills(?= \()/, '');
+  const stems = new Set([stem, stem.replace(/Shape Shifting/i, 'Shapeshifting'), stem.replace(/Shape Shifting/i, 'Shape-Shifting')]);
+  if (entry.id === 13) stems.add(stem.replace('Masteries', 'Combat Masteries'));
+  for (const name of stems) {
+    for (const suffix of ['', ' Skills', ' Spells']) {
+      addAlias(tabs, name.replace(/ (?=\()/, `${suffix} `), id);
+    }
+  }
 }
 
 export interface SkillFilter {
@@ -97,7 +109,7 @@ export interface SkillFilter {
   value?: number;
 }
 
-type SkillInput = Pick<Stat, 'stat_id' | 'skill'> & Partial<Pick<Stat, 'name' | 'value' | 'level' | 'chance'>>;
+type SkillInput = Pick<Stat, 'stat_id' | 'skill'> & Partial<Pick<Stat, 'name' | 'value' | 'level' | 'chance' | 'charges'>>;
 const finite = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
 const levelNumber = (value: unknown): value is number => finite(value) && Number.isInteger(value) && value > 0;
 
@@ -182,19 +194,20 @@ function withSkillLabelData(stat: Stat): Stat {
 
 function bonusName(stat: SkillInput): string | undefined {
   if (stat.skill?.trim()) return stat.skill.trim();
-  const match = /^\+?(?:\d+|%d)\s+to\s+(.+)$/i.exec(stat.name?.trim() ?? '');
+  const match = /^(?:\+?(?:\d+|%d)\s+)?to\s+(.+)$/i.exec(stat.name?.trim() ?? '');
   return match?.[1];
 }
 
 export function isDirectSkillStat(stat: SkillInput): boolean {
   if (stat.stat_id !== undefined && DIRECT_IDS.has(stat.stat_id)) return true;
-  if (stat.stat_id != null || stat.level !== undefined || stat.chance !== undefined || !finite(stat.value))
+  if (stat.stat_id != null || stat.level !== undefined || stat.chance !== undefined || stat.charges !== undefined || !finite(stat.value))
     return false;
   const name = stat.name?.trim() ?? '';
   const bonus = bonusName(stat);
   if (!bonus) return false;
   const plainBonus =
-    /^\+?(?:\d+|%d)\s+to\s+/i.test(name) || (stat.skill && cleanSkillName(name) === cleanSkillName(stat.skill));
+    /^(?:\+?(?:\d+|%d)\s+)?to\s+/i.test(name) ||
+    (stat.skill && cleanSkillName(name) === cleanSkillName(stat.skill));
   if (!plainBonus) return false;
   return Boolean(
     stat.skill ||
@@ -243,8 +256,16 @@ export function getSkillFilter(stat: Stat): SkillFilter | undefined {
         ? undefined
         : { kind: 'direct', property: 'item_addskill_tab', params: [tabId], valueIndex: 1, value: stat.value };
     }
-    const labelName = stat.name.replace(/^\+?(?:\d+|%d)\s+to\s+/i, '');
-    const id = resolveCharacterSkillId(labelName) ?? resolveCharacterSkillId(name);
+    const labelName = stat.name.replace(/^(?:\+?(?:\d+|%d)\s+)?to\s+/i, '');
+    const unqualified = (value: string) => cleanSkillName(value).replace(/\s*\(oskill\)$/i, '').replace(CLASS_SUFFIX, '');
+    // A matching class qualifier can disambiguate a skill/proc alias. A label
+    // naming a different skill must never override the explicit skill field.
+    const id =
+      (unqualified(labelName) === unqualified(name) ? resolveCharacterSkillId(labelName) : undefined) ??
+      resolveCharacterSkillId(name);
+    // Short tree labels such as Lightning also name an individual skill. With
+    // neither a modifier kind nor a distinct Skills label, do not invent one.
+    if (stat.stat_id === undefined && tabId !== undefined && id !== undefined) return;
     if (id !== undefined) {
       return {
         kind: 'direct',
@@ -343,9 +364,14 @@ export function normalizeSkillStat(stat: Stat): Stat {
     resolveCharacterSkillId(originalName) !== filter.params[0]
       ? (characterSkillMap[filter.params[0]]?.name ?? originalName)
       : originalName;
+  // Some game copies label every class bonus as Amazon while skill explicitly
+  // identifies another class. Keep display and query tied to that same identity.
+  const canonicalDirectName = directName && canonicalizeSkillName(directName);
   return {
     ...data,
-    ...(filter.kind === 'direct' ? { stat_id: directIds[filter.property], skill: directName } : {}),
+    ...(filter.kind === 'direct'
+      ? { stat_id: directIds[filter.property], skill: canonicalDirectName, name: canonicalDirectName ?? data.name }
+      : {}),
     ...(filter.value === undefined ? {} : { value: filter.value }),
     ...(filter.kind === 'charges' ? { value: filter.value } : {}),
     // A range belonging to remaining charges or another source value must not
