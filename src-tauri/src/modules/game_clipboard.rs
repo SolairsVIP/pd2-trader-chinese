@@ -5,19 +5,84 @@ pub fn read_utf8_item() -> Option<String> {
     #[cfg(target_os = "windows")]
     {
         let bytes = windows::read_cf_text()?;
-        let end = bytes.iter().position(|byte| *byte == 0)?;
-        let text = std::str::from_utf8(&bytes[..end])
-            .ok()?
-            .trim_start_matches('\u{feff}');
-        let item: serde_json::Value = serde_json::from_str(text).ok()?;
-        if item.get("quality")?.is_string()
-            && item.get("type")?.is_string()
-            && item.get("iLevel")?.is_number()
+        return decode_item_bytes(&bytes);
+    }
+    #[cfg(not(target_os = "windows"))]
+    {
+        None
+    }
+}
+
+// TBL colours use a legacy single-byte 0xff before 'c' and a colour selector.
+// Convert only this exact marker to UTF-8; reject every other invalid byte.
+// JSON structure, numeric fields and unknown bytes are never guessed/repaired.
+#[cfg(any(target_os = "windows", test))]
+fn decode_item_bytes(bytes: &[u8]) -> Option<String> {
+    let end = bytes.iter().position(|byte| *byte == 0)?;
+    let mut utf8 = Vec::with_capacity(end);
+    let mut i = 0;
+    while i < end {
+        if bytes[i] == 0xff
+            && i + 2 < end
+            && bytes[i + 1] == b'c'
+            && bytes[i + 2].is_ascii_graphic()
         {
-            return Some(text.to_owned());
+            utf8.extend_from_slice("ÿ".as_bytes());
+        } else {
+            utf8.push(bytes[i]);
+        }
+        i += 1;
+    }
+    let text = std::str::from_utf8(&utf8)
+        .ok()?
+        .trim_start_matches('\u{feff}');
+    let item: serde_json::Value = serde_json::from_str(text).ok()?;
+    if item.get("quality")?.is_string()
+        && item.get("type")?.is_string()
+        && item.get("iLevel")?.is_number()
+    {
+        Some(text.to_owned())
+    } else {
+        None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::decode_item_bytes;
+
+    #[test]
+    fn preserves_complete_utf8_item_and_bom() {
+        let item =
+            r#"{"iLevel":85,"type":"精良箭矢 Sharp Arrows","quality":"Unique","name":"Tombsong"}"#;
+        assert_eq!(
+            decode_item_bytes(format!("\u{feff}{item}\0").as_bytes()).as_deref(),
+            Some(item)
+        );
+    }
+
+    #[test]
+    fn accepts_legacy_colour_markers_in_utf8_strings() {
+        let mut bytes =
+            br#"{"iLevel":85,"type":"Sharp Arrows","quality":"Unique","name":""#.to_vec();
+        bytes.extend_from_slice(b"\xffc4Tombsong\xffc/");
+        bytes.extend_from_slice(b"\"}\0");
+        let decoded = decode_item_bytes(&bytes).unwrap();
+        let item: serde_json::Value = serde_json::from_str(&decoded).unwrap();
+        assert_eq!(item["name"], "ÿc4Tombsongÿc/");
+    }
+
+    #[test]
+    fn rejects_bad_bytes_broken_json_and_non_items() {
+        for bytes in [
+            b"{\"iLevel\":85,\"type\":\"\xffx1\",\"quality\":\"Unique\"}\0".as_slice(),
+            b"{\"iLevel\":85,\"type\":\"Sharp Arrows?,\"quality\":\"Unique\"}\0",
+            b"{\"type\":\"Sharp Arrows\"}\0",
+            b"{\"iLevel\":85,\"type\":\"Sharp Arrows\",\"quality\":\"Unique\"}",
+        ] {
+            assert!(decode_item_bytes(bytes).is_none());
         }
     }
-    None
 }
 
 #[cfg(target_os = "windows")]

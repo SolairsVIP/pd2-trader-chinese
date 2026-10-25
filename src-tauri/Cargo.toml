@@ -1,6 +1,6 @@
 [package]
 name = "pd2-trader"
-version = "0.11.5"
+version = "0.11.6-beta.1"
 description = "PD2 Trader 中文版"
 authors = ["Solaris"]
 edition = "2021"

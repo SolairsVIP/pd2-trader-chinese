@@ -1,0 +1,1499 @@
+{
+  "scope": "Local catalogue, display, normalization, selection, official URL, API query and internal-market parameter audit. Not an in-game or remote transaction test.",
+  "date": "2026-10-25",
+  "groups": {
+    "canonical-skill-identities": {
+      "passed": 594,
+      "failed": 0
+    },
+    "player-direct-formats": {
+      "passed": 2079,
+      "failed": 0
+    },
+    "player-chinese-display": {
+      "passed": 231,
+      "failed": 0
+    },
+    "trigger-skills": {
+      "passed": 2310,
+      "failed": 0
+    },
+    "aura-equipped-charged": {
+      "passed": 693,
+      "failed": 0
+    },
+    "class-bonuses": {
+      "passed": 63,
+      "failed": 0
+    },
+    "skill-tree-formats": {
+      "passed": 252,
+      "failed": 0
+    },
+    "market-picker-identities": {
+      "passed": 525,
+      "failed": 0
+    },
+    "element-bonuses": {
+      "passed": 10,
+      "failed": 0
+    },
+    "user-reproductions": {
+      "passed": 2,
+      "failed": 0
+    },
+    "incomplete-ambiguous-data": {
+      "passed": 7,
+      "failed": 0
+    },
+    "verified-name-variants": {
+      "passed": 5,
+      "failed": 0
+    },
+    "no-skill-field": {
+      "passed": 238,
+      "failed": 0
+    },
+    "chinese-skill-trees": {
+      "passed": 21,
+      "failed": 0
+    },
+    "official-tab-samples": {
+      "passed": 44,
+      "failed": 0
+    },
+    "chinese-game-skill-aliases": {
+      "passed": 380,
+      "failed": 0
+    }
+  },
+  "failures": [],
+  "userSamples": [
+    {
+      "source": {
+        "name": "+%d to Javelin and Spear Skills",
+        "skill": "Javalin and Spear Skills (Amazon)",
+        "value": 2
+      },
+      "normalized": {
+        "name": "Javelin and Spear Skills (Amazon)",
+        "skill": "Javelin and Spear Skills (Amazon)",
+        "value": 2,
+        "stat_id": 188
+      },
+      "chinese": "标枪和长矛技能（亚马逊）",
+      "filter": {
+        "kind": "direct",
+        "property": "item_addskill_tab",
+        "params": [
+          2
+        ],
+        "valueIndex": 1,
+        "value": 2
+      }
+    },
+    {
+      "source": {
+        "name": "to Amazon Skill Levels",
+        "skill": "Assassin Skills",
+        "value": 2
+      },
+      "normalized": {
+        "name": "Assassin Skills",
+        "skill": "Assassin Skills",
+        "value": 2,
+        "stat_id": 83
+      },
+      "chinese": "刺客技能等级",
+      "filter": {
+        "kind": "direct",
+        "property": "item_addclassskills",
+        "params": [
+          6
+        ],
+        "valueIndex": 1,
+        "value": 2
+      }
+    }
+  ],
+  "internalNamesWithoutChineseDisplay": [
+    {
+      "id": 156,
+      "name": "Fire Hit"
+    },
+    {
+      "id": 157,
+      "name": "UnHolyBolt"
+    },
+    {
+      "id": 158,
+      "name": "SkeletonRaise"
+    },
+    {
+      "id": 159,
+      "name": "MaggotEgg"
+    },
+    {
+      "id": 160,
+      "name": "ShamanFire"
+    },
+    {
+      "id": 161,
+      "name": "MagottUp"
+    },
+    {
+      "id": 162,
+      "name": "MagottDown"
+    },
+    {
+      "id": 163,
+      "name": "MagottLay"
+    },
+    {
+      "id": 164,
+      "name": "AndrialSpray"
+    },
+    {
+      "id": 165,
+      "name": "Jump"
+    },
+    {
+      "id": 166,
+      "name": "Swarm Move"
+    },
+    {
+      "id": 167,
+      "name": "Nest"
+    },
+    {
+      "id": 168,
+      "name": "Quick Strike"
+    },
+    {
+      "id": 169,
+      "name": "VampireFireball"
+    },
+    {
+      "id": 170,
+      "name": "VampireFirewall"
+    },
+    {
+      "id": 171,
+      "name": "VampireMeteor"
+    },
+    {
+      "id": 172,
+      "name": "GargoyleTrap"
+    },
+    {
+      "id": 173,
+      "name": "SpiderLay"
+    },
+    {
+      "id": 174,
+      "name": "VampireHeal"
+    },
+    {
+      "id": 175,
+      "name": "VampireRaise"
+    },
+    {
+      "id": 176,
+      "name": "Submerge"
+    },
+    {
+      "id": 177,
+      "name": "FetishAura"
+    },
+    {
+      "id": 178,
+      "name": "FetishInferno"
+    },
+    {
+      "id": 179,
+      "name": "ZakarumHeal"
+    },
+    {
+      "id": 180,
+      "name": "Emerge"
+    },
+    {
+      "id": 181,
+      "name": "Resurrect"
+    },
+    {
+      "id": 182,
+      "name": "Bestow"
+    },
+    {
+      "id": 183,
+      "name": "MissileSkill1"
+    },
+    {
+      "id": 184,
+      "name": "MonTeleport"
+    },
+    {
+      "id": 185,
+      "name": "PrimeLightning"
+    },
+    {
+      "id": 186,
+      "name": "PrimeBolt"
+    },
+    {
+      "id": 187,
+      "name": "PrimeBlaze"
+    },
+    {
+      "id": 188,
+      "name": "PrimeFirewall"
+    },
+    {
+      "id": 189,
+      "name": "PrimeSpike"
+    },
+    {
+      "id": 190,
+      "name": "PrimeIceNova"
+    },
+    {
+      "id": 191,
+      "name": "PrimePoisonball"
+    },
+    {
+      "id": 192,
+      "name": "PrimePoisonNova"
+    },
+    {
+      "id": 193,
+      "name": "DiabLight"
+    },
+    {
+      "id": 194,
+      "name": "DiabCold"
+    },
+    {
+      "id": 195,
+      "name": "DiabFire"
+    },
+    {
+      "id": 196,
+      "name": "FingerMageSpider"
+    },
+    {
+      "id": 197,
+      "name": "DiabWall"
+    },
+    {
+      "id": 198,
+      "name": "DiabRun"
+    },
+    {
+      "id": 199,
+      "name": "DiabPrison"
+    },
+    {
+      "id": 200,
+      "name": "PoisonBallTrap"
+    },
+    {
+      "id": 201,
+      "name": "AndyPoisonBolt"
+    },
+    {
+      "id": 202,
+      "name": "HireableMissile"
+    },
+    {
+      "id": 203,
+      "name": "DesertTurret"
+    },
+    {
+      "id": 204,
+      "name": "ArcaneTower"
+    },
+    {
+      "id": 205,
+      "name": "MonBlizzard"
+    },
+    {
+      "id": 206,
+      "name": "Mosquito"
+    },
+    {
+      "id": 207,
+      "name": "CursedBallTrapRight"
+    },
+    {
+      "id": 208,
+      "name": "CursedBallTrapLeft"
+    },
+    {
+      "id": 209,
+      "name": "MonFrozenArmor"
+    },
+    {
+      "id": 210,
+      "name": "MonBoneArmor"
+    },
+    {
+      "id": 211,
+      "name": "MonBoneSpirit"
+    },
+    {
+      "id": 212,
+      "name": "MonCurseCast"
+    },
+    {
+      "id": 213,
+      "name": "HellMeteor"
+    },
+    {
+      "id": 214,
+      "name": "RegurgitatorEat"
+    },
+    {
+      "id": 215,
+      "name": "MonFrenzy"
+    },
+    {
+      "id": 216,
+      "name": "QueenDeath"
+    },
+    {
+      "id": 218,
+      "name": "Book of Identify"
+    },
+    {
+      "id": 220,
+      "name": "Book of Townportal"
+    },
+    {
+      "id": 281,
+      "name": "Wake Of Destruction Sentry"
+    },
+    {
+      "id": 282,
+      "name": "Imp Inferno"
+    },
+    {
+      "id": 283,
+      "name": "Imp Fireball"
+    },
+    {
+      "id": 284,
+      "name": "Baal Taunt"
+    },
+    {
+      "id": 285,
+      "name": "Baal Corpse Explode"
+    },
+    {
+      "id": 286,
+      "name": "Baal Monster Spawn"
+    },
+    {
+      "id": 287,
+      "name": "Catapult Charged Ball"
+    },
+    {
+      "id": 288,
+      "name": "Catapult Spike Ball"
+    },
+    {
+      "id": 289,
+      "name": "Suck Blood"
+    },
+    {
+      "id": 290,
+      "name": "Cry Help"
+    },
+    {
+      "id": 291,
+      "name": "Healing Vortex"
+    },
+    {
+      "id": 292,
+      "name": "Teleport 2"
+    },
+    {
+      "id": 293,
+      "name": "Self-resurrect"
+    },
+    {
+      "id": 294,
+      "name": "Vine Attack"
+    },
+    {
+      "id": 295,
+      "name": "Overseer Whip"
+    },
+    {
+      "id": 296,
+      "name": "Barbs Aura"
+    },
+    {
+      "id": 297,
+      "name": "Wolverine Aura"
+    },
+    {
+      "id": 298,
+      "name": "Oak Sage Aura"
+    },
+    {
+      "id": 299,
+      "name": "Imp Fire Missile"
+    },
+    {
+      "id": 300,
+      "name": "Impregnate"
+    },
+    {
+      "id": 301,
+      "name": "Siege Beast Stomp"
+    },
+    {
+      "id": 302,
+      "name": "MinionSpawner"
+    },
+    {
+      "id": 303,
+      "name": "CatapultBlizzard"
+    },
+    {
+      "id": 304,
+      "name": "CatapultPlague"
+    },
+    {
+      "id": 305,
+      "name": "CatapultMeteor"
+    },
+    {
+      "id": 306,
+      "name": "BoltSentry"
+    },
+    {
+      "id": 307,
+      "name": "CorpseCycler"
+    },
+    {
+      "id": 308,
+      "name": "DeathMaul"
+    },
+    {
+      "id": 310,
+      "name": "Blood Mana"
+    },
+    {
+      "id": 311,
+      "name": "mon inferno sentry"
+    },
+    {
+      "id": 312,
+      "name": "mon death sentry"
+    },
+    {
+      "id": 313,
+      "name": "Sentry Chain Lightning"
+    },
+    {
+      "id": 314,
+      "name": "fenris rage"
+    },
+    {
+      "id": 315,
+      "name": "Baal Tentacle"
+    },
+    {
+      "id": 316,
+      "name": "Baal Nova"
+    },
+    {
+      "id": 317,
+      "name": "Baal Inferno"
+    },
+    {
+      "id": 318,
+      "name": "Baal Cold Missiles"
+    },
+    {
+      "id": 319,
+      "name": "MegademonInferno"
+    },
+    {
+      "id": 320,
+      "name": "EvilHutSpawner"
+    },
+    {
+      "id": 321,
+      "name": "CountessFirewall"
+    },
+    {
+      "id": 322,
+      "name": "ImpBolt"
+    },
+    {
+      "id": 323,
+      "name": "Horror Arctic Blast"
+    },
+    {
+      "id": 324,
+      "name": "death sentry ltng"
+    },
+    {
+      "id": 325,
+      "name": "VineCycler"
+    },
+    {
+      "id": 326,
+      "name": "BearSmite"
+    },
+    {
+      "id": 327,
+      "name": "Resurrect2"
+    },
+    {
+      "id": 328,
+      "name": "BloodLordFrenzy"
+    },
+    {
+      "id": 329,
+      "name": "Baal Teleport"
+    },
+    {
+      "id": 330,
+      "name": "Imp Teleport"
+    },
+    {
+      "id": 331,
+      "name": "Baal Clone Teleport"
+    },
+    {
+      "id": 332,
+      "name": "ZakarumLightning"
+    },
+    {
+      "id": 333,
+      "name": "VampireMissile"
+    },
+    {
+      "id": 334,
+      "name": "MephistoMissile"
+    },
+    {
+      "id": 335,
+      "name": "DoomKnightMissile"
+    },
+    {
+      "id": 336,
+      "name": "RogueMissile"
+    },
+    {
+      "id": 337,
+      "name": "HydraMissile"
+    },
+    {
+      "id": 338,
+      "name": "NecromageMissile"
+    },
+    {
+      "id": 339,
+      "name": "MonBow"
+    },
+    {
+      "id": 340,
+      "name": "MonFireArrow"
+    },
+    {
+      "id": 341,
+      "name": "MonColdArrow"
+    },
+    {
+      "id": 342,
+      "name": "MonExplodingArrow"
+    },
+    {
+      "id": 343,
+      "name": "MonFreezingArrow"
+    },
+    {
+      "id": 344,
+      "name": "MonPowerStrike"
+    },
+    {
+      "id": 345,
+      "name": "SuccubusBolt"
+    },
+    {
+      "id": 346,
+      "name": "MephFrostNova"
+    },
+    {
+      "id": 347,
+      "name": "MonIceSpear"
+    },
+    {
+      "id": 348,
+      "name": "ShamanIce"
+    },
+    {
+      "id": 349,
+      "name": "Diablogeddon"
+    },
+    {
+      "id": 350,
+      "name": "Delerium Change"
+    },
+    {
+      "id": 351,
+      "name": "NihlathakCorpseExplosion"
+    },
+    {
+      "id": 352,
+      "name": "SerpentCharge"
+    },
+    {
+      "id": 353,
+      "name": "Trap Nova"
+    },
+    {
+      "id": 354,
+      "name": "UnHolyBoltEx"
+    },
+    {
+      "id": 355,
+      "name": "ShamanFireEx"
+    },
+    {
+      "id": 356,
+      "name": "Imp Fire Missile Ex"
+    },
+    {
+      "id": 357,
+      "name": "Blink"
+    },
+    {
+      "id": 358,
+      "name": "proc_SplashDamage"
+    },
+    {
+      "id": 361,
+      "name": "ExtraDrop"
+    },
+    {
+      "id": 362,
+      "name": "BloodRavenImmo"
+    },
+    {
+      "id": 363,
+      "name": "DollMeteor"
+    },
+    {
+      "id": 384,
+      "name": "HurricaneTortureBoss"
+    },
+    {
+      "id": 385,
+      "name": "Merc Fire Arrow"
+    },
+    {
+      "id": 386,
+      "name": "Merc Cold Arrow"
+    },
+    {
+      "id": 387,
+      "name": "Raven Splash"
+    },
+    {
+      "id": 388,
+      "name": "Vampire Form"
+    },
+    {
+      "id": 389,
+      "name": "Golem Splash"
+    },
+    {
+      "id": 390,
+      "name": "KanemithBossBlaze"
+    },
+    {
+      "id": 391,
+      "name": "Lesser Fade"
+    },
+    {
+      "id": 392,
+      "name": "Sentry Lightning"
+    },
+    {
+      "id": 393,
+      "name": "Skeleton Splash"
+    },
+    {
+      "id": 394,
+      "name": "Force Move"
+    },
+    {
+      "id": 395,
+      "name": "Immune Aura"
+    },
+    {
+      "id": 396,
+      "name": "Immune Passive"
+    },
+    {
+      "id": 397,
+      "name": "MegademonInfernoBoss"
+    },
+    {
+      "id": 398,
+      "name": "MegademonBlazeBoss"
+    },
+    {
+      "id": 399,
+      "name": "MegademonArmaBoss"
+    },
+    {
+      "id": 400,
+      "name": "FingermageBossNova"
+    },
+    {
+      "id": 401,
+      "name": "FingermageBossDiabWall"
+    },
+    {
+      "id": 402,
+      "name": "FingermageBossShockWave"
+    },
+    {
+      "id": 403,
+      "name": "CantorBossEruption"
+    },
+    {
+      "id": 404,
+      "name": "CantorBossTornado"
+    },
+    {
+      "id": 405,
+      "name": "UnravelerBossMultiShot"
+    },
+    {
+      "id": 406,
+      "name": "UnravelerBossBuff"
+    },
+    {
+      "id": 407,
+      "name": "UnravelerMinionBuff"
+    },
+    {
+      "id": 408,
+      "name": "BaalMinionBossBerserk"
+    },
+    {
+      "id": 409,
+      "name": "BaalMinionBossRabies"
+    },
+    {
+      "id": 410,
+      "name": "BaalMinionBossCharge"
+    },
+    {
+      "id": 411,
+      "name": "BaalMinionBossNova"
+    },
+    {
+      "id": 412,
+      "name": "MonLeap"
+    },
+    {
+      "id": 413,
+      "name": "MonJab"
+    },
+    {
+      "id": 414,
+      "name": "MonSmite"
+    },
+    {
+      "id": 415,
+      "name": "MonCharge"
+    },
+    {
+      "id": 416,
+      "name": "MonHolyFreeze"
+    },
+    {
+      "id": 417,
+      "name": "MonGlacialSpike"
+    },
+    {
+      "id": 418,
+      "name": "MonFrostNova"
+    },
+    {
+      "id": 419,
+      "name": "MonFireBall"
+    },
+    {
+      "id": 420,
+      "name": "MonWeaken"
+    },
+    {
+      "id": 421,
+      "name": "MonHydra"
+    },
+    {
+      "id": 422,
+      "name": "MonLightning"
+    },
+    {
+      "id": 423,
+      "name": "Fixed Siege Beast Stomp"
+    },
+    {
+      "id": 424,
+      "name": "MonAmplifyDamage"
+    },
+    {
+      "id": 425,
+      "name": "MonWhirlwind"
+    },
+    {
+      "id": 426,
+      "name": "MonShout"
+    },
+    {
+      "id": 427,
+      "name": "MonDecrepify"
+    },
+    {
+      "id": 428,
+      "name": "MonChainLightning"
+    },
+    {
+      "id": 429,
+      "name": "MonChillingArmor"
+    },
+    {
+      "id": 430,
+      "name": "UberDiabloMeteor"
+    },
+    {
+      "id": 431,
+      "name": "UberDiabloBoulder"
+    },
+    {
+      "id": 432,
+      "name": "UberDiabWall"
+    },
+    {
+      "id": 433,
+      "name": "UberDiabLight"
+    },
+    {
+      "id": 434,
+      "name": "UberDiabCold"
+    },
+    {
+      "id": 435,
+      "name": "UberDiabFire"
+    },
+    {
+      "id": 436,
+      "name": "UberDiabSuperFire"
+    },
+    {
+      "id": 437,
+      "name": "WispBossChainLightning"
+    },
+    {
+      "id": 438,
+      "name": "WispMinionLightning"
+    },
+    {
+      "id": 439,
+      "name": "WispTotemConviction"
+    },
+    {
+      "id": 440,
+      "name": "MonLeapAttack"
+    },
+    {
+      "id": 441,
+      "name": "FingerMageBossSpider"
+    },
+    {
+      "id": 448,
+      "name": "Iceboss Freezing Arrow"
+    },
+    {
+      "id": 449,
+      "name": "Iceboss Blizzard"
+    },
+    {
+      "id": 450,
+      "name": "Lightning Strike Cowboss"
+    },
+    {
+      "id": 451,
+      "name": "Poison Nova Tomb Boss"
+    },
+    {
+      "id": 452,
+      "name": "Power Strike Tomb Boss"
+    },
+    {
+      "id": 453,
+      "name": "PoisonEggSpawn"
+    },
+    {
+      "id": 454,
+      "name": "Hydra Throne Boss"
+    },
+    {
+      "id": 455,
+      "name": "UberDiabSummon"
+    },
+    {
+      "id": 456,
+      "name": "A3 Mastery Fire"
+    },
+    {
+      "id": 457,
+      "name": "A3 Mastery Cold"
+    },
+    {
+      "id": 458,
+      "name": "A3 Mastery Ltng"
+    },
+    {
+      "id": 459,
+      "name": "Merc Static Field"
+    },
+    {
+      "id": 460,
+      "name": "A3 Merc Lightning"
+    },
+    {
+      "id": 461,
+      "name": "A3 Merc Meteor"
+    },
+    {
+      "id": 462,
+      "name": "A3 Merc Fire Ball"
+    },
+    {
+      "id": 463,
+      "name": "A3 Merc Blizzard"
+    },
+    {
+      "id": 464,
+      "name": "A3 Merc Ice Blast"
+    },
+    {
+      "id": 465,
+      "name": "TraitorBossBlessedAim"
+    },
+    {
+      "id": 466,
+      "name": "TraitorBossVigor"
+    },
+    {
+      "id": 467,
+      "name": "TraitorBossConeJab"
+    },
+    {
+      "id": 468,
+      "name": "TraitorBossStunSpear"
+    },
+    {
+      "id": 469,
+      "name": "ArcherBossArrowRain"
+    },
+    {
+      "id": 470,
+      "name": "ArcherBossBoomerShot"
+    },
+    {
+      "id": 471,
+      "name": "ArcherBossCageShot"
+    },
+    {
+      "id": 472,
+      "name": "Mon Conviction"
+    },
+    {
+      "id": 473,
+      "name": "Mon Fanaticism"
+    },
+    {
+      "id": 474,
+      "name": "Mon Holy Shock"
+    },
+    {
+      "id": 475,
+      "name": "Mon Holy Freeze"
+    },
+    {
+      "id": 476,
+      "name": "Mon Holy Fire"
+    },
+    {
+      "id": 477,
+      "name": "Mon Might"
+    },
+    {
+      "id": 478,
+      "name": "Mon Concentration"
+    },
+    {
+      "id": 479,
+      "name": "Mon Vigor"
+    },
+    {
+      "id": 480,
+      "name": "Baal Lowres"
+    },
+    {
+      "id": 481,
+      "name": "Poison Dagger Spider Boss"
+    },
+    {
+      "id": 482,
+      "name": "AndyPoisonBolt Spider Boss"
+    },
+    {
+      "id": 483,
+      "name": "Tornado Arcane Boss"
+    },
+    {
+      "id": 484,
+      "name": "Skeleton Archer Bow"
+    },
+    {
+      "id": 485,
+      "name": "RathmaDeath"
+    },
+    {
+      "id": 486,
+      "name": "NihlathakMapMobSpawn"
+    },
+    {
+      "id": 487,
+      "name": "NihlathakMapDeath"
+    },
+    {
+      "id": 488,
+      "name": "DoppleZonStrafe"
+    },
+    {
+      "id": 489,
+      "name": "Valk Power Strike"
+    },
+    {
+      "id": 490,
+      "name": "RathmaSummon"
+    },
+    {
+      "id": 491,
+      "name": "RathmaBoneSpear"
+    },
+    {
+      "id": 492,
+      "name": "RathmaTeethNova"
+    },
+    {
+      "id": 493,
+      "name": "VoidBolt"
+    },
+    {
+      "id": 494,
+      "name": "SummonVoidling"
+    },
+    {
+      "id": 495,
+      "name": "IskatuHurricane"
+    },
+    {
+      "id": 496,
+      "name": "RathmaPoisonOrb"
+    },
+    {
+      "id": 497,
+      "name": "RathmaFissure"
+    },
+    {
+      "id": 498,
+      "name": "RathmaOuterNova"
+    },
+    {
+      "id": 499,
+      "name": "Horror Arctic Blast Boss"
+    },
+    {
+      "id": 500,
+      "name": "Frost Nova Horror Boss"
+    },
+    {
+      "id": 501,
+      "name": "Mon Holy Freeze Wide"
+    },
+    {
+      "id": 502,
+      "name": "RathmaPacman"
+    },
+    {
+      "id": 503,
+      "name": "Shock Wave Boss"
+    },
+    {
+      "id": 504,
+      "name": "RathmaPrison"
+    },
+    {
+      "id": 505,
+      "name": "RathmaColdMissiles"
+    },
+    {
+      "id": 506,
+      "name": "Glacial Spike Spire"
+    },
+    {
+      "id": 507,
+      "name": "Poison Nova Rathma"
+    },
+    {
+      "id": 508,
+      "name": "Teeth Rathma"
+    },
+    {
+      "id": 509,
+      "name": "UberTalicBlaze"
+    },
+    {
+      "id": 510,
+      "name": "UberTalicWhirlwind"
+    },
+    {
+      "id": 511,
+      "name": "UberTalicBash"
+    },
+    {
+      "id": 512,
+      "name": "UberTalicMeteor"
+    },
+    {
+      "id": 513,
+      "name": "Book of Unlimited Identify"
+    },
+    {
+      "id": 514,
+      "name": "Book of Unlimited Townportal"
+    },
+    {
+      "id": 515,
+      "name": "BruteFireSlam"
+    },
+    {
+      "id": 516,
+      "name": "BruteMoltenBoulder"
+    },
+    {
+      "id": 517,
+      "name": "BruteShockWave"
+    },
+    {
+      "id": 518,
+      "name": "BruteVigor"
+    },
+    {
+      "id": 519,
+      "name": "UberMadawcDoubleThrow"
+    },
+    {
+      "id": 520,
+      "name": "UberMadawcCursedAxe"
+    },
+    {
+      "id": 521,
+      "name": "UberMadawcOWAxe"
+    },
+    {
+      "id": 522,
+      "name": "UberTalicSmite"
+    },
+    {
+      "id": 523,
+      "name": "UberMadawcFakeBO"
+    },
+    {
+      "id": 524,
+      "name": "UberMadawcLightningStorm"
+    },
+    {
+      "id": 525,
+      "name": "Cyclone ArmorMon"
+    },
+    {
+      "id": 526,
+      "name": "LeoricSummonNova"
+    },
+    {
+      "id": 527,
+      "name": "SiegeBeastClusterbomb"
+    },
+    {
+      "id": 528,
+      "name": "SiegeBeastFireNova"
+    },
+    {
+      "id": 529,
+      "name": "SiegeBeastBuffNova"
+    },
+    {
+      "id": 530,
+      "name": "SiegeBeastOrb"
+    },
+    {
+      "id": 531,
+      "name": "Holy Fire Fire Golem"
+    },
+    {
+      "id": 532,
+      "name": "Holy Freeze Korlic"
+    },
+    {
+      "id": 533,
+      "name": "Leap Attack Korlic"
+    },
+    {
+      "id": 534,
+      "name": "Holy Fire Sanctuaryboss"
+    },
+    {
+      "id": 535,
+      "name": "Howl Monster"
+    },
+    {
+      "id": 536,
+      "name": "Bone Spear Serpent"
+    },
+    {
+      "id": 537,
+      "name": "Fire Ball Ashen Boss"
+    },
+    {
+      "id": 538,
+      "name": "Fire Nova"
+    },
+    {
+      "id": 539,
+      "name": "ZharBarrage"
+    },
+    {
+      "id": 540,
+      "name": "ZharStrike"
+    },
+    {
+      "id": 541,
+      "name": "ZharArmageddon"
+    },
+    {
+      "id": 542,
+      "name": "ZharNovaOrb"
+    },
+    {
+      "id": 543,
+      "name": "ZharCloak"
+    },
+    {
+      "id": 544,
+      "name": "DemonPillar Fireball"
+    },
+    {
+      "id": 545,
+      "name": "Merc Magic Arrow"
+    },
+    {
+      "id": 546,
+      "name": "UberDiabRun"
+    },
+    {
+      "id": 547,
+      "name": "ZharMiniBossMeteorBlizzard"
+    },
+    {
+      "id": 548,
+      "name": "ZharMiniBossCombustion"
+    },
+    {
+      "id": 549,
+      "name": "DemonPillar Lightning"
+    },
+    {
+      "id": 550,
+      "name": "GuardianOfFateSummon"
+    },
+    {
+      "id": 551,
+      "name": "A4 Mastery"
+    },
+    {
+      "id": 552,
+      "name": "A4 AmpDmg"
+    },
+    {
+      "id": 553,
+      "name": "WarlordMiniBoss1BaalFire"
+    },
+    {
+      "id": 558,
+      "name": "IskatuBlizzard"
+    },
+    {
+      "id": 559,
+      "name": "ButcherAura"
+    },
+    {
+      "id": 560,
+      "name": "IskatuMagicOrb"
+    },
+    {
+      "id": 561,
+      "name": "RakanothStrike"
+    },
+    {
+      "id": 562,
+      "name": "TorajanBossNest"
+    },
+    {
+      "id": 563,
+      "name": "KanemithFirestorm"
+    },
+    {
+      "id": 564,
+      "name": "KanemithShockWeb"
+    },
+    {
+      "id": 565,
+      "name": "SharptoothUnholyOrb"
+    },
+    {
+      "id": 566,
+      "name": "SharptoothChainPoison"
+    },
+    {
+      "id": 567,
+      "name": "SharptoothArmageddon"
+    },
+    {
+      "id": 568,
+      "name": "RadamentBossRoyalFire"
+    },
+    {
+      "id": 569,
+      "name": "WispBossNova"
+    },
+    {
+      "id": 570,
+      "name": "RadamentBossMeteor"
+    },
+    {
+      "id": 571,
+      "name": "LucionNova"
+    },
+    {
+      "id": 572,
+      "name": "LucionBoneWave"
+    },
+    {
+      "id": 573,
+      "name": "LucionBlink"
+    },
+    {
+      "id": 574,
+      "name": "LucionRoyalFire"
+    },
+    {
+      "id": 575,
+      "name": "LucionDash"
+    },
+    {
+      "id": 576,
+      "name": "LucionPunish"
+    },
+    {
+      "id": 577,
+      "name": "EruptionDemonRoadBoss"
+    },
+    {
+      "id": 578,
+      "name": "Tentacle"
+    },
+    {
+      "id": 579,
+      "name": "LucionCharge"
+    },
+    {
+      "id": 580,
+      "name": "LucionDeath1"
+    },
+    {
+      "id": 581,
+      "name": "LucionDeath2"
+    },
+    {
+      "id": 582,
+      "name": "LucionDeath3"
+    },
+    {
+      "id": 583,
+      "name": "LucionDeath4"
+    },
+    {
+      "id": 584,
+      "name": "MonSmiteLucion"
+    },
+    {
+      "id": 585,
+      "name": "MonLowerRes"
+    },
+    {
+      "id": 586,
+      "name": "HydraFireball"
+    },
+    {
+      "id": 587,
+      "name": "SummonVoidlingUniqueMap"
+    },
+    {
+      "id": 588,
+      "name": "Bone Spear Putrid Defiler"
+    },
+    {
+      "id": 589,
+      "name": "SummonViperUniqueMap"
+    },
+    {
+      "id": 590,
+      "name": "ChargedBoltImperialMiniBoss"
+    },
+    {
+      "id": 591,
+      "name": "ImperialMiniBossBlast"
+    },
+    {
+      "id": 593,
+      "name": "Armageddon SelfAura"
+    }
+  ],
+  "officialSampleTrees": 21,
+  "catalogue": {
+    "allCanonicalNames": 594,
+    "playerSkills": 231,
+    "classes": 7,
+    "skillTrees": 21,
+    "marketSkillEntries": 525
+  },
+  "passed": 7454,
+  "failed": 0
+}

@@ -1,10 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { readText as tauriReadText, writeText as tauriWriteText } from '@tauri-apps/plugin-clipboard-manager';
-import { readText, writeText } from './browser-clipboard';
+import { readText, writeText, readGameItemText } from './browser-clipboard';
+import { invoke } from '@tauri-apps/api/core';
 
 const tauri = vi.hoisted(() => ({ value: false }));
 
-vi.mock('@tauri-apps/api/core', () => ({ isTauri: () => tauri.value }));
+vi.mock('@tauri-apps/api/core', () => ({ isTauri: () => tauri.value, invoke: vi.fn() }));
 vi.mock('@tauri-apps/plugin-clipboard-manager', () => ({ readText: vi.fn(), writeText: vi.fn() }));
 
 beforeEach(() => {
@@ -33,6 +34,21 @@ describe('Tauri mode', () => {
     vi.mocked(tauriReadText).mockRejectedValue(new Error('not text'));
 
     expect(await readText()).toBeNull();
+  });
+
+  it('uses the original UTF-8 item before Windows ANSI conversion', async () => {
+    const raw = '{"name":"Tombsong","type":"精良箭矢 Sharp Arrows","quality":"Unique","iLevel":85}';
+    vi.mocked(invoke).mockResolvedValue(raw);
+    expect(await readGameItemText()).toBe(raw);
+    expect(invoke).toHaveBeenCalledWith('read_game_item_clipboard');
+    expect(tauriReadText).not.toHaveBeenCalled();
+  });
+
+  it.each([null, new Error('clipboard busy')])('falls back when original UTF-8 is unavailable: %s', async result => {
+    if (result instanceof Error) vi.mocked(invoke).mockRejectedValue(result);
+    else vi.mocked(invoke).mockResolvedValue(result);
+    vi.mocked(tauriReadText).mockResolvedValue('Unicode clipboard');
+    expect(await readGameItemText()).toBe('Unicode clipboard');
   });
 
   it('rethrows plugin write failures so callers can surface them', async () => {

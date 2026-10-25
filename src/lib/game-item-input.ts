@@ -1,12 +1,14 @@
 import client from './game-client-aliases.data.json';
 import { PD2_ITEM_TRANSLATIONS } from './pd2-item-translations';
-import { uniqueItems, setItems } from '@/assets/items';
+import { uniqueItems, setItems, runeWords } from '@/assets/items';
+import { itemTypes } from '@/common/item-types';
 import { characterSkillMap } from '@/assets/character-skills';
 import { classSkillsMap, classSubSkillMap } from '@/assets/class-skills';
 import skillReference from './pd2-skill-translations.data.json';
 import { normalizeSkillStat, resolveCharacterSkillId } from '@/pages/price-check/lib/skill-stats';
 import type { Stat } from '@/pages/price-check/lib/interfaces';
 import { restoreGameItemStrings } from './game-text-encoding';
+import { bilingualGameLabel } from './bilingual-game-label';
 
 type Aliases = Map<string, Set<string>>;
 const clean = (s: string) => s.replace(/ÿc./g, '').replace(/\s+/g, ' ').trim();
@@ -27,21 +29,45 @@ const names: Record<string, Aliases> = { Unique: new Map(), Set: new Map(), Rune
 const nameFallback: Record<string, Aliases> = { Unique: new Map(), Set: new Map(), Runeword: new Map() };
 for (const [zh, en] of client.bases) add(bases, zh, en);
 for (const [kind, zh, en] of client.items) add(names[kind], zh, en);
-for (const [en, zh] of Object.entries(PD2_ITEM_TRANSLATIONS.Base)) add(baseFallback, zh, en);
+const canonicalBases = new Map(itemTypes.flatMap(type => type.bases.map(base => [key(base.label), base.label])));
+for (const [en, zh] of Object.entries(PD2_ITEM_TRANSLATIONS.Base))
+  add(baseFallback, zh, canonicalBases.get(key(en)) ?? en);
+for (const type of itemTypes)
+  for (const base of type.bases)
+    if (base.label !== 'Any') add(baseFallback, base.label, base.label);
 for (const kind of ['Unique', 'Set', 'Runeword'] as const) {
-  const items = kind === 'Unique' ? uniqueItems : kind === 'Set' ? setItems : [];
+  const items = kind === 'Unique' ? uniqueItems : kind === 'Set' ? setItems : runeWords;
   const canonical = new Map<string, string>();
   for (const item of items) {
-    canonical.set(key(item.name), item.key);
-    canonical.set(key(item.key), item.key);
+    const identity = kind === 'Runeword' ? item.name : item.key;
+    canonical.set(key(item.name), identity);
+    canonical.set(key(item.key), identity);
+    add(nameFallback[kind], item.name, identity);
+    add(nameFallback[kind], item.key, identity);
   }
   for (const [en, zh] of Object.entries(PD2_ITEM_TRANSLATIONS[kind]))
     add(nameFallback[kind], zh, canonical.get(key(en)) ?? en);
 }
 // Client aliases take precedence over display translations, whose wording may
 // differ. An ambiguous client label must not fall through to a convenient guess.
+const bilingualCatalogues = new WeakMap<Aliases, Aliases>();
 function resolve(primary: Aliases, fallback: Aliases, name: string) {
-  return primary.has(key(name)) ? unique(primary, name) : unique(fallback, name);
+  if (primary.has(key(name))) return unique(primary, name);
+  const exact = unique(fallback, name);
+  if (exact) return exact;
+  let english = bilingualCatalogues.get(primary);
+  if (!english) {
+    english = new Map();
+    for (const index of [primary, fallback])
+      for (const values of index.values())
+        for (const value of values) add(english, value, value);
+    bilingualCatalogues.set(primary, english);
+  }
+  const bilingual = bilingualGameLabel(name, english);
+  if (!bilingual) return;
+  const knownPrefix = primary.get(key(bilingual.prefix)) ?? fallback.get(key(bilingual.prefix));
+  if (knownPrefix && !knownPrefix.has(bilingual.value)) return;
+  return bilingual.value;
 }
 
 const classes: Aliases = new Map(),
@@ -108,8 +134,8 @@ function translateSkillLabel(stat: Record<string, any>): Record<string, any> {
 }
 
 function normalizeSkill(name: string, statId?: number): string | undefined {
-  if (statId === 83) return unique(classes, name);
-  if (statId === 188) return unique(tabs, name);
+  if (statId === 83) return resolve(classes, classes, name);
+  if (statId === 188) return resolve(tabs, tabs, name);
   if (statId === 126) {
     const element = /^(火焰|冰冷|闪电|毒素|魔法)技能(?:等级)?$/.exec(clean(name));
     return element && `${elements[element[1]]} Skills`;
@@ -118,7 +144,7 @@ function normalizeSkill(name: string, statId?: number): string | undefined {
   if (id !== undefined) return characterSkillMap[id]?.name;
   // Older game exports use 107 for class and tab bonuses as well.
   if (statId === undefined || statId === 107) {
-    const candidates = new Set([unique(classes, name), unique(tabs, name)].filter(Boolean));
+    const candidates = new Set([resolve(classes, classes, name), resolve(tabs, tabs, name)].filter(Boolean));
     if (candidates.size === 1) return candidates.values().next().value;
   }
   return undefined;
@@ -172,7 +198,7 @@ function normalizeStat(stat: Record<string, any>): Record<string, any> {
     translated.charges === undefined &&
     (translated.stat_id == null || [83, 97, 107, 188].includes(translated.stat_id))
   ) {
-    const oskill = /oskill|非本职业/i.test(stat.name ?? '');
+    const oskill = /oskill|非本职业/i.test(`${stat.name ?? ''} ${stat.skill ?? ''}`);
     translated = { ...translated, name: `+${translated.value} to ${translated.skill}${oskill ? ' (Oskill)' : ''}` };
   }
   return normalizeSkillStat(translated as Stat);

@@ -49,7 +49,10 @@ describe('game encoding before stash matching', () => {
   });
 
   it('rejects damaged/unknown bases instead of claiming the server has not synced', () => {
-    expect(() => normalizeItemForStashMatching({ ...tomb, type: 'ç¥ž? Cryptic Axe' })).toThrow(GameItemMatchingError);
+    // A complete, exact English suffix now preserves identity even if its
+    // Chinese prefix lost bytes; a damaged name without that identity cannot.
+    expect(normalizeItemForStashMatching({ ...tomb, type: 'ç¥ž? Cryptic Axe' }).type).toBe('Cryptic Axe');
+    expect(() => normalizeItemForStashMatching({ ...tomb, type: 'ç¥ž? Cryptic Ax' })).toThrow(GameItemMatchingError);
     expect(() => normalizeItemForStashMatching({ ...tomb, type: '未知底材' })).toThrow(GameItemMatchingError);
     expect(() => normalizeItemForStashMatching({ ...tomb, type: 'Unknown Base' })).toThrow('无法识别装备底材');
   });

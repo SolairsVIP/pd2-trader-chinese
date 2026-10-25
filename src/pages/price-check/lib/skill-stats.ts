@@ -4,6 +4,7 @@ import { SITE_STAT_OPTIONS } from '@/pages/market/lib/stat-options.data';
 import { PD2_SKILL_TRANSLATION_ALIASES } from '@/lib/pd2-skill-translations';
 import gameClientAliases from '@/lib/game-client-aliases.data.json';
 import { canonicalizeSkillName } from '@/lib/skill-name-aliases';
+import { bilingualGameLabel } from '@/lib/bilingual-game-label';
 import type { Stat } from './interfaces';
 import { statIdToProperty } from './stat-mappings';
 
@@ -68,12 +69,23 @@ for (const [english, chinese] of PD2_SKILL_TRANSLATION_ALIASES) {
   if (id !== undefined) addAlias(translatedSkills, chinese, id);
 }
 
+const englishSkillAliases: AliasIndex = new Map(characterAliases);
+for (const [name, skill] of Object.entries(skillNameToIdMap)) addAlias(englishSkillAliases, name, skill.id);
+
 export function resolveCharacterSkillId(name: string): number | undefined {
   const english = englishSkillId(name);
   if (english !== undefined) return english;
   // A verified client label can differ from our display dictionary (Battle Cry
   // vs War Cry). Do not mix those dictionaries into one ambiguous identity.
-  return clientSkills.has(cleanSkillName(name)) ? uniqueId(clientSkills, name) : uniqueId(translatedSkills, name);
+  const chinese = clientSkills.has(cleanSkillName(name)) ? uniqueId(clientSkills, name) : uniqueId(translatedSkills, name);
+  if (chinese !== undefined) return chinese;
+  const bilingual = bilingualGameLabel(name.replace(/\s*\(oskill\)$/i, ''), englishSkillAliases);
+  if (!bilingual) return;
+  const prefixKey = cleanSkillName(bilingual.prefix);
+  const knownPrefix = clientSkills.get(prefixKey) ?? translatedSkills.get(prefixKey);
+  // Conflicting known translations must not silently become a different skill.
+  if (knownPrefix && !knownPrefix.has(bilingual.value)) return;
+  return bilingual.value;
 }
 
 const classes: AliasIndex = new Map();
@@ -127,7 +139,7 @@ const TRIGGER_NAMES: Record<string, number> = {
 };
 
 function chargeCounts(text: string): { remaining: number; capacity: number } | undefined {
-  const match = /^\(\s*(\d+)\s*\/\s*(\d+)\s+(?:Charges|聚气)\s*\)$/i.exec(text.trim());
+  const match = /^\(\s*(\d+)\s*\/\s*(\d+)\s+(?:Charges|聚气|聚氣)\s*\)$/i.exec(text.trim());
   if (!match) return;
   const remaining = Number(match[1]),
     capacity = Number(match[2]);

@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-26",
+  "scope": "Offline aliases, bilingual labels, reversible mojibake, stat fields, selection, query and stash normalization. Not in-game or authenticated server validation.",
+  "aliases": {
+    "bases": 1229,
+    "items": 1304,
+    "stats": 721,
+    "skills": 384
+  },
+  "groups": {
+    "base-labels": {
+      "passed": 4626,
+      "failed": 0
+    },
+    "item-labels": {
+      "passed": 3264,
+      "failed": 0
+    },
+    "skill-labels": {
+      "passed": 8256,
+      "failed": 0
+    },
+    "ordinary-stat-fields": {
+      "passed": 1442,
+      "failed": 0
+    },
+    "translated-skill-templates": {
+      "passed": 11088,
+      "failed": 0
+    },
+    "charged-skill-languages": {
+      "passed": 693,
+      "failed": 0
+    },
+    "english-fixed-item-regression": {
+      "passed": 797,
+      "failed": 0
+    },
+    "english-base-regression": {
+      "passed": 683,
+      "failed": 0
+    }
+  },
+  "failures": [],
+  "ambiguous": [
+    {
+      "kind": "base",
+      "label": "战斗斧",
+      "candidates": [
+        "Battle Axe",
+        "Tabar"
+      ]
+    },
+    {
+      "kind": "skill",
+      "label": "重击",
+      "candidates": [
+        97,
+        126
+      ]
+    },
+    {
+      "kind": "skill",
+      "label": "重擊",
+      "candidates": [
+        97,
+        126
+      ]
+    }
+  ],
+  "ambiguousTemplates": [
+    {
+      "label": "%d%%几率在死亡时施放%d级%s",
+      "candidates": [
+        197,
+        453
+      ]
+    },
+    {
+      "label": "當你死去 %d%% 機會施展等級 %d %s",
+      "candidates": [
+        197,
+        453
+      ]
+    }
+  ],
+  "unnamedCatalogueBases": [
+    {
+      "type": "Map T4",
+      "code": "t99"
+    },
+    {
+      "type": "Map T5",
+      "code": "t55"
+    },
+    {
+      "type": "Map T5",
+      "code": "t54"
+    }
+  ],
+  "identities": {
+    "bases": 668,
+    "fixedItems": 765,
+    "skills": 212
+  },
+  "passed": 30849,
+  "failed": 0
+}

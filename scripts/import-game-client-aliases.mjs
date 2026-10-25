@@ -6,7 +6,10 @@ import ts from 'typescript';
 
 // Read translation data only; never load or execute the game's EXE/DLL files.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const [tableDir, skillTable] = process.argv.slice(2);
+const [tableDir, skillTable, ...flags] = process.argv.slice(2);
+const option = (name, fallback) => flags.includes(name) ? flags[flags.indexOf(name) + 1] : fallback;
+const target = path.resolve(option('--output', path.join(root, 'src/lib/game-client-aliases.data.json')));
+const reportTarget = path.resolve(option('--report', path.join(root, 'docs/game-client-aliases-20261024.json')));
 const basesOnly = skillTable === '--bases-only';
 if (!tableDir || !skillTable)
   throw new Error('Usage: node scripts/import-game-client-aliases.mjs <LNG/ENG directory> <skill-reference.tsv | --bases-only>');
@@ -84,7 +87,7 @@ function baseKeys(value) {
 const bases = uniqueRows(
   itemTypes.flatMap((type) =>
     type.bases.flatMap(({ label, value }) =>
-      baseKeys(value).flatMap((code) => {
+      (label.trim() ? baseKeys(value) : []).flatMap((code) => {
         const chinese = lookup(code);
         return chinese && hasChinese(chinese) ? [[chinese, label]] : [];
       }),
@@ -94,7 +97,6 @@ const bases = uniqueRows(
 if (basesOnly) {
   // Extend only the input aliases. Existing item, stat and skill mappings stay
   // tied to the previously verified client; no translation reference is needed.
-  const target = path.join(root, 'src/lib/game-client-aliases.data.json');
   const existing = JSON.parse(fs.readFileSync(target, 'utf8'));
   const before = existing.bases.length;
   existing.bases = uniqueRows([...existing.bases, ...bases]);
@@ -140,7 +142,13 @@ const skills = uniqueRows(
     }),
 );
 const data = { bases, items, stats, skills };
-fs.writeFileSync(path.join(root, 'src/lib/game-client-aliases.data.json'), JSON.stringify(data, null, 2) + '\n');
+const mergeSource = option('--merge-from', undefined);
+if (mergeSource) {
+  const previous = JSON.parse(fs.readFileSync(mergeSource, 'utf8'));
+  for (const group of Object.keys(data)) data[group] = uniqueRows([...previous[group], ...data[group]]);
+  data.bases = data.bases.filter(([, english]) => english.trim());
+}
+fs.writeFileSync(target, JSON.stringify(data, null, 2) + '\n');
 const collisions = (rows, labelIndex, targetIndex) => {
   const map = new Map();
   for (const row of rows) {
@@ -153,10 +161,13 @@ const collisions = (rows, labelIndex, targetIndex) => {
     .map(([label, values]) => ({ label, candidates: [...values] }));
 };
 const report = {
+  language: path.basename(tableDir),
+  mergedWithExistingAliases: Boolean(mergeSource),
   sources,
   counts: Object.fromEntries(Object.entries(data).map(([k, v]) => [k, v.length])),
-  ambiguousBases: collisions(bases, 0, 1),
-  ambiguousSkills: collisions(skills, 0, 2),
+  ambiguousBases: collisions(data.bases, 0, 1),
+  ambiguousSkills: collisions(data.skills, 0, 2),
+  unnamedCatalogueBases: itemTypes.flatMap(type => type.bases.filter(base => !base.label.trim()).map(base => ({ type: type.typeLabel, code: base.value }))),
 };
-fs.writeFileSync(path.join(root, 'docs/game-client-aliases-20261024.json'), JSON.stringify(report, null, 2) + '\n');
+fs.writeFileSync(reportTarget, JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify(report, null, 2));

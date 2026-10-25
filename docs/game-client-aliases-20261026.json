@@ -1,0 +1,63 @@
+{
+  "language": "CHI",
+  "mergedWithExistingAliases": true,
+  "sources": [
+    {
+      "file": "string.tbl",
+      "rows": 5391
+    },
+    {
+      "file": "expansionstring.tbl",
+      "rows": 2818
+    },
+    {
+      "file": "patchstring.tbl",
+      "rows": 3277
+    }
+  ],
+  "counts": {
+    "bases": 1229,
+    "items": 1304,
+    "stats": 721,
+    "skills": 384
+  },
+  "ambiguousBases": [
+    {
+      "label": "战斗斧",
+      "candidates": [
+        "Battle Axe",
+        "Tabar"
+      ]
+    }
+  ],
+  "ambiguousSkills": [
+    {
+      "label": "重击",
+      "candidates": [
+        97,
+        126
+      ]
+    },
+    {
+      "label": "重擊",
+      "candidates": [
+        97,
+        126
+      ]
+    }
+  ],
+  "unnamedCatalogueBases": [
+    {
+      "type": "Map T4",
+      "code": "t99"
+    },
+    {
+      "type": "Map T5",
+      "code": "t55"
+    },
+    {
+      "type": "Map T5",
+      "code": "t54"
+    }
+  ]
+}
