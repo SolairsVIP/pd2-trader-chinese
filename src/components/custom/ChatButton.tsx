@@ -78,7 +78,7 @@ interface MenuEntry {
 const DRAG_THRESHOLD = 4;
 
 /**
- * The chat dock: a tab (chat · offers · menu caret) flush on the game's right edge, flat side against it. Nothing
+ * The chat dock: a tab (market · chat · offers · menu caret) flush on the game's right edge, flat side against it. Nothing
  * opens on hover: a stray pointer passing over it mid-fight does nothing, only clicks do. Dragging the tab slides it
  * along the edge (`onDrag` gets the vertical travel). The caret opens a menu of the other windows, above the tab or
  * below it (`menuBelow`) near the top. A new message or offer pulses the tab once.
@@ -183,7 +183,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
       onClick: onChatClick,
       badge: { count: unreadCount, className: 'bg-destructive text-destructive-foreground' },
     },
-    { label: '市场浏览', icon: Store, onClick: onMarketClick },
+    { label: '交易大厅', icon: Store, onClick: onMarketClick },
     { label: '仓库估值', icon: TrendingUp, onClick: onNetWorthClick },
     { label: '仓库价值', icon: Coins, onClick: onStashValueClick },
     {
@@ -225,6 +225,17 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
           onPointerDown={onTabPointerDown}
           onClickCapture={onTabClickCapture}
         >
+          {onMarketClick && (
+            <button
+              type="button"
+              onClick={pick(onMarketClick)}
+              className={segment}
+              aria-label="打开交易大厅"
+              title="交易大厅"
+            >
+              <Store style={icon} />
+            </button>
+          )}
           <button type="button"
             onClick={onChatClick}
             className={segment}

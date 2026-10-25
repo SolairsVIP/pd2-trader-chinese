@@ -2503,6 +2503,378 @@
     [
       "世界之石碎片",
       "Worldstone Shard"
+    ],
+    [
+      "无暇疵的钻石",
+      "Flawless Diamond"
+    ],
+    [
+      "Flawless Diamond (旧)",
+      "Flawless Diamond"
+    ],
+    [
+      "无暇疵的绿宝石",
+      "Flawless Emerald"
+    ],
+    [
+      "Flawless Emerald (旧)",
+      "Flawless Emerald"
+    ],
+    [
+      "无暇疵的红宝石",
+      "Flawless Ruby"
+    ],
+    [
+      "Flawless Ruby (旧)",
+      "Flawless Ruby"
+    ],
+    [
+      "无暇疵的蓝宝石",
+      "Flawless Sapphire"
+    ],
+    [
+      "Flawless Sapphire (旧)",
+      "Flawless Sapphire"
+    ],
+    [
+      "无暇疵的骷髅",
+      "Flawless Skull"
+    ],
+    [
+      "Flawless Skull (旧)",
+      "Flawless Skull"
+    ],
+    [
+      "无暇疵的黄宝石",
+      "Flawless Topaz"
+    ],
+    [
+      "Flawless Topaz (旧)",
+      "Flawless Topaz"
+    ],
+    [
+      "完美的紫宝石",
+      "Perfect Amethyst"
+    ],
+    [
+      "Perfect Amethyst (旧)",
+      "Perfect Amethyst"
+    ],
+    [
+      "完美的钻石",
+      "Perfect Diamond"
+    ],
+    [
+      "Perfect Diamond (旧)",
+      "Perfect Diamond"
+    ],
+    [
+      "完美的绿宝石",
+      "Perfect Emerald"
+    ],
+    [
+      "Perfect Emerald (旧)",
+      "Perfect Emerald"
+    ],
+    [
+      "完美的红宝石",
+      "Perfect Ruby"
+    ],
+    [
+      "Perfect Ruby (旧)",
+      "Perfect Ruby"
+    ],
+    [
+      "完美的蓝宝石",
+      "Perfect Sapphire"
+    ],
+    [
+      "Perfect Sapphire (旧)",
+      "Perfect Sapphire"
+    ],
+    [
+      "完美的骷髅",
+      "Perfect Skull"
+    ],
+    [
+      "Perfect Skull (旧)",
+      "Perfect Skull"
+    ],
+    [
+      "完美的黄宝石",
+      "Perfect Topaz"
+    ],
+    [
+      "Perfect Topaz (旧)",
+      "Perfect Topaz"
+    ],
+    [
+      "大长刀",
+      "Glaive"
+    ],
+    [
+      "符文：安姆",
+      "Amn Rune"
+    ],
+    [
+      "Amn Rune (旧)",
+      "Amn Rune"
+    ],
+    [
+      "符文：贝",
+      "Ber Rune"
+    ],
+    [
+      "Ber Rune (旧)",
+      "Ber Rune"
+    ],
+    [
+      "符文：查姆",
+      "Cham Rune"
+    ],
+    [
+      "Cham Rune (旧)",
+      "Cham Rune"
+    ],
+    [
+      "符文：多尔",
+      "Dol Rune"
+    ],
+    [
+      "Dol Rune (旧)",
+      "Dol Rune"
+    ],
+    [
+      "符文：艾尔",
+      "El Rune"
+    ],
+    [
+      "El Rune (旧)",
+      "El Rune"
+    ],
+    [
+      "符文：艾德",
+      "Eld Rune"
+    ],
+    [
+      "Eld Rune (旧)",
+      "Eld Rune"
+    ],
+    [
+      "符文：艾斯",
+      "Eth Rune"
+    ],
+    [
+      "Eth Rune (旧)",
+      "Eth Rune"
+    ],
+    [
+      "符文：法尔",
+      "Fal Rune"
+    ],
+    [
+      "Fal Rune (旧)",
+      "Fal Rune"
+    ],
+    [
+      "符文：古尔",
+      "Gul Rune"
+    ],
+    [
+      "Gul Rune (旧)",
+      "Gul Rune"
+    ],
+    [
+      "符文：海尔",
+      "Hel Rune"
+    ],
+    [
+      "Hel Rune (旧)",
+      "Hel Rune"
+    ],
+    [
+      "符文：艾欧",
+      "Io Rune"
+    ],
+    [
+      "Io Rune (旧)",
+      "Io Rune"
+    ],
+    [
+      "符文：伊司特",
+      "Ist Rune"
+    ],
+    [
+      "Ist Rune (旧)",
+      "Ist Rune"
+    ],
+    [
+      "符文：伊司",
+      "Ith Rune"
+    ],
+    [
+      "Ith Rune (旧)",
+      "Ith Rune"
+    ],
+    [
+      "符文：扎哈",
+      "Jah Rune"
+    ],
+    [
+      "Jah Rune (旧)",
+      "Jah Rune"
+    ],
+    [
+      "符文：科",
+      "Ko Rune"
+    ],
+    [
+      "Ko Rune (旧)",
+      "Ko Rune"
+    ],
+    [
+      "符文：兰姆",
+      "Lem Rune"
+    ],
+    [
+      "Lem Rune (旧)",
+      "Lem Rune"
+    ],
+    [
+      "符文：罗",
+      "Lo Rune"
+    ],
+    [
+      "Lo Rune (旧)",
+      "Lo Rune"
+    ],
+    [
+      "符文：卢姆",
+      "Lum Rune"
+    ],
+    [
+      "Lum Rune (旧)",
+      "Lum Rune"
+    ],
+    [
+      "符文：玛尔",
+      "Mal Rune"
+    ],
+    [
+      "Mal Rune (旧)",
+      "Mal Rune"
+    ],
+    [
+      "符文：奈夫",
+      "Nef Rune"
+    ],
+    [
+      "Nef Rune (旧)",
+      "Nef Rune"
+    ],
+    [
+      "符文：欧姆",
+      "Ohm Rune"
+    ],
+    [
+      "Ohm Rune (旧)",
+      "Ohm Rune"
+    ],
+    [
+      "符文：欧特",
+      "Ort Rune"
+    ],
+    [
+      "Ort Rune (旧)",
+      "Ort Rune"
+    ],
+    [
+      "符文：普尔",
+      "Pul Rune"
+    ],
+    [
+      "Pul Rune (旧)",
+      "Pul Rune"
+    ],
+    [
+      "符文：拉尔",
+      "Ral Rune"
+    ],
+    [
+      "Ral Rune (旧)",
+      "Ral Rune"
+    ],
+    [
+      "符文：沙伊",
+      "Shael Rune"
+    ],
+    [
+      "Shael Rune (旧)",
+      "Shael Rune"
+    ],
+    [
+      "符文：索尔",
+      "Sol Rune"
+    ],
+    [
+      "Sol Rune (旧)",
+      "Sol Rune"
+    ],
+    [
+      "符文：瑟",
+      "Sur Rune"
+    ],
+    [
+      "Sur Rune (旧)",
+      "Sur Rune"
+    ],
+    [
+      "符文：塔尔",
+      "Tal Rune"
+    ],
+    [
+      "Tal Rune (旧)",
+      "Tal Rune"
+    ],
+    [
+      "符文：图尔",
+      "Thul Rune"
+    ],
+    [
+      "Thul Rune (旧)",
+      "Thul Rune"
+    ],
+    [
+      "符文：提尔",
+      "Tir Rune"
+    ],
+    [
+      "Tir Rune (旧)",
+      "Tir Rune"
+    ],
+    [
+      "符文：乌姆",
+      "Um Rune"
+    ],
+    [
+      "Um Rune (旧)",
+      "Um Rune"
+    ],
+    [
+      "符文：伐克斯",
+      "Vex Rune"
+    ],
+    [
+      "Vex Rune (旧)",
+      "Vex Rune"
+    ],
+    [
+      "符文：佐德",
+      "Zod Rune"
+    ],
+    [
+      "Zod Rune (旧)",
+      "Zod Rune"
     ]
   ],
   "items": [

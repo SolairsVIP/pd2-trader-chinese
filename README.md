@@ -12,18 +12,18 @@
 >
 > **汉化作者：Solaris · 开源许可：[MIT License](LICENSE)**。保留原项目版权声明与许可证。
 
-**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.3/PD2.Trader.CN_0.11.3_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.3/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.3)**
+**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.4/PD2.Trader.CN_0.11.4_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.4/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.4)**
 
-当前版本：**0.11.3 正式版**，发布于 2026-10-25。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
+当前版本：**0.11.4 正式版**，发布于 2026-10-25。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
 
-本版已通过用户测试，由 0.11.3-beta.2 转为正式版：修复中文客户端上架匹配与队列刷新，补齐通知和错误提示汉化，支持使用“召唤”等中文及中英混合搜索市场属性。[完整更新说明](docs/releases/v0.11.3.md)。
+本版新增游戏右下角浮窗的**交易大厅入口**，位于聊天图标上方，点击即可打开市场；修复古尔等全部 33 种中文符文及同类条目的识别，并保留 0.11.3 的上架、搜索与提示汉化修复。[完整更新说明](docs/releases/v0.11.4.md)。
 
 ## 快速开始
 
 1. 完全退出旧版程序及托盘进程，再安装上方的 Windows x64 安装包。
 2. 启动插件，使用 PD2 账号登录，在浏览器中完成官方授权。
 3. 从右下角托盘右键打开**设置**，核对游戏目录、赛季、天梯与普通／专家模式。
-4. 回到游戏，将鼠标指向装备，按 **<kbd>Ctrl</kbd> + <kbd>D</kbd> 查价**；按 **<kbd>Ctrl</kbd> + <kbd>M</kbd> 打开交易大厅**。
+4. 回到游戏，将鼠标指向装备，按 **<kbd>Ctrl</kbd> + <kbd>D</kbd> 查价**；按 **<kbd>Ctrl</kbd> + <kbd>M</kbd> 打开交易大厅**；也可直接点击游戏右下角浮窗最上方的**商店图标**。
 
 **0.11.2 及以上版本可通过自动更新升级；更早版本请手动安装当前正式版。默认自动检查中文版更新并弹出中文提示，由用户点击“下载并安装”后才更新及重启。** 在“设置 → 更新”中可以关闭自动检查或随时手动检查。启动约 5 秒后检查一次，运行中每隔 30 分钟检查一次；需要能连接 GitHub。安装后请核对现有账号和游戏分区设置。
 
@@ -89,7 +89,7 @@
 
 ## 4. 交易大厅：搜索、筛选与联系卖家
 
-**打开交易大厅：<kbd>Ctrl</kbd> + <kbd>M</kbd>。**
+**打开交易大厅：点击游戏右下角浮窗最上方的商店图标，或按 <kbd>Ctrl</kbd> + <kbd>M</kbd>。**
 
 ![交易大厅全貌：左侧筛选、中间挂牌与右侧物品详情](docs/images/guide/market-browser.webp)
 
@@ -215,7 +215,7 @@
 - [0.11.0 兼容范围与历史校验值](docs/releases/v0.11.0.md)
 - [0.11 大版本更新记录](docs/发布记录-0.11.0.md)
 - [历史修复与阶段性验证记录](docs/历史修复记录.md)
-- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.3/SHA256SUMS.txt)
+- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.4/SHA256SUMS.txt)
 - [上游原项目](https://github.com/errolgr/pd2-trade) · [本项目开源仓库](https://github.com/SolairsVIP/pd2-trader-chinese) · [MIT 许可证](LICENSE)
 
 <details>

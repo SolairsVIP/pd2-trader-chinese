@@ -6,12 +6,38 @@ import { useStashCache } from './useStashCache';
 import { useMarketActions } from './useMarketActions';
 import type { ISettings } from '../useOptions';
 import type { AuthData } from '@/common/types/pd2-website/AuthResponse';
+import type { Item } from '@/pages/price-check/lib/interfaces';
 
 vi.mock('@/lib/browser-http', () => ({ fetch: vi.fn() }));
 vi.mock('@/lib/error-reporting', () => ({ reportApiError: vi.fn() }));
 afterEach(cleanup);
 
 describe('real game input -> official stash matching -> listing boundary', () => {
+  it('matches the user Gul Rune copy without name/stats and submits the original website item', async () => {
+    const official = { hash: 'official-gul', name: 'Gul Rune', base: { name: 'Gul Rune' },
+      quality: { name: 'Normal' }, modifiers: [] };
+    const otherRune = { ...official, hash: 'official-vex', name: 'Vex Rune', base: { name: 'Vex Rune' } };
+    vi.mocked(tauriFetch).mockReset();
+    vi.mocked(tauriFetch).mockImplementation(async (_url, init) => ({
+      ok: true, status: 200,
+      json: async () => init?.method === 'POST' ? { _id: 'rune-listing' } : { items: [otherRune, official] },
+    }) as Response);
+    const settings = { pd2Token: 'test', account: 'TestAccount', mode: 'softcore', ladder: 'ladder' } as ISettings;
+    const authData = { user: { _id: 'test-user' } } as AuthData;
+    const { result } = renderHook(() => {
+      const cache = useStashCache(authData, settings);
+      return useMarketActions({ settings, authData, ...cache });
+    });
+    const candidates = await result.current.findMatchingItems({ iLevel: 99, isRune: true,
+      location: 'Stash', quality: 'Normal', type: 'ç¬¦æ–‡ï¼šå¤å°”' } as Item, { forceRefresh: true });
+    expect(candidates).toEqual([official]);
+    expect(candidates[0]).toBe(official);
+    await result.current.listSpecificItem(candidates[0], 0, '1wss', 'note');
+    const post = vi.mocked(tauriFetch).mock.calls.findLast(([, init]) => init?.method === 'POST')!;
+    expect(JSON.parse(post[1]!.body as string).item).toEqual({ ...official, account_id: 'testaccount' });
+    expect(official).not.toHaveProperty('account_id');
+  });
+
   it.each(['Cryptic Axe', '神秘之斧 Cryptic Axe', 'ç¥žç§˜ä¹‹æ–§ Cryptic Axe'])(
     'matches Tomb Reaver with base %s and submits the original website hash/modifiers', async (type) => {
       const official = { hash: 'official-tomb', name: 'Tomb Reaver', base: { name: 'Cryptic Axe' },

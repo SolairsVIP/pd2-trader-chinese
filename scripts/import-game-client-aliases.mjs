@@ -7,8 +7,9 @@ import ts from 'typescript';
 // Read translation data only; never load or execute the game's EXE/DLL files.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const [tableDir, skillTable] = process.argv.slice(2);
+const basesOnly = skillTable === '--bases-only';
 if (!tableDir || !skillTable)
-  throw new Error('Usage: node scripts/import-game-client-aliases.mjs <LNG/ENG directory> <skill-reference.tsv>');
+  throw new Error('Usage: node scripts/import-game-client-aliases.mjs <LNG/ENG directory> <skill-reference.tsv | --bases-only>');
 const require = createRequire(import.meta.url);
 function declarations(relative) {
   const exports = {};
@@ -71,14 +72,36 @@ const { uniqueItems, setItems, runeWords } = declarations('src/assets/items.ts')
 const { characterSkillMap } = declarations('src/assets/character-skills.ts');
 const { modifiers } = declarations('src/assets/modifiers.ts');
 const uniqueRows = (rows) => [...new Map(rows.map((row) => [JSON.stringify(row), row])).values()];
+// The catalogue groups normal and stackable variants with a JSON selector.
+// TBL names are indexed by each concrete code, never by the selector text.
+function baseKeys(value) {
+  if (!value.trim().startsWith('{')) return value === 'Any' ? [] : [value];
+  const selector = JSON.parse(value);
+  if (!Array.isArray(selector.$in) || !selector.$in.every((code) => typeof code === 'string'))
+    throw new Error(`Invalid base selector: ${value}`);
+  return selector.$in;
+}
 const bases = uniqueRows(
   itemTypes.flatMap((type) =>
-    type.bases.flatMap(({ label, value }) => {
-      const chinese = lookup(value);
-      return chinese && hasChinese(chinese) ? [[chinese, label]] : [];
-    }),
+    type.bases.flatMap(({ label, value }) =>
+      baseKeys(value).flatMap((code) => {
+        const chinese = lookup(code);
+        return chinese && hasChinese(chinese) ? [[chinese, label]] : [];
+      }),
+    ),
   ),
 );
+if (basesOnly) {
+  // Extend only the input aliases. Existing item, stat and skill mappings stay
+  // tied to the previously verified client; no translation reference is needed.
+  const target = path.join(root, 'src/lib/game-client-aliases.data.json');
+  const existing = JSON.parse(fs.readFileSync(target, 'utf8'));
+  const before = existing.bases.length;
+  existing.bases = uniqueRows([...existing.bases, ...bases]);
+  fs.writeFileSync(target, JSON.stringify(existing, null, 2) + '\n');
+  console.log(`Base aliases: ${before} -> ${existing.bases.length}; other mappings preserved`);
+  process.exit(0);
+}
 const items = uniqueRows(
   [
     ['Unique', uniqueItems],
