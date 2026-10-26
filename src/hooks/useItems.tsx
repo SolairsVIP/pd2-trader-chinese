@@ -10,7 +10,7 @@ interface ItemsContextValue {
   fuse: Fuse<ItemType>;
   itemsMapByKey: Record<string, ItemType>;
   findByName: (name: string, limit?: number, itemQuality?: string) => ItemType[];
-  findOneByName: (name: string, itemQuality?: string) => ItemType | null;
+  findOneByName: (name: string, itemQuality?: string, exactMatch?: boolean) => ItemType | null;
 }
 
 const ItemsContext = createContext<ItemsContextValue | undefined>(undefined);
@@ -48,8 +48,29 @@ export function ItemsProvider({ items = allItems, children }: { items?: ItemType
   );
 
   const findOneByName = useCallback(
-    (name: string, itemQuality?: string): ItemType | null => {
+    (name: string, itemQuality?: string, exactMatch = false): ItemType | null => {
       if (!name) return null;
+
+      // Clipboard names identify an item, unlike interactive search input. Never
+      // substitute a similar catalogue entry for an unknown/new game item.
+      if (exactMatch) {
+        const normalize = (value: string) => value.trim().replace(/[’‘]/g, "'").replace(/\s+/g, ' ').toLowerCase();
+        const expectedKind =
+          itemQuality === ItemQuality.Unique
+            ? 'item.unique'
+            : itemQuality === ItemQuality.Set
+              ? 'item.set'
+              : itemQuality === ItemQuality.Runeword
+                ? 'item.runeword'
+                : undefined;
+        return (
+          items.find(
+            (item) =>
+              (!expectedKind || item.kind === expectedKind) &&
+              [item.key, item.name].some((label) => normalize(label) === normalize(name)),
+          ) ?? null
+        );
+      }
 
       // For unique or set items, try direct lookup by key first
       if (itemQuality === ItemQuality.Unique || itemQuality === ItemQuality.Set) {
@@ -63,7 +84,7 @@ export function ItemsProvider({ items = allItems, children }: { items?: ItemType
       const results = fuse.search(name, { limit: 1 });
       return results.map((r) => r.item).pop() || null;
     },
-    [fuse, itemsMapByKey],
+    [fuse, itemsMapByKey, items],
   );
 
   const value = useMemo(

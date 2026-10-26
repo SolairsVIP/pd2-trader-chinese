@@ -28,6 +28,7 @@ import type { MarketListingQuery } from '@/common/types/pd2-website/GetMarketLis
 import type { RareAppraisal } from '@/lib/rare-appraisal-api';
 import { useRareAppraisal, type RareAppraisalState } from '../hooks/useRareAppraisal';
 import type { Item } from '../lib/interfaces';
+import { normalizeGameItemInput } from '@/lib/game-item-input';
 import ItemOverlayWidget from './ItemOverlayWidget';
 
 vi.mock('@/hooks/useOptions', () => ({ useOptions: vi.fn() }));
@@ -71,7 +72,9 @@ afterAll(() => {
 
 // ---------------------------------------------------------------- fixtures
 
-const TEST_ITEMS = allItems.filter((i) => i.key === 'Harlequin Crest' || i.key === 'Rainbow Facet');
+const TEST_ITEMS = allItems.filter(
+  (i) => i.key === 'Harlequin Crest' || i.key === 'Rainbow Facet' || i.key === 'Irices Shard',
+);
 
 const FCR = { stat_id: 105, name: '% Faster Cast Rate', value: 20, range: { min: 10, max: 20 } };
 const MF = { stat_id: 80, name: '% Better Chance of Getting Magic Items', value: 30, range: { min: 25, max: 35 } };
@@ -194,15 +197,13 @@ afterEach(() => {
 function renderWidget(item: Item, onClose = vi.fn()) {
   const utils = render(
     <ItemsProvider items={TEST_ITEMS}>
-      <ItemOverlayWidget item={item}
-        onClose={onClose} />
+      <ItemOverlayWidget item={item} onClose={onClose} />
     </ItemsProvider>,
   );
   const rerenderItem = (next: Item) =>
     utils.rerender(
       <ItemsProvider items={TEST_ITEMS}>
-        <ItemOverlayWidget item={next}
-          onClose={onClose} />
+        <ItemOverlayWidget item={next} onClose={onClose} />
       </ItemsProvider>,
     );
   return { ...utils, onClose, rerenderItem };
@@ -216,15 +217,61 @@ const lastQuery = (fn = getMarketListings) => fn.mock.calls[fn.mock.calls.length
 // ---------------------------------------------------------------- tests
 
 describe('ItemOverlayWidget skill filter integration', () => {
+  it('keeps Spectral Plate identity in all search actions without borrowing Spectral Shard prices', async () => {
+    const armor: Item = {
+      defense: 477,
+      iLevel: 88,
+      isEthereal: true,
+      location: 'Inventory',
+      name: 'Spectral Plate',
+      quality: 'Unique',
+      type: 'Great Hauberk',
+      stats: [
+        { name: 'to All Skills', stat_id: 127, value: 1 },
+        { name: 'Level %d %s When Equipped', stat_id: 191, value: 1 },
+        { name: 'Physical Damage Taken Reduced by', stat_id: 36, value: 8, range: { min: 8, max: 12 } },
+        { name: 'to Energy', stat_id: 1, value: 38, range: { min: 24, max: 38 } },
+        { name: 'Lightning Resist', stat_id: 41, value: 43, range: { min: 40, max: 50 } },
+        { name: 'Indestructible', stat_id: 152, value: 1 },
+      ],
+    };
+    renderWidget(armor);
+    expect(screen.getByText('装备时赋予技能（名称或等级缺失）')).toBeTruthy();
+    expect((statCheckbox('装备时赋予技能（名称或等级缺失）') as HTMLButtonElement).disabled).toBe(true);
+    expect(fetchItemPriceByName).not.toHaveBeenCalled();
+    expect(fetchItemPrice).not.toHaveBeenCalled();
+    expect(fetchCorruptionPrices).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: '搜索' }));
+    await waitFor(() => expect(getMarketListings).toHaveBeenCalledTimes(1));
+    expect(lastQuery()['item.name'].$regex).toBe('Spectral Plate');
+    expect(lastQuery()['item.quality.name']).toBe('Unique');
+    fireEvent.click(screen.getByRole('button', { name: '在 projectdiablo2.com 上打开搜索' }));
+    expect(new URL(vi.mocked(openUrl).mock.calls.at(-1)![0]).searchParams.get('name')).toBe('Spectral Plate');
+    fireEvent.click(screen.getByRole('button', { name: '在交易市场中打开' }));
+    expect(overlay.openPanel).toHaveBeenLastCalledWith(
+      'market',
+      expect.objectContaining({
+        filters: expect.objectContaining({ itemName: 'Spectral Plate', rarity: ['Unique'] }),
+      }),
+    );
+  });
+
   const katar = (stats: Item['stats']): Item => ({
-    iLevel: 2, location: 'Inventory', quality: 'Normal', sockets: 2, type: 'Katar', stats,
+    iLevel: 2,
+    location: 'Inventory',
+    quality: 'Normal',
+    sockets: 2,
+    type: 'Katar',
+    stats,
   });
 
   it('selects the user Katar skill and carries the same filter through all search actions', async () => {
-    renderWidget(katar([
-      { name: '+2 to Claw and Dagger Mastery', skill: 'Claw and Dagger Mastery', value: 2 },
-      { name: 'Melee Attacks Deal Splash Damage', stat_id: 359, value: 100 },
-    ]));
+    renderWidget(
+      katar([
+        { name: '+2 to Claw and Dagger Mastery', skill: 'Claw and Dagger Mastery', value: 2 },
+        { name: 'Melee Attacks Deal Splash Damage', stat_id: 359, value: 100 },
+      ]),
+    );
     expect(screen.queryByText('暂不可筛选')).toBeNull();
     const box = statCheckbox('利爪与匕首精通');
     expect((box as HTMLButtonElement).disabled).toBe(false);
@@ -233,24 +280,31 @@ describe('ItemOverlayWidget skill filter integration', () => {
     fireEvent.change(screen.getByLabelText('利爪与匕首精通最大值'), { target: { value: '3' } });
     fireEvent.click(screen.getByRole('button', { name: '搜索' }));
     await waitFor(() => expect(getMarketListings).toHaveBeenCalledTimes(1));
-    expect(lastQuery()['item.modifiers']).toEqual({ $all: [
-      { $elemMatch: { name: 'item_singleskill', 'values.0': 252, 'values.1': { $gte: 2, $lte: 3 } } },
-    ] });
+    expect(lastQuery()['item.modifiers']).toEqual({
+      $all: [{ $elemMatch: { name: 'item_singleskill', 'values.0': 252, 'values.1': { $gte: 2, $lte: 3 } } }],
+    });
     fireEvent.click(screen.getByRole('button', { name: '在 projectdiablo2.com 上打开搜索' }));
     const url = new URL(vi.mocked(openUrl).mock.calls.at(-1)![0]);
     expect(url.searchParams.get('properties[item_singleskill{252}][min]')).toBe('2');
     expect(url.searchParams.get('properties[item_singleskill{252}][max]')).toBe('3');
     fireEvent.click(screen.getByRole('button', { name: '在交易市场中打开' }));
-    expect(overlay.openPanel).toHaveBeenLastCalledWith('market', expect.objectContaining({
-      filters: expect.objectContaining({ stats: [expect.objectContaining({ key: 'item_singleskill{252}', min: 2, max: 3 })] }),
-    }));
+    expect(overlay.openPanel).toHaveBeenLastCalledWith(
+      'market',
+      expect.objectContaining({
+        filters: expect.objectContaining({
+          stats: [expect.objectContaining({ key: 'item_singleskill{252}', min: 2, max: 3 })],
+        }),
+      }),
+    );
   });
 
   it('keeps an incomplete proc unavailable while other item attributes remain searchable', async () => {
-    renderWidget(katar([
-      { stat_id: 195, name: 'Incomplete proc', skill: 'Fire Ball', chance: 17 },
-      { stat_id: 0, name: 'to Strength', value: 15 },
-    ]));
+    renderWidget(
+      katar([
+        { stat_id: 195, name: 'Incomplete proc', skill: 'Fire Ball', chance: 17 },
+        { stat_id: 0, name: 'to Strength', value: 15 },
+      ]),
+    );
     const badge = screen.getByText('暂不可筛选');
     expect(badge.title).toContain('无法确认触发技能名称或等级');
     const box = badge.closest('label')!.querySelector('[role="checkbox"]') as HTMLButtonElement;
@@ -264,6 +318,31 @@ describe('ItemOverlayWidget skill filter integration', () => {
 });
 
 describe('ItemOverlayWidget header', () => {
+  it('queries a copied colored rune without name or stats and shows its type as the title', async () => {
+    const normalized = normalizeGameItemInput(JSON.stringify({
+      iLevel: 99, quality: 'Normal', isRune: true, type: 'ÿc8Ber Rune', location: 'Stash',
+    }));
+    expect(normalized.error).toBeUndefined();
+    renderWidget(JSON.parse(normalized.text!));
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Ber Rune');
+    fireEvent.click(screen.getByRole('button', { name: '搜索' }));
+    await waitFor(() => expect(getMarketListings).toHaveBeenCalledTimes(1));
+    expect(lastQuery()['item.base_code']).toEqual({ $in: ['r30', 'r30s'] });
+    expect(lastQuery()['item.base.type_code']).toEqual({ $in: ['rune', 'runs'] });
+    expect(lastQuery()['item.modifiers']).toBeUndefined();
+    expect(lastQuery()['item.is_corrupted']).toBeUndefined();
+    fireEvent.click(screen.getByRole('button', { name: '在 projectdiablo2.com 上打开搜索' }));
+    const params = new URL(vi.mocked(openUrl).mock.calls.at(-1)![0]).searchParams;
+    expect(JSON.parse(params.get('base')!)).toEqual({ $in: ['r30', 'r30s'] });
+    fireEvent.click(screen.getByRole('button', { name: '在交易市场中打开' }));
+    expect(overlay.openPanel).toHaveBeenLastCalledWith('market', expect.objectContaining({
+      filters: expect.objectContaining({ baseCode: expect.any(String), typeCode: expect.any(String) }),
+    }));
+    const filters = overlay.openPanel.mock.calls.at(-1)![1].filters;
+    expect(JSON.parse(filters.baseCode)).toEqual({ $in: ['r30', 'r30s'] });
+    expect(JSON.parse(filters.typeCode)).toEqual({ $in: ['rune', 'runs'] });
+  });
+
   it('shows the item name, defense and every parsed stat', () => {
     renderWidget(shako());
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Harlequin Crest');
@@ -720,14 +799,17 @@ describe('ItemOverlayWidget rare appraisal', () => {
     expect(getMarketListings).not.toHaveBeenCalled();
   });
 
-  it.each(['unknown base', 'unparsed stats: 2'])('shows the server reason without an optional tooltip: %s', (reason) => {
-    rareState = { status: 'done', response: { appraisal: null, history: null, reason } };
-    renderWidget(rareRing());
-    const note = screen.getByText(`估价说明：${reason}`);
-    expect(note.getAttribute('title')).toBeNull();
-    expect(screen.queryByText('建议保留')).toBeNull();
-    expect(screen.getByRole('button', { name: '搜索' })).not.toBeNull();
-  });
+  it.each(['unknown base', 'unparsed stats: 2'])(
+    'shows the server reason without an optional tooltip: %s',
+    (reason) => {
+      rareState = { status: 'done', response: { appraisal: null, history: null, reason } };
+      renderWidget(rareRing());
+      const note = screen.getByText(`估价说明：${reason}`);
+      expect(note.getAttribute('title')).toBeNull();
+      expect(screen.queryByText('建议保留')).toBeNull();
+      expect(screen.getByRole('button', { name: '搜索' })).not.toBeNull();
+    },
+  );
 
   it('keeps a filtered corrupted ring searchable after an unavailable appraisal and a later retry', async () => {
     // Synthetic clipboard fixture using the stats visible in the user's failing screenshot.
@@ -780,9 +862,7 @@ describe('ItemOverlayWidget rare appraisal', () => {
     };
     renderWidget(rareRing({ name: 'Storm Grip', quality: 'Crafted', type: 'Vampirebone Gloves' }));
     const note = screen.getByText(/^估价说明：/);
-    expect(note.textContent).toBe(
-      '估价说明：此部位的手工物品暂时无法可靠估价（相关数据不足）。',
-    );
+    expect(note.textContent).toBe('估价说明：此部位的手工物品暂时无法可靠估价（相关数据不足）。');
     expect(note.getAttribute('title')).toBe(reason);
   });
 });

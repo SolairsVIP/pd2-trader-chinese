@@ -29,7 +29,7 @@ describe('real game input -> official stash matching -> listing boundary', () =>
       return useMarketActions({ settings, authData, ...cache });
     });
     const candidates = await result.current.findMatchingItems({ iLevel: 99, isRune: true,
-      location: 'Stash', quality: 'Normal', type: 'ç¬¦æ–‡ï¼šå¤å°”' } as Item, { forceRefresh: true });
+      location: 'Stash', quality: 'Normal', type: 'ç¬¦æ–‡ï¼šå¤å°”' } as unknown as Item, { forceRefresh: true });
     expect(candidates).toEqual([official]);
     expect(candidates[0]).toBe(official);
     await result.current.listSpecificItem(candidates[0], 0, '1wss', 'note');

@@ -56,6 +56,8 @@ export const StatRow: React.FC<StatRowProps> = ({
   const skillFilter = getSkillFilter(stat);
   const unavailableReason = skillFilterUnavailableReason(stat);
   const isUnknown = isSkill ? !skillFilter : stat.stat_id === undefined || statIdToProperty[stat.stat_id] === undefined;
+  const missingEquippedSkill =
+    isSkill && !skillFilter && (stat.stat_id === 151 || stat.stat_id === 191) && !stat.skill && /%s/.test(stat.name);
 
   // For corrupted stat, determine checkbox state
   const corruptedChecked = isCorrupted && corruptedState === 1;
@@ -143,22 +145,26 @@ export const StatRow: React.FC<StatRowProps> = ({
               {corruptedIndeterminate && <X className="size-3.5 motion-safe:animate-in motion-safe:zoom-in-50" />}
             </div>
           ) : (
-            <Checkbox checked={isSelected}
+            <Checkbox
+              checked={isSelected}
               onCheckedChange={() => toggle(stat)}
               title={unavailableReason}
-              disabled={isUnknown} />
+              disabled={isUnknown}
+            />
           )}
 
           <div className="flex min-w-0 flex-row items-center">
             {isUnknown && (
               <div className="flex min-w-0 flex-row items-center gap-2">
                 <span className="min-w-0 flex-1 text-sm text-muted-foreground">
-                  {localizePd2Text(stat.name)}
-                  {valueParts(true)}
+                  {missingEquippedSkill ? '装备时赋予技能（名称或等级缺失）' : localizePd2Text(stat.name)}
+                  {!missingEquippedSkill && valueParts(true)}
                 </span>
-                <Badge variant="destructive"
+                <Badge
+                  variant="destructive"
                   title={unavailableReason}
-                  className="h-4.5 px-1.5 text-[10px] uppercase tracking-wide">
+                  className="h-4.5 px-1.5 text-[10px] uppercase tracking-wide"
+                >
                   {isSkill ? '暂不可筛选' : '未知属性'}
                 </Badge>
               </div>
@@ -179,7 +185,10 @@ export const StatRow: React.FC<StatRowProps> = ({
                   {localizePd2Text(stat.name)}
                   {valueParts(!isCorrupted)}
                   {skillFilter?.kind === 'charges' && (
-                    <span className="ml-1 text-xs text-muted-foreground" title="固定具体技能和等级；数值框筛选剩余次数，留空表示任意次数。">
+                    <span
+                      className="ml-1 text-xs text-muted-foreground"
+                      title="固定具体技能和等级；数值框筛选剩余次数，留空表示任意次数。"
+                    >
                       （等级固定为 {skillFilter.params[0]}；数值筛选剩余次数）
                     </span>
                   )}
@@ -232,8 +241,7 @@ export const StatRow: React.FC<StatRowProps> = ({
                   </HoverPopover>
                 )}
                 {stat.corrupted && (
-              <span className="text-q-corrupted"
-                    title="腐化属性">
+                  <span className="text-q-corrupted" title="腐化属性">
                     *
                   </span>
                 )}

@@ -1,8 +1,8 @@
 [package]
 name = "pd2-trader"
-version = "0.11.7"
+version = "0.11.8"
 description = "PD2 Trader 中文版"
-authors = ["Solaris"]
+authors = ["errolgr (原版开发者)", "Solaris (中文版开发者)"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

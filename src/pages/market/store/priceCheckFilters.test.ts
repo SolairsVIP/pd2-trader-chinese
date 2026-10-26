@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { ItemType as PD2Item } from '@/assets/itemFuzzySearch';
 import type { Item } from '@/pages/price-check/lib/interfaces';
 import { marketQueryToFilters, priceCheckToMarketFilters, type PriceCheckSearch } from './priceCheckFilters';
+import { SITE_ITEM_TYPES } from '../lib/catalog.data';
 
 const stripIds = (filters: ReturnType<typeof marketQueryToFilters>) =>
   filters.stats?.map(({ id, ...rest }) => {
@@ -10,6 +11,19 @@ const stripIds = (filters: ReturnType<typeof marketQueryToFilters>) =>
   });
 
 describe('marketQueryToFilters', () => {
+  it('keeps grouped rune selectors and preselects the actual market dropdown entries', () => {
+    const filters = marketQueryToFilters({
+      'item.base.type_code': { $in: ['rune', 'runs'] },
+      'item.base_code': { $in: ['r30', 'r30s'] },
+      'item.quality.name': 'Normal',
+    }, false);
+    expect(JSON.parse(filters.typeCode!)).toEqual({ $in: ['rune', 'runs'] });
+    expect(JSON.parse(filters.baseCode!)).toEqual({ $in: ['r30', 'r30s'] });
+    const type = SITE_ITEM_TYPES.find((type) => type.code === filters.typeCode);
+    expect(type?.bases.find((base) => base.code === filters.baseCode)?.label).toBe('Ber Rune');
+    expect(filters.rarity).toEqual(['Normal']);
+  });
+
   it('reads every price-check query field back into filters', () => {
     const filters = marketQueryToFilters(
       {

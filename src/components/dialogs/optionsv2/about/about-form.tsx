@@ -60,10 +60,15 @@ export function AboutForm() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <CreditTile role="开发者" names={['@Doreet']} />
-        <CreditTile role="汉化与本地化" names={['Solaris']} />
-        <CreditTile role="腐化区提示作者" names={['Blyat']} />
+      <div className="flex flex-col gap-3">
+        <CreditTile role="中文版开发者" names={['Solaris']} />
+        <div className="flex flex-col gap-3">
+          <h3 className="text-sm font-semibold text-foreground">致谢：</h3>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <CreditTile role="原版开发者" names={['@Doreet']} />
+            <CreditTile role="腐化区提示原作者" names={['Blyat']} />
+          </div>
+        </div>
       </div>
     </div>
   );

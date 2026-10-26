@@ -27,9 +27,17 @@ export function normalizeItemSkillStat(
           : '';
   const name = (item.isRuneword ? item.runeword : item.name)?.toLowerCase();
   const fixed = name && fixedItems.get(`${kind}:${name}`);
-  if (!fixed || fixed.base.toLowerCase() !== item.type.toLowerCase()) return normalized;
-  const direct = fixed.modifiers.filter((modifier) => modifier.key === 'skill' || modifier.key === 'oskill');
+  if (!fixed || !('base' in fixed) || fixed.base.toLowerCase() !== item.type.toLowerCase()) return normalized;
+  const direct = fixed.modifiers
+    .filter((modifier) => 'key' in modifier)
+    .filter((modifier) => modifier.key === 'skill' || modifier.key === 'oskill');
   if (!direct.length || direct.some((modifier) => modifier.key !== 'oskill')) return normalized;
-  if (!direct.some((modifier) => stat.value! >= modifier.min && stat.value! <= modifier.max)) return normalized;
+  if (
+    !direct.some(
+      (modifier) =>
+        'min' in modifier && 'max' in modifier && stat.value! >= modifier.min && stat.value! <= modifier.max,
+    )
+  )
+    return normalized;
   return normalizeSkillStat({ ...normalized, stat_id: 97 });
 }

@@ -6,17 +6,17 @@
 
 **游戏内装备查价、中文交易市场、买卖聊天、物品上架与仓库估值，一份安装包同时兼容英文和汉化游戏客户端。**
 
-> **特别感谢原作者 [errolgr](https://github.com/errolgr) 及所有 PD2 Trader 贡献者！**
+> **特别感谢原版开发者 [errolgr](https://github.com/errolgr) 及所有 PD2 Trader 贡献者！**
 >
 > 本中文版基于 **[errolgr/pd2-trade](https://github.com/errolgr/pd2-trade)** 的开源成果进行中文本地化与兼容修复。原作者的工作是本项目的基础。
 >
-> **汉化作者：Solaris · 开源许可：[MIT License](LICENSE)**。保留原项目版权声明与许可证。
+> **中文版开发者：Solaris · 开源许可：[MIT License](LICENSE)**。保留原项目版权声明与许可证。
 
-**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.7/PD2.Trader.CN_0.11.7_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.7/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.7)**
+**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.8/PD2.Trader.CN_0.11.8_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.8/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.8)**
 
-当前版本：**0.11.7 正式版**，发布于 2026-10-26。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
+当前版本：**0.11.8 正式版**，发布于 2026-10-26。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
 
-本版新增腐化区顶部横条，支持中英地名、清晰倒计时、未来四轮预报、六类伤害免疫参考，以及宽度、位置和颜色调整。[完整更新说明](docs/releases/v0.11.7.md)。
+本版修复中文客户端符文识别、交易大厅符文筛选丢失，以及新装备被误匹配为相似物品的问题；继续保留腐化区顶部横条及原有功能。[完整更新说明](docs/releases/v0.11.8.md)。
 
 > **新增腐化区提示，原作者：Blyat。** 感谢提供原始工具与区域资料。横条默认顶部居中，仅在游戏激活时显示；右下角“更多 → 腐化区提示”可恢复显示，设置中可调整宽度与配色。参见 [功能说明、来源与验证范围](docs/corrupted-zone.md)。
 
@@ -223,7 +223,7 @@
 - [0.11.0 兼容范围与历史校验值](docs/releases/v0.11.0.md)
 - [0.11 大版本更新记录](docs/发布记录-0.11.0.md)
 - [历史修复与阶段性验证记录](docs/历史修复记录.md)
-- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.7/SHA256SUMS.txt)
+- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.8/SHA256SUMS.txt)
 - [上游原项目](https://github.com/errolgr/pd2-trade) · [本项目开源仓库](https://github.com/SolairsVIP/pd2-trader-chinese) · [MIT 许可证](LICENSE)
 
 <details>

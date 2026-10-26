@@ -10,7 +10,7 @@ afterEach(cleanup);
 
 // `key` is the stable identifier for uniques/sets; `name` is what Fuse searches.
 const items = [
-  { key: "Harlequin Crest", name: 'Shako', kind: 'item.unique' },
+  { key: 'Harlequin Crest', name: 'Shako', kind: 'item.unique' },
   { key: "Tal Rasha's Horadric Crest", name: "Tal Rasha's Horadric Crest", kind: 'item.set' },
   { key: 'Shako', name: 'Shako Base', kind: 'item.base' },
   { key: 'Arachnid Mesh', name: 'Arachnid Mesh', kind: 'item.unique' },
@@ -23,6 +23,19 @@ function renderItems(list: ItemType[] = items) {
 }
 
 describe('useItems', () => {
+  it('does not substitute Spectral Shard for an unlisted Spectral Plate in exact price-check lookup', () => {
+    const { result } = renderHook(() => useItems(), {
+      wrapper: ({ children }: { children: React.ReactNode }) => <ItemsProvider>{children}</ItemsProvider>,
+    });
+    // Reproduce the old substitution, then exercise the price-check mode.
+    expect(result.current.findOneByName('Spectral Plate', ItemQuality.Unique)?.name).toBe('Spectral Shard');
+    expect(result.current.findOneByName('Spectral Plate', ItemQuality.Unique, true)).toBeNull();
+    expect(result.current.findOneByName('Spectral Shard', ItemQuality.Unique, true)?.name).toBe('Spectral Shard');
+    expect(result.current.findOneByName('Irices Shard', ItemQuality.Unique, true)?.name).toBe('Spectral Shard');
+    expect(result.current.findOneByName('  spectral shard ', ItemQuality.Unique, true)?.name).toBe('Spectral Shard');
+    expect(result.current.findOneByName('Spectral Shard', ItemQuality.Set, true)).toBeNull();
+  });
+
   it('resolves uniques and sets by exact key before fuzzy name search', () => {
     const { result } = renderItems();
 

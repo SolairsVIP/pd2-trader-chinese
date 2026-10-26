@@ -12,6 +12,7 @@ import type { ItemType as PD2Item } from '@/assets/itemFuzzySearch';
 import { buildGetMarketListingQuery } from '@/pages/price-check/lib/tradeUrlBuilder';
 import type { Item, Stat } from '@/pages/price-check/lib/interfaces';
 import { StatId } from '@/pages/price-check/lib/stat-mappings';
+import { SITE_ITEM_TYPES } from '@/pages/market/lib/catalog.data';
 import type { MarketFilters, Rarity, StatFilter } from '@/pages/market/lib/types';
 
 export interface PriceCheckSearch {
@@ -49,6 +50,22 @@ type ElemMatch = Record<string, unknown> & { name: string };
 /** `value[key]` when value is an object (query fragments are loosely typed). */
 function prop(value: unknown, key: string): unknown {
   return value && typeof value === 'object' && key in value ? (value as Record<string, unknown>)[key] : undefined;
+}
+
+/** Preserve grouped selectors, using the select's exact code string for display. */
+function queryCode(value: unknown, options: readonly { code: string }[]): string | undefined {
+  if (typeof value === 'string') return value || undefined;
+  const codes = prop(value, '$in');
+  if (!Array.isArray(codes) || !codes.length || !codes.every((code) => typeof code === 'string')) return;
+  const wanted = new Set(codes);
+  for (const option of options) {
+    if (!option.code.startsWith('{')) continue;
+    const candidate: unknown = JSON.parse(option.code);
+    const members = prop(candidate, '$in');
+    if (Array.isArray(members) && members.length === wanted.size && members.every((code) => wanted.has(code)))
+      return option.code;
+  }
+  return JSON.stringify({ $in: codes });
 }
 
 /** The real PD2 modifier name (the price check's table drops the `item_` prefix of a few, e.g. maxdamage_percent). */
@@ -119,10 +136,15 @@ export function marketQueryToFilters(query: Record<string, unknown>, archive: bo
   if (typeof nameText === 'string' && nameText) out.itemName = nameText;
 
   const baseCode = query['item.base_code'];
-  if (typeof baseCode === 'string' && baseCode) out.baseCode = baseCode;
+  const base = queryCode(baseCode, SITE_ITEM_TYPES.flatMap((type) => type.bases));
+  if (base) out.baseCode = base;
   const typeCode = query['item.base.type_code'];
   if (typeof typeCode === 'string' && typeCode) out.typeCode = typeCode;
   else if (typeof baseCode === 'string' && CHARM_TYPE_BY_BASE[baseCode]) out.typeCode = CHARM_TYPE_BY_BASE[baseCode];
+  else {
+    const type = queryCode(typeCode, SITE_ITEM_TYPES);
+    if (type) out.typeCode = type;
+  }
 
   if (query['item.corrupted'] === true) out.corrupted = 'yes';
   else if (query['item.corrupted'] === false) out.corrupted = 'no';

@@ -351,6 +351,8 @@ export function getDirectSkillFilter(stat: Stat): { property: string; id: number
 export function skillFilterUnavailableReason(stat: Stat): string | undefined {
   if (!isSkillStat(stat) || getSkillFilter(stat)) return;
   if (stat.stat_id === 204) return '聚气技能缺少可确认的技能或等级，暂不能精确筛选；可使用其他属性查价。';
+  if (stat.stat_id === 151 || stat.stat_id === 191)
+    return '装备赋予的技能缺少可确认的名称或等级，暂不能精确筛选；可使用其他属性查价。';
   if (isTriggeredSkillStat(stat)) return '无法确认触发技能名称或等级，暂不能精确筛选；可使用其他属性查价。';
   return '无法唯一确定技能或技能树，暂不能精确筛选；可使用其他属性查价。';
 }

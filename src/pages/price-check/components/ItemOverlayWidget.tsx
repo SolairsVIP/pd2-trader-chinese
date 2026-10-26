@@ -112,7 +112,7 @@ export default function ItemOverlayWidget({ item, statMapper, onClose }: Props) 
     setCorruptedState,
   } = useStatSelection(item);
 
-  const pd2Item = useMemo(() => findOneByName(item.name, item.quality), [item, findOneByName]);
+  const pd2Item = useMemo(() => findOneByName(item.name, item.quality, true), [item, findOneByName]);
 
   // Market listings state
   const [marketListings, setMarketListings] = useState<MarketListingEntry[]>([]);
@@ -303,8 +303,8 @@ export default function ItemOverlayWidget({ item, statMapper, onClose }: Props) 
       return `${type} Facet ${facetData.damagePercent}/${facetData.piercePercent}`;
     }
 
-    return item.name;
-  }, [item.isRuneword, item.runeword, item.name, extractRainbowFacetData]);
+    return item.name || item.type;
+  }, [item.isRuneword, item.runeword, item.name, item.type, extractRainbowFacetData]);
 
   /**
    * Get the icon filename for the current item

@@ -1,0 +1,63 @@
+{
+  "checkedAt": "2026-10-26T10:58:40.191Z",
+  "scope": "Offline real ENG/CHI TBL rune strings -> capture validation -> stash normalization -> market query. No live game/server verification.",
+  "sources": [
+    {
+      "language": "ENG",
+      "file": "string.tbl",
+      "sha256": "22341af3fd59719ff306c864808bb2a3a494eb6159e73bdbc76b763fc17ef63f"
+    },
+    {
+      "language": "ENG",
+      "file": "expansionstring.tbl",
+      "sha256": "bdd9da248b9ac37cfefb8e3a10af4fba3b2ae46ee445c6c222514172c6917280"
+    },
+    {
+      "language": "ENG",
+      "file": "patchstring.tbl",
+      "sha256": "ddc615a2ac623ec4b330b9a6e2bcbd3f7ca4875012d7fa8ecafcdd02cf7ffabc"
+    },
+    {
+      "language": "CHI",
+      "file": "string.tbl",
+      "sha256": "e7b505e0d64d36aa89f23a9111dde28b3d49ed72d5cb2f7150621479471e81c2"
+    },
+    {
+      "language": "CHI",
+      "file": "expansionstring.tbl",
+      "sha256": "15a7d0aa10627fe44c32422c6c24582063e1e68751ea2cc16d9aeed53ebf9455"
+    },
+    {
+      "language": "CHI",
+      "file": "patchstring.tbl",
+      "sha256": "96c92debaef18b90e46b5322e18a8bd6cebd56c88e97020395f476ebfe2a0e15"
+    }
+  ],
+  "groups": {
+    "ENG/utf8": {
+      "passed": 66,
+      "failed": 0
+    },
+    "ENG/latin1-mojibake": {
+      "passed": 66,
+      "failed": 0
+    },
+    "ENG/windows1252-mojibake": {
+      "passed": 66,
+      "failed": 0
+    },
+    "CHI/utf8": {
+      "passed": 66,
+      "failed": 0
+    },
+    "CHI/latin1-mojibake": {
+      "passed": 66,
+      "failed": 0
+    },
+    "CHI/windows1252-mojibake": {
+      "passed": 66,
+      "failed": 0
+    }
+  },
+  "failures": []
+}

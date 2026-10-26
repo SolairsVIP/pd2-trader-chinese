@@ -11,6 +11,7 @@ import { restoreGameItemStrings } from './game-text-encoding';
 import { bilingualGameLabel } from './bilingual-game-label';
 import { normalizeItemSkillStat } from '@/pages/price-check/lib/item-skill-stats';
 import type { Item } from '@/pages/price-check/lib/interfaces';
+import { normalizeRuneInputTypes } from './game-rune-input';
 
 type Aliases = Map<string, Set<string>>;
 const clean = (s: string) => s.replace(/ÿc./g, '').replace(/\s+/g, ' ').trim();
@@ -228,9 +229,13 @@ export function normalizeGameItemInput(raw: string | null): GameItemInput {
     typeof item.iLevel !== 'number'
   )
     return { text: raw };
-  // Preserve the established English-input path exactly.
-  if (!hasChinese(JSON.stringify(item))) return { text: raw };
   try {
+    // Rune labels in both ENG and CHI tables can be English with color codes
+    // and an old-stack suffix. Normalize these before the Chinese-only path.
+    const runeItem = normalizeRuneInputTypes(item);
+    // Preserve plain English JSON byte for byte, including its whitespace.
+    if (!hasChinese(JSON.stringify(runeItem)))
+      return { text: runeItem === item ? raw : JSON.stringify(runeItem) };
     const normalizeItem = (source: Record<string, any>): Record<string, any> => {
       const result = { ...source };
       if (typeof source.type === 'string' && hasChinese(source.type)) {
@@ -259,7 +264,7 @@ export function normalizeGameItemInput(raw: string | null): GameItemInput {
         });
       return result;
     };
-    return { text: JSON.stringify(normalizeItem(item)) };
+    return { text: JSON.stringify(normalizeItem(runeItem)) };
   } catch (error) {
     return { text: null, error: error instanceof Error ? error.message : '中文物品数据无法转换。' };
   }

@@ -90,7 +90,7 @@ describe('Chinese rune and grouped base input', () => {
 
   it('restores the exact user copy without requiring stats or name', () => {
     const raw = { iLevel: 99, isRune: true, location: 'Stash', quality: 'Normal', type: 'ç¬¦æ–‡ï¼šå¤å°”' };
-    const result = normalizeItemForStashMatching(raw as Item);
+    const result = normalizeItemForStashMatching(raw as unknown as Item);
     expect(result).toEqual({ ...raw, type: 'Gul Rune' });
     expect(getTypeFromBaseType(result.type, true)?.base).toEqual({ $in: ['r25', 'r25s'] });
     expect(raw.type).toBe('ç¬¦æ–‡ï¼šå¤å°”');
@@ -113,7 +113,7 @@ describe('Chinese rune and grouped base input', () => {
     expect(aliases.length).toBeGreaterThan(0);
     for (const [type] of aliases) {
       const input = { iLevel: 99, quality: 'Normal', type };
-      const result = normalizeItemForStashMatching(input as Item);
+      const result = normalizeItemForStashMatching(input as unknown as Item);
       expect(result.type).toBe(label);
       expect(getTypeFromBaseType(result.type, true)?.base).toEqual(getTypeFromBaseType(label, true)?.base);
     }
@@ -128,6 +128,6 @@ describe('Chinese rune and grouped base input', () => {
   });
 
   it('rejects unknown rune labels rather than guessing a rune', () => {
-    expect(() => normalizeItemForStashMatching({ iLevel: 99, isRune: true, quality: 'Normal', type: '符文：未知' } as Item)).toThrow(GameItemMatchingError);
+    expect(() => normalizeItemForStashMatching({ iLevel: 99, isRune: true, quality: 'Normal', type: '符文：未知' } as unknown as Item)).toThrow(GameItemMatchingError);
   });
 });
