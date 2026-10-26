@@ -12,13 +12,15 @@
 >
 > **汉化作者：Solaris · 开源许可：[MIT License](LICENSE)**。保留原项目版权声明与许可证。
 
-**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.6/PD2.Trader.CN_0.11.6_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.6/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.6)**
+**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.7/PD2.Trader.CN_0.11.7_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.7/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.7)**
 
-当前版本：**0.11.6 正式版**，发布于 2026-10-26。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
+当前版本：**0.11.7 正式版**，发布于 2026-10-26。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
 
-本版修复墓歌等装备的中英混合名称识别与非本职业技能筛选，增补简繁中文输入别名，并兼容繁体聚气及旧式颜色标记。[完整更新说明](docs/releases/v0.11.6.md)。
+本版新增腐化区顶部横条，支持中英地名、清晰倒计时、未来四轮预报、六类伤害免疫参考，以及宽度、位置和颜色调整。[完整更新说明](docs/releases/v0.11.7.md)。
 
-> **开发中的下一版：腐化区提示。** 感谢腐化区提示作者 **Blyat**。新增顶部中英双语细横条、清晰倒计时、未来四轮、宽度与颜色调整，以及按六类主要伤害显示的免疫参考和刷图建议。参见 [功能说明、来源与验证范围](docs/corrupted-zone.md)。当前正式下载仍为上方的 0.11.6。
+> **新增腐化区提示，原作者：Blyat。** 感谢提供原始工具与区域资料。横条默认顶部居中，仅在游戏激活时显示；右下角“更多 → 腐化区提示”可恢复显示，设置中可调整宽度与配色。参见 [功能说明、来源与验证范围](docs/corrupted-zone.md)。
+
+<p align="center"><img src="docs/images/corrupted-zone-strip.png" alt="腐化区中英地名、免疫参考与倒计时横条" width="720"></p>
 
 ## 快速开始
 
@@ -221,7 +223,7 @@
 - [0.11.0 兼容范围与历史校验值](docs/releases/v0.11.0.md)
 - [0.11 大版本更新记录](docs/发布记录-0.11.0.md)
 - [历史修复与阶段性验证记录](docs/历史修复记录.md)
-- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.6/SHA256SUMS.txt)
+- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.7/SHA256SUMS.txt)
 - [上游原项目](https://github.com/errolgr/pd2-trade) · [本项目开源仓库](https://github.com/SolairsVIP/pd2-trader-chinese) · [MIT 许可证](LICENSE)
 
 <details>
