@@ -44,7 +44,7 @@ export default function CorruptedZoneCard({
   const advice = zoneRecommendation(current.zone.id, selected);
   const adviceClass = (status: string) =>
     status === 'caution'
-      ? 'rounded bg-amber-100 px-1 text-amber-900'
+      ? 'rounded bg-purple-100 px-1 text-purple-900'
       : status === 'suitable'
         ? 'rounded bg-emerald-100 px-1 text-emerald-900'
         : 'opacity-65';
