@@ -14,6 +14,10 @@ describe('corrupted-zone card', () => {
       <CorruptedZoneCard now={now} expanded damageType="lightning" onDamageChange={change} />,
     );
     expect(screen.getByLabelText('当前刷图建议').textContent).toBe('存在免疫');
+    expect(
+      screen.getByLabelText('当前刷图建议').compareDocumentPosition(screen.getByLabelText('剩余时间')) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: '物理' }));
     expect(change).toHaveBeenLastCalledWith('physical');
     fireEvent.click(screen.getByLabelText('切换主要伤害类型'));
@@ -37,7 +41,9 @@ describe('corrupted-zone card', () => {
     render(<CorruptedZoneCard now={now} expanded onExpand={expand} />);
     expect(screen.getAllByRole('listitem')).toHaveLength(4);
     expect(screen.getByText('腐化区提示作者：Blyat')).toBeTruthy();
-    expect(screen.getByText('建房时间表预报 · 以游戏公告为准')).toBeTruthy();
+    expect(screen.queryByText('建房时间表预报 · 以游戏公告为准')).toBeNull();
+    expect(screen.queryByText('免疫资料：Hiim PD2（社区参考）')).toBeNull();
+    expect(screen.queryByText(/社区免疫资料参考，按区域组合汇总/)).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: '收起未来四轮' }));
     expect(expand).toHaveBeenCalledOnce();
   });

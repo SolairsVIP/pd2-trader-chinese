@@ -8,7 +8,6 @@ import {
   DAMAGE_TYPES,
   damageSelection,
   zoneRecommendation,
-  RECOMMENDATION_NOTE,
   type DamageSelection,
 } from './recommendation';
 
@@ -86,20 +85,21 @@ export default function CorruptedZoneCard({
             {current.zone.english}
           </span>
         </span>
-        <div className="flex shrink-0 flex-col items-center" title={advice.detail}>
-          <span
-            className="min-w-[74px] shrink-0 rounded border border-primary/30 bg-primary/10 px-1 py-0.5 text-center font-mono text-xl font-bold leading-6 tabular-nums text-primary"
-            aria-label="剩余时间"
-          >
-            {countdown(current.end, now)}
-          </span>
+        {selected !== 'none' && (
           <span
             aria-label="当前刷图建议"
-            className={`text-[10px] font-semibold leading-4 ${adviceClass(advice.status)}`}
+            title={advice.detail}
+            className={`shrink-0 px-1.5 py-1 text-xs font-semibold leading-4 ${adviceClass(advice.status)}`}
           >
             {advice.label}
           </span>
-        </div>
+        )}
+        <span
+          className="min-w-[74px] shrink-0 rounded border border-primary/30 bg-primary/10 px-1 py-0.5 text-center font-mono text-xl font-bold leading-6 tabular-nums text-primary"
+          aria-label="剩余时间"
+        >
+          {countdown(current.end, now)}
+        </span>
         <div className="flex shrink-0 items-center gap-0.5">
           {onReset && (
             <button
@@ -180,28 +180,25 @@ export default function CorruptedZoneCard({
                 title={`${r.zone.english}\n${r.zone.detail}`}
               >
                 <span className="shrink-0 font-mono tabular-nums opacity-70">{localTime(r.start)}</span>
-                <span className="min-w-0 break-words">
+                <span className="min-w-0 flex-1 break-words">
                   {i === 0 ? '下一轮 · ' : ''}
                   {r.zone.name} <span className="font-semibold opacity-80">· 第 {r.zone.act} 幕</span>
                   <span lang="en" className="block text-[10px] leading-snug opacity-65">
                     {r.zone.english}
                   </span>
-                  {selected !== 'none' && (
-                    <span
-                      className={`block w-fit text-[10px] ${adviceClass(zoneRecommendation(r.zone.id, selected).status)}`}
-                      title={zoneRecommendation(r.zone.id, selected).detail}
-                    >
-                      {zoneRecommendation(r.zone.id, selected).label}
-                    </span>
-                  )}
                 </span>
+                {selected !== 'none' && (
+                  <span
+                    className={`shrink-0 text-[10px] ${adviceClass(zoneRecommendation(r.zone.id, selected).status)}`}
+                    title={zoneRecommendation(r.zone.id, selected).detail}
+                  >
+                    {zoneRecommendation(r.zone.id, selected).label}
+                  </span>
+                )}
               </li>
             ))}
           </ol>
           <footer className="space-y-0.5 border-t border-border/60 pt-1.5 text-[10px] leading-relaxed opacity-65">
-            <p>建房时间表预报 · 以游戏公告为准</p>
-            <p>{RECOMMENDATION_NOTE}</p>
-            <p>免疫资料：Hiim PD2（社区参考）</p>
             <p>腐化区提示作者：Blyat</p>
           </footer>
         </div>
