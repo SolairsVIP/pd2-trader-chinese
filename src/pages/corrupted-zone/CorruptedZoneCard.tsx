@@ -56,7 +56,7 @@ export default function CorruptedZoneCard({
         {...dragHandlers}
         data-zone-strip
         className="relative flex min-h-[46px] shrink-0 touch-none select-none items-center gap-2 px-2 py-2 cursor-grab active:cursor-grabbing"
-        title={`建房时间表预报 · 以游戏公告为准\n下一轮 ${localTime(next[0].start)} · ${next[0].zone.name}\n腐化区提示原作者：Blyat`}
+        title={`建房时间表预报 · 以游戏公告为准\n下一轮 ${localTime(next[0].start)} · ${next[0].zone.name}\n腐化区提示作者：Blyat`}
       >
         <MapPin className="size-3 shrink-0 text-primary" aria-hidden="true" />
         <span className="sr-only">腐化区提示</span>
@@ -198,7 +198,7 @@ export default function CorruptedZoneCard({
             ))}
           </ol>
           <footer className="space-y-0.5 border-t border-border/60 pt-1.5 text-[10px] leading-relaxed opacity-65">
-            <p>腐化区提示原作者：Blyat</p>
+            <p>腐化区提示作者：Blyat</p>
           </footer>
         </div>
       )}

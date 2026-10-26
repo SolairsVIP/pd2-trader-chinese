@@ -66,7 +66,7 @@ export function AboutForm() {
           <h3 className="text-sm font-semibold text-foreground">致谢：</h3>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <CreditTile role="原版开发者" names={['@Doreet']} />
-            <CreditTile role="腐化区提示原作者" names={['Blyat']} />
+            <CreditTile role="腐化区提示作者" names={['Blyat']} />
           </div>
         </div>
       </div>
