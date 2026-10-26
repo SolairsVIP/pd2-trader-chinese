@@ -11,6 +11,7 @@ import { applyTheme, applyWindowTransparency, DEFAULT_THEME_ID, getTheme } from 
 import { DEFAULT_PRICE_WINDOW_HOURS, type PriceWindowHours } from '@/lib/price-window';
 import { DEFAULT_CHAT_TEMPLATES, type ChatTemplate } from '@/lib/message-templates';
 import { showToast } from '@/overlay';
+import type { DamageSelection } from '@/pages/corrupted-zone/recommendation';
 
 export type NetWorthTickerAnchor =
   | 'top-left'
@@ -75,6 +76,7 @@ export interface ISettings {
   netWorthTrackingEnabled?: boolean; // history snapshots on pd2trader.com; on unless explicitly turned off
   netWorthTickerEnabled?: boolean;
   corruptedZoneEnabled?: boolean;
+  corruptedZoneDamageType?: DamageSelection;
   corruptedZoneWidth?: number;
   corruptedZoneExpanded?: boolean;
   corruptedZonePosition?: { x: number; y: number } | null;
@@ -147,6 +149,7 @@ const DEFAULT_SETTINGS: ISettings = {
   netWorthTrackingEnabled: true,
   netWorthTickerEnabled: false,
   corruptedZoneEnabled: true,
+  corruptedZoneDamageType: 'none',
   corruptedZoneWidth: 720,
   corruptedZoneExpanded: false,
   corruptedZonePosition: null,

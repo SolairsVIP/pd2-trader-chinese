@@ -44,6 +44,12 @@ afterEach(() => {
 });
 
 describe('corrupted-zone lifecycle', () => {
+  it('persists the chosen damage type through the existing settings provider', () => {
+    state.settings = { corruptedZoneDamageType: 'lightning' };
+    render(<CorruptedZonePage />);
+    fireEvent.click(screen.getByLabelText('切换主要伤害类型'));
+    expect(state.update).toHaveBeenCalledWith({ corruptedZoneDamageType: 'cold' });
+  });
   it('centres on the screen on first open and again after returning to the game', () => {
     const { rerender } = render(<CorruptedZonePage />);
     expect(state.setRect).toHaveBeenLastCalledWith({ x: 600, y: 8, width: 720, height: 48 });

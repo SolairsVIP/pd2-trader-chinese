@@ -14,6 +14,7 @@ import {
 } from '@/components/dialogs/optionsv2/settings-ui';
 import { DEFAULT_ZONE_COLORS, zoneColors, zoneWidth } from './appearance';
 import CorruptedZoneCard from './CorruptedZoneCard';
+import { DAMAGE_CHOICES, DAMAGE_TYPES, damageSelection, RECOMMENDATION_NOTE } from './recommendation';
 
 export default function CorruptedZoneSettings() {
   const { settings, updateSettings, isLoading } = useOptions();
@@ -27,6 +28,26 @@ export default function CorruptedZoneSettings() {
       description="中英双语细横条，中文居中、大号倒计时，默认吸附在屏幕顶部中央，只在游戏激活时显示；可拖动标题栏，靠近顶部松开即恢复吸附。"
     >
       <Form {...form}>
+        <SettingsGroup title="刷图免疫参考">
+          <div className="space-y-2 px-4 py-3">
+            <p className="text-sm">选择角色主要伤害类型</p>
+            <div role="group" aria-label="主要伤害类型" className="flex flex-wrap gap-2">
+              {DAMAGE_CHOICES.map((type) => (
+                <Button
+                  key={type}
+                  type="button"
+                  size="sm"
+                  variant={damageSelection(settings.corruptedZoneDamageType) === type ? 'default' : 'outline'}
+                  aria-pressed={damageSelection(settings.corruptedZoneDamageType) === type}
+                  onClick={() => updateSettings({ corruptedZoneDamageType: type })}
+                >
+                  {type === 'none' ? '不提示' : DAMAGE_TYPES[type]}
+                </Button>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">{RECOMMENDATION_NOTE}</p>
+          </div>
+        </SettingsGroup>
         <SettingsGroup title="显示与位置">
           <FormField
             name="enabled"
@@ -179,6 +200,8 @@ export default function CorruptedZoneSettings() {
           expanded={settings.corruptedZoneExpanded === true}
           customColors={settings.corruptedZoneCustomColors}
           colors={colors}
+          damageType={settings.corruptedZoneDamageType}
+          onDamageChange={(damage) => updateSettings({ corruptedZoneDamageType: damage })}
           onExpand={() => updateSettings({ corruptedZoneExpanded: !settings.corruptedZoneExpanded })}
         />
       </div>

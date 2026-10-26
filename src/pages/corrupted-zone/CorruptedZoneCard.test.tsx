@@ -8,6 +8,20 @@ afterEach(cleanup);
 const now = Date.parse('2026-10-26T00:00:00Z');
 
 describe('corrupted-zone card', () => {
+  it('allows direct damage selection and keeps the countdown visible', () => {
+    const change = vi.fn();
+    const { rerender } = render(
+      <CorruptedZoneCard now={now} expanded damageType="lightning" onDamageChange={change} />,
+    );
+    expect(screen.getByLabelText('当前刷图建议').textContent).toBe('存在免疫');
+    fireEvent.click(screen.getByRole('button', { name: '物理' }));
+    expect(change).toHaveBeenLastCalledWith('physical');
+    fireEvent.click(screen.getByLabelText('切换主要伤害类型'));
+    expect(change).toHaveBeenLastCalledWith('cold');
+    rerender(<CorruptedZoneCard now={now} expanded={false} damageType="lightning" onDamageChange={change} />);
+    expect(screen.getByLabelText('剩余时间').textContent).toBe('15:00');
+    expect(screen.queryByRole('group')).toBeNull();
+  });
   it('keeps the collapsed display to one thin row with details available in its tooltip', () => {
     render(<CorruptedZoneCard now={now} expanded={false} />);
     expect(screen.getByTitle(/建房时间表预报/).title).toContain('腐化区提示作者：Blyat');

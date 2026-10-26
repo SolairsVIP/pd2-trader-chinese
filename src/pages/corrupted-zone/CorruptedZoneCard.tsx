@@ -3,12 +3,22 @@ import { ChevronDown, ChevronUp, MapPin, RotateCcw, Settings, X } from 'lucide-r
 import { WindowPanel } from '@/components/custom/window-chrome';
 import { countdown, localTime, rotationAt, upcomingRotations } from './schedule';
 import { zoneStyle, type ZoneColors } from './appearance';
+import {
+  DAMAGE_CHOICES,
+  DAMAGE_TYPES,
+  damageSelection,
+  zoneRecommendation,
+  RECOMMENDATION_NOTE,
+  type DamageSelection,
+} from './recommendation';
 
 interface Props {
   now: number;
   expanded: boolean;
   customColors?: boolean;
   colors?: Partial<ZoneColors>;
+  damageType?: DamageSelection;
+  onDamageChange?: (damage: DamageSelection) => void;
   onExpand?: () => void;
   onClose?: () => void;
   onSettings?: () => void;
@@ -21,6 +31,8 @@ export default function CorruptedZoneCard({
   expanded,
   customColors = false,
   colors,
+  damageType,
+  onDamageChange,
   onExpand,
   onClose,
   onSettings,
@@ -29,6 +41,14 @@ export default function CorruptedZoneCard({
 }: Props) {
   const current = rotationAt(now);
   const next = upcomingRotations(now);
+  const selected = damageSelection(damageType);
+  const advice = zoneRecommendation(current.zone.id, selected);
+  const adviceClass = (status: string) =>
+    status === 'caution'
+      ? 'rounded bg-amber-100 px-1 text-amber-900'
+      : status === 'suitable'
+        ? 'rounded bg-emerald-100 px-1 text-emerald-900'
+        : 'opacity-65';
   const buttonClass =
     'inline-flex size-6 shrink-0 cursor-default items-center justify-center rounded hover:bg-current/10 focus-visible:outline focus-visible:outline-2';
   return (
@@ -41,24 +61,45 @@ export default function CorruptedZoneCard({
       >
         <MapPin className="size-3 shrink-0 text-primary" aria-hidden="true" />
         <span className="sr-only">腐化区提示</span>
-        <span className="shrink-0 rounded bg-primary/15 px-1.5 py-1 text-base font-bold leading-6 text-primary">
-          第{current.zone.act}幕
-        </span>
+        <div className="flex shrink-0 flex-col items-center">
+          <span className="rounded bg-primary/15 px-1.5 text-base font-bold leading-6 text-primary">
+            第{current.zone.act}幕
+          </span>
+          <button
+            type="button"
+            aria-label="切换主要伤害类型"
+            title="点击轮换伤害类型；展开后可直接选择"
+            className="rounded px-1 text-[11px] leading-4 hover:bg-current/10 focus-visible:outline"
+            onClick={() =>
+              onDamageChange?.(DAMAGE_CHOICES[(DAMAGE_CHOICES.indexOf(selected) + 1) % DAMAGE_CHOICES.length])
+            }
+          >
+            {selected === 'none' ? '选伤害' : DAMAGE_TYPES[selected]} ▾
+          </button>
+        </div>
         <span
           className="flex min-w-0 flex-1 flex-col justify-center"
           title={`${current.zone.name}\n${current.zone.english}\n${current.zone.detail}`}
         >
-          <span className="truncate text-center text-base font-semibold leading-5">{current.zone.name}</span>
+          <span className="break-words text-center text-base font-semibold leading-5">{current.zone.name}</span>
           <span lang="en" className="break-words text-center text-[11px] leading-[14px] opacity-85">
             {current.zone.english}
           </span>
         </span>
-        <span
-          className="min-w-[74px] shrink-0 rounded border border-primary/30 bg-primary/10 px-1 py-0.5 text-center font-mono text-xl font-bold leading-6 tabular-nums text-primary"
-          aria-label="剩余时间"
-        >
-          {countdown(current.end, now)}
-        </span>
+        <div className="flex shrink-0 flex-col items-center" title={advice.detail}>
+          <span
+            className="min-w-[74px] shrink-0 rounded border border-primary/30 bg-primary/10 px-1 py-0.5 text-center font-mono text-xl font-bold leading-6 tabular-nums text-primary"
+            aria-label="剩余时间"
+          >
+            {countdown(current.end, now)}
+          </span>
+          <span
+            aria-label="当前刷图建议"
+            className={`text-[10px] font-semibold leading-4 ${adviceClass(advice.status)}`}
+          >
+            {advice.label}
+          </span>
+        </div>
         <div className="flex shrink-0 items-center gap-0.5">
           {onReset && (
             <button
@@ -115,6 +156,21 @@ export default function CorruptedZoneCard({
       </div>
       {expanded && (
         <div className="space-y-2 border-t border-border/60 px-2.5 py-2">
+          <div className="flex flex-wrap items-center gap-1" role="group" aria-label="主要伤害类型">
+            <span className="mr-1 text-xs opacity-70">主伤害</span>
+            {DAMAGE_CHOICES.map((type) => (
+              <button
+                key={type}
+                type="button"
+                aria-pressed={selected === type}
+                onClick={() => onDamageChange?.(type)}
+                className={`rounded border px-2 py-0.5 text-xs ${selected === type ? 'border-primary bg-primary/15 text-primary' : 'border-border/60 hover:bg-current/10'}`}
+              >
+                {type === 'none' ? '不提示' : DAMAGE_TYPES[type]}
+              </button>
+            ))}
+          </div>
+          <p className={`text-xs leading-relaxed ${adviceClass(advice.status)}`}>{advice.detail}</p>
           <p className="text-[11px] opacity-65">当前：{current.zone.name} · 每 15 分钟轮换</p>
           <ol aria-label="未来四轮" className="space-y-1.5">
             {next.map((r, i) => (
@@ -130,12 +186,22 @@ export default function CorruptedZoneCard({
                   <span lang="en" className="block text-[10px] leading-snug opacity-65">
                     {r.zone.english}
                   </span>
+                  {selected !== 'none' && (
+                    <span
+                      className={`block w-fit text-[10px] ${adviceClass(zoneRecommendation(r.zone.id, selected).status)}`}
+                      title={zoneRecommendation(r.zone.id, selected).detail}
+                    >
+                      {zoneRecommendation(r.zone.id, selected).label}
+                    </span>
+                  )}
                 </span>
               </li>
             ))}
           </ol>
           <footer className="space-y-0.5 border-t border-border/60 pt-1.5 text-[10px] leading-relaxed opacity-65">
             <p>建房时间表预报 · 以游戏公告为准</p>
+            <p>{RECOMMENDATION_NOTE}</p>
+            <p>免疫资料：Hiim PD2（社区参考）</p>
             <p>腐化区提示作者：Blyat</p>
           </footer>
         </div>

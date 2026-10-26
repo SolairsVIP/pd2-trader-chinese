@@ -76,6 +76,8 @@ export default function CorruptedZonePage() {
           expanded={settings.corruptedZoneExpanded === true}
           customColors={settings.corruptedZoneCustomColors}
           colors={settings.corruptedZoneColors}
+          damageType={settings.corruptedZoneDamageType}
+          onDamageChange={(damage) => updateSettings({ corruptedZoneDamageType: damage })}
           onClose={() => updateSettings({ corruptedZoneEnabled: false })}
           onExpand={() => updateSettings({ corruptedZoneExpanded: !settings.corruptedZoneExpanded })}
           onReset={() => {
