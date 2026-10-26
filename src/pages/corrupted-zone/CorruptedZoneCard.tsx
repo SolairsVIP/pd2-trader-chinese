@@ -55,7 +55,7 @@ export default function CorruptedZoneCard({
       <div
         {...dragHandlers}
         data-zone-strip
-        className="relative flex min-h-[46px] shrink-0 touch-none select-none items-center gap-2 px-2 py-1 cursor-grab active:cursor-grabbing"
+        className="relative flex min-h-[46px] shrink-0 touch-none select-none items-center gap-2 px-2 py-2 cursor-grab active:cursor-grabbing"
         title={`建房时间表预报 · 以游戏公告为准\n下一轮 ${localTime(next[0].start)} · ${next[0].zone.name}\n腐化区提示原作者：Blyat`}
       >
         <MapPin className="size-3 shrink-0 text-primary" aria-hidden="true" />
@@ -95,7 +95,7 @@ export default function CorruptedZoneCard({
           </span>
         )}
         <span
-          className="min-w-[110px] shrink-0 rounded-md border border-primary/40 bg-primary/15 px-2 py-1 text-center font-mono text-[30px] font-bold leading-9 tabular-nums text-primary"
+          className="min-w-[96px] shrink-0 rounded-md border border-primary/40 bg-primary/15 px-1.5 py-0.5 text-center font-mono text-[26px] font-bold leading-8 tabular-nums text-primary"
           aria-label="剩余时间"
         >
           {countdown(current.end, now)}
@@ -170,7 +170,6 @@ export default function CorruptedZoneCard({
               </button>
             ))}
           </div>
-          <p className={`text-xs leading-relaxed ${adviceClass(advice.status)}`}>{advice.detail}</p>
           <p className="text-[11px] opacity-65">当前：{current.zone.name} · 每 15 分钟轮换</p>
           <ol aria-label="未来四轮" className="space-y-1.5">
             {next.map((r, i) => (
