@@ -134,6 +134,7 @@ const DEFS = {
   netWorthTicker: def('netWorthTicker', { keyboard: 'never', keepMounted: true }),
   netWorthPanel: def('netWorthPanel'),
   corruptedZone: def('corruptedZone', { keyboard: 'never' }),
+  corruptionLuck: def('corruptionLuck', { keyboard: 'never', closeOnBlur: true }),
   market: def('market', { placement: 'screenCenter', persist: true, closeOnBlur: true }),
 } satisfies PanelDefs;
 

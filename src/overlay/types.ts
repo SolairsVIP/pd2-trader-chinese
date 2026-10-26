@@ -18,6 +18,7 @@ export type PanelId =
   | 'netWorthTicker'
   | 'netWorthPanel'
   | 'corruptedZone'
+  | 'corruptionLuck'
   | 'market';
 
 export interface PanelPayloads {
@@ -57,6 +58,7 @@ export interface PanelPayloads {
   netWorthTicker: undefined;
   netWorthPanel: undefined;
   corruptedZone: undefined;
+  corruptionLuck: undefined;
   /** Filters to search right away (merged over defaults), a saved search to run, a listing to focus. */
   market: MarketPanelPayload | undefined;
 }

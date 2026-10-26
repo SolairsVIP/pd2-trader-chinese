@@ -40,6 +40,10 @@ const files = new Map([
   ['latest.json', Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`)],
   ['RELEASE-NOTES.zh-CN.md', Buffer.from(notes)],
 ]);
+// Package the exact tagged source alongside the installer, including local feature documentation.
+files.set(`pd2-trader-chinese-${version}-source.zip`, execFileSync('git', [
+  '-c', `safe.directory=${root}`, 'archive', '--format=zip', `--prefix=pd2-trader-chinese-${version}/`, commit,
+], { cwd: root, maxBuffer: 128 * 1024 * 1024 }));
 const guide = path.join(root, 'docs', 'PD2查价器中文版功能介绍.pdf');
 try { files.set('PD2.Trader.CN_User.Guide.pdf', readFileSync(guide)); } catch (error) { if (error.code !== 'ENOENT') throw error; }
 files.set('SHA256SUMS.txt', Buffer.from([...files].map(([file, bytes]) => `${sha(bytes)}  ${file}`).join('\n') + '\n'));

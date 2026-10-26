@@ -16,7 +16,7 @@ function renderForm(settings: Partial<ISettings>, isLoading = false) {
   return render(<InterfaceForm />);
 }
 
-const overlaySwitch = () => screen.getByRole('switch', { name: 'Chat Button Overlay' });
+const overlaySwitch = () => screen.getByRole('switch', { name: '聊天按钮浮窗' });
 
 const advance = (ms: number) => act(() => vi.advanceTimersByTime(ms));
 const transparency = () => screen.getByRole('slider');
@@ -54,7 +54,7 @@ describe('InterfaceForm', () => {
   it('starts opaque when transparency was never set', () => {
     renderForm({});
     expect(transparency().getAttribute('aria-valuenow')).toBe('0');
-    expect(screen.getByText(/Window transparency/).textContent).toContain('0%');
+    expect(screen.getByText(/窗口透明度/).textContent).toContain('0%');
   });
 
   it('previews transparency right away and saves it once after a drag, capped at 90%', async () => {
@@ -62,7 +62,7 @@ describe('InterfaceForm', () => {
     fireEvent.keyDown(transparency(), { key: 'ArrowRight' });
     fireEvent.keyDown(transparency(), { key: 'ArrowRight' });
     fireEvent.keyDown(transparency(), { key: 'ArrowRight' });
-    expect(screen.getByText(/Window transparency/).textContent).toContain('90%');
+    expect(screen.getByText(/窗口透明度/).textContent).toContain('90%');
     const root = document.documentElement.style;
     expect([root.getPropertyValue('--window-opacity'), root.getPropertyValue('--window-opacity-elevated')]).toEqual([
       '10%',

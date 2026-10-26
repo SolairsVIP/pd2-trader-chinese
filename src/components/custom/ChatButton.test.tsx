@@ -34,6 +34,14 @@ function renderDock(props: Partial<React.ComponentProps<typeof ChatButton>> = {}
 }
 
 describe('ChatButton', () => {
+  it('opens the experimental corruption page from the shard and closes More', () => {
+    const onCorruptionLuckClick = vi.fn();
+    renderDock({ onCorruptionLuckClick, onSettingsClick: vi.fn() });
+    fireEvent.click(caret());
+    fireEvent.click(screen.getByRole('button', { name: '打开腐化前试试手气' }));
+    expect(onCorruptionLuckClick).toHaveBeenCalledOnce();
+    expect(caret().getAttribute('aria-expanded')).toBe('false');
+  });
   it('restores the corrupted-zone card from More and closes the menu afterwards', () => {
     const onCorruptedZoneClick = vi.fn();
     renderDock({ onCorruptedZoneClick });

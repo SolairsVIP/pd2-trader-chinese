@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import type { OverlayRect } from '@/overlay/types';
+import { getTheme } from '@/lib/themes';
 
 export const DEFAULT_ZONE_COLORS = { background: '#171e2b', text: '#f2f4f8', accent: '#d6b46a' };
 export type ZoneColors = typeof DEFAULT_ZONE_COLORS;
@@ -16,11 +17,33 @@ export function zoneColors(saved?: Partial<ZoneColors>): ZoneColors {
   };
 }
 
-export function zoneStyle(custom: boolean, colors?: Partial<ZoneColors>): CSSProperties {
-  if (!custom) return {};
+export const ZONE_TRANSPARENCY_MAX = 90;
+
+export function zoneTransparency(value: unknown): number {
+  return typeof value === 'number' && Number.isFinite(value)
+    ? Math.round(Math.min(ZONE_TRANSPARENCY_MAX, Math.max(0, value)))
+    : 0;
+}
+
+export function zoneStyle(
+  custom: boolean,
+  colors?: Partial<ZoneColors>,
+  transparency?: number,
+  themeId?: string,
+): CSSProperties {
+  const opacity = `${100 - zoneTransparency(transparency)}%`;
+  // Re-declare the surface on the card: an inherited CSS variable has already
+  // resolved the app-wide opacity on <html> and cannot be adjusted locally.
+  const surface = {
+    '--window-opacity': opacity,
+    '--window-opacity-elevated': opacity,
+    '--surface': getTheme(themeId).vars.surface,
+  };
+  if (!custom) return surface as CSSProperties;
   const c = zoneColors(colors);
   return {
-    '--surface': c.background,
+    ...surface,
+    '--surface': `color-mix(in oklab, ${c.background} var(--window-opacity), transparent)`,
     '--surface-foreground': c.text,
     '--muted-foreground': c.text,
     '--border': c.accent,

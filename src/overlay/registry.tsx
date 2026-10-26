@@ -14,12 +14,25 @@ import { CHAT_DOCK_FRAME } from '@/pages/chat/chat-dock';
 import MarketBrowserPage from '@/pages/market/MarketBrowserPage';
 import type { PanelDefs } from './types';
 import CorruptedZonePage from '@/pages/corrupted-zone/CorruptedZonePage';
+import CorruptionLuckPage from '@/pages/corruption-luck/CorruptionLuckPage';
 
 /**
  * Every overlay panel. Each page owner tunes ONLY its own entry. Passed to <OverlayProvider defs={PANEL_DEFS}>
  * from main.tsx (kept out of '@/overlay' so importing the overlay API never pulls in every page).
  */
 export const PANEL_DEFS: PanelDefs = {
+  corruptionLuck: {
+    id: 'corruptionLuck',
+    component: CorruptionLuckPage,
+    size: { width: 424, height: 700 },
+    resizable: false,
+    placement: 'gameCenter',
+    persist: true,
+    keyboard: 'never',
+    keepMounted: false,
+    hideOnGameBlur: true,
+    closeOnBlur: true,
+  },
   corruptedZone: {
     id: 'corruptedZone',
     component: CorruptedZonePage,

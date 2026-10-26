@@ -78,6 +78,7 @@ export interface ISettings {
   corruptedZoneEnabled?: boolean;
   corruptedZoneDamageType?: DamageSelection;
   corruptedZoneWidth?: number;
+  corruptedZoneTransparency?: number; // Independent background transparency, 0-90%; text stays opaque.
   corruptedZoneExpanded?: boolean;
   corruptedZonePosition?: { x: number; y: number } | null;
   corruptedZoneCustomColors?: boolean;
@@ -151,6 +152,7 @@ const DEFAULT_SETTINGS: ISettings = {
   corruptedZoneEnabled: true,
   corruptedZoneDamageType: 'none',
   corruptedZoneWidth: 720,
+  corruptedZoneTransparency: 0,
   corruptedZoneExpanded: false,
   corruptedZonePosition: null,
   corruptedZoneCustomColors: false,

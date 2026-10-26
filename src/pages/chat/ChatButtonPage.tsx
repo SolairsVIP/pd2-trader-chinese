@@ -43,6 +43,7 @@ const ChatButtonPage: React.FC = () => {
         onChatClick={() => (unreadCount > 0 ? togglePanel('chat', { newestUnread: true }) : togglePanel('chat'))}
         onOffersClick={() => openPanel('chat', { filter: 'selling' })}
         onMarketClick={() => openPanel('market')}
+        onCorruptionLuckClick={() => openPanel('corruptionLuck')}
         onNetWorthClick={() =>
           openPanel('netWorthPanel', undefined, {
             placement: panelBesideTicker(dock, NET_WORTH_PANEL_SIZE, gameRect, PANEL_GAP),

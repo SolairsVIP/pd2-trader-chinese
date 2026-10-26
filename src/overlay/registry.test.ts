@@ -6,6 +6,16 @@ import { isPanelVisible, type PanelState } from './OverlayProvider';
 const open = { open: true, placing: false } as PanelState;
 
 describe('PANEL_DEFS', () => {
+  it('keeps the corruption experiment bounded, without keyboard capture, and closes on leaving it', () => {
+    expect(PANEL_DEFS.corruptionLuck).toMatchObject({
+      size: { width: 424, height: 700 },
+      placement: 'gameCenter', keyboard: 'never',
+      hideOnGameBlur: true, closeOnBlur: true,
+      keepMounted: false, resizable: false,
+    });
+    expect(isPanelVisible(PANEL_DEFS.corruptionLuck, open, false)).toBe(false);
+    expect(isPanelVisible(PANEL_DEFS.corruptionLuck, open, true)).toBe(true);
+  });
   it('keeps the corrupted-zone notice small, keyboard-free and hidden outside the game', () => {
     expect(PANEL_DEFS.corruptedZone).toMatchObject({
       size: { width: 720, height: 48 },

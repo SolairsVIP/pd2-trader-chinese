@@ -12,15 +12,17 @@
 >
 > **中文版开发者：Solaris · 开源许可：[MIT License](LICENSE)**。保留原项目版权声明与许可证。
 
-**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.8/PD2.Trader.CN_0.11.8_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.8/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.8)**
+**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.9/PD2.Trader.CN_0.11.9_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.9/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.9)**
 
-当前版本：**0.11.8 正式版**，发布于 2026-10-26。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
+当前版本：**0.11.9 正式版**，发布于 2026-10-26。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
 
-本版修复中文客户端符文识别、交易大厅符文筛选丢失，以及新装备被误匹配为相似物品的问题；继续保留腐化区顶部横条及原有功能。[完整更新说明](docs/releases/v0.11.8.md)。
+本版新增腐化区独立背景透明度滑块，以及右下角红石入口的“腐化前试试手气”功能，支持七档诙谐提示与对应音效。[完整更新说明](docs/releases/v0.11.9.md)。
 
 > **新增腐化区提示，原作者：Blyat。** 感谢提供原始工具与区域资料。横条默认顶部居中，仅在游戏激活时显示；右下角“更多 → 腐化区提示”可恢复显示，设置中可调整宽度与配色。参见 [功能说明、来源与验证范围](docs/corrupted-zone.md)。
 
 <p align="center"><img src="docs/images/corrupted-zone-strip.png" alt="腐化区中英地名、免疫参考与倒计时横条" width="720"></p>
+
+**0.11.9 新增：** 在“设置 → 腐化区提示 → 显示与位置”独立调整腐化区背景透明度；点击游戏右下角的红色石头进入“腐化前试试手气”，随机抽取 0–100，显示七档诙谐提示并播放对应音效。仅供娱乐，不影响游戏内腐化结果。详见[手气功能与概率说明](docs/corruption-luck.md)。
 
 ## 快速开始
 
@@ -218,12 +220,12 @@
 
 **0.11.0 本次重点：**修复中文装备复制乱码，补充中文底材、固定名称与技能识别，修复鬼火投射者等聚气技能装备的缺失字段报错，并整合技能和部分 PD2 暗金名称汉化。预设交易消息继续发送英文。
 
-- [当前发布说明](docs/releases/v0.11.2.md)
+- [当前发布说明](docs/releases/v0.11.9.md)
 - [更新专项验证记录](docs/自动更新验证-20261025.md)
 - [0.11.0 兼容范围与历史校验值](docs/releases/v0.11.0.md)
 - [0.11 大版本更新记录](docs/发布记录-0.11.0.md)
 - [历史修复与阶段性验证记录](docs/历史修复记录.md)
-- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.8/SHA256SUMS.txt)
+- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.9/SHA256SUMS.txt)
 - [上游原项目](https://github.com/errolgr/pd2-trade) · [本项目开源仓库](https://github.com/SolairsVIP/pd2-trader-chinese) · [MIT 许可证](LICENSE)
 
 <details>

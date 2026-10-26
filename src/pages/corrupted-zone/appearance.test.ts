@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_ZONE_COLORS, validColor, zoneColors, zoneRect, zoneStyle, zoneWidth } from './appearance';
+import {
+  DEFAULT_ZONE_COLORS,
+  validColor,
+  zoneColors,
+  zoneRect,
+  zoneStyle,
+  zoneTransparency,
+  zoneWidth,
+} from './appearance';
+import { THEMES } from '@/lib/themes';
 
 describe('corrupted-zone layout and persisted appearance', () => {
   it('defaults to a bounded 720 px strip at the monitor top centre', () => {
@@ -32,12 +41,25 @@ describe('corrupted-zone layout and persisted appearance', () => {
     expect(zoneRect(720, 195, { x: 0, y: 0, width: 1, height: 1 })).toEqual({ x: 0, y: 0, width: 1, height: 1 });
   });
   it('inherits the app theme or overrides only local card tokens with valid saved colours', () => {
-    expect(zoneStyle(false, { background: '#000000' })).toEqual({});
+    expect(zoneStyle(false, { background: '#000000' })).toMatchObject({ '--window-opacity': '100%' });
     expect(zoneColors({ background: 'url(https://example.com)' })).toEqual(DEFAULT_ZONE_COLORS);
     expect(validColor('#Ab12Cd', '#ffffff')).toBe('#Ab12Cd');
     expect(zoneStyle(true, { text: '#123456' })).toMatchObject({
       '--surface-foreground': '#123456',
-      '--surface': DEFAULT_ZONE_COLORS.background,
+      '--surface': `color-mix(in oklab, ${DEFAULT_ZONE_COLORS.background} var(--window-opacity), transparent)`,
     });
+  });
+  it('uses an independent background opacity in every theme and in custom colours', () => {
+    for (const theme of THEMES) {
+      expect(zoneStyle(false, undefined, 60, theme.id)).toMatchObject({
+        '--window-opacity': '40%',
+        '--surface': theme.vars.surface,
+      });
+    }
+    expect(zoneStyle(true, { background: '#123456' }, 90)).toMatchObject({
+      '--window-opacity': '10%',
+      '--surface': 'color-mix(in oklab, #123456 var(--window-opacity), transparent)',
+    });
+    expect([undefined, NaN, Infinity, '60', -20, 300, 39.7].map(zoneTransparency)).toEqual([0, 0, 0, 0, 0, 90, 40]);
   });
 });

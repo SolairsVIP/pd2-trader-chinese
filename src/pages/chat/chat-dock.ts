@@ -6,11 +6,11 @@ import type { OverlayRect } from '@/overlay';
  * corner, on the statue beside the mana orb, and can be dragged up or down along the edge; where it sits is saved as
  * a share of the game height, so it keeps its spot across resolutions.
  *
- * Its size follows the game height (the HUD art scales with it): 4% of the height wide, 3.75× as tall.
- * The extra row keeps chat/offers click targets readable when the market shortcut is added above them.
+ * Its size follows the game height (the HUD art scales with it): 4% of the height wide, 4.75× as tall.
+ * The extra rows keep each click target readable with the market and experimental corruption shortcuts.
  */
 const WIDTH_RATIO = 0.04;
-const HEIGHT_PER_WIDTH = 3.75;
+const HEIGHT_PER_WIDTH = 4.75;
 const MIN_WIDTH = 22;
 const MAX_WIDTH = 64;
 /** Default gap between the tab and the game's bottom edge, as a share of the game height. */

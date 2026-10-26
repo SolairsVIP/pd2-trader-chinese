@@ -12,7 +12,7 @@ import {
   SettingsSection,
   SettingsSkeleton,
 } from '@/components/dialogs/optionsv2/settings-ui';
-import { DEFAULT_ZONE_COLORS, zoneColors, zoneWidth } from './appearance';
+import { DEFAULT_ZONE_COLORS, ZONE_TRANSPARENCY_MAX, zoneColors, zoneTransparency, zoneWidth } from './appearance';
 import CorruptedZoneCard from './CorruptedZoneCard';
 import { DAMAGE_CHOICES, DAMAGE_TYPES, damageSelection, RECOMMENDATION_NOTE } from './recommendation';
 
@@ -90,6 +90,35 @@ export default function CorruptedZoneSettings() {
                     </FormControl>
                     <span className="w-16 text-right font-mono text-xs">
                       {zoneWidth(settings.corruptedZoneWidth)} px
+                    </span>
+                  </>
+                }
+              />
+            )}
+          />
+          <FormField
+            name="transparency"
+            control={form.control}
+            render={() => (
+              <SettingsRow
+                label="腐化区背景透明度"
+                description="独立于插件整体透明度，仅调整腐化区提示背景；文字和倒计时保持清晰。0% 为不透明。"
+                layout="stacked"
+                control={
+                  <>
+                    <FormControl>
+                      <Slider
+                        aria-label="腐化区背景透明度"
+                        className="flex-1"
+                        min={0}
+                        max={ZONE_TRANSPARENCY_MAX}
+                        step={1}
+                        value={[zoneTransparency(settings.corruptedZoneTransparency)]}
+                        onValueChange={([value]) => updateSettings({ corruptedZoneTransparency: value })}
+                      />
+                    </FormControl>
+                    <span className="w-16 text-right font-mono text-xs">
+                      {zoneTransparency(settings.corruptedZoneTransparency)}%
                     </span>
                   </>
                 }
@@ -200,6 +229,8 @@ export default function CorruptedZoneSettings() {
           expanded={settings.corruptedZoneExpanded === true}
           customColors={settings.corruptedZoneCustomColors}
           colors={colors}
+          transparency={settings.corruptedZoneTransparency}
+          themeId={settings.themeId}
           damageType={settings.corruptedZoneDamageType}
           onDamageChange={(damage) => updateSettings({ corruptedZoneDamageType: damage })}
           onExpand={() => updateSettings({ corruptedZoneExpanded: !settings.corruptedZoneExpanded })}

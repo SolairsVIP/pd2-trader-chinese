@@ -16,6 +16,8 @@ interface Props {
   expanded: boolean;
   customColors?: boolean;
   colors?: Partial<ZoneColors>;
+  transparency?: number;
+  themeId?: string;
   damageType?: DamageSelection;
   onDamageChange?: (damage: DamageSelection) => void;
   onExpand?: () => void;
@@ -30,6 +32,8 @@ export default function CorruptedZoneCard({
   expanded,
   customColors = false,
   colors,
+  transparency,
+  themeId,
   damageType,
   onDamageChange,
   onExpand,
@@ -51,7 +55,7 @@ export default function CorruptedZoneCard({
   const buttonClass =
     'inline-flex size-6 shrink-0 cursor-default items-center justify-center rounded hover:bg-current/10 focus-visible:outline focus-visible:outline-2';
   return (
-    <WindowPanel style={zoneStyle(customColors, colors)} className="w-full text-sm">
+    <WindowPanel style={zoneStyle(customColors, colors, transparency, themeId)} className="w-full text-sm">
       <div
         {...dragHandlers}
         data-zone-strip

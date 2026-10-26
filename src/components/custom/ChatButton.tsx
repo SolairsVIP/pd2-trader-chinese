@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { popIn, scaleIn } from '@/lib/motion';
+import corruptionShard from '@/assets/corruption-luck/shard.png';
 
 interface ChatButtonProps {
   /** Tab size (CSS px); everything inside scales with its width. */
@@ -27,6 +28,7 @@ interface ChatButtonProps {
   onManageListingsClick?: () => void;
   onSettingsClick?: () => void;
   onCorruptedZoneClick?: () => void;
+  onCorruptionLuckClick?: () => void;
   onDisableClick?: () => void;
   unreadCount?: number;
   tradeOffersCount?: number;
@@ -95,6 +97,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
   onManageListingsClick,
   onSettingsClick,
   onCorruptedZoneClick,
+  onCorruptionLuckClick,
   onDisableClick,
   unreadCount = 0,
   tradeOffersCount = 0,
@@ -231,6 +234,23 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
           onPointerDown={onTabPointerDown}
           onClickCapture={onTabClickCapture}
         >
+          {onCorruptionLuckClick && (
+            <button
+              type="button"
+              onClick={pick(onCorruptionLuckClick)}
+              className={segment}
+              aria-label="打开腐化前试试手气"
+              title="腐化前试试手气"
+            >
+              <img
+                src={corruptionShard}
+                alt=""
+                draggable={false}
+                className="pointer-events-none drop-shadow-[0_0_4px_#e65b3b66]"
+                style={{ width: Math.round(w * 0.56), height: Math.round(w * 0.56) }}
+              />
+            </button>
+          )}
           {onMarketClick && (
             <button
               type="button"

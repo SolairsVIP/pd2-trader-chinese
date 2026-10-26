@@ -44,6 +44,15 @@ afterEach(() => {
 });
 
 describe('corrupted-zone lifecycle', () => {
+  it('applies the saved local transparency to the floating card independently of the app', () => {
+    state.settings = { corruptedZoneTransparency: 65, windowTransparency: 10 };
+    const { container, rerender } = render(<CorruptedZonePage />);
+    const card = () => container.querySelector<HTMLElement>('[data-slot="window-panel"]')!;
+    expect(card().style.getPropertyValue('--window-opacity')).toBe('35%');
+    state.settings = { ...state.settings, windowTransparency: 90 };
+    rerender(<CorruptedZonePage />);
+    expect(card().style.getPropertyValue('--window-opacity')).toBe('35%');
+  });
   it('persists the chosen damage type through the existing settings provider', () => {
     state.settings = { corruptedZoneDamageType: 'lightning' };
     render(<CorruptedZonePage />);

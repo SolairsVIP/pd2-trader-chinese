@@ -1,0 +1,49 @@
+.luck-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid #7c6a49;
+  border-radius: 9px;
+  background: #100f0d;
+  color: #eee1bf;
+  box-shadow: 0 14px 48px #0009;
+}
+.luck-titlebar { background: #181612; color: #e6d5ac; border-color: #66563b; }
+.luck-stage { display: flex; justify-content: center; flex: 1; min-height: 0; overflow: hidden; }
+.luck-chamber { position: relative; height: 100%; max-width: 100%; aspect-ratio: 767 / 1195; container-type: inline-size; }
+.luck-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; user-select: none; pointer-events: none; }
+.luck-reading {
+  position: absolute; left: 21%; right: 21%; top: 13%; height: 20%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: linear-gradient(90deg, #0c0a06b3, #100d08eb 25%, #100d08eb 75%, #0c0a06b3);
+  border-block: 1px solid #a68b5399;
+  text-shadow: 0 2px 5px #000;
+}
+.luck-eyebrow { color: #bfac83; font-size: 2.35cqw; white-space: nowrap; }
+.luck-reveal { display: flex; flex-direction: column; align-items: center; color: #e6cf94; animation: luck-reveal .3s ease-out; }
+.luck-score { font-size: 12cqw; line-height: 1.1; font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-variant-numeric: tabular-nums; }
+.luck-message { font-size: 3.55cqw; line-height: 1.6; font-weight: 700; white-space: nowrap; }
+.luck-scale { color: #b5a68b; font-size: 2.3cqw; margin-top: 1.2cqw; white-space: nowrap; }
+.luck-reading[data-tier=poor] .luck-reveal { color: #c3bbab; }
+.luck-reading[data-tier=unlucky] .luck-reveal { color: #d9b591; }
+.luck-reading[data-tier=balanced] .luck-reveal { color: #c0cfdf; }
+.luck-reading[data-tier=hopeful] .luck-reveal { color: #9dc9df; }
+.luck-reading[data-tier=steady] .luck-reveal { color: #a9df9d; }
+.luck-reading[data-tier=chosen] .luck-reveal { color: #d5b3ff; }
+.luck-reading[data-tier=saint] .luck-reveal { color: #ffdb7a; text-shadow: 0 0 18px #e79147aa, 0 2px 5px #000; }
+/* The source grid is 4×4. Rows 2–3, columns 2–3 reserve exactly 2×2 cells below the shard. */
+.luck-parcel { position: absolute; left: 41.72%; top: 41%; width: 18.25%; height: 11.72%; background: #92754718; box-shadow: inset 0 0 15px #b69a5122; }
+.luck-parcel img { width: 100%; height: 100%; padding: 7%; object-fit: contain; filter: drop-shadow(2px 4px 3px #000c); pointer-events: none; user-select: none; }
+.luck-roll { position: absolute; left: 44.72%; top: 59.16%; width: 11.22%; height: 7.03%; border: 1px solid #e5c38399; border-radius: 2px; cursor: pointer; background: transparent; transition: box-shadow .15s, background .15s; }
+.luck-roll:hover { background: #f3cf7a1a; box-shadow: 0 0 18px #ffd78366, inset 0 0 8px #f4c98044; }
+.luck-roll:active { background: #100b0677; }
+.luck-roll:focus-visible, .luck-close:focus-visible { outline: 2px solid #ffdb8b; outline-offset: 3px; }
+.luck-roll-caption { position: absolute; top: 67.1%; left: 25%; right: 25%; text-align: center; font-size: 3cqw; color: #eddbb1; text-shadow: 0 2px 4px #000; pointer-events: none; }
+.luck-disclaimer { flex-shrink: 0; margin: 0; padding: 6px 8px; text-align: center; background: #100e0b; border-top: 1px solid #75623e66; color: #c1b49a; font-size: 11px; line-height: 1.4; }
+.luck-disclaimer p { margin: 0; }
+.luck-close { position: absolute; left: 85%; top: 92.6%; width: 10.8%; height: 6.6%; background: transparent; cursor: pointer; border-radius: 2px; }
+.luck-close:hover { background: #f3cf7a1a; }
+@keyframes luck-reveal { from { opacity: .4; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .luck-reveal { animation: none; } .luck-roll { transition: none; } }
