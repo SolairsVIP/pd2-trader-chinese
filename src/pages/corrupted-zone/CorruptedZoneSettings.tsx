@@ -206,7 +206,7 @@ export default function CorruptedZoneSettings() {
         />
       </div>
       <SettingsHint>
-        腐化区提示作者：Blyat。按 UTC 每 15
+        腐化区提示原作者：Blyat。按 UTC 每 15
         分钟离线计算，时间显示为本地时区，请保持系统时间准确。这是建房时间表预报，已有房间可能保留建房时区域，请以游戏公告为准。
       </SettingsHint>
     </SettingsSection>

@@ -28,19 +28,19 @@ describe('corrupted-zone card', () => {
   });
   it('keeps the collapsed display to one thin row with details available in its tooltip', () => {
     render(<CorruptedZoneCard now={now} expanded={false} />);
-    expect(screen.getByTitle(/建房时间表预报/).title).toContain('腐化区提示作者：Blyat');
+    expect(screen.getByTitle(/建房时间表预报/).title).toContain('腐化区提示原作者：Blyat');
     expect(screen.getByTitle(/建房时间表预报/).title).toContain('下一轮');
     expect(screen.getByLabelText('剩余时间').textContent).toBe('15:00');
     expect(screen.getByText("Nihlathak's Temple")).toBeTruthy();
     expect(screen.queryByText(/每 15 分钟轮换/)).toBeNull();
-    expect(screen.queryByText('腐化区提示作者：Blyat')).toBeNull();
+    expect(screen.queryByText('腐化区提示原作者：Blyat')).toBeNull();
     expect(screen.queryByRole('list')).toBeNull();
   });
   it('shows four future slots only while expanded and lets the user collapse', () => {
     const expand = vi.fn();
     render(<CorruptedZoneCard now={now} expanded onExpand={expand} />);
     expect(screen.getAllByRole('listitem')).toHaveLength(4);
-    expect(screen.getByText('腐化区提示作者：Blyat')).toBeTruthy();
+    expect(screen.getByText('腐化区提示原作者：Blyat')).toBeTruthy();
     expect(screen.queryByText('建房时间表预报 · 以游戏公告为准')).toBeNull();
     expect(screen.queryByText('免疫资料：Hiim PD2（社区参考）')).toBeNull();
     expect(screen.queryByText(/社区免疫资料参考，按区域组合汇总/)).toBeNull();

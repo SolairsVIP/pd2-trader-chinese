@@ -20,6 +20,7 @@ describe('damage recommendations', () => {
   it('distinguishes damage types and missing data from a known empty immunity list', () => {
     expect(zoneRecommendation(0, 'fire').status).toBe('caution');
     expect(zoneRecommendation(0, 'lightning').status).toBe('suitable');
+    expect(zoneRecommendation(0, 'lightning').label).toBe('爽刷');
     for (const damage of Object.keys(DAMAGE_TYPES)) expect(zoneRecommendation(11, damage).status).toBe('suitable');
     expect(zoneRecommendation(999, 'lightning').status).toBe('unknown');
     expect(zoneRecommendation(-1, 'fire').status).toBe('unknown');
