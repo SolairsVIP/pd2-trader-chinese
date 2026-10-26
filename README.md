@@ -12,11 +12,11 @@
 >
 > **汉化作者：Solaris · 开源许可：[MIT License](LICENSE)**。保留原项目版权声明与许可证。
 
-**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.5/PD2.Trader.CN_0.11.5_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.5/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.5)**
+**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.6/PD2.Trader.CN_0.11.6_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.6/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.6)**
 
-当前版本：**0.11.5 正式版**，发布于 2026-10-26。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
+当前版本：**0.11.6 正式版**，发布于 2026-10-26。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
 
-本版优化小窗覆盖层，修复其他窗口黑屏、切回游戏无法激活及托盘设置打开异常，并完善右下角小窗的“更多”二级菜单。[完整更新说明](docs/releases/v0.11.5.md)。
+本版修复墓歌等装备的中英混合名称识别与非本职业技能筛选，增补简繁中文输入别名，并兼容繁体聚气及旧式颜色标记。[完整更新说明](docs/releases/v0.11.6.md)。
 
 ## 快速开始
 
@@ -219,7 +219,7 @@
 - [0.11.0 兼容范围与历史校验值](docs/releases/v0.11.0.md)
 - [0.11 大版本更新记录](docs/发布记录-0.11.0.md)
 - [历史修复与阶段性验证记录](docs/历史修复记录.md)
-- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.5/SHA256SUMS.txt)
+- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.6/SHA256SUMS.txt)
 - [上游原项目](https://github.com/errolgr/pd2-trade) · [本项目开源仓库](https://github.com/SolairsVIP/pd2-trader-chinese) · [MIT 许可证](LICENSE)
 
 <details>
