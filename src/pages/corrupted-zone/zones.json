@@ -1,0 +1,925 @@
+[
+  {
+    "id": 0,
+    "act": 1,
+    "english": "Blood Moor and Den of Evil",
+    "name": "鲜血荒地 · 邪恶洞窟",
+    "maps": [
+      {
+        "id": 2,
+        "key": "Blood Moor",
+        "name": "鲜血荒地"
+      },
+      {
+        "id": 8,
+        "key": "Den of Evil",
+        "name": "邪恶洞窟"
+      }
+    ],
+    "detail": "鲜血荒地、邪恶洞窟"
+  },
+  {
+    "id": 1,
+    "act": 1,
+    "english": "Cold Plains and the Cave",
+    "name": "冰冷之原 · 洞窟",
+    "maps": [
+      {
+        "id": 3,
+        "key": "Cold Plains",
+        "name": "冰冷之原"
+      },
+      {
+        "id": 9,
+        "key": "Cave Level 1",
+        "name": "洞窟第一层"
+      },
+      {
+        "id": 13,
+        "key": "Cave Level 2",
+        "name": "洞窟第二层"
+      }
+    ],
+    "detail": "冰冷之原、洞窟第一层、洞窟第二层"
+  },
+  {
+    "id": 2,
+    "act": 1,
+    "english": "Stony Field and Tristram",
+    "name": "石块旷野 · 崔斯特瑞姆",
+    "maps": [
+      {
+        "id": 4,
+        "key": "Stony Field",
+        "name": "石块旷野"
+      },
+      {
+        "id": 38,
+        "key": "Tristram",
+        "name": "崔斯特瑞姆"
+      }
+    ],
+    "detail": "石块旷野、崔斯特瑞姆"
+  },
+  {
+    "id": 3,
+    "act": 1,
+    "english": "Dark Wood and the Underground Passage",
+    "name": "黑暗森林 · 地底通道",
+    "maps": [
+      {
+        "id": 5,
+        "key": "Dark Wood",
+        "name": "黑暗森林"
+      },
+      {
+        "id": 10,
+        "key": "Underground Passage Level 1",
+        "name": "地底通道第一层"
+      },
+      {
+        "id": 14,
+        "key": "Underground Passage Level 2",
+        "name": "地底通道第二层"
+      }
+    ],
+    "detail": "黑暗森林、地底通道第一层、地底通道第二层"
+  },
+  {
+    "id": 4,
+    "act": 1,
+    "english": "Black Marsh and the Hole",
+    "name": "黑色荒地 · 洞穴",
+    "maps": [
+      {
+        "id": 6,
+        "key": "Black Marsh",
+        "name": "黑色荒地"
+      },
+      {
+        "id": 11,
+        "key": "Hole Level 1",
+        "name": "洞穴第一层"
+      },
+      {
+        "id": 15,
+        "key": "Hole Level 2",
+        "name": "洞穴第二层"
+      }
+    ],
+    "detail": "黑色荒地、洞穴第一层、洞穴第二层"
+  },
+  {
+    "id": 5,
+    "act": 1,
+    "english": "Tamoe Highland and the Pit",
+    "name": "泰摩高地 · 地穴",
+    "maps": [
+      {
+        "id": 7,
+        "key": "Tamoe Highland",
+        "name": "泰摩高地"
+      },
+      {
+        "id": 12,
+        "key": "Pit Level 1",
+        "name": "地穴第一层"
+      },
+      {
+        "id": 16,
+        "key": "Pit Level 2",
+        "name": "地穴第二层"
+      }
+    ],
+    "detail": "泰摩高地、地穴第一层、地穴第二层"
+  },
+  {
+    "id": 6,
+    "act": 1,
+    "english": "Burial Ground and Mausoleum",
+    "name": "埋骨之地 · 大陵寝",
+    "maps": [
+      {
+        "id": 17,
+        "key": "Burial Grounds",
+        "name": "埋骨之地"
+      },
+      {
+        "id": 19,
+        "key": "Mausoleum",
+        "name": "大陵寝"
+      }
+    ],
+    "detail": "埋骨之地、大陵寝"
+  },
+  {
+    "id": 7,
+    "act": 1,
+    "english": "Forgotten Tower",
+    "name": "遗忘之塔 · 高塔地牢",
+    "maps": [
+      {
+        "id": 20,
+        "key": "Forgotten Tower",
+        "name": "遗忘之塔"
+      },
+      {
+        "id": 21,
+        "key": "Tower Cellar Level 1",
+        "name": "高塔地牢第一层"
+      },
+      {
+        "id": 22,
+        "key": "Tower Cellar Level 2",
+        "name": "高塔地牢第二层"
+      },
+      {
+        "id": 23,
+        "key": "Tower Cellar Level 3",
+        "name": "高塔地牢第三层"
+      },
+      {
+        "id": 24,
+        "key": "Tower Cellar Level 4",
+        "name": "高塔地牢第四层"
+      },
+      {
+        "id": 25,
+        "key": "Tower Cellar Level 5",
+        "name": "高塔地牢第五层"
+      }
+    ],
+    "detail": "遗忘之塔、高塔地牢第一层、高塔地牢第二层、高塔地牢第三层、高塔地牢第四层、高塔地牢第五层"
+  },
+  {
+    "id": 8,
+    "act": 1,
+    "english": "Outer Cloister and Barracks",
+    "name": "外侧回廊 · 军营",
+    "maps": [
+      {
+        "id": 27,
+        "key": "Outer Cloister",
+        "name": "外侧回廊"
+      },
+      {
+        "id": 28,
+        "key": "Barracks",
+        "name": "军营"
+      }
+    ],
+    "detail": "外侧回廊、军营"
+  },
+  {
+    "id": 9,
+    "act": 1,
+    "english": "Jail, Inner Cloister, and Cathedral",
+    "name": "监牢 · 内侧回廊 · 大教堂",
+    "maps": [
+      {
+        "id": 29,
+        "key": "Jail Level 1",
+        "name": "监牢第一层"
+      },
+      {
+        "id": 30,
+        "key": "Jail Level 2",
+        "name": "监牢第二层"
+      },
+      {
+        "id": 31,
+        "key": "Jail Level 3",
+        "name": "监牢第三层"
+      },
+      {
+        "id": 32,
+        "key": "Inner Cloister",
+        "name": "内侧回廊"
+      },
+      {
+        "id": 33,
+        "key": "Cathedral",
+        "name": "大教堂"
+      }
+    ],
+    "detail": "监牢第一层、监牢第二层、监牢第三层、内侧回廊、大教堂"
+  },
+  {
+    "id": 10,
+    "act": 1,
+    "english": "Catacombs",
+    "name": "地下墓穴",
+    "maps": [
+      {
+        "id": 34,
+        "key": "Catacombs Level 1",
+        "name": "地下墓穴第一层"
+      },
+      {
+        "id": 35,
+        "key": "Catacombs Level 2",
+        "name": "地下墓穴第二层"
+      },
+      {
+        "id": 36,
+        "key": "Catacombs Level 3",
+        "name": "地下墓穴第三层"
+      },
+      {
+        "id": 37,
+        "key": "Catacombs Level 4",
+        "name": "地下墓穴第四层"
+      }
+    ],
+    "detail": "地下墓穴第一层、地下墓穴第二层、地下墓穴第三层、地下墓穴第四层"
+  },
+  {
+    "id": 11,
+    "act": 1,
+    "english": "Cow Level",
+    "name": "秘密母牛关卡",
+    "maps": [
+      {
+        "id": 39,
+        "key": "Moo Moo Farm",
+        "name": "秘密母牛关卡"
+      }
+    ],
+    "detail": "秘密母牛关卡"
+  },
+  {
+    "id": 12,
+    "act": 2,
+    "english": "Rocky Waste and the Stony Tomb",
+    "name": "碎石荒地 · 石制古墓",
+    "maps": [
+      {
+        "id": 41,
+        "key": "Rocky Waste",
+        "name": "碎石荒地"
+      },
+      {
+        "id": 55,
+        "key": "Stony Tomb Level 1",
+        "name": "石制古墓第一层"
+      },
+      {
+        "id": 59,
+        "key": "Stony Tomb Level 2",
+        "name": "石制古墓第二层"
+      }
+    ],
+    "detail": "碎石荒地、石制古墓第一层、石制古墓第二层"
+  },
+  {
+    "id": 13,
+    "act": 2,
+    "english": "Dry Hills and the Halls of the Dead",
+    "name": "干燥的高地 · 死亡之殿",
+    "maps": [
+      {
+        "id": 42,
+        "key": "Dry Hills",
+        "name": "干燥的高地"
+      },
+      {
+        "id": 56,
+        "key": "Halls of the Dead Level 1",
+        "name": "死亡之殿第一层"
+      },
+      {
+        "id": 57,
+        "key": "Halls of the Dead Level 2",
+        "name": "死亡之殿第二层"
+      },
+      {
+        "id": 60,
+        "key": "Halls of the Dead Level 3",
+        "name": "死亡之殿第三层"
+      }
+    ],
+    "detail": "干燥的高地、死亡之殿第一层、死亡之殿第二层、死亡之殿第三层"
+  },
+  {
+    "id": 14,
+    "act": 2,
+    "english": "Far Oasis and the Maggot Lair",
+    "name": "遥远的绿洲 · 蛆虫巢穴",
+    "maps": [
+      {
+        "id": 43,
+        "key": "Far Oasis",
+        "name": "遥远的绿洲"
+      },
+      {
+        "id": 62,
+        "key": "Maggot Lair Level 1",
+        "name": "蛆虫巢穴第一层"
+      },
+      {
+        "id": 63,
+        "key": "Maggot Lair Level 2",
+        "name": "蛆虫巢穴第二层"
+      },
+      {
+        "id": 64,
+        "key": "Maggot Lair Level 3",
+        "name": "蛆虫巢穴第三层"
+      }
+    ],
+    "detail": "遥远的绿洲、蛆虫巢穴第一层、蛆虫巢穴第二层、蛆虫巢穴第三层"
+  },
+  {
+    "id": 15,
+    "act": 2,
+    "english": "Lost City, Ancient Tunnels, and Claw Viper Temple",
+    "name": "遗失的城市 · 古代通道 · 利爪腹蛇神殿",
+    "maps": [
+      {
+        "id": 44,
+        "key": "Lost City",
+        "name": "遗失的城市"
+      },
+      {
+        "id": 65,
+        "key": "Ancient Tunnels",
+        "name": "古代通道"
+      },
+      {
+        "id": 58,
+        "key": "Claw Viper Temple Level 1",
+        "name": "利爪腹蛇神殿第一层"
+      },
+      {
+        "id": 61,
+        "key": "Claw Viper Temple Level 2",
+        "name": "利爪腹蛇神殿第二层"
+      }
+    ],
+    "detail": "遗失的城市、古代通道、利爪腹蛇神殿第一层、利爪腹蛇神殿第二层"
+  },
+  {
+    "id": 16,
+    "act": 2,
+    "english": "Canyon of the Magi and Tal Rasha's Tomb",
+    "name": "术士的峡谷 · 塔－拉夏的古墓",
+    "maps": [
+      {
+        "id": 46,
+        "key": "Canyon of the Magi",
+        "name": "术士的峡谷"
+      },
+      {
+        "id": 66,
+        "key": "Tal Rasha's Tomb",
+        "name": "塔－拉夏的古墓"
+      },
+      {
+        "id": 67,
+        "key": "Tal Rasha's Tomb",
+        "name": "塔－拉夏的古墓"
+      },
+      {
+        "id": 68,
+        "key": "Tal Rasha's Tomb",
+        "name": "塔－拉夏的古墓"
+      },
+      {
+        "id": 69,
+        "key": "Tal Rasha's Tomb",
+        "name": "塔－拉夏的古墓"
+      },
+      {
+        "id": 70,
+        "key": "Tal Rasha's Tomb",
+        "name": "塔－拉夏的古墓"
+      },
+      {
+        "id": 71,
+        "key": "Tal Rasha's Tomb",
+        "name": "塔－拉夏的古墓"
+      },
+      {
+        "id": 72,
+        "key": "Tal Rasha's Tomb",
+        "name": "塔－拉夏的古墓"
+      }
+    ],
+    "detail": "术士的峡谷、塔－拉夏的古墓"
+  },
+  {
+    "id": 17,
+    "act": 2,
+    "english": "Lut Gholein Sewers and the Palace Cellars",
+    "name": "下水道 · 皇宫监牢",
+    "maps": [
+      {
+        "id": 47,
+        "key": "Sewers Level 1",
+        "name": "下水道第一层"
+      },
+      {
+        "id": 48,
+        "key": "Sewers Level 2",
+        "name": "下水道第二层"
+      },
+      {
+        "id": 49,
+        "key": "Sewers Level 3",
+        "name": "下水道第三层"
+      },
+      {
+        "id": 52,
+        "key": "Palace Cellar Level 1 ",
+        "name": "皇宫监牢第一层"
+      },
+      {
+        "id": 53,
+        "key": "Palace Cellar Level 2",
+        "name": "皇宫监牢第二层"
+      },
+      {
+        "id": 54,
+        "key": "Palace Cellar Level 3",
+        "name": "皇宫监牢第三层"
+      }
+    ],
+    "detail": "下水道第一层、下水道第二层、下水道第三层、皇宫监牢第一层、皇宫监牢第二层、皇宫监牢第三层"
+  },
+  {
+    "id": 18,
+    "act": 2,
+    "english": "Arcane Sanctuary",
+    "name": "神秘庇难所",
+    "maps": [
+      {
+        "id": 74,
+        "key": "Arcane Sanctuary",
+        "name": "神秘庇难所"
+      }
+    ],
+    "detail": "神秘庇难所"
+  },
+  {
+    "id": 19,
+    "act": 3,
+    "english": "Spider Forest, Arachnid Lair, and Spider Cavern",
+    "name": "蜘蛛森林 · 蜘蛛巢穴 · 蜘蛛洞窟",
+    "maps": [
+      {
+        "id": 76,
+        "key": "Spider Forest",
+        "name": "蜘蛛森林"
+      },
+      {
+        "id": 84,
+        "key": "Spider Cave",
+        "name": "蜘蛛巢穴"
+      },
+      {
+        "id": 85,
+        "key": "Spider Cavern",
+        "name": "蜘蛛洞窟"
+      }
+    ],
+    "detail": "蜘蛛森林、蜘蛛巢穴、蜘蛛洞窟"
+  },
+  {
+    "id": 20,
+    "act": 3,
+    "english": "Great Marsh and the Swampy Pit",
+    "name": "庞大湿地 · 沼泽地洞",
+    "maps": [
+      {
+        "id": 77,
+        "key": "Great Marsh",
+        "name": "庞大湿地"
+      },
+      {
+        "id": 86,
+        "key": "Swampy Pit Level 1",
+        "name": "沼泽地洞第一层"
+      },
+      {
+        "id": 87,
+        "key": "Swampy Pit Level 2",
+        "name": "沼泽地洞第二层"
+      },
+      {
+        "id": 90,
+        "key": "Swampy Pit Level 3",
+        "name": "沼泽地洞第三层"
+      }
+    ],
+    "detail": "庞大湿地、沼泽地洞第一层、沼泽地洞第二层、沼泽地洞第三层"
+  },
+  {
+    "id": 21,
+    "act": 3,
+    "english": "Flayer Jungle and the Flayer Dungeon",
+    "name": "剥皮丛林 · 剥皮地窖",
+    "maps": [
+      {
+        "id": 78,
+        "key": "Flayer Jungle",
+        "name": "剥皮丛林"
+      },
+      {
+        "id": 88,
+        "key": "Flayer Dungeon Level 1",
+        "name": "剥皮地窖第一层"
+      },
+      {
+        "id": 89,
+        "key": "Flayer Dungeon Level 2",
+        "name": "剥皮地窖第二层"
+      },
+      {
+        "id": 91,
+        "key": "Flayer Dungeon Level 3",
+        "name": "剥皮地窖第三层"
+      }
+    ],
+    "detail": "剥皮丛林、剥皮地窖第一层、剥皮地窖第二层、剥皮地窖第三层"
+  },
+  {
+    "id": 22,
+    "act": 3,
+    "english": "Lower Kurast and the Kurast Sewers",
+    "name": "库拉斯特下层 · 下水道",
+    "maps": [
+      {
+        "id": 79,
+        "key": "Lower Kurast",
+        "name": "库拉斯特下层"
+      },
+      {
+        "id": 92,
+        "key": "Sewers Level 1",
+        "name": "下水道第一层"
+      },
+      {
+        "id": 93,
+        "key": "Sewers Level 2",
+        "name": "下水道第二层"
+      }
+    ],
+    "detail": "库拉斯特下层、下水道第一层、下水道第二层"
+  },
+  {
+    "id": 23,
+    "act": 3,
+    "english": "Kurast Bazaar, Ruined Temple, and Disused Fane",
+    "name": "库拉斯特商场 · 残破神殿 · 废弃的寺院",
+    "maps": [
+      {
+        "id": 80,
+        "key": "Kurast Bazaar",
+        "name": "库拉斯特商场"
+      },
+      {
+        "id": 94,
+        "key": "Ruined Temple",
+        "name": "残破神殿"
+      },
+      {
+        "id": 95,
+        "key": "Disused Fane",
+        "name": "废弃的寺院"
+      }
+    ],
+    "detail": "库拉斯特商场、残破神殿、废弃的寺院"
+  },
+  {
+    "id": 24,
+    "act": 3,
+    "english": "Upper Kurast, the Forgotten Reliquary, and Forgotten Temple",
+    "name": "库拉斯特上层 · 遗忘的圣物 · 遗忘神殿",
+    "maps": [
+      {
+        "id": 81,
+        "key": "Upper Kurast",
+        "name": "库拉斯特上层"
+      },
+      {
+        "id": 96,
+        "key": "Forgotten Reliquary",
+        "name": "遗忘的圣物"
+      },
+      {
+        "id": 97,
+        "key": "Forgotten Temple",
+        "name": "遗忘神殿"
+      }
+    ],
+    "detail": "库拉斯特上层、遗忘的圣物、遗忘神殿"
+  },
+  {
+    "id": 25,
+    "act": 3,
+    "english": "Travincal, the Ruined Fane, and Disused Reliquary",
+    "name": "崔凡克 · 残破的寺院 · 废弃的圣物",
+    "maps": [
+      {
+        "id": 83,
+        "key": "Travincal",
+        "name": "崔凡克"
+      },
+      {
+        "id": 98,
+        "key": "Ruined Fane",
+        "name": "残破的寺院"
+      },
+      {
+        "id": 99,
+        "key": "Disused Reliquary",
+        "name": "废弃的圣物"
+      }
+    ],
+    "detail": "崔凡克、残破的寺院、废弃的圣物"
+  },
+  {
+    "id": 26,
+    "act": 3,
+    "english": "Durance of Hate",
+    "name": "憎恨的囚牢",
+    "maps": [
+      {
+        "id": 100,
+        "key": "Durance of Hate Level 1",
+        "name": "憎恨的囚牢第一层"
+      },
+      {
+        "id": 101,
+        "key": "Durance of Hate Level 2",
+        "name": "憎恨的囚牢第二层"
+      },
+      {
+        "id": 102,
+        "key": "Durance of Hate Level 3",
+        "name": "憎恨的囚牢第三层"
+      }
+    ],
+    "detail": "憎恨的囚牢第一层、憎恨的囚牢第二层、憎恨的囚牢第三层"
+  },
+  {
+    "id": 27,
+    "act": 4,
+    "english": "Outer Steppes and the Plains of Despair",
+    "name": "郊外大草原 · 绝望平原",
+    "maps": [
+      {
+        "id": 104,
+        "key": "Outer Steppes",
+        "name": "郊外大草原"
+      },
+      {
+        "id": 105,
+        "key": "Plains of Despair",
+        "name": "绝望平原"
+      }
+    ],
+    "detail": "郊外大草原、绝望平原"
+  },
+  {
+    "id": 28,
+    "act": 4,
+    "english": "City of the Damned and the River of Flame",
+    "name": "神罚之城 · 火焰之河",
+    "maps": [
+      {
+        "id": 106,
+        "key": "City of the Damned",
+        "name": "神罚之城"
+      },
+      {
+        "id": 107,
+        "key": "River of Flame",
+        "name": "火焰之河"
+      }
+    ],
+    "detail": "神罚之城、火焰之河"
+  },
+  {
+    "id": 29,
+    "act": 4,
+    "english": "Chaos Sanctuary",
+    "name": "混沌庇难所",
+    "maps": [
+      {
+        "id": 108,
+        "key": "Chaos Sanctum",
+        "name": "混沌庇难所"
+      }
+    ],
+    "detail": "混沌庇难所"
+  },
+  {
+    "id": 30,
+    "act": 5,
+    "english": "Bloody Foothills and the Frigid Highlands",
+    "name": "血腥丘陵 · 冰冻高地",
+    "maps": [
+      {
+        "id": 110,
+        "key": "Bloody Foothills",
+        "name": "血腥丘陵"
+      },
+      {
+        "id": 111,
+        "key": "Rigid Highlands",
+        "name": "冰冻高地"
+      }
+    ],
+    "detail": "血腥丘陵、冰冻高地"
+  },
+  {
+    "id": 31,
+    "act": 5,
+    "english": "Arreat Plateau, Crystalline Passage, and Frozen River",
+    "name": "亚瑞特高原 · 水晶通道 · 冰河",
+    "maps": [
+      {
+        "id": 112,
+        "key": "Arreat Plateau",
+        "name": "亚瑞特高原"
+      },
+      {
+        "id": 113,
+        "key": "Crystalized Cavern Level 1",
+        "name": "水晶通道"
+      },
+      {
+        "id": 114,
+        "key": "Cellar of Pity",
+        "name": "冰河"
+      }
+    ],
+    "detail": "亚瑞特高原、水晶通道、冰河"
+  },
+  {
+    "id": 32,
+    "act": 5,
+    "english": "Glacial Trail, Drifter Cavern, and Frozen Tundra",
+    "name": "冰河路径 · 漂泊者洞穴 · 冰冻苔原",
+    "maps": [
+      {
+        "id": 115,
+        "key": "Crystalized Cavern Level 2",
+        "name": "冰河路径"
+      },
+      {
+        "id": 116,
+        "key": "Echo Chamber",
+        "name": "漂泊者洞穴"
+      },
+      {
+        "id": 117,
+        "key": "Tundra Wastelands",
+        "name": "冰冻苔原"
+      }
+    ],
+    "detail": "冰河路径、漂泊者洞穴、冰冻苔原"
+  },
+  {
+    "id": 33,
+    "act": 5,
+    "english": "Ancients' Way and the Icy Cellar",
+    "name": "远古之路 · 冰窖",
+    "maps": [
+      {
+        "id": 118,
+        "key": "Glacial Caves Level 1",
+        "name": "远古之路"
+      },
+      {
+        "id": 119,
+        "key": "Glacial Caves Level 2",
+        "name": "冰窖"
+      }
+    ],
+    "detail": "远古之路、冰窖"
+  },
+  {
+    "id": 34,
+    "act": 5,
+    "english": "Nihlathak's Temple",
+    "name": "尼拉塞克的神殿 · 悲痛之厅 · 痛苦之厅 · 瓦特之厅",
+    "maps": [
+      {
+        "id": 121,
+        "key": "Nihlathaks Temple",
+        "name": "尼拉塞克的神殿"
+      },
+      {
+        "id": 122,
+        "key": "Halls of Anguish",
+        "name": "悲痛之厅"
+      },
+      {
+        "id": 123,
+        "key": "Halls of Death's Calling",
+        "name": "痛苦之厅"
+      },
+      {
+        "id": 124,
+        "key": "Halls of Vaught",
+        "name": "瓦特之厅"
+      }
+    ],
+    "detail": "尼拉塞克的神殿、悲痛之厅、痛苦之厅、瓦特之厅"
+  },
+  {
+    "id": 35,
+    "act": 5,
+    "english": "Abaddon, the Pit of Acheron, and the Infernal Pit",
+    "name": "艾巴当 · 冥河之洞 · 地狱魔窟",
+    "maps": [
+      {
+        "id": 125,
+        "key": "Hell1",
+        "name": "艾巴当"
+      },
+      {
+        "id": 126,
+        "key": "Hell2",
+        "name": "冥河之洞"
+      },
+      {
+        "id": 127,
+        "key": "Hell3",
+        "name": "地狱魔窟"
+      }
+    ],
+    "detail": "艾巴当、冥河之洞、地狱魔窟"
+  },
+  {
+    "id": 36,
+    "act": 5,
+    "english": "Worldstone Keep and Throne of Destruction",
+    "name": "世界之石要塞 · 毁灭的王座",
+    "maps": [
+      {
+        "id": 128,
+        "key": "The Worldstone Keep Level 1",
+        "name": "世界之石要塞第一层"
+      },
+      {
+        "id": 129,
+        "key": "The Worldstone Keep Level 2",
+        "name": "世界之石要塞第二层"
+      },
+      {
+        "id": 130,
+        "key": "The Worldstone Keep Level 3",
+        "name": "世界之石要塞第三层"
+      },
+      {
+        "id": 131,
+        "key": "Throne of Destruction",
+        "name": "毁灭的王座"
+      }
+    ],
+    "detail": "世界之石要塞第一层、世界之石要塞第二层、世界之石要塞第三层、毁灭的王座"
+  }
+]

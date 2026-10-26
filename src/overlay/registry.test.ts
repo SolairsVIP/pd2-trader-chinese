@@ -6,6 +6,18 @@ import { isPanelVisible, type PanelState } from './OverlayProvider';
 const open = { open: true, placing: false } as PanelState;
 
 describe('PANEL_DEFS', () => {
+  it('keeps the corrupted-zone notice small, keyboard-free and hidden outside the game', () => {
+    expect(PANEL_DEFS.corruptedZone).toMatchObject({
+      size: { width: 720, height: 48 },
+      keyboard: 'never',
+      hideOnGameBlur: true,
+      resizable: false,
+      persist: false,
+    });
+    expect(isPanelVisible(PANEL_DEFS.corruptedZone, open, false)).toBe(false);
+    expect(isPanelVisible(PANEL_DEFS.corruptedZone, open, true)).toBe(true);
+    expect(isPanelVisible(PANEL_DEFS.corruptedZone, { ...open, open: false }, true)).toBe(false);
+  });
   it.each([
     ['Settings', 'settings'],
     ["What's New", 'changeLog'],

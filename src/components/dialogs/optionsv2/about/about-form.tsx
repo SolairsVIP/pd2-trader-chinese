@@ -63,6 +63,7 @@ export function AboutForm() {
       <div className="grid grid-cols-2 gap-3">
         <CreditTile role="开发者" names={['@Doreet']} />
         <CreditTile role="汉化与本地化" names={['Solaris']} />
+        <CreditTile role="腐化区提示作者" names={['Blyat']} />
       </div>
     </div>
   );

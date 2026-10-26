@@ -383,6 +383,25 @@ mod tests {
     }
 
     #[test]
+    fn top_zone_strip_and_bottom_dock_leave_the_game_between_them_click_through() {
+        let strip = rect(760, 8, 400, 32);
+        let dock = rect(1800, 800, 60, 230);
+        let expanded = rect(760, 8, 400, 240);
+        let open = clipped_rects(&[expanded, dock], 1920, 1080);
+        assert!(rects_contain(&open, 800, 200));
+        let collapsed = clipped_rects(&[strip, dock], 1920, 1080);
+        let crop = bounding_rect(&collapsed).unwrap();
+        let local: Vec<_> = collapsed.iter()
+            .map(|r| rect(r.x - crop.x, r.y - crop.y, r.width, r.height))
+            .collect();
+        assert!(rects_contain(&local, 800 - crop.x, 20 - crop.y));
+        assert!(rects_contain(&local, 1820 - crop.x, 900 - crop.y));
+        assert!(!rects_contain(&local, 800 - crop.x, 200 - crop.y));
+        assert!(!rects_contain(&local, 1300 - crop.x, 500 - crop.y));
+        assert!(!rects_contain(&local, 1700 - crop.x, 900 - crop.y));
+    }
+
+    #[test]
     fn menu_expands_the_host_and_closing_it_shrinks_it_again() {
         let dock = rect(1800, 800, 60, 230);
         let menu = rect(1650, 450, 210, 340);

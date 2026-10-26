@@ -34,6 +34,14 @@ function renderDock(props: Partial<React.ComponentProps<typeof ChatButton>> = {}
 }
 
 describe('ChatButton', () => {
+  it('restores the corrupted-zone card from More and closes the menu afterwards', () => {
+    const onCorruptedZoneClick = vi.fn();
+    renderDock({ onCorruptedZoneClick });
+    fireEvent.click(caret());
+    fireEvent.click(screen.getByRole('menuitem', { name: '腐化区提示' }));
+    expect(onCorruptedZoneClick).toHaveBeenCalledOnce();
+    expect(caret().getAttribute('aria-expanded')).toBe('false');
+  });
   it('nothing opens on hover: the menu only opens from the caret', () => {
     renderDock({ onSettingsClick: vi.fn() });
     act(() => {

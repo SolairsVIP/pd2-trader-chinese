@@ -8,7 +8,7 @@ import { chatDockRect, clampDockOffset, setChatDockOffset, useChatDockOffset } f
 /** Gap (px) between the dock and the net worth panel it opens. */
 const PANEL_GAP = 8;
 /** Room (px) the menu needs above the tab; with less, it opens below. */
-const MENU_ROOM = 300;
+const MENU_ROOM = 340;
 
 const ChatButtonPage: React.FC = () => {
   const { updateSettings } = useOptions();
@@ -52,6 +52,10 @@ const ChatButtonPage: React.FC = () => {
         // Already open (e.g. mid-listing): just bring it forward instead of switching it to manage mode
         onManageListingsClick={() => openPanel('quickList', undefined, { placement: 'gameCenter', keepPayload: true })}
         onSettingsClick={() => openPanel('settings')}
+        onCorruptedZoneClick={() => {
+          updateSettings({ corruptedZoneEnabled: true });
+          openPanel('corruptedZone');
+        }}
         onDisableClick={handleDisableClick}
         unreadCount={unreadCount}
         tradeOffersCount={tradeOffersCount}

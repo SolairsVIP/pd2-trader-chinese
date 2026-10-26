@@ -17,6 +17,7 @@ export type PanelId =
   | 'delist'
   | 'netWorthTicker'
   | 'netWorthPanel'
+  | 'corruptedZone'
   | 'market';
 
 export interface PanelPayloads {
@@ -55,6 +56,7 @@ export interface PanelPayloads {
   delist: { listings: MarketListingEntry[] };
   netWorthTicker: undefined;
   netWorthPanel: undefined;
+  corruptedZone: undefined;
   /** Filters to search right away (merged over defaults), a saved search to run, a listing to focus. */
   market: MarketPanelPayload | undefined;
 }

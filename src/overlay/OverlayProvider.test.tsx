@@ -133,6 +133,7 @@ const DEFS = {
   delist: def('delist'),
   netWorthTicker: def('netWorthTicker', { keyboard: 'never', keepMounted: true }),
   netWorthPanel: def('netWorthPanel'),
+  corruptedZone: def('corruptedZone', { keyboard: 'never' }),
   market: def('market', { placement: 'screenCenter', persist: true, closeOnBlur: true }),
 } satisfies PanelDefs;
 

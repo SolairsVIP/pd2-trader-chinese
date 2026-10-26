@@ -16,6 +16,7 @@ export type SettingsSectionId =
   | 'Interface'
   | 'Price Check'
   | 'Net Worth'
+  | 'Corrupted Zone'
   | 'Hotkeys'
   | 'Updates'
   | 'About';
@@ -38,12 +39,7 @@ export function SettingsSection({ title, description, children, as = 'h3', class
   return (
     <section className={cn('flex flex-col gap-y-4', className)}>
       <header className="space-y-1">
-        <Heading
-          className={cn(
-            'font-semibold tracking-tight text-foreground',
-            as === 'h3' ? 'text-xl' : 'text-base',
-          )}
-        >
+        <Heading className={cn('font-semibold tracking-tight text-foreground', as === 'h3' ? 'text-xl' : 'text-base')}>
           {title}
         </Heading>
         <p className="text-sm text-muted-foreground">{description}</p>
@@ -118,8 +114,7 @@ export function SettingsRow({
   labelClassName,
 }: SettingsRowProps) {
   const stacked = layout === 'stacked';
-  const labelBase =
-    'text-sm font-medium leading-snug text-foreground group-data-[disabled]/row:text-muted-foreground';
+  const labelBase = 'text-sm font-medium leading-snug text-foreground group-data-[disabled]/row:text-muted-foreground';
   const descriptionBase = 'text-[13px] leading-relaxed';
   return (
     <FormItem
@@ -179,11 +174,9 @@ export function SettingsLink({ to, children }: { to: SettingsSectionId; children
 /** Placeholder shown while settings load (forms used to render nothing). */
 export function SettingsSkeleton({ rows = 3 }: { rows?: number }) {
   return (
-    <div aria-hidden
-      className="divide-y divide-border/60 rounded-lg border border-border/70 bg-card/50">
+    <div aria-hidden className="divide-y divide-border/60 rounded-lg border border-border/70 bg-card/50">
       {Array.from({ length: rows }, (_, i) => (
-        <div key={i}
-          className="flex items-center justify-between gap-6 px-4 py-4">
+        <div key={i} className="flex items-center justify-between gap-6 px-4 py-4">
           <div className="flex-1 space-y-2">
             <Skeleton className="h-3.5 w-40" />
             <Skeleton className="h-3 w-3/4" />

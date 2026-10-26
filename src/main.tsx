@@ -19,6 +19,7 @@ import { GlobalErrorHandler } from './components/GlobalErrorHandler';
 import AppController from './pages/landing/AppController';
 import DelistHandler from './pages/delist/DelistHandler';
 import NetWorthOverlayController from './pages/net-worth/NetWorthOverlayController';
+import CorruptedZoneController from './pages/corrupted-zone/CorruptedZoneController';
 import { OverlayProvider, OverlayRoot } from './overlay';
 import { PANEL_DEFS } from './overlay/registry';
 import PrimitivesGallery from './pages/dev/PrimitivesGallery';
@@ -101,6 +102,7 @@ const AppRoot: React.FC = () => (
                   <AppController />
                   <DelistHandler />
                   <NetWorthOverlayController />
+                  <CorruptedZoneController />
                   <OverlayRoot />
                 </NetWorthProvider>
               </WhisperHistoryProvider>
@@ -115,11 +117,9 @@ const AppRoot: React.FC = () => (
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <BrowserRouter>
     <Routes>
-      <Route path="/"
-        element={<AppRoot />} />
+      <Route path="/" element={<AppRoot />} />
       {/* Browser mode: open straight into the market browser (see overlay/browser-launch.ts) */}
-      <Route path="/market"
-        element={<AppRoot />} />
+      <Route path="/market" element={<AppRoot />} />
       {/* Dev-only primitives gallery (screenshot harness); tree-shaken from production builds */}
       {process.env.NODE_ENV !== 'production' && (
         <Route

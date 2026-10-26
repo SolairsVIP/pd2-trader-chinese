@@ -6,6 +6,7 @@ import {
   Download,
   Keyboard,
   LayoutPanelTop,
+  MapPin,
   MessageSquare,
   Search,
   SlidersHorizontal,
@@ -28,6 +29,7 @@ import SettingsChat from './chat/layout';
 import SettingsInterface from './interface/layout';
 import SettingsStats from './stats/layout';
 import SettingsNetWorth from './networth/layout';
+import SettingsCorruptedZone from '@/pages/corrupted-zone/CorruptedZoneSettings';
 import { SettingsNavContext, type SettingsSectionId } from './settings-ui';
 
 interface INavItem {
@@ -43,6 +45,7 @@ const sidebarNavItems: INavItem[] = [
   { title: 'Interface', label: '界面', icon: LayoutPanelTop, content: <SettingsInterface /> },
   { title: 'Price Check', label: '物品估价', icon: Search, content: <SettingsStats /> },
   { title: 'Net Worth', label: '仓库估值', icon: TrendingUp, content: <SettingsNetWorth /> },
+  { title: 'Corrupted Zone', label: '腐化区提示', icon: MapPin, content: <SettingsCorruptedZone /> },
   { title: 'Hotkeys', label: '快捷键', icon: Keyboard, content: <SettingsHotkeys /> },
   { title: 'About', label: '关于', icon: Info, content: <SettingsAbout /> },
   { title: 'Updates', label: '更新', icon: Download, content: <SettingsUpdates /> },
@@ -151,12 +154,7 @@ export default function SettingsLayout() {
         <SettingsNavContext.Provider value={goTo}>
           <div className="flex min-h-0 flex-1">
             <aside className="flex w-52 shrink-0 flex-col border-r border-border/70 bg-muted/20 p-3 lg:w-56">
-              <nav
-                role="tablist"
-                aria-orientation="vertical"
-                aria-label="设置分类"
-                className="flex flex-col gap-0.5"
-              >
+              <nav role="tablist" aria-orientation="vertical" aria-label="设置分类" className="flex flex-col gap-0.5">
                 {sidebarNavItems.map((item, index) => {
                   const active = item.title === selectedItem.title;
                   const Icon = item.icon;
@@ -198,7 +196,7 @@ export default function SettingsLayout() {
                           active ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground',
                         )}
                       />
-              <span className="relative truncate">{item.label}</span>
+                      <span className="relative truncate">{item.label}</span>
                     </button>
                   );
                 })}
@@ -222,8 +220,7 @@ export default function SettingsLayout() {
               </div>
             </aside>
 
-            <ScrollArea ref={scrollRef}
-              className="min-h-0 flex-1">
+            <ScrollArea ref={scrollRef} className="min-h-0 flex-1">
               <motion.div
                 key={selectedItem.title}
                 id="settings-panel"

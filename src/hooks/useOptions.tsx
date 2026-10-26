@@ -74,6 +74,12 @@ export interface ISettings {
   debugLoggingEnabled?: boolean;
   netWorthTrackingEnabled?: boolean; // history snapshots on pd2trader.com; on unless explicitly turned off
   netWorthTickerEnabled?: boolean;
+  corruptedZoneEnabled?: boolean;
+  corruptedZoneWidth?: number;
+  corruptedZoneExpanded?: boolean;
+  corruptedZonePosition?: { x: number; y: number } | null;
+  corruptedZoneCustomColors?: boolean;
+  corruptedZoneColors?: { background: string; text: string; accent: string };
   netWorthTickerAnchor?: NetWorthTickerAnchor;
   /**
    * Legacy: the old ticker window's dragged top-left in physical screen pixels. No longer written; the ticker
@@ -140,6 +146,12 @@ const DEFAULT_SETTINGS: ISettings = {
   chatTemplates: DEFAULT_CHAT_TEMPLATES,
   netWorthTrackingEnabled: true,
   netWorthTickerEnabled: false,
+  corruptedZoneEnabled: true,
+  corruptedZoneWidth: 720,
+  corruptedZoneExpanded: false,
+  corruptedZonePosition: null,
+  corruptedZoneCustomColors: false,
+  corruptedZoneColors: { background: '#171e2b', text: '#f2f4f8', accent: '#d6b46a' },
   netWorthTickerAnchor: 'top-center',
   netWorthTickerOpacity: 90,
   netWorthAutoSnapshotMinutes: 15,

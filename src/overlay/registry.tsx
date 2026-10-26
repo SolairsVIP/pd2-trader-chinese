@@ -13,12 +13,24 @@ import { NET_WORTH_PANEL_SIZE } from '@/pages/net-worth/overlay';
 import { CHAT_DOCK_FRAME } from '@/pages/chat/chat-dock';
 import MarketBrowserPage from '@/pages/market/MarketBrowserPage';
 import type { PanelDefs } from './types';
+import CorruptedZonePage from '@/pages/corrupted-zone/CorruptedZonePage';
 
 /**
  * Every overlay panel. Each page owner tunes ONLY its own entry. Passed to <OverlayProvider defs={PANEL_DEFS}>
  * from main.tsx (kept out of '@/overlay' so importing the overlay API never pulls in every page).
  */
 export const PANEL_DEFS: PanelDefs = {
+  corruptedZone: {
+    id: 'corruptedZone',
+    component: CorruptedZonePage,
+    size: { width: 720, height: 48 },
+    resizable: false,
+    placement: { x: 0, y: 8 }, // content anchors to monitor top-centre, measured to its actual size
+    persist: false, // explicit position setting; no stale saved panel rect on first open
+    keyboard: 'never',
+    keepMounted: true,
+    hideOnGameBlur: true,
+  },
   // ---- itemSearch (Group Search) ----
   itemSearch: {
     id: 'itemSearch',

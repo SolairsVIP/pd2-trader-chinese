@@ -4,6 +4,7 @@ import {
   ChevronUp,
   Coins,
   List,
+  MapPin,
   type LucideIcon,
   MessageSquare,
   Settings,
@@ -25,6 +26,7 @@ interface ChatButtonProps {
   onStashValueClick?: () => void;
   onManageListingsClick?: () => void;
   onSettingsClick?: () => void;
+  onCorruptedZoneClick?: () => void;
   onDisableClick?: () => void;
   unreadCount?: number;
   tradeOffersCount?: number;
@@ -92,6 +94,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
   onStashValueClick,
   onManageListingsClick,
   onSettingsClick,
+  onCorruptedZoneClick,
   onDisableClick,
   unreadCount = 0,
   tradeOffersCount = 0,
@@ -196,6 +199,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
     },
     { label: '管理上架物品', icon: List, onClick: onManageListingsClick },
     { label: '设置', icon: Settings, onClick: onSettingsClick },
+    { label: '腐化区提示', icon: MapPin, onClick: onCorruptedZoneClick },
   ];
 
   return (
@@ -238,11 +242,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
               <Store style={icon} />
             </button>
           )}
-          <button type="button"
-            onClick={onChatClick}
-            className={segment}
-            aria-label="打开 PD2 聊天"
-            title="聊天">
+          <button type="button" onClick={onChatClick} className={segment} aria-label="打开 PD2 聊天" title="聊天">
             <MessageSquare style={icon} />
             <AnimatePresence>
               {unreadCount > 0 && (
@@ -256,11 +256,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
               )}
             </AnimatePresence>
           </button>
-          <button type="button"
-            onClick={onOffersClick}
-            className={segment}
-            aria-label="报价"
-            title="报价">
+          <button type="button" onClick={onOffersClick} className={segment} aria-label="报价" title="报价">
             <ShoppingBag style={icon} />
             <AnimatePresence>
               {tradeOffersCount > 0 && (
@@ -274,8 +270,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
               )}
             </AnimatePresence>
           </button>
-          <div aria-hidden
-            className="mx-auto h-px w-1/2 shrink-0 bg-border" />
+          <div aria-hidden className="mx-auto h-px w-1/2 shrink-0 bg-border" />
           <button
             type="button"
             data-dock-menu-toggle
@@ -337,8 +332,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
               )}
               {onDisableClick && (
                 <>
-                  <div role="separator"
-                    className="my-1 h-px bg-border" />
+                  <div role="separator" className="my-1 h-px bg-border" />
                   <button
                     type="button"
                     role="menuitem"
