@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, ChevronUp, FileText, Pencil, Plus, Star, X } from 'lucide-react';
@@ -16,6 +17,7 @@ const rowAction =
  * deleted, and new ones added. Every change is saved right away.
  */
 export function ChatTemplatesEditor() {
+  const __ui = useUiText();
   const { templates, add, update, remove, move } = useChatTemplates();
   // The template being edited ('new': the add form)
   const [editing, setEditing] = useState<string | null>(null);
@@ -23,11 +25,10 @@ export function ChatTemplatesEditor() {
   return (
     <div className="flex flex-col gap-3 px-4 py-3.5">
       <p className="text-[13px] leading-relaxed text-muted-foreground">
-        在聊天输入框中输入 <kbd className="rounded-sm border border-border/70 bg-muted/60 px-1 font-mono text-[11px]">/</kbd> 可使用这些模板。令牌会从当前会话自动填入；其他 {'{name}'} 占位符会在使用时询问。点击星标可将模板固定在聊天输入框上方。
-      </p>
+        {" " + __ui("在聊天输入框中输入") + " "}<kbd className="rounded-sm border border-border/70 bg-muted/60 px-1 font-mono text-[11px]">/</kbd> {" " + __ui("可使用这些模板。令牌会从当前会话自动填入；其他") + " "}{'{name}'} {" " + __ui("占位符会在使用时询问。点击星标可将模板固定在聊天输入框上方。") + " "}</p>
 
       {templates.length > 0 ? (
-        <ul aria-label="我的模板"
+        <ul aria-label={__ui("我的模板")}
           className="flex flex-col gap-1.5">
           <AnimatePresence initial={false}>
             {templates.map((template, index) => (
@@ -69,8 +70,8 @@ export function ChatTemplatesEditor() {
                         aria-pressed={!!template.favorite}
                         title={
                           template.favorite
-                            ? '已收藏：显示在聊天输入框上方'
-                            : '收藏此模板并显示在聊天输入框上方'
+                            ? __ui("已收藏：显示在聊天输入框上方")
+                            : __ui("收藏此模板并显示在聊天输入框上方")
                         }
                         className={cn(rowAction, template.favorite && 'text-warning hover:text-warning')}
                       >
@@ -81,7 +82,7 @@ export function ChatTemplatesEditor() {
                         onClick={() => move(index, -1)}
                         disabled={index === 0}
                         aria-label={`上移模板：${template.name}`}
-                        title="上移"
+                        title={__ui("上移")}
                         className={rowAction}
                       >
                         <ChevronUp />
@@ -91,7 +92,7 @@ export function ChatTemplatesEditor() {
                         onClick={() => move(index, 1)}
                         disabled={index === templates.length - 1}
                         aria-label={`下移模板：${template.name}`}
-                        title="下移"
+                        title={__ui("下移")}
                         className={rowAction}
                       >
                         <ChevronDown />
@@ -100,7 +101,7 @@ export function ChatTemplatesEditor() {
                         type="button"
                         onClick={() => setEditing(template.id)}
                         aria-label={`编辑模板：${template.name}`}
-                        title="编辑"
+                        title={__ui("编辑")}
                         className={rowAction}
                       >
                         <Pencil />
@@ -112,7 +113,7 @@ export function ChatTemplatesEditor() {
                           if (editing === template.id) setEditing(null);
                         }}
                         aria-label={`删除模板：${template.name}`}
-                        title="删除"
+                        title={__ui("删除")}
                         className={cn(rowAction, 'hover:bg-destructive/15 hover:text-destructive')}
                       >
                         <X />
@@ -128,14 +129,13 @@ export function ChatTemplatesEditor() {
         <p className="flex items-center justify-center gap-2 rounded-md border border-dashed border-border/70 px-3 py-2.5 text-xs text-muted-foreground">
           <FileText aria-hidden
             className="size-3.5" />
-          暂无自定义模板。
-        </p>
+          {" " + __ui("暂无自定义模板。") + " "}</p>
       )}
 
       {editing === 'new' ? (
         <div className="rounded-lg border border-border/70 bg-background/40">
           <ChatTemplateForm
-            label="新建模板"
+            label={__ui("新建模板")}
             initial={{ name: '', text: '' }}
             submitLabel="添加模板"
             onSubmit={(draft) => {
@@ -152,8 +152,7 @@ export function ChatTemplatesEditor() {
           className="self-start"
           onClick={() => setEditing('new')}>
           <Plus />
-          添加模板
-        </Button>
+          {" " + __ui("添加模板") + " "}</Button>
       )}
     </div>
   );

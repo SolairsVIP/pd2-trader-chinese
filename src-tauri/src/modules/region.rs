@@ -219,15 +219,10 @@ fn apply_small_window_region(window: &Window, rects: &[RegionRect]) -> Result<()
             }
         }
 
-        // Clear the old shape before moving; stale shapes must not momentarily expose the canvas.
-        let empty = CreateRectRgn(0, 0, 0, 0);
-        if empty == 0 || SetWindowRgn(hwnd, empty, 0) == 0 {
-            if empty != 0 {
-                DeleteObject(empty);
-            }
-            DeleteObject(region);
-            return Err("Failed to clear the old window region".into());
-        }
+        // Keep the previous bounded shape while moving. Replacing it with an empty region on
+        // every drag frame briefly hides the host and causes visible flicker. The host is always
+        // clipped to its window bounds, and is resized to the new content bounds below before
+        // the new region is applied, so this transition cannot expose the full virtual canvas.
         let mut old: windows_sys::Win32::Foundation::RECT = std::mem::zeroed();
         let x = workspace.x + crop.x;
         let y = workspace.y + crop.y;

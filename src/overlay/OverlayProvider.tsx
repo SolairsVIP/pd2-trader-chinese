@@ -174,6 +174,8 @@ export function computePlacement(
  * do not re-run on every transition. Only gameRect/gameFocused changes produce a new value.
  */
 export interface OverlayApi {
+  /** Temporarily protect an in-progress flow from outside-click/blur dismissal; explicit Close still works. */
+  guardPanelDismissal(id: PanelId, canDismiss: () => boolean): () => void;
   /** Opens or, if open, updates payload + brings to front (OpenOptions.keepPayload: only brings to front). */
   openPanel<K extends PanelId>(id: K, payload?: PanelPayloads[K], opts?: OpenOptions): void;
   closePanel(id: PanelId, options?: { focusGame?: boolean }): void;
@@ -433,11 +435,19 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
 
   const isOpen = useCallback((id: PanelId) => !!stateRef.current.panels[id]?.open, []);
   const bringToFront = useCallback((id: PanelId) => apply({ type: 'front', id }), [apply]);
+  const dismissalGuards = useRef(new Map<PanelId, () => boolean>());
+  const guardPanelDismissal = useCallback((id: PanelId, canDismiss: () => boolean) => {
+    dismissalGuards.current.set(id, canDismiss);
+    return () => {
+      if (dismissalGuards.current.get(id) === canDismiss) dismissalGuards.current.delete(id);
+    };
+  }, []);
+  const canDismissPanel = useCallback((id: PanelId) => dismissalGuards.current.get(id)?.() !== false, []);
 
   // No `state` here: panel transitions must not re-render (and re-run the effects of) every consumer.
   const api = useMemo<OverlayApi>(
-    () => ({ openPanel, closePanel, togglePanel, isOpen, bringToFront, gameRect, gameFocused }),
-    [openPanel, closePanel, togglePanel, isOpen, bringToFront, gameRect, gameFocused],
+    () => ({ openPanel, closePanel, togglePanel, isOpen, bringToFront, gameRect, gameFocused, guardPanelDismissal }),
+    [openPanel, closePanel, togglePanel, isOpen, bringToFront, gameRect, gameFocused, guardPanelDismissal],
   );
   const internals = useMemo<OverlayInternals>(
     () => ({ defs, state, gameFocused, commitRect }),
@@ -449,9 +459,9 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
   // hand-off to the game (e.g. before a hotkey copies the next item) isn't the user leaving.
   const closeDismissablePanels = useCallback(() => {
     for (const [id, panel] of Object.entries(stateRef.current.panels) as [PanelId, PanelState][]) {
-      if (panel.open && defs[id].closeOnBlur) closePanel(id, { focusGame: false });
+      if (panel.open && defs[id].closeOnBlur && canDismissPanel(id)) closePanel(id, { focusGame: false });
     }
-  }, [closePanel, defs]);
+  }, [closePanel, defs, canDismissPanel]);
 
   useEffect(() => {
     let blurTimer: ReturnType<typeof setTimeout> | undefined;
@@ -468,7 +478,7 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
         blurTimer = undefined;
         for (const [id, version] of candidates) {
           const panel = stateRef.current.panels[id];
-          if (panel?.open && panel.payloadVersion === version) closePanel(id, { focusGame: false });
+          if (panel?.open && panel.payloadVersion === version && canDismissPanel(id)) closePanel(id, { focusGame: false });
         }
       }, CLOSE_ON_BLUR_MS);
     });
@@ -476,7 +486,7 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
       clearTimeout(blurTimer);
       stop();
     };
-  }, [closePanel, defs]);
+  }, [closePanel, defs, canDismissPanel]);
 
   // A click outside every panel (into the game or another app) closes closeOnBlur panels even though the overlay
   // never took focus from the game. The Rust mouse hook behind it only runs while one is open.

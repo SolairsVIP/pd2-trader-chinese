@@ -12,11 +12,11 @@
 >
 > **中文版开发者：Solaris · 开源许可：[MIT License](LICENSE)**。保留原项目版权声明与许可证。
 
-**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.9/PD2.Trader.CN_0.11.9_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.9/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.9)**
+**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.10/PD2.Trader.CN_0.11.10_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.10/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.10)**
 
-当前版本：**0.11.9 正式版**，发布于 2026-10-26。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
+当前版本：**0.11.10 正式版**，发布于 2026-10-27。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
 
-本版新增腐化区独立背景透明度滑块，以及右下角红石入口的“腐化前试试手气”功能，支持七档诙谐提示与对应音效。[完整更新说明](docs/releases/v0.11.9.md)。
+本版优化覆盖层及登录提示，官网收藏接口不可用时支持本机收藏，并为腐化区提示等部分界面增加简繁显示切换。[完整更新说明](docs/releases/v0.11.10.md)。
 
 > **新增腐化区提示，原作者：Blyat。** 感谢提供原始工具与区域资料。横条默认顶部居中，仅在游戏激活时显示；右下角“更多 → 腐化区提示”可恢复显示，设置中可调整宽度与配色。参见 [功能说明、来源与验证范围](docs/corrupted-zone.md)。
 
@@ -146,6 +146,8 @@
 
 点击商品旁的**心形图标**收藏，再切换右上角的“**收藏**”页集中查看。在卡片视图中选中挂牌且未在输入文字时，可按 **<kbd>F</kbd>** 收藏／取消收藏。
 
+程序优先使用官网收藏；官网接口不可用时，改用**本机收藏**，并在收藏页标注。本机收藏按 PD2 账号分别保存在当前设备，**不会自动同步官网或其他电脑**。重新打开市场或手动刷新时会重新检查官网，恢复后切回官网收藏；原有本机收藏仍保留在设备上，不会自动上传或删除。
+
 ![市场的收藏页与已收藏商品](docs/images/guide/market-favorites.webp)
 
 <img src="docs/images/guide/market-favorite-button.webp" alt="红色心形表示商品已收藏" width="257">
@@ -225,7 +227,7 @@
 - [0.11.0 兼容范围与历史校验值](docs/releases/v0.11.0.md)
 - [0.11 大版本更新记录](docs/发布记录-0.11.0.md)
 - [历史修复与阶段性验证记录](docs/历史修复记录.md)
-- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.9/SHA256SUMS.txt)
+- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.10/SHA256SUMS.txt)
 - [上游原项目](https://github.com/errolgr/pd2-trade) · [本项目开源仓库](https://github.com/SolairsVIP/pd2-trader-chinese) · [MIT 许可证](LICENSE)
 
 <details>

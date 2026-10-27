@@ -8,6 +8,13 @@ afterEach(cleanup);
 const now = Date.parse('2026-10-26T00:00:00Z');
 
 describe('corrupted-zone card', () => {
+  it('switches the zone controls and countdown label to Traditional Chinese', () => {
+    const { rerender } = render(<CorruptedZoneCard now={now} expanded language="zh-TW" />);
+    expect(screen.getByLabelText('剩餘時間').textContent).toBe('15:00');
+    expect(screen.getByRole('group', { name: '主要傷害類型' })).toBeTruthy();
+    rerender(<CorruptedZoneCard now={now} expanded language="zh-CN" />);
+    expect(screen.getByLabelText('剩余时间').textContent).toBe('15:00');
+  });
   it('allows direct damage selection and keeps the countdown visible', () => {
     const change = vi.fn();
     const { rerender } = render(
@@ -28,7 +35,7 @@ describe('corrupted-zone card', () => {
   });
   it('keeps the collapsed display to one thin row with details available in its tooltip', () => {
     render(<CorruptedZoneCard now={now} expanded={false} />);
-    expect(screen.getByTitle(/建房时间表预报/).title).toContain('腐化区提示作者：Blyat');
+    expect(screen.getByTitle(/建房时间表预报/).title).not.toContain('Blyat');
     expect(screen.getByTitle(/建房时间表预报/).title).toContain('下一轮');
     expect(screen.getByLabelText('剩余时间').textContent).toBe('15:00');
     expect(screen.getByText("Nihlathak's Temple")).toBeTruthy();
@@ -40,7 +47,7 @@ describe('corrupted-zone card', () => {
     const expand = vi.fn();
     render(<CorruptedZoneCard now={now} expanded onExpand={expand} />);
     expect(screen.getAllByRole('listitem')).toHaveLength(4);
-    expect(screen.getByText('腐化区提示作者：Blyat')).toBeTruthy();
+    expect(screen.queryByText('腐化区提示作者：Blyat')).toBeNull();
     expect(screen.queryByText('建房时间表预报 · 以游戏公告为准')).toBeNull();
     expect(screen.queryByText('免疫资料：Hiim PD2（社区参考）')).toBeNull();
     expect(screen.queryByText(/社区免疫资料参考，按区域组合汇总/)).toBeNull();

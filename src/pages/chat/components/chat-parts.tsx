@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React from 'react';
 import { Check, CheckCheck } from 'lucide-react';
 import type { Conversation, Message, Participant } from '@/common/types/pd2-website/ChatTypes';
@@ -126,11 +127,12 @@ export function ReadReceipt({
   readerId?: string;
   className?: string;
 }) {
+  const __ui = useUiText();
   return readerId && message.reader_ids?.includes(readerId) ? (
-    <CheckCheck aria-label="已读"
+    <CheckCheck aria-label={__ui("已读")}
       className={cn('size-3.5 text-info', className)} />
   ) : (
-    <Check aria-label="已发送"
+    <Check aria-label={__ui("已发送")}
       className={cn('size-3.5 text-muted-foreground/80', className)} />
   );
 }

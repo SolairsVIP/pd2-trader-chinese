@@ -22,6 +22,7 @@ it('persists the local slider, previews it, and stays independent of the app tra
   applyWindowTransparency(70);
   const { container, unmount } = render(<CorruptedZoneSettings />);
   const panel = () => container.querySelector<HTMLElement>('[data-slot="window-panel"]')!;
+  expect(screen.getByLabelText('腐化区提示效果预览').contains(panel())).toBe(true);
   const slider = screen.getByRole('slider', { name: '腐化区背景透明度' });
   expect(slider.getAttribute('aria-valuenow')).toBe('0');
   expect(panel().style.getPropertyValue('--window-opacity')).toBe('100%');

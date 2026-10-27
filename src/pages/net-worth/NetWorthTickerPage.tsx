@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { isTauri } from '@tauri-apps/api/core';
 import { getCurrentWindow } from '@tauri-apps/api/window';
@@ -50,6 +51,7 @@ async function legacyTickerOrigin(position: { x: number; y: number }): Promise<{
  * game), or for `custom` where the user dragged it (the panel layout persists it). Click toggles the mini panel.
  */
 const NetWorthTicker: React.FC = () => {
+  const __ui = useUiText();
   const { settings, updateSettings } = useOptions();
   const { latest, status, lastSnapshotAt, currentSession } = useNetWorth();
   const { gameRect, togglePanel } = useOverlay();
@@ -200,7 +202,7 @@ const NetWorthTicker: React.FC = () => {
           onPointerCancel={endPress}
           style={{ opacity: (settings.netWorthTickerOpacity ?? 90) / 100 }}
           className="group flex h-7 cursor-pointer select-none items-center gap-2 whitespace-nowrap rounded-full border border-border bg-surface pl-3 pr-2.5 text-xs font-medium text-surface-foreground outline-none backdrop-blur-md transition-[background-color,border-color] duration-(--dur-fast) ease-out hover:border-ring/60 hover:bg-surface-elevated focus-visible:border-ring active:bg-muted"
-          title="仓库估值 — 点击查看详情，拖动以移动"
+          title={__ui("仓库估值 — 点击查看详情，拖动以移动")}
         >
           <span
             className={cn(
@@ -219,7 +221,7 @@ const NetWorthTicker: React.FC = () => {
                 className="h-3 w-px bg-border" />
               <span className={cn('tabular-nums', sessionDelta >= 0 ? 'text-success' : 'text-destructive')}>
                 <span className="text-[10px]">{sessionDelta >= 0 ? '▲' : '▼'}</span> {formatSignedHr(sessionDelta)}{' '}
-                <span className="font-normal opacity-80">本次会话</span>
+                <span className="font-normal opacity-80">{"" + __ui("本次会话") + ""}</span>
               </span>
             </>
           )}

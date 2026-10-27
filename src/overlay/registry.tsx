@@ -154,11 +154,12 @@ export const PANEL_DEFS: PanelDefs = {
     component: SignInPage,
     size: { width: 440, height: 340 },
     resizable: false,
-    placement: 'screenCenter',
+    placement: 'gameCenter',
     persist: false,
     keyboard: 'onPointerDown',
     keepMounted: false,
     hideOnGameBlur: false,
+    closeOnBlur: true,
   },
 
   // ---- delist (Group Search) ----

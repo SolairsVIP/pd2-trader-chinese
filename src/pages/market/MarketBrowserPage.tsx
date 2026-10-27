@@ -50,7 +50,7 @@ const MarketBrowserPage: React.FC = () => {
   const { payload, payloadVersion, close, visible } = usePanel<'market'>();
   const { openPanel } = useOverlay();
   const { settings } = useOptions();
-  const { marketApi } = usePd2Website();
+  const { marketApi, authData } = usePd2Website();
   const store = useMarketStore();
   const { viewMode } = store;
   const cards = viewMode === 'cards';
@@ -104,7 +104,7 @@ const MarketBrowserPage: React.FC = () => {
   }
 
   const search = useMarketSearch(marketApi ?? null, activated ? filters : null, { signedIn });
-  const favorites = useMarketFavorites(marketApi ?? null, signedIn && activated);
+  const favorites = useMarketFavorites(marketApi ?? null, signedIn && activated && visible, authData?.user?._id ?? '');
 
   const pickItemName = useCallback((itemName: string | undefined) => {
     setFilters((current) => (current ? { ...current, itemName } : current));
@@ -691,7 +691,9 @@ function ResultsPane({
 
   let status: React.ReactNode;
   if (tab === 'favorites') {
-    status = `${rows.length} 件收藏`;
+    status = favorites.source === 'local'
+      ? `${rows.length} 件本机收藏 · 仅当前设备，不同步官网`
+      : `${rows.length} 件收藏`;
   } else if (search.status === 'ready') {
     status = `${search.total.toLocaleString()} 个挂单`;
   } else if (loading) {

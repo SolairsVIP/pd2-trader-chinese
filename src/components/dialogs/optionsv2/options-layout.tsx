@@ -1,3 +1,4 @@
+import { zoneText } from '@/pages/corrupted-zone/language';
 import React, { useState } from 'react';
 import { motion, MotionConfig } from 'framer-motion';
 import {
@@ -101,6 +102,8 @@ const findSection = (section: SettingsSectionId | undefined) =>
   section ? sidebarNavItems.find((i) => i.title === section) : undefined;
 
 export default function SettingsLayout() {
+  const { settings } = useOptions();
+  const t = (text: string) => zoneText(text, settings.uiLanguage);
   // keepMounted panel: every openPanel('settings', { section }) switches to that section
   const { close, payload, payloadVersion } = usePanel<'settings'>();
   const [selectedItem, setSelectedItem] = useState<INavItem>(() => findSection(payload?.section) ?? sidebarNavItems[0]);
@@ -139,22 +142,27 @@ export default function SettingsLayout() {
         <WindowChrome
           title={
             <span className="flex items-baseline gap-2">
-              <span className="text-[15px]">设置</span>
+              <span className="text-[15px]">{t('设置')}</span>
               <span className="hidden truncate text-xs font-normal text-muted-foreground md:inline">
-                管理应用设置和偏好选项
+                {t('管理应用设置和偏好选项')}
               </span>
             </span>
           }
           gripId="titlebar-drag-handle"
           onClose={close}
-          closeLabel="关闭设置"
+          closeLabel={t('关闭设置')}
           className="h-12 px-4"
         />
 
         <SettingsNavContext.Provider value={goTo}>
           <div className="flex min-h-0 flex-1">
             <aside className="flex w-52 shrink-0 flex-col border-r border-border/70 bg-muted/20 p-3 lg:w-56">
-              <nav role="tablist" aria-orientation="vertical" aria-label="设置分类" className="flex flex-col gap-0.5">
+              <nav
+                role="tablist"
+                aria-orientation="vertical"
+                aria-label={t('设置分类')}
+                className="flex flex-col gap-0.5"
+              >
                 {sidebarNavItems.map((item, index) => {
                   const active = item.title === selectedItem.title;
                   const Icon = item.icon;
@@ -196,7 +204,7 @@ export default function SettingsLayout() {
                           active ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground',
                         )}
                       />
-                      <span className="relative truncate">{item.label}</span>
+                      <span className="relative truncate">{t(item.label)}</span>
                     </button>
                   );
                 })}
@@ -216,7 +224,7 @@ export default function SettingsLayout() {
                     saved && 'motion-safe:scale-125',
                   )}
                 />
-                <span>{saved ? '已保存' : '更改会自动保存'}</span>
+                <span>{t(saved ? '已保存' : '更改会自动保存')}</span>
               </div>
             </aside>
 

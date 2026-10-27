@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useCallback, useState } from 'react';
 import { MotionConfig, motion } from 'framer-motion';
 import { Loader2, Trash2 } from 'lucide-react';
@@ -14,6 +15,7 @@ import { listItem, listStagger } from '@/lib/motion';
 import { showToast, usePanel } from '@/overlay';
 
 export const DelistPage: React.FC = () => {
+  const __ui = useUiText();
   const { deleteMarketListing } = usePd2Website();
   const { payload, payloadVersion, close } = usePanel<'delist'>();
   const listings = payload?.listings ?? [];
@@ -56,7 +58,7 @@ export const DelistPage: React.FC = () => {
       <WindowPanel animate
         className="h-full w-full">
         <WindowChrome
-          title="选择要下架的物品"
+          title={__ui("选择要下架的物品")}
           icon={<Trash2 />}
           onClose={close}
           showGrip={false}
@@ -76,7 +78,7 @@ export const DelistPage: React.FC = () => {
             initial="hidden"
             animate="visible"
             role="list"
-            aria-label="该物品的上架列表"
+            aria-label={__ui("该物品的上架列表")}
           >
             {listings.map((listing) => {
               const isDeleting = deletingId === listing._id;
@@ -131,16 +133,14 @@ export const DelistPage: React.FC = () => {
                           role="status"
                         >
                           <Loader2 className="w-4 h-4 animate-spin" />
-                          正在下架…
-                        </span>
+                          {" " + __ui("正在下架…") + " "}</span>
                       ) : (
                         <span
                           aria-hidden
                           className="flex shrink-0 items-center gap-1 rounded-md px-1.5 py-1 text-xs font-medium text-destructive opacity-0 transition-opacity duration-(--dur-fast) group-hover/card:opacity-100 group-focus-visible/card:opacity-100"
                         >
                           <Trash2 className="size-3.5" />
-                          下架
-                        </span>
+                          {" " + __ui("下架") + " "}</span>
                       )}
                     </div>
                     <ItemStatsDisplay

@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import { describeUiError } from '@/lib/ui-error';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { localizeMarketItemName } from '@/lib/localize-item-name';
@@ -72,6 +73,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
   onTotalCountChange,
   onListingsChange,
 }) => {
+  const __ui = useUiText();
   const {
     getMarketListings,
     updateMarketListing,
@@ -572,7 +574,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
         <div className="flex items-center gap-2 pb-1 text-sm text-muted-foreground"
           role="status">
           <Loader2 className="size-4 animate-spin text-primary" />
-          <span>正在加载挂单…</span>
+          <span>{"" + __ui("正在加载挂单…") + ""}</span>
         </div>
         {[0, 1, 2].map((i) => (
           <div key={i}
@@ -601,7 +603,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
   if (error && listings.length === 0 && !searchQuery.trim()) {
     return (
       <EmptyState icon={<CircleAlert />}
-        title="无法加载挂单">
+        title={__ui("无法加载挂单")}>
         <p className="mb-4 text-destructive">{error}</p>
         <Button
           onClick={() => {
@@ -610,8 +612,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
           }}
         >
           <RotateCw className="size-4" />
-          重试
-        </Button>
+          {" " + __ui("重试") + " "}</Button>
       </EmptyState>
     );
   }
@@ -629,8 +630,8 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
             <Search className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="按物品名称搜索…"
-              aria-label="搜索挂单"
+              placeholder={__ui("按物品名称搜索…")}
+              aria-label={__ui("搜索挂单")}
               value={searchQuery}
               onChange={(e) => {
                 const newQuery = e.target.value;
@@ -652,7 +653,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
               {searchQuery && (
                 <motion.button
                   type="button"
-                  aria-label="清除搜索"
+                  aria-label={__ui("清除搜索")}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
@@ -668,9 +669,8 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
             </AnimatePresence>
           </div>
           <span className="flex shrink-0 items-center gap-1.5 text-xs font-medium text-muted-foreground">
-            已上架物品
-            <span className={countChip}>{isSearching ? filteredListings.length : totalCount}</span>
-            <span className="sr-only">（{isSearching ? filteredListings.length : totalCount} 件）</span>
+            {" " + __ui("已上架物品") + " "}<span className={countChip}>{isSearching ? filteredListings.length : totalCount}</span>
+            <span className="sr-only">（{isSearching ? filteredListings.length : totalCount} {" " + __ui("件）") + ""}</span>
           </span>
         </div>
         <Tooltip delayDuration={0}>
@@ -685,17 +685,15 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
               {isBumpingAll ? (
                 <>
                   <Loader2 className="h-3 w-3 animate-spin" />
-                  正在置顶…
-                </>
+                  {" " + __ui("正在置顶…") + " "}</>
               ) : (
                 <>
                   <ChevronsUp className="h-3.5 w-3.5" />
-                  全部置顶
-                </>
+                  {" " + __ui("全部置顶") + " "}</>
               )}
             </Button>
           </TooltipTrigger>
-          <TooltipContent>将所有符合条件的物品置顶</TooltipContent>
+          <TooltipContent>{"" + __ui("将所有符合条件的物品置顶") + ""}</TooltipContent>
         </Tooltip>
       </div>
 
@@ -710,7 +708,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
           >
             <div className="flex items-center gap-2 p-3">
               <Loader2 className="h-4 w-4 animate-spin text-primary" />
-              <span className="text-sm text-muted-foreground">正在搜索…</span>
+              <span className="text-sm text-muted-foreground">{"" + __ui("正在搜索…") + ""}</span>
             </div>
           </motion.div>
         )}
@@ -722,17 +720,16 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
           animate="visible">
           {displayListings.length === 0 && isSearching && !isLoadingAllListings && (
             <EmptyState icon={<SearchX />}
-              title="没有匹配结果"
+              title={__ui("没有匹配结果")}
               className="p-6">
-              没有找到与“{searchQuery}”匹配的物品
-            </EmptyState>
+              {" " + __ui("没有找到与“") + ""}{searchQuery}{"" + __ui("”匹配的物品") + " "}</EmptyState>
           )}
           {showEmpty && (
             <EmptyState icon={<Store />}
-              title={authData ? '没有正在出售的挂单' : '尚未登录'}>
+              title={authData ? __ui("没有正在出售的挂单") : __ui("尚未登录")}>
               {authData
-                ? '从共享仓库上架的物品会显示在这里。'
-                : '请登录 PD2 账号以管理挂单。'}
+                ? __ui("从共享仓库上架的物品会显示在这里。")
+                : __ui("请登录 PD2 账号以管理挂单。")}
             </EmptyState>
           )}
           <AnimatePresence initial={false}>
@@ -804,8 +801,8 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
                                     <FormItem className="m-0 p-0 min-w-0 flex-1">
                                       <FormControl>
                                         <Input
-                                          placeholder="价格备注…"
-                                          aria-label="价格备注"
+                                          placeholder={__ui("价格备注…")}
+                                          aria-label={__ui("价格备注")}
                                           {...field}
                                           className="h-8 text-xs"
                                           autoComplete="off"
@@ -827,7 +824,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
                                           min={0}
                                           step={0.01}
                                           placeholder="HR"
-                                          aria-label="HR 价格"
+                                          aria-label={__ui("HR 价格")}
                                           {...field}
                                           className="h-8 text-xs tabular-nums"
                                           value={editForm.getValues('price') || ''}
@@ -844,8 +841,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
                                     disabled={isEditing && !isEditFormValid}
                                   >
                                     <Check className="size-3.5" />
-                                    保存
-                                  </Button>
+                                    {" " + __ui("保存") + " "}</Button>
                                   <Button
                                     type="button"
                                     size="sm"
@@ -853,8 +849,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
                                     className="h-8 text-xs"
                                     onClick={() => setEditingListingId(null)}
                                   >
-                                    取消
-                                  </Button>
+                                    {" " + __ui("取消") + " "}</Button>
                                 </ButtonGroup>
                               </form>
                             </Form>
@@ -883,12 +878,11 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
                                     ) : (
                                       <>
                                         <ArrowUp className="size-3.5" />
-                                        置顶
-                                      </>
+                                        {" " + __ui("置顶") + " "}</>
                                     )}
                                   </Button>
                                 </TooltipTrigger>
-                                <TooltipContent>将挂单置顶</TooltipContent>
+                                <TooltipContent>{"" + __ui("将挂单置顶") + ""}</TooltipContent>
                               </Tooltip>
                             ) : (
                               <Tooltip delayDuration={0}>
@@ -899,11 +893,10 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
                                       className="h-7 gap-1 px-2.5 text-xs"
                                       disabled>
                                       <Clock className="size-3.5" />
-                                      置顶
-                                    </Button>
+                                      {" " + __ui("置顶") + " "}</Button>
                                   </span>
                                 </TooltipTrigger>
-                                <TooltipContent>可在 {timeUntilBump(listing)} 后将此物品置顶</TooltipContent>
+                                <TooltipContent>{"" + __ui("可在") + " "}{timeUntilBump(listing)} {" " + __ui("后将此物品置顶") + ""}</TooltipContent>
                               </Tooltip>
                             )}
                             <Tooltip delayDuration={0}>
@@ -915,16 +908,15 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
                                   onClick={() => handleEdit(listing)}
                                 >
                                   <Pencil className="size-3" />
-                                  编辑
-                                </Button>
+                                  {" " + __ui("编辑") + " "}</Button>
                               </TooltipTrigger>
-                              <TooltipContent>编辑价格</TooltipContent>
+                              <TooltipContent>{"" + __ui("编辑价格") + ""}</TooltipContent>
                             </Tooltip>
                             <Tooltip delayDuration={0}>
                               <TooltipTrigger asChild>
                                 <button
                                   type="button"
-                                  aria-label={isDeleting ? '正在删除…' : '删除挂单'}
+                                  aria-label={isDeleting ? __ui("正在删除…") : __ui("删除挂单")}
                                   disabled={isDeleting}
                                   className={cn(
                                     iconButton,
@@ -939,13 +931,13 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
                                   {isDeleting ? <Loader2 className="animate-spin" /> : <Trash2 />}
                                 </button>
                               </TooltipTrigger>
-                              <TooltipContent>{isDeleting ? '正在删除…' : '删除挂单'}</TooltipContent>
+                              <TooltipContent>{isDeleting ? __ui("正在删除…") : __ui("删除挂单")}</TooltipContent>
                             </Tooltip>
                             <Tooltip delayDuration={0}>
                               <TooltipTrigger asChild>
                                 <button
                                   type="button"
-                                  aria-label="前往交易网站"
+                                  aria-label={__ui("前往交易网站")}
                                   className={cn(iconButton, 'hover:bg-accent hover:text-accent-foreground')}
                                   onClick={() => {
                                     trackEvent('listed_items_trade_url_opened');
@@ -955,7 +947,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
                                   <SquareArrowOutUpRight />
                                 </button>
                               </TooltipTrigger>
-                              <TooltipContent>前往交易网站</TooltipContent>
+                              <TooltipContent>{"" + __ui("前往交易网站") + ""}</TooltipContent>
                             </Tooltip>
                           </motion.div>
                         )}
@@ -970,7 +962,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
                         aria-expanded={statsOpen}
                         className="inline-flex items-center gap-0.5 rounded-sm text-xs font-medium text-primary outline-none transition-colors duration-(--dur-fast) hover:text-primary/80 focus-visible:ring-2 focus-visible:ring-ring/60"
                       >
-                        {statsOpen ? '收起属性' : '显示属性'}
+                        {statsOpen ? __ui("收起属性") : __ui("显示属性")}
                         <ChevronDown
                           className={cn('size-3 transition-transform duration-(--dur-fast)', statsOpen && 'rotate-180')}
                         />

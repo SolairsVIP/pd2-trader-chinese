@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import { describeUiError } from '@/lib/ui-error';
 import React, { useEffect, useId, useMemo, useState } from 'react';
 import { motion, MotionConfig } from 'framer-motion';
@@ -20,13 +21,13 @@ const SPARK_WIDTH = 320;
 const SPARK_HEIGHT = 56;
 
 const Sparkline: React.FC<{ values: number[] }> = ({ values }) => {
+  const __ui = useUiText();
   const gradientId = useId();
   const reduce = useReducedMotionSafe();
   if (values.length < 2) {
     return (
       <div className="flex h-14 items-center justify-center rounded-md border border-dashed border-border text-xs text-muted-foreground">
-        快照数量不足
-      </div>
+        {" " + __ui("快照数量不足") + " "}</div>
     );
   }
   const min = Math.min(...values);
@@ -88,6 +89,7 @@ const Sparkline: React.FC<{ values: number[] }> = ({ values }) => {
 };
 
 const NetWorthPanel: React.FC = () => {
+  const __ui = useUiText();
   const { settings } = useOptions();
   const {
     owner: ctxOwner,
@@ -174,7 +176,7 @@ const NetWorthPanel: React.FC = () => {
     <WindowPanel animate
       className="h-full w-full">
       <WindowChrome
-        title="仓库估值"
+        title={__ui("仓库估值")}
         icon={<TrendingUp />}
         closeLabel="隐藏"
         onClose={close}
@@ -187,8 +189,7 @@ const NetWorthPanel: React.FC = () => {
               onClick={() => openNetWorth('history')}
             >
               <ExternalLink className="size-3.5" />
-              打开完整视图
-            </Button>
+              {" " + __ui("打开完整视图") + " "}</Button>
           ) : undefined
         }
       />
@@ -199,14 +200,12 @@ const NetWorthPanel: React.FC = () => {
             <LogIn className="size-5" />
           </span>
           <p className="max-w-60 text-sm text-muted-foreground">
-            登录 PD2 账号以追踪仓库估值。
-          </p>
+            {" " + __ui("登录 PD2 账号以追踪仓库估值。") + " "}</p>
           {!token && (
             <Button size="sm"
               onClick={() => openPanel('signIn')}>
               <LogIn className="size-3.5" />
-              登录
-            </Button>
+              {" " + __ui("登录") + " "}</Button>
           )}
         </div>
       ) : (
@@ -227,8 +226,7 @@ const NetWorthPanel: React.FC = () => {
                 )}
                 {latest && latest.valuation.uncertainHr > 0 && (
                   <div className="mt-1 text-xs text-muted-foreground tabular-nums">
-                    +{formatHr(latest.valuation.uncertainHr)} HR 待确认
-                  </div>
+                    +{formatHr(latest.valuation.uncertainHr)} {" " + __ui("HR 待确认") + " "}</div>
                 )}
               </div>
               {sessionOpen && currentSession && sessionDelta !== null && (
@@ -239,11 +237,9 @@ const NetWorthPanel: React.FC = () => {
                       sessionDelta >= 0 ? 'bg-success/12 text-success' : 'bg-destructive/12 text-destructive',
                     )}
                   >
-                    {formatSignedHr(sessionDelta)} HR 本次收益
-                  </span>
+                    {formatSignedHr(sessionDelta)} {" " + __ui("HR 本次收益") + " "}</span>
                   <span className="text-muted-foreground tabular-nums">
-                    {formatHr(currentSession.hrPerHour)} HR/h · {Math.round(currentSession.durationMinutes)} 分钟
-                  </span>
+                    {formatHr(currentSession.hrPerHour)} HR/h · {Math.round(currentSession.durationMinutes)} {" " + __ui("分钟") + " "}</span>
                 </div>
               )}
             </div>
@@ -254,7 +250,7 @@ const NetWorthPanel: React.FC = () => {
                   <div className="mb-1 flex items-center justify-between text-xs text-muted-foreground">
                     <span className="flex items-center gap-1.5">
                       {sessionOpen && <span className="size-1.5 rounded-full bg-success" />}
-                      {sessionOpen ? '本次会话' : '最近 24 小时'}
+                      {sessionOpen ? __ui("本次会话") : __ui("最近 24 小时")}
                     </span>
                     {sparkChange !== null && (
                       <span className={cn('tabular-nums', sparkChange >= 0 ? 'text-success' : 'text-destructive')}>
@@ -265,9 +261,9 @@ const NetWorthPanel: React.FC = () => {
                   <Sparkline values={sessionValues} />
                 </div>
                 <div className="min-h-0 flex-1 overflow-y-auto">
-                  <div className="mb-1 text-xs text-muted-foreground">最近的估值快照</div>
+                  <div className="mb-1 text-xs text-muted-foreground">{"" + __ui("最近的估值快照") + ""}</div>
                   {recentDeltas.length === 0 ? (
-                    <div className="text-xs text-muted-foreground">尚无估值变化记录。</div>
+                    <div className="text-xs text-muted-foreground">{"" + __ui("尚无估值变化记录。") + ""}</div>
                   ) : (
                     <motion.ul variants={listStagger}
                       initial="hidden"
@@ -297,8 +293,7 @@ const NetWorthPanel: React.FC = () => {
               </>
             ) : (
               <p className="flex-1 rounded-md border border-dashed border-border p-3 text-xs leading-relaxed text-muted-foreground">
-                历史记录已关闭。请前往“设置 → 仓库估值”开启“保存仓库估值历史”，以查看会话和估值变化。
-              </p>
+                {" " + __ui("历史记录已关闭。请前往“设置 → 仓库估值”开启“保存仓库估值历史”，以查看会话和估值变化。") + " "}</p>
             )}
 
             {status === 'error' && error && (
@@ -320,8 +315,7 @@ const NetWorthPanel: React.FC = () => {
               onClick={() => run('snapshot', () => takeSnapshot('manual'))}
             >
               {busy === 'snapshot' ? <Loader2 className="size-3.5 animate-spin" /> : <Camera className="size-3.5" />}
-              立即记录快照
-            </Button>
+              {" " + __ui("立即记录快照") + " "}</Button>
             {trackingEnabled && (
               <Button
                 size="sm"
@@ -337,7 +331,7 @@ const NetWorthPanel: React.FC = () => {
                 ) : (
                   <Play className="size-3.5" />
                 )}
-                {sessionOpen ? '结束会话' : '开始会话'}
+                {sessionOpen ? __ui("结束会话") : __ui("开始会话")}
               </Button>
             )}
           </div>

@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -48,6 +49,7 @@ const chatFormSchema = z.object({
 type ChatFormValues = z.infer<typeof chatFormSchema>;
 
 export function ChatForm() {
+  const __ui = useUiText();
   const { settings, isLoading, updateSettings } = useOptions();
   const [newIgnorePlayer, setNewIgnorePlayer] = React.useState('');
   const debounceRef = React.useRef<NodeJS.Timeout | null>(null);
@@ -144,26 +146,26 @@ export function ChatForm() {
   return (
     <Form {...form}>
       <div className="flex flex-col gap-y-6">
-        <SettingsGroup title="通知">
+        <SettingsGroup title={__ui("通知")}>
           <FormField
             control={form.control}
             name="whisperNotificationTiming"
             render={({ field }) => (
               <SettingsRow
-                label="通知时机"
-                description="根据 Diablo II 是否处于前台，选择播放密语通知的时机。"
+                label={__ui("通知时机")}
+                description={__ui("根据 Diablo II 是否处于前台，选择播放密语通知的时机。")}
                 control={
                   <Select onValueChange={field.onChange} value={field.value || 'both'}>
                     <FormControl>
                       <SelectTrigger className="w-[220px]">
-                        <SelectValue placeholder="选择通知时机" />
+                        <SelectValue placeholder={__ui("选择通知时机")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="in-game">仅在游戏中</SelectItem>
-                      <SelectItem value="out-of-game">仅在游戏外</SelectItem>
-                      <SelectItem value="both">始终</SelectItem>
-                      <SelectItem value="never">从不</SelectItem>
+                      <SelectItem value="in-game">{"" + __ui("仅在游戏中") + ""}</SelectItem>
+                      <SelectItem value="out-of-game">{"" + __ui("仅在游戏外") + ""}</SelectItem>
+                      <SelectItem value="both">{"" + __ui("始终") + ""}</SelectItem>
+                      <SelectItem value="never">{"" + __ui("从不") + ""}</SelectItem>
                     </SelectContent>
                   </Select>
                 }
@@ -179,8 +181,7 @@ export function ChatForm() {
                       className="flex items-center gap-2 rounded-md border border-warning/40 bg-warning/10 px-3 py-2 text-xs text-warning"
                     >
                       <BellOff className="size-3.5 shrink-0" />
-                      通知已关闭。请选择其他时机以编辑下方设置。
-                    </motion.p>
+                      {" " + __ui("通知已关闭。请选择其他时机以编辑下方设置。") + " "}</motion.p>
                   )}
                 </AnimatePresence>
                 <FormMessage />
@@ -193,8 +194,8 @@ export function ChatForm() {
             render={({ field }) => (
               <SettingsRow
                 disabled={isDisabled}
-                label="常规通知"
-                description="收到非交易密语或网站聊天新消息时播放提示音。"
+                label={__ui("常规通知")}
+                description={__ui("收到非交易密语或网站聊天新消息时播放提示音。")}
                 control={
                   <FormControl>
                     <Switch checked={field.value ?? true} onCheckedChange={field.onChange} disabled={isDisabled} />
@@ -209,8 +210,8 @@ export function ChatForm() {
             render={({ field }) => (
               <SettingsRow
                 disabled={isDisabled}
-                label="弹出通知"
-                description="Diablo II 窗口未处于前台时显示弹出通知。"
+                label={__ui("弹出通知")}
+                description={__ui("Diablo II 窗口未处于前台时显示弹出通知。")}
                 control={
                   <FormControl>
                     <Switch checked={field.value ?? true} onCheckedChange={field.onChange} disabled={isDisabled} />
@@ -238,7 +239,7 @@ export function ChatForm() {
                             typesField.onChange(updated);
                           };
                           return (
-                            <div role="group" aria-label="弹出通知类型" className="flex flex-wrap gap-2">
+                            <div role="group" aria-label={__ui("弹出通知类型")} className="flex flex-wrap gap-2">
                               {TOAST_TYPES.map((type) => {
                                 const isActive = types.includes(type.id);
                                 return (
@@ -277,8 +278,8 @@ export function ChatForm() {
             render={({ field }) => (
               <SettingsRow
                 disabled={isDisabled}
-                label="交易通知"
-                description="收到交易密语或网站报价时播放提示音。"
+                label={__ui("交易通知")}
+                description={__ui("收到交易密语或网站报价时播放提示音。")}
                 control={
                   <FormControl>
                     <Switch checked={field.value ?? true} onCheckedChange={field.onChange} disabled={isDisabled} />
@@ -293,8 +294,8 @@ export function ChatForm() {
             render={({ field }) => (
               <SettingsRow
                 disabled={isDisabled}
-                label="公告通知"
-                description="启用来自 *announcements 的消息通知。默认忽略公告。"
+                label={__ui("公告通知")}
+                description={__ui("启用来自 *announcements 的消息通知。默认忽略公告。")}
                 control={
                   <FormControl>
                     <Switch checked={field.value ?? false} onCheckedChange={field.onChange} disabled={isDisabled} />
@@ -309,8 +310,8 @@ export function ChatForm() {
             render={({ field }) => (
               <SettingsRow
                 disabled={isDisabled}
-                label="玩家加入通知"
-                description="有玩家加入游戏时弹出通知（仅在 Diablo II 未处于前台时）。默认关闭。"
+                label={__ui("玩家加入通知")}
+                description={__ui("有玩家加入游戏时弹出通知（仅在 Diablo II 未处于前台时）。默认关闭。")}
                 control={
                   <FormControl>
                     <Switch checked={field.value ?? false} onCheckedChange={field.onChange} disabled={isDisabled} />
@@ -322,10 +323,10 @@ export function ChatForm() {
         </SettingsGroup>
 
         <SettingsGroup
-          title="忽略名单"
+          title={__ui("忽略名单")}
           aside={
             ignoreList.length > 0 && (
-              <span className="text-xs tabular-nums text-muted-foreground">{ignoreList.length} 名玩家</span>
+              <span className="text-xs tabular-nums text-muted-foreground">{ignoreList.length} {" " + __ui("名玩家") + ""}</span>
             )
           }
         >
@@ -336,13 +337,13 @@ export function ChatForm() {
               <SettingsRow
                 layout="stacked"
                 disabled={isDisabled}
-                label="忽略名单"
-                description="名单中的玩家不会触发密语通知。"
+                label={__ui("忽略名单")}
+                description={__ui("名单中的玩家不会触发密语通知。")}
                 control={
                   <>
                     <FormControl>
                       <Input
-                        placeholder="输入要忽略的玩家名称"
+                        placeholder={__ui("输入要忽略的玩家名称")}
                         value={newIgnorePlayer}
                         onChange={(e) => setNewIgnorePlayer(e.target.value)}
                         onKeyDown={(e) => {
@@ -362,8 +363,7 @@ export function ChatForm() {
                       disabled={!newIgnorePlayer.trim() || isDisabled}
                     >
                       <UserX />
-                      添加
-                    </Button>
+                      {" " + __ui("添加") + " "}</Button>
                   </>
                 }
               >
@@ -397,8 +397,7 @@ export function ChatForm() {
                   </div>
                 ) : (
                   <p className="rounded-md border border-dashed border-border/70 px-3 py-2.5 text-center text-xs text-muted-foreground">
-                    暂无忽略的玩家。
-                  </p>
+                    {" " + __ui("暂无忽略的玩家。") + " "}</p>
                 )}
                 <FormMessage />
               </SettingsRow>
@@ -406,7 +405,7 @@ export function ChatForm() {
           />
         </SettingsGroup>
 
-        <SettingsGroup title="声音">
+        <SettingsGroup title={__ui("声音")}>
           <FormField
             control={form.control}
             name="whisperNotificationVolume"
@@ -418,10 +417,10 @@ export function ChatForm() {
                   disabled={isDisabled}
                   label={
                     <>
-                      通知音量：<span className="tabular-nums">{volume}%</span>
+                      {" " + __ui("通知音量：") + ""}<span className="tabular-nums">{volume}%</span>
                     </>
                   }
-                  description="调整密语通知音量（0–100%）。"
+                  description={__ui("调整密语通知音量（0–100%）。")}
                   control={
                     <div className="flex w-[240px] items-center gap-3">
                       <VolumeIcon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
@@ -449,8 +448,8 @@ export function ChatForm() {
             name="marketAlertSoundEnabled"
             render={({ field }) => (
               <SettingsRow
-                label="市场提醒音效"
-                description="关注的市场搜索出现新挂单时，随弹出提醒播放提示音。"
+                label={__ui("市场提醒音效")}
+                description={__ui("关注的市场搜索出现新挂单时，随弹出提醒播放提示音。")}
                 control={
                   <FormControl>
                     <Switch checked={field.value ?? true} onCheckedChange={field.onChange} />
@@ -471,16 +470,16 @@ export function ChatForm() {
                   disabled={soundOff}
                   label={
                     <>
-                      市场提醒音量：<span className="tabular-nums">{volume}%</span>
+                      {" " + __ui("市场提醒音量：") + ""}<span className="tabular-nums">{volume}%</span>
                     </>
                   }
-                  description="调整市场提醒音量（0–100%）。"
+                  description={__ui("调整市场提醒音量（0–100%）。")}
                   control={
                     <div className="flex w-[240px] items-center gap-3">
                       <VolumeIcon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
                       <FormControl>
                         <Slider
-                          aria-label="市场提醒音量"
+                          aria-label={__ui("市场提醒音量")}
                           min={0}
                           max={100}
                           step={1}
@@ -500,7 +499,7 @@ export function ChatForm() {
           />
         </SettingsGroup>
 
-        <SettingsGroup title="消息模板">
+        <SettingsGroup title={__ui("消息模板")}>
           <ChatTemplatesEditor />
           <FormField
             control={form.control}
@@ -508,7 +507,7 @@ export function ChatForm() {
             render={({ field }) => (
               <SettingsRow
                 layout="stacked"
-                label="接受报价消息模板"
+                label={__ui("接受报价消息模板")}
                 description={
                   <PlaceholderHint
                     action="接受报价"
@@ -537,7 +536,7 @@ export function ChatForm() {
             render={({ field }) => (
               <SettingsRow
                 layout="stacked"
-                label="拒绝报价消息模板"
+                label={__ui("拒绝报价消息模板")}
                 description={
                   <PlaceholderHint
                     action="拒绝报价"
@@ -562,7 +561,7 @@ export function ChatForm() {
             render={({ field }) => (
               <SettingsRow
                 layout="stacked"
-                label="物品售出消息模板"
+                label={__ui("物品售出消息模板")}
                 description={
                   <PlaceholderHint
                     action="标记物品已售出"
@@ -602,10 +601,11 @@ function PlaceholderHint({
   text: string;
   onInsert: (token: string) => void;
 }) {
+  const __ui = useUiText();
   const asks = templatePlaceholders(text);
   return (
     <span className="flex flex-col gap-1.5">
-      <span>自定义{action}时复制的消息。可用占位符：</span>
+      <span>{"" + __ui("自定义") + ""}{action}{"" + __ui("时复制的消息。可用占位符：") + ""}</span>
       <span className="flex flex-wrap gap-1.5">
         {tokens.map((token) => (
           <button
@@ -619,7 +619,7 @@ function PlaceholderHint({
           </button>
         ))}
       </span>
-      {asks.length > 0 && <span>在聊天中使用时需要填写：{asks.map((name) => `{${name}}`).join(' ')}</span>}
+      {asks.length > 0 && <span>{"" + __ui("在聊天中使用时需要填写：") + ""}{asks.map((name) => `{${name}}`).join(' ')}</span>}
     </span>
   );
 }

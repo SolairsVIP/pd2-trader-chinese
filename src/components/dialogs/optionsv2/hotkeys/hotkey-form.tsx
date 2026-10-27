@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -148,6 +149,7 @@ const HOTKEY_ROWS: HotkeyRowConfig[] = [
 ];
 
 export function HotkeyForm() {
+  const __ui = useUiText();
   const { settings, isLoading, updateSettings } = useOptions();
 
   const form = useForm<HotkeyFormValues>({
@@ -212,7 +214,7 @@ export function HotkeyForm() {
   return (
     <Form {...form}>
       <div className="flex flex-col gap-y-4">
-        <SettingsGroup title="快捷键">
+        <SettingsGroup title={__ui("快捷键")}>
           {HOTKEY_ROWS.map((row) => {
             const warning = warningFor(row);
             return (
@@ -222,8 +224,8 @@ export function HotkeyForm() {
                 name={row.key}
                 render={({ field: keyField }) => (
                   <SettingsRow
-                    label={row.label}
-                    description={row.description}
+                    label={__ui(row.label)}
+                    description={__ui(row.description)}
                     control={
                       <>
                         <FormField
@@ -233,7 +235,7 @@ export function HotkeyForm() {
                             <Tabs defaultValue={'ctrl'}
                               value={modField.value as string}>
                               <TabsList className="h-8"
-                                aria-label={`${row.label} 的组合修饰键`}>
+                                aria-label={`${__ui(row.label)} 的组合修饰键`}>
                                 <TabsTrigger
                                   value={'ctrl'}
                                   className="px-2.5"
@@ -285,7 +287,7 @@ export function HotkeyForm() {
             );
           })}
         </SettingsGroup>
-        <SettingsHint>将估值快照或市场快捷键留空即可取消绑定。</SettingsHint>
+        <SettingsHint>{"" + __ui("将估值快照或市场快捷键留空即可取消绑定。") + ""}</SettingsHint>
       </div>
     </Form>
   );

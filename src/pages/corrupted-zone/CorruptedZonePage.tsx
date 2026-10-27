@@ -72,6 +72,7 @@ export default function CorruptedZonePage() {
     <div className="h-full w-full overflow-auto">
       <div ref={content}>
         <CorruptedZoneCard
+          language={settings.uiLanguage}
           now={now}
           expanded={settings.corruptedZoneExpanded === true}
           customColors={settings.corruptedZoneCustomColors}

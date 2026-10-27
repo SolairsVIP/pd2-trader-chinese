@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -13,6 +14,7 @@ import { Switch } from '@/components/ui/switch';
 import { getSeasonSettingOptions } from '@/lib/seasons';
 import { SettingsGroup, SettingsRow, SettingsSkeleton } from '../settings-ui';
 import { showToast } from '@/overlay';
+import { zoneText } from '@/pages/corrupted-zone/language';
 
 const appearanceFormSchema = z.object({
   mode: z.enum(['softcore', 'hardcore'], {
@@ -27,6 +29,7 @@ const appearanceFormSchema = z.object({
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
 export function GeneralForm() {
+  const __ui = useUiText();
   const { settings, isLoading, updateSettings } = useOptions();
   const [detectedDirectory, setDetectedDirectory] = React.useState<string | null>(null);
   const debounceRef = React.useRef<NodeJS.Timeout | null>(null);
@@ -95,25 +98,44 @@ export function GeneralForm() {
   return (
     <Form {...form}>
       <div className="flex flex-col gap-y-6">
-        <SettingsGroup title="游戏">
+        <SettingsGroup title={zoneText('语言', settings.uiLanguage)}>
+          <SettingsRow
+            label={settings.uiLanguage === 'zh-TW' ? '插件介面語言' : '插件界面语言'}
+            description={settings.uiLanguage === 'zh-TW'
+              ? '切換插件介面的顯示語言。查價與交易大廳暫不支援繁體。'
+              : '切换插件界面的显示语言。查价与交易大厅暂不支持繁体。'}
+            control={
+              <select
+                aria-label={zoneText('界面语言', settings.uiLanguage)}
+                value={settings.uiLanguage ?? 'zh-CN'}
+                onChange={(e) => updateSettings({ uiLanguage: e.target.value as 'zh-CN' | 'zh-TW' })}
+                className="rounded border border-border bg-background px-2 py-1 text-sm"
+              >
+                <option value="zh-CN">简体中文</option>
+                <option value="zh-TW">繁體中文</option>
+              </select>
+            }
+          />
+        </SettingsGroup>
+        <SettingsGroup title={__ui("游戏")}>
           <FormField
             control={form.control}
             name="ladder"
             render={({ field }) => (
               <SettingsRow
-                label="天梯"
+                label={__ui("天梯")}
                 control={
                   <Select value={field.value}
                     onValueChange={field.onChange}
                     defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-[220px]">
-                        <SelectValue placeholder="天梯" />
+                        <SelectValue placeholder={__ui("天梯")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="ladder">天梯</SelectItem>
-                      <SelectItem value="non-ladder">非天梯</SelectItem>
+                      <SelectItem value="ladder">{"" + __ui("天梯") + ""}</SelectItem>
+                      <SelectItem value="non-ladder">{"" + __ui("非天梯") + ""}</SelectItem>
                     </SelectContent>
                   </Select>
                 }
@@ -127,19 +149,19 @@ export function GeneralForm() {
             name="mode"
             render={({ field }) => (
               <SettingsRow
-                label="模式"
+                label={__ui("模式")}
                 control={
                   <Select value={field.value}
                     onValueChange={field.onChange}
                     defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-[220px]">
-                        <SelectValue placeholder="模式" />
+                        <SelectValue placeholder={__ui("模式")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="softcore">普通模式</SelectItem>
-                      <SelectItem value="hardcore">专家模式</SelectItem>
+                      <SelectItem value="softcore">{"" + __ui("普通模式") + ""}</SelectItem>
+                      <SelectItem value="hardcore">{"" + __ui("专家模式") + ""}</SelectItem>
                     </SelectContent>
                   </Select>
                 }
@@ -149,8 +171,8 @@ export function GeneralForm() {
             )}
           />
           <SettingsRow
-            label="赛季"
-            description="按赛季筛选价格数据。查看往季价格需要有相应的历史数据。"
+            label={__ui("赛季")}
+            description={__ui("按赛季筛选价格数据。查看往季价格需要有相应的历史数据。")}
             control={
               <Select
                 value={settings.selectedSeasonId ?? 'current'}
@@ -158,7 +180,7 @@ export function GeneralForm() {
               >
                 <FormControl>
                   <SelectTrigger className="w-[220px]">
-                    <SelectValue placeholder="赛季" />
+                    <SelectValue placeholder={__ui("赛季")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -181,7 +203,7 @@ export function GeneralForm() {
             render={({ field }) => (
               <SettingsRow
                 layout="stacked"
-                label="Diablo II 安装目录"
+                label={__ui("Diablo II 安装目录")}
                 description={
                   detectedDirectory && !field.value ? (
                     <span className="inline-flex items-center gap-1.5">
@@ -189,7 +211,7 @@ export function GeneralForm() {
                       {`已检测到：${detectedDirectory}`}
                     </span>
                   ) : (
-                    'Diablo II 的安装路径。留空可自动检测。'
+                    __ui("Diablo II 的安装路径。留空可自动检测。")
                   )
                 }
                 control={
@@ -230,8 +252,7 @@ export function GeneralForm() {
                       }}
                     >
                       <Wand2 />
-                      自动检测
-                    </Button>
+                      {" " + __ui("自动检测") + " "}</Button>
                   </>
                 }
               >
@@ -241,10 +262,10 @@ export function GeneralForm() {
           />
         </SettingsGroup>
 
-        <SettingsGroup title="故障排查">
+        <SettingsGroup title={__ui("故障排查")}>
           <SettingsRow
-            label="调试日志"
-            description="将控制台输出写入日志文件，以便排查问题。"
+            label={__ui("调试日志")}
+            description={__ui("将控制台输出写入日志文件，以便排查问题。")}
             control={
               <FormControl>
                 <Switch

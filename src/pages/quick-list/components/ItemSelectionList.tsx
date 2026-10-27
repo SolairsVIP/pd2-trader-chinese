@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React from 'react';
 import { localizeMarketItemName } from '@/lib/localize-item-name';
 import { motion } from 'framer-motion';
@@ -41,22 +42,22 @@ const ItemSelectionList: React.FC<ItemSelectionListProps> = ({
   onBump,
   onRefresh,
 }) => {
+  const __ui = useUiText();
   const anyExpanded = expandedItems.size > 0;
 
   return (
     <div className="mb-3 flex min-h-0 flex-1 flex-col">
       <div className="mb-2 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className={sectionLabel}>选择物品</span>
+          <span className={sectionLabel}>{"" + __ui("选择物品") + ""}</span>
           <span className={countChip}
             aria-hidden>
             {matchingItems.length}
           </span>
-          <span className="sr-only">（找到 {matchingItems.length} 件）</span>
+          <span className="sr-only">{"" + __ui("（找到") + " "}{matchingItems.length} {" " + __ui("件）") + ""}</span>
           {isMarketListingsLoading && (
             <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
-              <Loader2 className="size-3 animate-spin" /> 正在加载市场挂单…
-            </span>
+              <Loader2 className="size-3 animate-spin" /> {" " + __ui("正在加载市场挂单…") + " "}</span>
           )}
         </div>
         <button
@@ -65,13 +66,13 @@ const ItemSelectionList: React.FC<ItemSelectionListProps> = ({
           className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium text-primary outline-none transition-colors duration-(--dur-fast) hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-ring/60"
         >
           {anyExpanded ? <ChevronsDownUp className="size-3.5" /> : <ChevronsUpDown className="size-3.5" />}
-          {anyExpanded ? '收起详情' : '显示全部属性'}
+          {anyExpanded ? __ui("收起详情") : __ui("显示全部属性")}
         </button>
       </div>
       <ScrollArea className="min-h-0 flex-1 pr-2">
         <motion.div
           role="group"
-          aria-label="匹配的仓库物品"
+          aria-label={__ui("匹配的仓库物品")}
           className="flex flex-col gap-2 p-px pb-3"
           variants={listStagger}
           initial="hidden"

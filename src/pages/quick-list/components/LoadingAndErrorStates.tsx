@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -21,6 +22,7 @@ const LoadingAndErrorStates: React.FC<LoadingAndErrorStatesProps> = ({
   onRetry,
   isAccountMismatch = false,
 }) => {
+  const __ui = useUiText();
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -35,7 +37,7 @@ const LoadingAndErrorStates: React.FC<LoadingAndErrorStatesProps> = ({
           <div className="flex items-center gap-2 text-sm text-muted-foreground"
             role="status">
             <Loader2 className="size-4 animate-spin text-primary" />
-            <span>正在搜索物品…</span>
+            <span>{"" + __ui("正在搜索物品…") + ""}</span>
           </div>
           {[0, 1].map((i) => (
             <div key={i}
@@ -66,16 +68,13 @@ const LoadingAndErrorStates: React.FC<LoadingAndErrorStatesProps> = ({
             <Alert variant="destructive"
               className="mb-4">
               <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>检测到账号不匹配</AlertTitle>
+              <AlertTitle>{"" + __ui("检测到账号不匹配") + ""}</AlertTitle>
               <AlertDescription className="text-xs mt-1 space-y-2">
                 <p>
-                  你可能登录的是游戏内账号，而不是网站账号。请退出登录，再使用正确的账号重新登录。
-                </p>
+                  {" " + __ui("你可能登录的是游戏内账号，而不是网站账号。请退出登录，再使用正确的账号重新登录。") + " "}</p>
                 <p>
-                  <strong>重要：</strong>重新登录前，请先清除此网站的浏览器 Cookie：{' '}
-                  <span className="rounded bg-destructive/10 px-1 font-mono">api.projectdiablo2.com</span>；
-                  否则系统会自动恢复到当前会话。
-                </p>
+                  <strong>{"" + __ui("重要：") + ""}</strong>{"" + __ui("重新登录前，请先清除此网站的浏览器 Cookie：") + ""}{' '}
+                  <span className="rounded bg-destructive/10 px-1 font-mono">api.projectdiablo2.com</span>{"" + __ui("； 否则系统会自动恢复到当前会话。") + " "}</p>
               </AlertDescription>
             </Alert>
           ) : (
@@ -84,15 +83,14 @@ const LoadingAndErrorStates: React.FC<LoadingAndErrorStatesProps> = ({
               <span className="flex size-10 items-center justify-center rounded-full bg-destructive/12 text-destructive">
                 <CircleAlert className="size-5" />
               </span>
-              <div className="text-sm font-semibold">发生错误</div>
+              <div className="text-sm font-semibold">{"" + __ui("发生错误") + ""}</div>
               <div className="max-w-sm text-xs text-destructive">{error}</div>
             </div>
           )}
           <Button onClick={onRetry}
             className="w-full">
             <Search className="h-4 w-4" />
-            重试搜索
-          </Button>
+            {" " + __ui("重试搜索") + " "}</Button>
         </motion.div>
       );
     }

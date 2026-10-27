@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { localizeItemName } from '@/lib/localize-item-name';
 import { GameItemMatchingError } from '@/lib/game-stash-input';
@@ -50,6 +51,7 @@ interface ListItemShortcutFormProps {
 }
 
 const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => {
+  const __ui = useUiText();
   const {
     findMatchingItems,
     listSpecificItem,
@@ -761,10 +763,9 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
     if (queuedItems.length === 0) {
       return (
         <EmptyState icon={<ListChecks />}
-          title="暂无排队物品"
+          title={__ui("暂无排队物品")}
           className="h-full">
-          等待上架的物品会显示在这里。
-        </EmptyState>
+          {" " + __ui("等待上架的物品会显示在这里。") + " "}</EmptyState>
       );
     }
 
@@ -783,10 +784,9 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
               strokeWidth={1}
             />
           </span>
-          <div className="text-base font-semibold tracking-tight">等待上架的物品</div>
+          <div className="text-base font-semibold tracking-tight">{"" + __ui("等待上架的物品") + ""}</div>
           <div className="text-sm text-muted-foreground max-w-md leading-relaxed">
-            每 15 秒检查一次官网仓库。找到单件候选后自动上架；多个候选需手动选择。
-          </div>
+            {" " + __ui("每 15 秒检查一次官网仓库。找到单件候选后自动上架；多个候选需手动选择。") + " "}</div>
           <AnimatePresence>
             {isPolling && (
               <motion.div
@@ -797,7 +797,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                 role="status"
               >
                 <Loader2 className="h-3 w-3 animate-spin" />
-                <span>正在检查仓库…</span>
+                <span>{"" + __ui("正在检查仓库…") + ""}</span>
               </motion.div>
             )}
           </AnimatePresence>
@@ -841,11 +841,11 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                       )}
                       <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
                         <Clock className="size-3 shrink-0" />
-                        <span className="shrink-0">自动等待期限：还剩约 {minutesRemaining} 分钟</span>
+                        <span className="shrink-0">{"" + __ui("自动等待期限：还剩约") + " "}{minutesRemaining} {" " + __ui("分钟") + ""}</span>
                         <div
                           className="h-1 flex-1 overflow-hidden rounded-full bg-muted"
                           role="progressbar"
-                          aria-label="排队超时进度"
+                          aria-label={__ui("排队超时进度")}
                           aria-valuenow={Math.round(elapsedPct)}
                           aria-valuemin={0}
                           aria-valuemax={100}
@@ -859,7 +859,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                       {queueErrors[pendingListing.id] ? (
                         <p role="alert" className="mt-2 text-sm text-destructive">{queueErrors[pendingListing.id]}</p>
                       ) : pendingListing.initialMatchingHashes?.size ? (
-                        <p className="mt-2 text-xs text-muted-foreground">已排除入队时的候选，正在等待新物品；若目标已在其中，请取消排队后重新选择。</p>
+                        <p className="mt-2 text-xs text-muted-foreground">{"" + __ui("已排除入队时的候选，正在等待新物品；若目标已在其中，请取消排队后重新选择。") + ""}</p>
                       ) : null}
                     </div>
                     <Button
@@ -886,8 +886,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                       }}
                     >
                       <X className="size-3.5" />
-                      取消
-                    </Button>
+                      {" " + __ui("取消") + " "}</Button>
                     {queueCandidates[pendingListing.id]?.length > 1 && (
                       <div className="w-full">
                         <MultipleMatchSelector
@@ -915,10 +914,9 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
     if (!item) {
       return (
         <EmptyState icon={<PackageSearch />}
-          title="未选择物品"
+          title={__ui("未选择物品")}
           className="h-[300px]">
-          在游戏中复制物品（Ctrl+C）后重新打开此窗口即可上架；也可以选择“管理挂单”查看当前交易。
-        </EmptyState>
+          {" " + __ui("在游戏中复制物品（Ctrl+C）后重新打开此窗口即可上架；也可以选择“管理挂单”查看当前交易。") + " "}</EmptyState>
       );
     }
 
@@ -949,25 +947,23 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
           </span>
           <div className="flex flex-col items-center gap-2 text-center">
             <div className="flex items-center gap-1.5 text-sm font-medium text-foreground">
-              <span>仓库中没有找到匹配“{item.name || item.type}”的物品</span>
+              <span>{"" + __ui("仓库中没有找到匹配“") + ""}{item.name || item.type}{"" + __ui("”的物品") + ""}</span>
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    aria-label="为什么没有找到该物品？"
+                    aria-label={__ui("为什么没有找到该物品？")}
                     className="inline-flex rounded-full text-warning outline-none transition-transform duration-(--dur-fast) hover:scale-110 focus-visible:ring-2 focus-visible:ring-ring/60"
                   >
                     <AlertCircle className="w-4 h-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs text-xs text-center">
-                  物品必须放在共享仓库（而非个人仓库）中，并且重新创建游戏后才能被搜索到。
-                </TooltipContent>
+                  {" " + __ui("物品必须放在共享仓库（而非个人仓库）中，并且重新创建游戏后才能被搜索到。") + " "}</TooltipContent>
               </Tooltip>
             </div>
             <div className="text-sm text-muted-foreground max-w-md leading-relaxed">
-              可以将此物品加入上架队列。服务器会从仓库同步物品（通常需要几分钟），同步完成后自动上架。
-            </div>
+              {" " + __ui("可以将此物品加入上架队列。服务器会从仓库同步物品（通常需要几分钟），同步完成后自动上架。") + " "}</div>
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)}
@@ -1025,7 +1021,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                   >
                     <div className="flex items-center gap-2">
                       <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">这些物品都不匹配？</span>
+                      <span className="text-xs text-muted-foreground">{"" + __ui("这些物品都不匹配？") + ""}</span>
                     </div>
                     <Button
                       type="button"
@@ -1037,8 +1033,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                       }}
                       className="text-xs h-7 px-3"
                     >
-                      加入上架队列
-                    </Button>
+                      {" " + __ui("加入上架队列") + " "}</Button>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -1052,8 +1047,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                       className="flex items-center justify-center gap-1.5 rounded-md bg-primary/8 px-2 py-1.5 text-xs text-muted-foreground"
                     >
                       <Hourglass className="size-3.5 shrink-0 text-primary" />
-                      将此物品加入队列，等待它同步到仓库中（通常需要几分钟）。
-                    </motion.div>
+                      {" " + __ui("将此物品加入队列，等待它同步到仓库中（通常需要几分钟）。") + " "}</motion.div>
                   )}
                   <ListingFormFields
                     form={form}
@@ -1075,8 +1069,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
     return (
       <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
         <p className="text-center">
-          尚未选择物品。请使用快捷键，或通过物品参数打开窗口以上架物品。
-        </p>
+          {" " + __ui("尚未选择物品。请使用快捷键，或通过物品参数打开窗口以上架物品。") + " "}</p>
       </div>
     );
   };
@@ -1135,13 +1128,12 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
                           style={{ fontFamily: 'DiabloFont' }}
                           disabled={item ? !isStashItem(item) : false}
                         >
-                          上架物品
-                        </TabsTrigger>
+                          {" " + __ui("上架物品") + " "}</TabsTrigger>
                       </span>
                     </TooltipTrigger>
                     {item && !isStashItem(item) && (
                       <TooltipContent>
-                        <p>物品必须位于共享仓库中才能上架。</p>
+                        <p>{"" + __ui("物品必须位于共享仓库中才能上架。") + ""}</p>
                       </TooltipContent>
                     )}
                   </Tooltip>
@@ -1160,7 +1152,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
             <Button
               type="button"
               id="titlebar-close"
-              aria-label="关闭"
+              aria-label={__ui("关闭")}
               size="icon"
               className="size-7 text-muted-foreground hover:bg-destructive/15 hover:text-destructive"
               variant="ghost"

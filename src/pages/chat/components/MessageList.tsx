@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { AlertTriangle, ArrowDown, Loader2, MessageSquareDashed, RotateCw } from 'lucide-react';
@@ -59,6 +60,7 @@ export function MessageList({
   onLoadOlder: (conversationId: string) => void;
   onReload: (conversationId: string) => void;
 }) {
+  const __ui = useUiText();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Variable-height virtual message list. anchorTo 'end' keeps the reading position when older pages are
@@ -135,7 +137,7 @@ export function MessageList({
         className="space-y-2 p-4">
         <div className="flex items-center justify-center gap-2 pb-2 text-xs text-muted-foreground">
           <Loader2 className="size-3.5 animate-spin" />
-          <span>正在加载消息…</span>
+          <span>{"" + __ui("正在加载消息…") + ""}</span>
         </div>
         {SKELETON_BUBBLES.map(([align, size], i) => (
           <div key={i}
@@ -150,15 +152,14 @@ export function MessageList({
       <EmptyState
         className="mx-auto mt-16 max-w-sm border-destructive/30 bg-destructive/5"
         icon={<AlertTriangle />}
-        title="无法加载消息"
-        description="请检查网络连接后重试。"
+        title={__ui("无法加载消息")}
+        description={__ui("请检查网络连接后重试。")}
         action={
           <Button variant="outline"
             size="sm"
             onClick={() => onReload(threadId)}>
             <RotateCw className="size-3.5" />
-            重试
-          </Button>
+            {" " + __ui("重试") + " "}</Button>
         }
       />
     );
@@ -167,7 +168,7 @@ export function MessageList({
       <EmptyState
         className="mx-auto mt-16 max-w-sm"
         icon={<MessageSquareDashed />}
-        title="暂无消息"
+        title={__ui("暂无消息")}
         description={`向 ${otherName} 打个招呼吧。`}
       />
     );
@@ -216,8 +217,7 @@ export function MessageList({
           className="pointer-events-none absolute inset-x-0 top-2 flex justify-center">
           <span className="flex items-center gap-2 rounded-full border border-border bg-popover/95 px-3 py-1 text-xs text-muted-foreground shadow-panel">
             <Loader2 className="size-3.5 animate-spin" />
-            正在加载更早的消息…
-          </span>
+            {" " + __ui("正在加载更早的消息…") + " "}</span>
         </div>
       )}
       {newCount > 0 && (
@@ -228,8 +228,7 @@ export function MessageList({
             className="pointer-events-auto flex items-center gap-1.5 rounded-full border border-primary/40 bg-popover/95 px-3 py-1 text-xs font-medium text-foreground shadow-panel outline-none transition-[background-color,scale] duration-(--dur-fast) hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/60 active:scale-95"
           >
             <ArrowDown className="size-3.5 text-primary" />
-            {newCount} 条新消息 · 跳转到最新
-          </button>
+            {newCount} {" " + __ui("条新消息 · 跳转到最新") + " "}</button>
         </div>
       )}
     </div>

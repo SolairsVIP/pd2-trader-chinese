@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useState } from 'react';
 import { useOptions } from '@/hooks/useOptions';
 import { Input } from '@/components/ui/input';
@@ -66,6 +67,7 @@ interface MacroManagerSheetProps {
 }
 
 const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
+  const __ui = useUiText();
   const { settings, updateSettings } = useOptions();
   const macros = (settings?.listingNoteMacros ?? []).filter(isValidMacro);
   const [newLabel, setNewLabel] = useState('');
@@ -164,16 +166,16 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
                       value={editLabel}
                       onChange={(e) => setEditLabel(e.target.value)}
                       className="h-7 text-xs"
-                      placeholder="模板名称"
-                      aria-label="模板名称"
+                      placeholder={__ui("模板名称")}
+                      aria-label={__ui("模板名称")}
                       autoFocus
                     />
                     <Input
                       value={editText}
                       onChange={(e) => setEditText(e.target.value)}
                       className="h-7 text-xs"
-                      placeholder="例如：出售 {itemName}（{sockets} 孔）"
-                      aria-label="模板内容"
+                      placeholder={__ui("例如：出售 {itemName}（{sockets} 孔）")}
+                      aria-label={__ui("模板内容")}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           e.preventDefault();
@@ -186,8 +188,7 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
                         size="sm"
                         className="h-7 text-xs"
                         onClick={saveEdit}>
-                        <Check className="size-3.5" /> 保存
-                      </Button>
+                        <Check className="size-3.5" /> {" " + __ui("保存") + " "}</Button>
                       <Button
                         type="button"
                         variant="ghost"
@@ -195,8 +196,7 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
                         className="h-7 text-xs"
                         onClick={() => setEditingIndex(null)}
                       >
-                        取消
-                      </Button>
+                        {" " + __ui("取消") + " "}</Button>
                     </div>
                   </div>
                 ) : (
@@ -204,7 +204,7 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
                     type="button"
                     className="min-w-0 flex-1 cursor-pointer rounded-l-lg px-3 py-2 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
                     onClick={() => onApply?.(macro)}
-                    title="使用此模板"
+                    title={__ui("使用此模板")}
                   >
                     <span className="font-semibold">{macro.label}</span>
                     <span className="mx-1.5 text-muted-foreground">&rarr;</span>
@@ -220,7 +220,7 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
                       className={macroAction}
                       disabled={index === 0}
                       aria-label={`将 ${macro.label} 上移`}
-                      title="上移"
+                      title={__ui("上移")}
                     >
                       <ChevronUp />
                     </button>
@@ -230,7 +230,7 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
                       className={macroAction}
                       disabled={index === macros.length - 1}
                       aria-label={`将 ${macro.label} 下移`}
-                      title="下移"
+                      title={__ui("下移")}
                     >
                       <ChevronDown />
                     </button>
@@ -239,7 +239,7 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
                       onClick={() => startEdit(index)}
                       className={macroAction}
                       aria-label={`编辑 ${macro.label}`}
-                      title="编辑"
+                      title={__ui("编辑")}
                     >
                       <Pencil />
                     </button>
@@ -248,7 +248,7 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
                       onClick={() => removeMacro(index)}
                       className={cn(macroAction, 'hover:bg-destructive/15 hover:text-destructive')}
                       aria-label={`删除 ${macro.label}`}
-                      title="删除"
+                      title={__ui("删除")}
                     >
                       <X />
                     </button>
@@ -268,12 +268,12 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
           <span className="flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground">
             <NotebookPen className="size-4" />
           </span>
-          <p className="text-sm text-muted-foreground">暂无备注模板，可在下方添加。</p>
+          <p className="text-sm text-muted-foreground">{"" + __ui("暂无备注模板，可在下方添加。") + ""}</p>
         </motion.div>
       )}
 
       <div className="flex flex-col gap-2 border-t border-border pt-4">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">新建模板</span>
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{"" + __ui("新建模板") + ""}</span>
         <AnimatePresence>
           {error && (
             <motion.p
@@ -288,8 +288,8 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
           )}
         </AnimatePresence>
         <Input
-          placeholder="模板名称"
-          aria-label="模板名称"
+          placeholder={__ui("模板名称")}
+          aria-label={__ui("模板名称")}
           value={newLabel}
           onChange={(e) => {
             setNewLabel(e.target.value);
@@ -297,8 +297,8 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
           }}
         />
         <Input
-          placeholder="例如：出售 {itemName}（{sockets} 孔）"
-          aria-label="模板内容"
+          placeholder={__ui("例如：出售 {itemName}（{sockets} 孔）")}
+          aria-label={__ui("模板内容")}
           value={newText}
           onChange={(e) => setNewText(e.target.value)}
           onKeyDown={(e) => {
@@ -309,9 +309,8 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
           }}
         />
         <p className="text-[11px] leading-relaxed text-muted-foreground">
-          <code className={tokenClass}>{'{itemName}'}</code> 会自动填入物品名称；其他格式如{' '}
-          <code className={tokenClass}>{'{name}'}</code> 会在使用时提示填写。
-        </p>
+          <code className={tokenClass}>{'{itemName}'}</code> {" " + __ui("会自动填入物品名称；其他格式如") + ""}{' '}
+          <code className={tokenClass}>{'{name}'}</code> {" " + __ui("会在使用时提示填写。") + " "}</p>
         <Button
           type="button"
           variant="outline"
@@ -320,8 +319,7 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
           disabled={!newLabel.trim() || !newText.trim()}
         >
           <Plus className="size-4" />
-          添加模板
-        </Button>
+          {" " + __ui("添加模板") + " "}</Button>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
@@ -36,6 +37,7 @@ const ListingFormFields: React.FC<ListingFormFieldsProps> = ({
   onSubmit,
   allowQueue = false,
 }) => {
+  const __ui = useUiText();
   const { settings } = useOptions();
   const macros = (settings?.listingNoteMacros ?? []).filter(isValidMacro);
   const [sheetOpen, setSheetOpen] = React.useState(false);
@@ -88,8 +90,8 @@ const ListingFormFields: React.FC<ListingFormFieldsProps> = ({
             variant="ghost"
             size="icon"
             className="relative h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
-            title="备注模板"
-            aria-label="备注模板"
+            title={__ui("备注模板")}
+            aria-label={__ui("备注模板")}
           >
             <NotebookPen className="h-4 w-4" />
             {macros.length > 0 && (
@@ -106,9 +108,8 @@ const ListingFormFields: React.FC<ListingFormFieldsProps> = ({
               <span className="flex size-7 items-center justify-center rounded-md bg-primary/12 text-primary">
                 <NotebookPen className="size-4" />
               </span>
-              备注模板
-            </SheetTitle>
-            <SheetDescription>点击模板填入备注，或在下方管理模板。</SheetDescription>
+              {" " + __ui("备注模板") + " "}</SheetTitle>
+            <SheetDescription>{"" + __ui("点击模板填入备注，或在下方管理模板。") + ""}</SheetDescription>
           </SheetHeader>
           <AnimatePresence mode="wait"
             initial={false}>
@@ -122,8 +123,7 @@ const ListingFormFields: React.FC<ListingFormFieldsProps> = ({
                 className="flex flex-col gap-3 px-4"
               >
                 <p className="text-sm text-muted-foreground">
-                  请填写<span className="font-semibold text-foreground">{pendingMacro.label}</span>的内容：
-                </p>
+                  {" " + __ui("请填写") + ""}<span className="font-semibold text-foreground">{pendingMacro.label}</span>{"" + __ui("的内容：") + " "}</p>
                 <div className="rounded-lg border border-border bg-secondary/60 px-3 py-2 text-xs text-secondary-foreground">
                   <MacroTemplate text={pendingMacro.text} />
                 </div>
@@ -150,14 +150,12 @@ const ListingFormFields: React.FC<ListingFormFieldsProps> = ({
                     size="sm"
                     onClick={() => applyMacro(pendingMacro, placeholderValues)}>
                     <Check className="size-4" />
-                    应用
-                  </Button>
+                    {" " + __ui("应用") + " "}</Button>
                   <Button type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => setPendingMacro(null)}>
-                    取消
-                  </Button>
+                    {" " + __ui("取消") + " "}</Button>
                 </div>
               </motion.div>
             ) : (
@@ -182,9 +180,9 @@ const ListingFormFields: React.FC<ListingFormFieldsProps> = ({
         name="note"
         render={({ field }) => (
           <FormItem className="flex-1 m-0 p-0 min-w-0">
-            <FormLabel className="sr-only">备注</FormLabel>
+            <FormLabel className="sr-only">{"" + __ui("备注") + ""}</FormLabel>
             <FormControl>
-              <Input placeholder="价格备注…"
+              <Input placeholder={__ui("价格备注…")}
                 {...field}
                 value={field.value || ''}
                 autoComplete={'off'} />

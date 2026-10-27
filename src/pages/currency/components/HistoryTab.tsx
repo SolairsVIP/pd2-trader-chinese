@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import { describeUiError } from '@/lib/ui-error';
 import React, { useCallback, useMemo, useState } from 'react';
 import { localizeItemName } from '@/lib/localize-item-name';
@@ -112,18 +113,19 @@ function SectionHeader({
 }
 
 function ShowMore({ remaining, onClick }: { remaining: number; onClick: () => void }) {
+  const __ui = useUiText();
   return (
     <button
       type="button"
       className="w-full py-2 text-xs font-medium text-muted-foreground outline-none transition-colors duration-(--dur-fast) hover:bg-muted/40 hover:text-foreground focus-visible:bg-muted/40"
       onClick={onClick}
     >
-      展开更多（还有 {remaining} 条较早记录）
-    </button>
+      {" " + __ui("展开更多（还有") + " "}{remaining} {" " + __ui("条较早记录）") + " "}</button>
   );
 }
 
 export function HistoryTab(props: HistoryTabProps) {
+  const __ui = useUiText();
   const { token, owner, seasons, currentSeasonId, seasonPoints, refreshKey, onHistoryChanged } = props;
   const [range, setRange] = useState<Range>('7d');
   const [stacked, setStacked] = useState(false);
@@ -161,7 +163,7 @@ export function HistoryTab(props: HistoryTabProps) {
               size="sm"
               value={range}
               onValueChange={(v) => v && setRange(v as Range)}
-              aria-label="图表时间范围"
+              aria-label={__ui("图表时间范围")}
             >
               {RANGES.map((r) => (
                 <ToggleGroupItem key={r.value}
@@ -192,7 +194,7 @@ export function HistoryTab(props: HistoryTabProps) {
                     'rounded-full px-2 py-0.5 text-xs font-medium tabular-nums',
                     deltaPillClass(rangeChange),
                   )}
-                  title="所选时间范围内的变化"
+                  title={__ui("所选时间范围内的变化")}
                 >
                   {formatSignedHr(rangeChange)}
                 </motion.span>
@@ -205,8 +207,7 @@ export function HistoryTab(props: HistoryTabProps) {
               onCheckedChange={setStacked} />
             <Label htmlFor="stacked"
               className="cursor-pointer text-xs text-muted-foreground">
-              按类别堆叠
-            </Label>
+              {" " + __ui("按类别堆叠") + " "}</Label>
           </div>
         </div>
         {rangeQuery.error && range !== 'season' ? (
@@ -218,8 +219,7 @@ export function HistoryTab(props: HistoryTabProps) {
               <Button size="sm"
                 variant="outline"
                 onClick={rangeQuery.reload}>
-                重试
-              </Button>
+                {" " + __ui("重试") + " "}</Button>
             }
           >
             <span className="text-destructive">{rangeQuery.error}</span>
@@ -288,6 +288,7 @@ function ChartTooltipCard({ row, stacked }: { row: ChartRow; stacked: boolean })
 }
 
 function NetWorthChart({ points, stacked, seasons }: { points: NetWorthPoint[]; stacked: boolean; seasons: Season[] }) {
+  const __ui = useUiText();
   const reduce = useReducedMotionSafe();
   const data = useMemo<ChartRow[]>(
     () => points.map((p) => ({ t: Date.parse(p.takenAt), totalHr: p.totalHr, ...p.byCategory })),
@@ -298,8 +299,8 @@ function NetWorthChart({ points, stacked, seasons }: { points: NetWorthPoint[]; 
       <EmptyState
         className="h-60 justify-center py-0"
         icon={<ChartArea />}
-        title="此时间范围内暂无估值快照"
-        description="程序启动时、Diablo II 窗口处于前台时，以及手动刷新时都会记录快照。"
+        title={__ui("此时间范围内暂无估值快照")}
+        description={__ui("程序启动时、Diablo II 窗口处于前台时，以及手动刷新时都会记录快照。")}
       />
     );
   }
@@ -418,6 +419,7 @@ function SessionsSection({
   seasonId: string | null;
   refreshKey: string | null;
 }) {
+  const __ui = useUiText();
   const { currentSession, startSession, stopSession } = useNetWorth();
   const [busy, setBusy] = useState(false);
   const [limit, setLimit] = useState(SESSION_PAGE);
@@ -442,21 +444,19 @@ function SessionsSection({
 
   return (
     <section className="space-y-2.5">
-      <SectionHeader title="游戏会话"
+      <SectionHeader title={__ui("游戏会话")}
         meta={sessions && sessions.length > 0 ? sessions.length : undefined}>
         <div className="flex gap-2">
           <Button size="sm"
             variant="outline"
             disabled={busy}
             onClick={() => mark(startSession)}>
-            <Play className="size-3.5" /> 开始新会话
-          </Button>
+            <Play className="size-3.5" /> {" " + __ui("开始新会话") + " "}</Button>
           <Button size="sm"
             variant="outline"
             disabled={busy || !currentSession}
             onClick={() => mark(stopSession)}>
-            <Square className="size-3.5" /> 结束会话
-          </Button>
+            <Square className="size-3.5" /> {" " + __ui("结束会话") + " "}</Button>
         </div>
       </SectionHeader>
       {error && (
@@ -476,18 +476,18 @@ function SessionsSection({
         <EmptyState
           compact
           icon={<Timer />}
-          title="暂无游戏会话"
-          description="间隔少于 30 分钟的估值快照会自动合并为一个会话。"
+          title={__ui("暂无游戏会话")}
+          description={__ui("间隔少于 30 分钟的估值快照会自动合并为一个会话。")}
         />
       )}
       {sessions && sessions.length > 0 && (
         <div className="overflow-hidden rounded-lg border border-border bg-card/40 text-sm">
           <div className="grid grid-cols-[1fr_4.5rem_5.5rem_5.5rem_4rem] gap-2 border-b border-border bg-muted/30 px-3 py-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            <span>时间</span>
-            <span className="text-right">时长</span>
-            <span className="text-right">物品增值</span>
-            <span className="text-right">市场变动</span>
-            <span className="text-right">HR/小时</span>
+            <span>{"" + __ui("时间") + ""}</span>
+            <span className="text-right">{"" + __ui("时长") + ""}</span>
+            <span className="text-right">{"" + __ui("物品增值") + ""}</span>
+            <span className="text-right">{"" + __ui("市场变动") + ""}</span>
+            <span className="text-right">{"" + __ui("HR/小时") + ""}</span>
           </div>
           <motion.div variants={listStagger}
             initial="hidden"
@@ -512,6 +512,7 @@ function SessionsSection({
 }
 
 function SessionRow({ session: s, best }: { session: SessionSummary; best: boolean }) {
+  const __ui = useUiText();
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -526,7 +527,7 @@ function SessionRow({ session: s, best }: { session: SessionSummary; best: boole
           <span className="flex min-w-0 items-center gap-1.5">
             {s.isOpen && (
               <span className="relative flex size-2 shrink-0"
-                aria-label="正在进行的会话">
+                aria-label={__ui("正在进行的会话")}>
                 <span className="absolute inline-flex size-full rounded-full bg-success opacity-60 motion-safe:animate-ping" />
                 <span className="relative inline-flex size-2 rounded-full bg-success" />
               </span>
@@ -536,12 +537,11 @@ function SessionRow({ session: s, best }: { session: SessionSummary; best: boole
             </span>
             {s.manual && (
               <span className="shrink-0 rounded-sm border border-border px-1 text-[10px] leading-4 text-muted-foreground">
-                手动
-              </span>
+                {" " + __ui("手动") + " "}</span>
             )}
             {best && (
               <Star className="size-3.5 shrink-0 fill-q-unique text-q-unique"
-                aria-label="本赛季最高 HR/小时收益" />
+                aria-label={__ui("本赛季最高 HR/小时收益")} />
             )}
           </span>
           <span className="text-right tabular-nums text-muted-foreground">{formatDuration(s.durationMinutes)}</span>
@@ -557,8 +557,7 @@ function SessionRow({ session: s, best }: { session: SessionSummary; best: boole
       <TooltipContent side="bottom"
         className="max-w-xs">
         <p className="mb-1 font-medium tabular-nums">
-          {s.startHr.toFixed(2)} → {s.endHr.toFixed(2)} HR · {s.snapshotCount} 个估值快照
-        </p>
+          {s.startHr.toFixed(2)} → {s.endHr.toFixed(2)} HR · {s.snapshotCount} {" " + __ui("个估值快照") + " "}</p>
         {s.topGains.length > 0 ? (
           s.topGains.map((g) => (
             <p key={g.key}
@@ -571,7 +570,7 @@ function SessionRow({ session: s, best }: { session: SessionSummary; best: boole
             </p>
           ))
         ) : (
-          <p className="text-muted-foreground">没有物品增值。</p>
+          <p className="text-muted-foreground">{"" + __ui("没有物品增值。") + ""}</p>
         )}
       </TooltipContent>
     </Tooltip>
@@ -579,6 +578,7 @@ function SessionRow({ session: s, best }: { session: SessionSummary; best: boole
 }
 
 function SnapshotsSection({ token, owner, points }: { token: string; owner: NetWorthOwner; points: NetWorthPoint[] }) {
+  const __ui = useUiText();
   const [selected, setSelected] = useState<string[]>([]);
   const [limit, setLimit] = useState(SNAPSHOT_PAGE);
   const [priceBasis, setPriceBasis] = useState<'then' | 'now'>('then');
@@ -602,27 +602,26 @@ function SnapshotsSection({ token, owner, points }: { token: string; owner: NetW
 
   return (
     <section className="space-y-2.5">
-      <SectionHeader title="估值快照"
+      <SectionHeader title={__ui("估值快照")}
         meta={rows.length > 0 ? rows.length : undefined}>
         {selected.length > 0 ? (
           <span className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span className="tabular-nums">已选择 {selected.length}/2 条</span>
+            <span className="tabular-nums">{"" + __ui("已选择") + " "}{selected.length}{"" + __ui("/2 条") + ""}</span>
             <button
               type="button"
               className="rounded px-1.5 py-0.5 font-medium text-foreground/80 outline-none transition-colors duration-(--dur-fast) hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
               onClick={() => setSelected([])}
             >
-              清除
-            </button>
+              {" " + __ui("清除") + " "}</button>
           </span>
         ) : (
-          <span className="text-xs text-muted-foreground">选择两条记录进行比较</span>
+          <span className="text-xs text-muted-foreground">{"" + __ui("选择两条记录进行比较") + ""}</span>
         )}
       </SectionHeader>
       {rows.length === 0 ? (
         <EmptyState compact
           icon={<HistoryIcon />}
-          title="此时间范围内暂无估值快照" />
+          title={__ui("此时间范围内暂无估值快照")} />
       ) : (
         <div className="max-h-72 overflow-y-auto rounded-lg border border-border bg-card/40 text-sm">
           <div className="divide-y divide-border/60">
@@ -660,8 +659,8 @@ function SnapshotsSection({ token, owner, points }: { token: string; owner: NetW
                     size="icon"
                     variant="ghost"
                     className="size-7 text-muted-foreground hover:text-foreground"
-                    title="与上一条比较"
-                    aria-label="与上一条估值快照比较"
+                    title={__ui("与上一条比较")}
+                    aria-label={__ui("与上一条估值快照比较")}
                     disabled={!prev || !p.hasHoldings || !prev.hasHoldings}
                     onClick={() => prev && setSelected([prev.snapshotId, p.snapshotId])}
                   >
@@ -705,22 +704,20 @@ function SnapshotsSection({ token, owner, points }: { token: string; owner: NetW
                   variant="outline"
                   value={priceBasis}
                   onValueChange={(v) => v && setPriceBasis(v as 'then' | 'now')}
-                  aria-label="价格依据"
+                  aria-label={__ui("价格依据")}
                 >
                   <ToggleGroupItem value="then"
                     className="flex-none px-3 text-xs">
-                    使用当时价格
-                  </ToggleGroupItem>
+                    {" " + __ui("使用当时价格") + " "}</ToggleGroupItem>
                   <ToggleGroupItem value="now"
                     className="flex-none px-3 text-xs">
-                    使用当前价格
-                  </ToggleGroupItem>
+                    {" " + __ui("使用当前价格") + " "}</ToggleGroupItem>
                 </ToggleGroup>
                 <Button
                   size="icon"
                   variant="ghost"
                   className="size-8"
-                  aria-label="关闭比较结果"
+                  aria-label={__ui("关闭比较结果")}
                   onClick={() => setSelected([])}
                 >
                   <X className="size-4" />
@@ -744,27 +741,27 @@ function SnapshotsSection({ token, owner, points }: { token: string; owner: NetW
             {diff.data && !diff.loading && (
               <>
                 <div className="grid grid-cols-3 gap-2">
-                  <DiffStat label="物品增值">
+                  <DiffStat label={__ui("物品增值")}>
                     <span className={deltaClass(diff.data.farmedHr)}>{formatSignedHr(diff.data.farmedHr)}</span>
                   </DiffStat>
-                  <DiffStat label="市场变动">
+                  <DiffStat label={__ui("市场变动")}>
                     <span className={deltaClass(diff.data.marketDriftHr)}>
                       {formatSignedHr(diff.data.marketDriftHr)}
                     </span>
                   </DiffStat>
-                  <DiffStat label="总计">
+                  <DiffStat label={__ui("总计")}>
                     {diff.data.from.totalHr.toFixed(2)} → {diff.data.to.totalHr.toFixed(2)} HR
                   </DiffStat>
                 </div>
                 {diff.data.lines.length === 0 ? (
-                  <p className="py-3 text-center text-sm text-muted-foreground">物品数量没有变化。</p>
+                  <p className="py-3 text-center text-sm text-muted-foreground">{"" + __ui("物品数量没有变化。") + ""}</p>
                 ) : (
                   <div className="overflow-hidden rounded-md border border-border/70">
                     <div className="grid grid-cols-[1fr_6rem_4rem_5.5rem] gap-2 border-b border-border/70 bg-muted/30 px-2.5 py-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                      <span>物品</span>
-                      <span className="text-right">数量</span>
-                      <span className="text-right">变化</span>
-                      <span className="text-right">价值变化</span>
+                      <span>{"" + __ui("物品") + ""}</span>
+                      <span className="text-right">{"" + __ui("数量") + ""}</span>
+                      <span className="text-right">{"" + __ui("变化") + ""}</span>
+                      <span className="text-right">{"" + __ui("价值变化") + ""}</span>
                     </div>
                     <motion.div
                       variants={listStagger}
@@ -825,6 +822,7 @@ function DeleteHistory({
   currentSeasonId: string | null;
   onDeleted: () => void;
 }) {
+  const __ui = useUiText();
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<{ ok: boolean; text: string } | null>(null);
   const seasonLabel = seasons.find((s) => s.id === currentSeasonId)?.label ?? '本赛季';
@@ -847,7 +845,7 @@ function DeleteHistory({
       <p className="flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
         <ShieldCheck className="mt-px size-3.5 shrink-0 opacity-80" />
         <span>
-          历史记录仅对你的 PD2 账号可见，并保存在 pd2trader.com。{' '}
+          {" " + __ui("历史记录仅对你的 PD2 账号可见，并保存在 pd2trader.com。") + ""}{' '}
           {result && (
             <span role="status"
               className={cn('font-medium', result.ok ? 'text-success' : 'text-destructive')}>
@@ -864,8 +862,7 @@ function DeleteHistory({
             className="shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
             disabled={busy}
           >
-            {busy ? <Loader2 className="size-3.5 animate-spin" /> : <Trash2 className="size-3.5" />} 删除历史记录
-          </Button>
+            {busy ? <Loader2 className="size-3.5 animate-spin" /> : <Trash2 className="size-3.5" />} {" " + __ui("删除历史记录") + " "}</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -873,15 +870,14 @@ function DeleteHistory({
               <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-destructive/12 text-destructive">
                 <Trash2 className="size-4" />
               </span>
-              <AlertDialogTitle>确定删除仓库估值历史记录吗？</AlertDialogTitle>
+              <AlertDialogTitle>{"" + __ui("确定删除仓库估值历史记录吗？") + ""}</AlertDialogTitle>
             </div>
             <AlertDialogDescription>
-              将删除账号 {owner.account} 的估值快照（{owner.isLadder ? '天梯' : '非天梯'}、{' '}
-              {owner.isHardcore ? '专家模式' : '普通模式'}）。此操作无法撤销。
-            </AlertDialogDescription>
+              {" " + __ui("将删除账号") + " "}{owner.account} {" " + __ui("的估值快照（") + ""}{owner.isLadder ? __ui("天梯") : __ui("非天梯")}、{' '}
+              {owner.isHardcore ? __ui("专家模式") : __ui("普通模式")}{"" + __ui("）。此操作无法撤销。") + " "}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>取消</AlertDialogCancel>
+            <AlertDialogCancel>{"" + __ui("取消") + ""}</AlertDialogCancel>
             {currentSeasonId && (
               <AlertDialogAction
                 className={buttonVariants({
@@ -891,13 +887,11 @@ function DeleteHistory({
                 })}
                 onClick={() => run(currentSeasonId)}
               >
-                删除 {seasonLabel} 的记录
-              </AlertDialogAction>
+                {" " + __ui("删除") + " "}{seasonLabel} {" " + __ui("的记录") + " "}</AlertDialogAction>
             )}
             <AlertDialogAction className={buttonVariants({ variant: 'destructive' })}
               onClick={() => run()}>
-              删除所有赛季记录
-            </AlertDialogAction>
+              {" " + __ui("删除所有赛季记录") + " "}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

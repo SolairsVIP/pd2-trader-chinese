@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import {
@@ -105,6 +106,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
   onDragEnd,
   menuBelow = false,
 }) => {
+  const __ui = useUiText();
   const [menuOpen, setMenuOpen] = useState(false);
   const leaveTimer = useRef<number | undefined>(undefined);
 
@@ -229,7 +231,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
         </AnimatePresence>
 
         <div
-          title={onDrag ? '拖动以移动' : undefined}
+          title={onDrag ? __ui("拖动以移动") : undefined}
           className="flex h-full w-full touch-none flex-col overflow-hidden rounded-l-xl border border-r-0 border-border bg-surface shadow-panel backdrop-blur-md"
           onPointerDown={onTabPointerDown}
           onClickCapture={onTabClickCapture}
@@ -239,8 +241,8 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
               type="button"
               onClick={pick(onCorruptionLuckClick)}
               className={segment}
-              aria-label="打开腐化前试试手气"
-              title="腐化前试试手气"
+              aria-label={__ui("打开腐化前试试手气")}
+              title={__ui("腐化前试试手气")}
             >
               <img
                 src={corruptionShard}
@@ -256,13 +258,13 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
               type="button"
               onClick={pick(onMarketClick)}
               className={segment}
-              aria-label="打开交易大厅"
-              title="交易大厅"
+              aria-label={__ui("打开交易大厅")}
+              title={__ui("交易大厅")}
             >
               <Store style={icon} />
             </button>
           )}
-          <button type="button" onClick={onChatClick} className={segment} aria-label="打开 PD2 聊天" title="聊天">
+          <button type="button" onClick={onChatClick} className={segment} aria-label={__ui("打开 PD2 聊天")} title={__ui("聊天")}>
             <MessageSquare style={icon} />
             <AnimatePresence>
               {unreadCount > 0 && (
@@ -276,7 +278,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
               )}
             </AnimatePresence>
           </button>
-          <button type="button" onClick={onOffersClick} className={segment} aria-label="报价" title="报价">
+          <button type="button" onClick={onOffersClick} className={segment} aria-label={__ui("报价")} title={__ui("报价")}>
             <ShoppingBag style={icon} />
             <AnimatePresence>
               {tradeOffersCount > 0 && (
@@ -297,10 +299,10 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
             data-no-drag
             onClick={() => setMenuOpen((open) => !open)}
             className={cn(segment, 'max-h-[30%] text-muted-foreground', menuOpen && 'bg-accent text-accent-foreground')}
-            aria-label="更多"
+            aria-label={__ui("更多")}
             aria-haspopup="menu"
             aria-expanded={menuOpen}
-            title={menuOpen ? '收起更多功能' : '展开更多功能'}
+            title={menuOpen ? __ui("收起更多功能") : __ui("展开更多功能")}
           >
             <ChevronUp
               style={{ width: icon.width * 0.85, height: icon.height * 0.85 }}
@@ -336,7 +338,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
                       className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-left outline-none hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent"
                     >
                       <Icon className="size-4 shrink-0 text-muted-foreground" />
-                      <span className="flex-1">{label}</span>
+                      <span className="flex-1">{__ui(label)}</span>
                       {count && count.count > 0 && (
                         <span
                           className={cn(
@@ -360,7 +362,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
                     className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-left text-destructive outline-none hover:bg-destructive/15 focus-visible:bg-destructive/15"
                   >
                     <X className="size-4 shrink-0" />
-                    <span className="flex-1">关闭悬浮按钮</span>
+                    <span className="flex-1">{"" + __ui("关闭悬浮按钮") + ""}</span>
                   </button>
                 </>
               )}

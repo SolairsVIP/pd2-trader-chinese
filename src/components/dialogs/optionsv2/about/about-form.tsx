@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import { useEffect, useState } from 'react';
 import { useOptions } from '@/hooks/useOptions';
 import imgPath from '../../../../assets/img.png';
@@ -11,6 +12,7 @@ import { useOverlay } from '@/overlay';
 import { SettingsSkeleton } from '../settings-ui';
 
 export function AboutForm() {
+  const __ui = useUiText();
   const { settings, isLoading } = useOptions();
   const [version, setVersion] = useState<string | null>(null);
   const { openPanel } = useOverlay();
@@ -32,7 +34,7 @@ export function AboutForm() {
         />
         <motion.img
           src={imgPath}
-          alt="PD2 Trader 标志"
+          alt={__ui("PD2 Trader 标志")}
           width={56}
           height={56}
           className="relative drop-shadow-lg"
@@ -42,11 +44,10 @@ export function AboutForm() {
         />
         <div className="relative flex flex-col items-center gap-1.5">
           <span className="text-2xl font-bold text-foreground" style={{ fontFamily: 'DiabloFont' }}>
-            PD2 Trader 中文版
-          </span>
+            {" " + __ui("PD2 Trader 中文版") + " "}</span>
           {version ? (
             <span className="rounded-full border border-border bg-muted/60 px-2.5 py-0.5 font-mono text-xs text-muted-foreground">
-              版本：{version}
+              {" " + __ui("版本：") + ""}{version}
             </span>
           ) : (
             <Skeleton className="h-5 w-28 rounded-full" />
@@ -55,15 +56,14 @@ export function AboutForm() {
         <div className="relative mt-2 flex w-full max-w-xs flex-col gap-2">
           <Button variant="outline" size="sm" onClick={() => openPanel('changeLog')} className="w-full">
             <FileText className="h-4 w-4" />
-            查看更新日志
-          </Button>
+            {" " + __ui("查看更新日志") + " "}</Button>
         </div>
       </div>
 
       <div className="flex flex-col gap-3">
         <CreditTile role="中文版开发者" names={['Solaris']} />
         <div className="flex flex-col gap-3">
-          <h3 className="text-sm font-semibold text-foreground">致谢：</h3>
+          <h3 className="text-sm font-semibold text-foreground">{"" + __ui("致谢：") + ""}</h3>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <CreditTile role="原版开发者" names={['@Doreet']} />
             <CreditTile role="腐化区提示作者" names={['Blyat']} />

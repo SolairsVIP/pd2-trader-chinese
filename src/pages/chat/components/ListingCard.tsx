@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useState } from 'react';
 import { localizeBaseName, localizeMarketItemName } from '@/lib/localize-item-name';
 import moment from 'moment';
@@ -32,7 +33,8 @@ export const listingIconBoxClass =
 
 /** Same footprint as a loaded pill, so the sentence doesn't reflow much when the listing arrives. */
 export function ListingCardSkeleton() {
-  return <Skeleton aria-label="正在加载挂单"
+  const __ui = useUiText();
+  return <Skeleton aria-label={__ui("正在加载挂单")}
     className="mx-0.5 inline-block h-[30px] w-36 align-middle" />;
 }
 
@@ -117,6 +119,7 @@ export function ListingDetails({
   market: ListingMarketPrice | undefined;
   hint?: string;
 }) {
+  const __ui = useUiText();
   const { item, user } = listing;
   const online = listed && isUserOnlineIngame(listing.user_last_ingame);
   const delta = market && listing.hr_price > 0 ? marketDelta(listing.hr_price, market.hr) : null;
@@ -134,9 +137,9 @@ export function ListingDetails({
         hideToggle={true}
       />
       <div className="mt-2 space-y-1 border-t border-border pt-2 text-xs">
-        {listing.hr_price > 0 && <PopoverKeyValue label="标价">{`${listing.hr_price} HR`}</PopoverKeyValue>}
+        {listing.hr_price > 0 && <PopoverKeyValue label={__ui("标价")}>{`${listing.hr_price} HR`}</PopoverKeyValue>}
         {market && (
-          <PopoverKeyValue label="市场参考价">
+          <PopoverKeyValue label={__ui("市场参考价")}>
             {`${Number(market.hr.toFixed(2))} HR `}
             <span className="text-muted-foreground">{`· ${market.window}`}</span>
             {delta && <span className={cn('ml-1.5', delta.className)}>{delta.text}</span>}
@@ -144,32 +147,32 @@ export function ListingDetails({
         )}
         {listing.price && (
           <div className="flex justify-between gap-3">
-            <span className="shrink-0 text-muted-foreground">备注：</span>
+            <span className="shrink-0 text-muted-foreground">{"" + __ui("备注：") + ""}</span>
             <span className="min-w-0 break-words text-right">{listing.price}</span>
           </div>
         )}
-        <PopoverKeyValue label="状态">
-          {listed ? `已上架，${moment(listing.bumped_at).fromNow()}前更新` : '已售出或已下架'}
+        <PopoverKeyValue label={__ui("状态")}>
+          {listed ? `已上架，${moment(listing.bumped_at).fromNow()}前更新` : __ui("已售出或已下架")}
         </PopoverKeyValue>
-        <PopoverKeyValue label="模式">
+        <PopoverKeyValue label={__ui("模式")}>
           {`${listing.is_ladder ? '天梯' : '非天梯'} · ${listing.is_hardcore ? '专家模式' : '普通模式'}`}
         </PopoverKeyValue>
         {stashLabel(listing) && (
-          <PopoverKeyValue label="仓库位置">
+          <PopoverKeyValue label={__ui("仓库位置")}>
             {`${stashLabel(listing)}${item.position ? ` · 第 ${item.position.column + 1} 列，第 ${item.position.row + 1} 行` : ''}`}
           </PopoverKeyValue>
         )}
-        {item.item_level > 0 && <PopoverKeyValue label="物品等级">{item.item_level}</PopoverKeyValue>}
+        {item.item_level > 0 && <PopoverKeyValue label={__ui("物品等级")}>{item.item_level}</PopoverKeyValue>}
         {item.requirements?.level > 0 && (
-          <PopoverKeyValue label="需求等级">{item.requirements.level}</PopoverKeyValue>
+          <PopoverKeyValue label={__ui("需求等级")}>{item.requirements.level}</PopoverKeyValue>
         )}
         {user?.username && (
           <div className="flex items-center gap-1.5 pt-1 text-muted-foreground">
             <UserIcon className="size-3" />
-            卖家：<span className="text-foreground">{user.username}</span>
+            {" " + __ui("卖家：") + ""}<span className="text-foreground">{user.username}</span>
             {online && (
               <span className="size-2 rounded-full bg-success ring-2 ring-success/25"
-                title="游戏内在线" />
+                title={__ui("游戏内在线")} />
             )}
           </div>
         )}
@@ -184,6 +187,7 @@ export function ListingDetails({
  * price, stash location, base, stats, seller, mode and age live in the hover popover.
  */
 export function ListingCard({ listing, listed, url }: { listing: MarketListingEntry; listed: boolean; url: string }) {
+  const __ui = useUiText();
   const [open, setOpen] = useState(false);
   // Fetched with the pill rather than on hover, so the popover opens priced; a thread's pills share one batch.
   const market = useListingMarketPrices([listing]).get(listing._id);
@@ -208,8 +212,7 @@ export function ListingCard({ listing, listed, url }: { listing: MarketListingEn
           <span className={cn('truncate font-semibold', nameColor(listing))} title={listing.item.name}>{localizeMarketItemName(listing.item)}</span>
           {!listed && (
             <span className="shrink-0 rounded-sm bg-muted px-1 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-              已下架
-            </span>
+              {" " + __ui("已下架") + " "}</span>
           )}
         </a>
       </PopoverTrigger>

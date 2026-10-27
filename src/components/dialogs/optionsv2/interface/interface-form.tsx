@@ -1,3 +1,4 @@
+import { zoneText } from '@/pages/corrupted-zone/language';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -25,6 +26,7 @@ function toFormValues(settings: ISettings | undefined): InterfaceFormValues {
 
 export function InterfaceForm() {
   const { settings, isLoading, updateSettings } = useOptions();
+  const t = (text: string) => zoneText(text, settings?.uiLanguage);
 
   const form = useForm<InterfaceFormValues>({
     resolver: zodResolver(interfaceFormSchema),
@@ -63,18 +65,17 @@ export function InterfaceForm() {
 
   return (
     <Form {...form}>
-      <SettingsGroup title="浮窗">
+      <SettingsGroup title={t('浮窗')}>
         <FormField
           control={form.control}
           name="chatButtonOverlayEnabled"
           render={({ field }) => (
             <SettingsRow
-              label="聊天按钮浮窗"
-              description="在屏幕右下角显示悬浮聊天按钮。"
+              label={t('聊天按钮浮窗')}
+              description={t('在屏幕右下角显示悬浮聊天按钮。')}
               control={
                 <FormControl>
-                  <Switch checked={field.value ?? true}
-                    onCheckedChange={field.onChange} />
+                  <Switch checked={field.value ?? true} onCheckedChange={field.onChange} />
                 </FormControl>
               }
             >
@@ -89,10 +90,10 @@ export function InterfaceForm() {
             <SettingsRow
               label={
                 <>
-                  窗口透明度：<span className="tabular-nums">{field.value}%</span>
+                  {t('窗口透明度')}：<span className="tabular-nums">{field.value}%</span>
                 </>
               }
-              description="透过窗口背景查看游戏画面。0% 表示完全不透明。"
+              description={t('透过窗口背景查看游戏画面。0% 表示完全不透明。')}
               control={
                 <FormControl>
                   <Slider

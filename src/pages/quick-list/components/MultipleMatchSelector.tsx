@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React from 'react';
 import { localizeMarketItemName } from '@/lib/localize-item-name';
 import { motion } from 'framer-motion';
@@ -28,6 +29,7 @@ const MultipleMatchSelector: React.FC<MultipleMatchSelectorProps> = ({
   onExpandAll,
   onCollapseAll,
 }) => {
+  const __ui = useUiText();
   const anyExpanded = expandedItems.size > 0;
 
   return (
@@ -43,18 +45,18 @@ const MultipleMatchSelector: React.FC<MultipleMatchSelectorProps> = ({
           <AlertCircle className="size-4" />
         </span>
         <div className="flex-1">
-          <div className="text-sm font-semibold text-foreground">找到多个物品</div>
-          <div className="text-xs text-muted-foreground">请选择要上架的物品：</div>
+          <div className="text-sm font-semibold text-foreground">{"" + __ui("找到多个物品") + ""}</div>
+          <div className="text-xs text-muted-foreground">{"" + __ui("请选择要上架的物品：") + ""}</div>
         </div>
       </motion.div>
       <div className="mb-2 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className={sectionLabel}>选择物品</span>
+          <span className={sectionLabel}>{"" + __ui("选择物品") + ""}</span>
           <span className={countChip}
             aria-hidden>
             {matchingItems.length}
           </span>
-          <span className="sr-only">（找到 {matchingItems.length} 件）</span>
+          <span className="sr-only">{"" + __ui("（找到") + " "}{matchingItems.length} {" " + __ui("件）") + ""}</span>
         </div>
         <button
           type="button"
@@ -62,7 +64,7 @@ const MultipleMatchSelector: React.FC<MultipleMatchSelectorProps> = ({
           className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium text-primary outline-none transition-colors duration-(--dur-fast) hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-ring/60"
         >
           {anyExpanded ? <ChevronsDownUp className="size-3.5" /> : <ChevronsUpDown className="size-3.5" />}
-          {anyExpanded ? '收起详情' : '显示全部属性'}
+          {anyExpanded ? __ui("收起详情") : __ui("显示全部属性")}
         </button>
       </div>
       <ScrollArea className="pr-2">
@@ -92,8 +94,7 @@ const MultipleMatchSelector: React.FC<MultipleMatchSelectorProps> = ({
                     onItemSelect(stashItem);
                   }}
                 >
-                  选择
-                </Button>
+                  {" " + __ui("选择") + " "}</Button>
               </div>
               <ItemStatsDisplay
                 stashItem={stashItem}

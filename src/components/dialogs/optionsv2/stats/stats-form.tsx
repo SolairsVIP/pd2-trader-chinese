@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -23,6 +24,7 @@ const statsFormSchema = z.object({
 type StatsFormValues = z.infer<typeof statsFormSchema>;
 
 export function StatsForm() {
+  const __ui = useUiText();
   const { settings, isLoading, updateSettings } = useOptions();
   const debounceRef = React.useRef<NodeJS.Timeout | null>(null);
 
@@ -84,20 +86,20 @@ export function StatsForm() {
   return (
     <Form {...form}>
       <div className="flex flex-col gap-y-6">
-        <SettingsGroup title="价格">
+        <SettingsGroup title={__ui("价格")}>
           <FormField
             control={form.control}
             name="priceWindowHours"
             render={({ field }) => (
               <SettingsRow
-                label="价格统计区间"
-                description="估价平均值使用的近期成交数据范围。成交较少的物品会改用更长的统计区间，并显示标记。"
+                label={__ui("价格统计区间")}
+                description={__ui("估价平均值使用的近期成交数据范围。成交较少的物品会改用更长的统计区间，并显示标记。")}
                 control={
                   <Select value={String(field.value ?? DEFAULT_PRICE_WINDOW_HOURS)}
                     onValueChange={(value) => field.onChange(Number(value))}>
                     <FormControl>
                       <SelectTrigger className="w-[220px]">
-                        <SelectValue placeholder="选择价格区间" />
+                        <SelectValue placeholder={__ui("选择价格区间")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -117,7 +119,7 @@ export function StatsForm() {
           />
         </SettingsGroup>
 
-        <SettingsGroup title="属性范围">
+        <SettingsGroup title={__ui("属性范围")}>
           <FormField
             control={form.control}
             name="fillStatValue"
@@ -126,8 +128,8 @@ export function StatsForm() {
                 label={`填充属性数值（${marginUnit === 'percent' ? '%' : '固定值'}）`}
                 description={
                   marginUnit === 'percent'
-                    ? '填充属性范围时，按当前数值的一定百分比设置 ± 浮动范围。'
-                    : '填充属性范围时，按固定数值设置 ± 浮动范围（例如 2 → ±2）。'
+                    ? __ui("填充属性范围时，按当前数值的一定百分比设置 ± 浮动范围。")
+                    : __ui("填充属性范围时，按固定数值设置 ± 浮动范围（例如 2 → ±2）。")
                 }
                 control={
                   <div className="flex w-[220px] items-center gap-2">
@@ -164,19 +166,19 @@ export function StatsForm() {
             name="statFillMarginUnit"
             render={({ field }) => (
               <SettingsRow
-                label="浮动单位"
-                description="设置上述填充值的计算方式。抗性、技能等级等数值范围较小的属性适合使用固定值。"
+                label={__ui("浮动单位")}
+                description={__ui("设置上述填充值的计算方式。抗性、技能等级等数值范围较小的属性适合使用固定值。")}
                 control={
                   <Select value={field.value ?? 'percent'}
                     onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="w-[220px]">
-                        <SelectValue placeholder="选择浮动单位" />
+                        <SelectValue placeholder={__ui("选择浮动单位")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="percent">百分比 (%)</SelectItem>
-                      <SelectItem value="flat">固定值</SelectItem>
+                      <SelectItem value="percent">{"" + __ui("百分比 (%)") + ""}</SelectItem>
+                      <SelectItem value="flat">{"" + __ui("固定值") + ""}</SelectItem>
                     </SelectContent>
                   </Select>
                 }
@@ -190,8 +192,8 @@ export function StatsForm() {
             name="statFillLeaveMinEmpty"
             render={({ field }) => (
               <SettingsRow
-                label="最小值留空"
-                description="填充属性范围时留空最小值，搜索时即可匹配不超过最大值的所有数值。"
+                label={__ui("最小值留空")}
+                description={__ui("填充属性范围时留空最小值，搜索时即可匹配不超过最大值的所有数值。")}
                 control={
                   <FormControl>
                     <Switch checked={field.value ?? false}
@@ -208,8 +210,8 @@ export function StatsForm() {
             name="statFillLeaveMaxEmpty"
             render={({ field }) => (
               <SettingsRow
-                label="最大值留空"
-                description="填充属性范围时留空最大值，搜索时即可匹配当前数值或更高的数值。"
+                label={__ui("最大值留空")}
+                description={__ui("填充属性范围时留空最大值，搜索时即可匹配当前数值或更高的数值。")}
                 control={
                   <FormControl>
                     <Switch checked={field.value ?? false}
@@ -223,26 +225,26 @@ export function StatsForm() {
           />
         </SettingsGroup>
 
-        <SettingsGroup title="筛选条件">
+        <SettingsGroup title={__ui("筛选条件")}>
           <FormField
             control={form.control}
             name="statDefaultCorruptedFilter"
             render={({ field }) => (
               <SettingsRow
-                label="默认腐化筛选"
-                description="打开可腐化物品的估价窗口时默认使用的腐化筛选条件。"
+                label={__ui("默认腐化筛选")}
+                description={__ui("打开可腐化物品的估价窗口时默认使用的腐化筛选条件。")}
                 control={
                   <Select value={field.value ?? 'both'}
                     onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="w-[220px]">
-                        <SelectValue placeholder="选择腐化筛选" />
+                        <SelectValue placeholder={__ui("选择腐化筛选")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="both">全部物品</SelectItem>
-                      <SelectItem value="corrupted">仅限已腐化</SelectItem>
-                      <SelectItem value="non-corrupted">仅限未腐化</SelectItem>
+                      <SelectItem value="both">{"" + __ui("全部物品") + ""}</SelectItem>
+                      <SelectItem value="corrupted">{"" + __ui("仅限已腐化") + ""}</SelectItem>
+                      <SelectItem value="non-corrupted">{"" + __ui("仅限未腐化") + ""}</SelectItem>
                     </SelectContent>
                   </Select>
                 }
@@ -253,25 +255,25 @@ export function StatsForm() {
           />
         </SettingsGroup>
 
-        <SettingsGroup title="稀有物品评估">
+        <SettingsGroup title={__ui("稀有物品评估")}>
           <FormField
             control={form.control}
             name="rareRankDisplay"
             render={({ field }) => (
               <SettingsRow
-                label="稀有物品评级显示"
-                description="设置稀有物品估价弹窗中，该物品在同部位物品价格排名的显示方式。"
+                label={__ui("稀有物品评级显示")}
+                description={__ui("设置稀有物品估价弹窗中，该物品在同部位物品价格排名的显示方式。")}
                 control={
                   <Select value={field.value ?? 'bar'}
                     onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="w-[220px]">
-                        <SelectValue placeholder="选择评级显示方式" />
+                        <SelectValue placeholder={__ui("选择评级显示方式")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="bar">进度条（百分位 + 出售/保留参考线）</SelectItem>
-                      <SelectItem value="blocks">分段条（6 个评级区间）</SelectItem>
+                      <SelectItem value="bar">{"" + __ui("进度条（百分位 + 出售/保留参考线）") + ""}</SelectItem>
+                      <SelectItem value="blocks">{"" + __ui("分段条（6 个评级区间）") + ""}</SelectItem>
                     </SelectContent>
                   </Select>
                 }

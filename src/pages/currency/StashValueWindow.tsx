@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import moment from 'moment';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
@@ -58,6 +59,7 @@ const STALE_ON_OPEN_MS = 2 * 60 * 1000;
 const TRIGGER_CLASS = 'shrink-0 px-2 text-xs';
 
 export function StashValueWindow() {
+  const __ui = useUiText();
   const netWorth = useNetWorth();
   const { owner, latest, status, error, trackingEnabled, takeSnapshot, lastSnapshotAt } = netWorth;
   const { settings } = useOptions();
@@ -145,8 +147,7 @@ export function StashValueWindow() {
                           variant="outline"
                           onClick={() => takeSnapshot('manual')}>
                           <RefreshCw className="size-3.5" />
-                          重试
-                        </Button>
+                          {" " + __ui("重试") + " "}</Button>
                       }
                     >
                       <span className="text-destructive">{error}</span>
@@ -167,8 +168,7 @@ export function StashValueWindow() {
                   >
                     <TabsTrigger value="overview"
                       className={TRIGGER_CLASS}>
-                      概览
-                    </TabsTrigger>
+                      {" " + __ui("概览") + " "}</TabsTrigger>
                     {HOLDING_TABS.map((t) => (
                       <TabsTrigger key={t.value}
                         value={t.value}
@@ -179,14 +179,13 @@ export function StashValueWindow() {
                     {rares && (
                       <TabsTrigger value="rares"
                         className={TRIGGER_CLASS}>
-                        {rares.some(isCrafted) ? '稀有与手工艺物品' : '稀有物品'}
+                        {rares.some(isCrafted) ? __ui("稀有与手工艺物品") : __ui("稀有物品")}
                       </TabsTrigger>
                     )}
                     <TabsTrigger value="history"
                       className={cn(TRIGGER_CLASS, 'gap-1')}>
                       <History className="size-3.5" />
-                      历史记录
-                    </TabsTrigger>
+                      {" " + __ui("历史记录") + " "}</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="overview"
@@ -261,6 +260,7 @@ function WindowTitle({
   seasonLabel?: string;
   onClose: () => void;
 }) {
+  const __ui = useUiText();
   return (
     <WindowChrome
       className="sticky top-0 z-30 h-12 border-border/70 bg-background/85 px-4 backdrop-blur-md"
@@ -269,7 +269,7 @@ function WindowTitle({
       onClose={onClose}
       title={
         <>
-          <span className="shrink-0">仓库估值</span>
+          <span className="shrink-0">{"" + __ui("仓库估值") + ""}</span>
           {owner && (
             <span className="flex min-w-0 items-center gap-1.5 text-xs font-normal">
               <span className="flex min-w-0 items-center gap-1 text-muted-foreground">
@@ -277,7 +277,7 @@ function WindowTitle({
                 <span className="truncate font-medium text-foreground/90">{owner.account}</span>
               </span>
               <span className="shrink-0 rounded-full border border-border bg-muted/50 px-2 py-px text-muted-foreground">
-                {owner.isLadder ? '天梯' : '非天梯'} · {owner.isHardcore ? '专家模式' : '普通模式'}
+                {owner.isLadder ? __ui("天梯") : __ui("非天梯")} · {owner.isHardcore ? __ui("专家模式") : __ui("普通模式")}
               </span>
               {seasonLabel && (
                 <span className="truncate rounded-full border border-border bg-muted/50 px-2 py-px text-muted-foreground">
@@ -308,6 +308,7 @@ function Header({
   loading: boolean;
   onRefresh: () => void;
 }) {
+  const __ui = useUiText();
   const deltas = useMemo(() => {
     if (!valuation) return [];
     const total = valuation.totalHr;
@@ -345,8 +346,7 @@ function Header({
       <div className="relative flex items-start justify-between gap-4">
         <div className="min-w-0 space-y-1.5">
           <p className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
-            仓库总估值
-            {wealthRank && (
+            {" " + __ui("仓库总估值") + " "}{wealthRank && (
               <span className="rounded-full border border-glow/40 bg-glow/10 px-2 py-px font-semibold normal-case tracking-normal text-foreground tabular-nums">
                 {wealthRank}
               </span>
@@ -382,31 +382,29 @@ function Header({
                 variant="outline"
                 disabled={loading}
                 onClick={onRefresh}>
-                <RefreshCw className={cn('size-3.5', loading && 'animate-spin')} /> {loading ? '正在刷新' : '刷新'}
+                <RefreshCw className={cn('size-3.5', loading && 'animate-spin')} /> {loading ? __ui("正在刷新") : __ui("刷新")}
               </Button>
             </span>
           </TooltipTrigger>
-          <TooltipContent>立即重新估算仓库价值</TooltipContent>
+          <TooltipContent>{"" + __ui("立即重新估算仓库价值") + ""}</TooltipContent>
         </Tooltip>
       </div>
       <div className="relative mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
         <span className="inline-flex items-center gap-1">
           <Clock className="size-3" />
-          估值时间：{moment(valuation.takenAt).format('HH:mm')}
+          {" " + __ui("估值时间：") + ""}{moment(valuation.takenAt).format('HH:mm')}
         </span>
         <span className="inline-flex items-center gap-1">
           <Tag className="size-3" />
-          价格数据：{valuation.priceDay}
+          {" " + __ui("价格数据：") + ""}{valuation.priceDay}
         </span>
         <span className="inline-flex items-center gap-1">
           <Coins className="size-3 text-q-gold" />
-          {valuation.gold.toLocaleString()} 金币
-        </span>
+          {valuation.gold.toLocaleString()} {" " + __ui("金币") + " "}</span>
         {valuation.priceSource === 'ladder-fallback' && (
           <span className="inline-flex items-center gap-1 rounded-full bg-warning/12 px-2 py-0.5 text-warning">
             <AlertTriangle className="size-3" />
-            当前没有非天梯行情数据，已使用天梯价格估算
-          </span>
+            {" " + __ui("当前没有非天梯行情数据，已使用天梯价格估算") + " "}</span>
         )}
       </div>
     </div>
@@ -414,48 +412,50 @@ function Header({
 }
 
 function TrackingDisabled() {
+  const __ui = useUiText();
   return (
     <EmptyState
       icon={<History />}
-      title="估值历史记录已关闭"
-      description="请前往“设置 → 仓库估值”开启“保存估值历史”，即可查看价格图表、每小时 HR 变化，以及两次快照之间的物品变化。"
+      title={__ui("估值历史记录已关闭")}
+      description={__ui("请前往“设置 → 仓库估值”开启“保存估值历史”，即可查看价格图表、每小时 HR 变化，以及两次快照之间的物品变化。")}
     />
   );
 }
 
 function SignedOut({ hasToken }: { hasToken: boolean }) {
+  const __ui = useUiText();
   const { openPanel } = useOverlay();
   return hasToken ? (
     <EmptyState
       className="mt-6"
       icon={<UserRound />}
-      title="请在设置中选择 PD2 账号以估算仓库价值"
+      title={__ui("请在设置中选择 PD2 账号以估算仓库价值")}
     />
   ) : (
     <EmptyState
       className="mt-6"
       icon={<LogIn />}
-      title="登录 PD2 账号以估算仓库价值"
+      title={__ui("登录 PD2 账号以估算仓库价值")}
       action={
         <Button size="sm"
           onClick={() => openPanel('signIn')}>
           <LogIn className="size-3.5" />
-          登录
-        </Button>
+          {" " + __ui("登录") + " "}</Button>
       }
     />
   );
 }
 
 function TabSkeleton({ failed }: { failed: boolean }) {
+  const __ui = useUiText();
   if (failed) {
     return (
       <EmptyState
         compact
         className="py-10"
         icon={<PackageOpen />}
-        title="暂无估值记录"
-        description="无法获取仓库估值。请确认 PD2 服务可用后，点击上方“重试”。"
+        title={__ui("暂无估值记录")}
+        description={__ui("无法获取仓库估值。请确认 PD2 服务可用后，点击上方“重试”。")}
       />
     );
   }

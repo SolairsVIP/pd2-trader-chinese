@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,6 +25,7 @@ const accountFormSchema = z.object({
 type AccountFormValues = z.infer<typeof accountFormSchema>;
 
 export function AccountForm() {
+  const __ui = useUiText();
   const { settings, updateSettings } = useOptions();
   const { authData, logout, startOAuthFlow } = usePd2Website();
   const [accounts, setAccounts] = useState<string[]>([]);
@@ -109,18 +111,16 @@ export function AccountForm() {
               exit="exit">
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
-                <AlertTitle>没有可用的账户</AlertTitle>
+                <AlertTitle>{"" + __ui("没有可用的账户") + ""}</AlertTitle>
                 <AlertDescription>
-                  如果未选择正确的账户，上架物品时可能会遇到 404 错误。
-                  请先验证身份以加载账户。
-                </AlertDescription>
+                  {" " + __ui("如果未选择正确的账户，上架物品时可能会遇到 404 错误。 请先验证身份以加载账户。") + " "}</AlertDescription>
               </Alert>
             </motion.div>
           )}
         </AnimatePresence>
 
         <SettingsGroup
-          title="PD2 账户"
+          title={__ui("PD2 账户")}
           aside={
             <span
               className={cn(
@@ -132,7 +132,7 @@ export function AccountForm() {
                 aria-hidden
                 className={cn('size-1.5 rounded-full', authData ? 'bg-success shadow-glow' : 'bg-muted-foreground/50')}
               />
-              {authData ? (username ? `已登录：${username}` : '已登录') : '未登录'}
+              {authData ? (username ? `已登录：${username}` : __ui("已登录")) : __ui("未登录")}
             </span>
           }
         >
@@ -143,10 +143,10 @@ export function AccountForm() {
               render={({ field }) => (
                 <SettingsRow
                   layout="stacked"
-                  label="PD2 令牌"
+                  label={__ui("PD2 令牌")}
                   description={
                     <>
-                      从以下网址获取令牌：{' '}
+                      {" " + __ui("从以下网址获取令牌：") + ""}{' '}
                       <a
                         href="https://projectdiablo2.com"
                         target="_blank"
@@ -156,13 +156,12 @@ export function AccountForm() {
                         projectdiablo2.com
                         <ExternalLink className="w-3 h-3" />
                       </a>{' '}
-                      登录后，在浏览器的 localStorage 中查找 &apos;pd2-token&apos;。
-                    </>
+                      {" " + __ui("登录后，在浏览器的 localStorage 中查找 &apos;pd2-token&apos;。") + " "}</>
                   }
                   control={
                     <FormControl>
                       <Input type="password"
-                        placeholder="输入 PD2 令牌"
+                        placeholder={__ui("输入 PD2 令牌")}
                         className="w-full"
                         autoComplete="off"
                         {...field} />
@@ -179,11 +178,11 @@ export function AccountForm() {
             name="account"
             render={({ field }) => (
               <SettingsRow
-                label="账户"
+                label={__ui("账户")}
                 description={
                   accounts.length > 0
                     ? `已关联 ${accounts.length} 个游戏账户，用于上架物品和交易报价。`
-                    : '登录以加载关联到 PD2 个人资料的游戏账户。'
+                    : __ui("登录以加载关联到 PD2 个人资料的游戏账户。")
                 }
                 control={
                   <>
@@ -195,7 +194,7 @@ export function AccountForm() {
                     >
                       <FormControl>
                         <SelectTrigger className="w-[220px]">
-                          <SelectValue placeholder={accounts.length === 0 ? '请先验证身份' : '选择账户'} />
+                          <SelectValue placeholder={accounts.length === 0 ? __ui("请先验证身份") : __ui("选择账户")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -216,7 +215,7 @@ export function AccountForm() {
                         className="min-w-28"
                       >
                         {loggingOut ? <Loader2 className="animate-spin" /> : <LogOut />}
-                        {loggingOut ? '正在退出…' : '退出登录'}
+                        {loggingOut ? __ui("正在退出…") : __ui("退出登录")}
                       </Button>
                     ) : (
                       <Button type="button"
@@ -224,7 +223,7 @@ export function AccountForm() {
                         disabled={loggingIn}
                         className="min-w-28">
                         {loggingIn ? <Loader2 className="animate-spin" /> : <LogIn />}
-                        {loggingIn ? '正在登录…' : '登录'}
+                        {loggingIn ? __ui("正在登录…") : __ui("登录")}
                       </Button>
                     )}
                   </>

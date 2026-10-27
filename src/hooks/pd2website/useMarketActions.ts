@@ -11,6 +11,8 @@ import { searchMarketListings } from '@/lib/market-search-api';
 import qs from 'qs';
 import { AuthenticationError, handleApiResponse } from './usePD2Website';
 import { normalizeItemForStashMatching } from '@/lib/game-stash-input';
+import { BACKEND_URL } from '@/lib/pkce';
+import { FavoriteAccessError } from '@/pages/market/lib/favorite-access';
 
 export interface StashMatchOptions {
   forceRefresh?: boolean;
@@ -216,6 +218,31 @@ export function useMarketActions({
     [settings, onAuthError],
   );
 
+  // The favorites endpoint can reject an otherwise valid OAuth token. Check identity before
+  // triggering global sign-out; never turn an unsuccessful write into an optimistic success.
+  const handleFavoriteResponse = useCallback(async <T,>(response: Response, context: unknown): Promise<T> => {
+    if (response.status === 401 || response.status === 403) {
+      const identityResponse = await tauriFetch(`${BACKEND_URL}/api/auth/oauth/me`, {
+        method: 'GET', headers: { Authorization: `Bearer ${settings.pd2Token}` },
+      });
+      if (identityResponse.ok) {
+        const identity = await identityResponse.json();
+        if (typeof identity?.user?._id === 'string' && identity.user._id) {
+          throw new FavoriteAccessError(identity.user._id);
+        }
+        throw new Error('无法确认当前账号，请稍后重试收藏。');
+      }
+      if (identityResponse.status !== 401) {
+        throw new Error('暂时无法验证登录状态，请稍后重试收藏。');
+      }
+      await onAuthError?.();
+      throw new AuthenticationError('登录已失效，请重新登录后收藏。');
+    }
+    const result = await handleApiResponse(response, undefined, context);
+    if (result == null && response.status !== 204) throw new Error('官网未确认收藏操作，请稍后重试。');
+    return result;
+  }, [settings.pd2Token, onAuthError]);
+
   // The user's site favorites, newest first, each with its listing and seller (GET /market/favorite)
   const getFavorites = useCallback(
     async ({ limit = 50, skip = 0 }: { limit?: number; skip?: number } = {}): Promise<{
@@ -230,9 +257,9 @@ export function useMarketActions({
           Authorization: `Bearer ${settings.pd2Token}`,
         },
       });
-      return await handleApiResponse(response, onAuthError, query);
+      return await handleFavoriteResponse(response, query);
     },
-    [settings.pd2Token, onAuthError],
+    [settings.pd2Token, handleFavoriteResponse],
   );
 
   // Favorite a listing (POST /market/favorite)
@@ -247,9 +274,9 @@ export function useMarketActions({
         },
         body: JSON.stringify(body),
       });
-      return await handleApiResponse(response, onAuthError, body);
+      return await handleFavoriteResponse(response, body);
     },
-    [settings.pd2Token, onAuthError],
+    [settings.pd2Token, handleFavoriteResponse],
   );
 
   // Unfavorite (DELETE /market/favorite/:favoriteId)
@@ -264,9 +291,9 @@ export function useMarketActions({
           },
         },
       );
-      await handleApiResponse(response, onAuthError, { favoriteId });
+      if (response.status !== 204) await handleFavoriteResponse(response, { favoriteId });
     },
-    [settings.pd2Token, onAuthError],
+    [settings.pd2Token, handleFavoriteResponse],
   );
 
   // Make an offer, as the site's Offer form does (POST /market/offer)

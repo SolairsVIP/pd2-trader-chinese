@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useState } from 'react';
 import { localizeMarketItemName } from '@/lib/localize-item-name';
 import moment from 'moment';
@@ -171,6 +172,7 @@ export function TraderSidebar({
   closeLabel: string;
   className?: string;
 }) {
+  const __ui = useUiText();
   const { participant } = thread;
   const { openPanel } = useOverlay();
   const username = participant?.username;
@@ -209,7 +211,7 @@ export function TraderSidebar({
     market = (
       <div aria-busy
         className="grid grid-cols-4 gap-1.5">
-        <span className="sr-only">正在加载对方的挂单…</span>
+        <span className="sr-only">{"" + __ui("正在加载对方的挂单…") + ""}</span>
         {Array.from({ length: MARKET_GRID_LIMIT }, (_, i) => (
           <Skeleton key={i}
             className="h-[66px] rounded-lg" />
@@ -219,7 +221,7 @@ export function TraderSidebar({
   } else if (grid.length === 0) {
     market = (
       <p className="rounded-lg border border-dashed border-border/70 px-3 py-4 text-center text-xs text-muted-foreground">
-        {profile.status === 'error' ? '无法加载对方的挂单。' : '对方没有正在出售的挂单。'}
+        {profile.status === 'error' ? __ui("无法加载对方的挂单。") : __ui("对方没有正在出售的挂单。")}
       </p>
     );
   } else {
@@ -235,7 +237,7 @@ export function TraderSidebar({
             />
           ))}
         </div>
-        <p className="px-0.5 text-[11px] text-muted-foreground">点击物品即可将其关联到消息中。</p>
+        <p className="px-0.5 text-[11px] text-muted-foreground">{"" + __ui("点击物品即可将其关联到消息中。") + ""}</p>
         {thread.userId && (
           <button
             type="button"
@@ -248,8 +250,7 @@ export function TraderSidebar({
             className="inline-flex h-7 w-full items-center justify-center gap-1.5 rounded-md border border-border/60 text-[11px] font-medium text-muted-foreground outline-none transition-colors duration-(--dur-fast) hover:bg-primary/10 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
           >
             <Store className="size-3.5" />
-            浏览所有挂单
-          </button>
+            {" " + __ui("浏览所有挂单") + " "}</button>
         )}
       </>
     );
@@ -257,7 +258,7 @@ export function TraderSidebar({
 
   return (
     <aside
-      aria-label="交易者"
+      aria-label={__ui("交易者")}
       className={cn(
         'flex min-h-0 w-[300px] shrink-0 flex-col overflow-hidden border-l border-border bg-card/40',
         className,
@@ -265,7 +266,7 @@ export function TraderSidebar({
     >
       <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border/70 px-3">
         <UserRound className="size-4 text-muted-foreground" />
-        <span className="flex-1 text-sm font-semibold tracking-tight">交易者</span>
+        <span className="flex-1 text-sm font-semibold tracking-tight">{"" + __ui("交易者") + ""}</span>
         <Tip label={closeLabel}>
           <button
             type="button"
@@ -305,7 +306,7 @@ export function TraderSidebar({
                       className="size-3 shrink-0" />
                   </button>
                 ) : (
-                  <span className="block truncate text-xs text-muted-foreground">尚未关联网站账号</span>
+                  <span className="block truncate text-xs text-muted-foreground">{"" + __ui("尚未关联网站账号") + ""}</span>
                 )}
                 <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
                   {presence}
@@ -313,7 +314,7 @@ export function TraderSidebar({
                     <span className="flex items-center gap-1">
                       <CalendarDays aria-hidden
                         className="size-3" />
-                      加入时间：{joined.format('YYYY年M月')}
+                      {" " + __ui("加入时间：") + ""}{joined.format('YYYY年M月')}
                     </span>
                   )}
                 </div>
@@ -343,40 +344,40 @@ export function TraderSidebar({
             <div className="-mx-3 -mb-3 mt-3 flex gap-0.5 border-t border-border/60 bg-background/30 p-1">
               {username && (
                 <>
-                  <Tip label="在 projectdiablo2.com 查看对方资料">
+                  <Tip label={__ui("在 projectdiablo2.com 查看对方资料")}>
                     <button
                       type="button"
-                      aria-label="查看个人资料"
+                      aria-label={__ui("查看个人资料")}
                       className={actionButtonClass}
                       onClick={() => openUrl(profileUrl(username))}
                     >
                       <UserRound className="size-3.5 shrink-0" />
-                      <span className="truncate">资料</span>
+                      <span className="truncate">{"" + __ui("资料") + ""}</span>
                     </button>
                   </Tip>
-                  <Tip label="在 projectdiablo2.com 查看对方的市场挂单">
+                  <Tip label={__ui("在 projectdiablo2.com 查看对方的市场挂单")}>
                     <button
                       type="button"
-                      aria-label="对方的市场挂单"
+                      aria-label={__ui("对方的市场挂单")}
                       className={actionButtonClass}
                       onClick={() => openUrl(marketUrl(username))}
                     >
                       <Store className="size-3.5 shrink-0" />
-                      <span className="truncate">市场</span>
+                      <span className="truncate">{"" + __ui("市场") + ""}</span>
                     </button>
                   </Tip>
                 </>
               )}
               {characterName && (
-                <Tip label="查看角色">
+                <Tip label={__ui("查看角色")}>
                   <button
                     type="button"
-                    aria-label="查看角色"
+                    aria-label={__ui("查看角色")}
                     className={actionButtonClass}
                     onClick={() => openUrl(characterUrl(characterName))}
                   >
                     <Swords className="size-3.5 shrink-0" />
-                    <span className="truncate">角色</span>
+                    <span className="truncate">{"" + __ui("角色") + ""}</span>
                   </button>
                 </Tip>
               )}
@@ -384,12 +385,12 @@ export function TraderSidebar({
                 <Tip label={`复制 *${whisperAccount}；在游戏聊天中输入 /w 后粘贴`}>
                   <button
                     type="button"
-                    aria-label="复制密语对象"
+                    aria-label={__ui("复制密语对象")}
                     className={actionButtonClass}
                     onClick={() => void copyAccount(whisperAccount)}
                   >
                     <Copy className="size-3.5 shrink-0" />
-                    <span className="truncate">密语</span>
+                    <span className="truncate">{"" + __ui("密语") + ""}</span>
                   </button>
                 </Tip>
               )}
@@ -398,7 +399,7 @@ export function TraderSidebar({
 
           {/* Trade with you */}
           <Section icon={Handshake}
-            title="与你的交易记录">
+            title={__ui("与你的交易记录")}>
             <div className="grid grid-cols-2 gap-1.5">
               {[
                 { label: '未完成报价', value: openOffers },
@@ -414,7 +415,7 @@ export function TraderSidebar({
               ))}
             </div>
             {offers.length > 0 && (
-              <ul aria-label="你们之间的报价"
+              <ul aria-label={__ui("你们之间的报价")}
                 className="space-y-1">
                 {offers.map((offer) => {
                   const status = offerStatus(offer);
@@ -425,10 +426,10 @@ export function TraderSidebar({
                       className="flex min-w-0 items-center gap-2 rounded-lg bg-background/40 px-2 py-1.5 text-xs"
                     >
                       <Direction
-                        aria-label={offer.isIncoming ? '对方发给你的报价' : '你发出的报价'}
+                        aria-label={offer.isIncoming ? __ui("对方发给你的报价") : __ui("你发出的报价")}
                         className="size-3.5 shrink-0 text-muted-foreground"
                       />
-                      <span className="min-w-0 flex-1 truncate font-medium">{offer.itemName ?? '未知物品'}</span>
+                      <span className="min-w-0 flex-1 truncate font-medium">{offer.itemName ?? __ui("未知物品")}</span>
                       {offer.price && (
                         <span className="max-w-20 shrink-0 truncate font-semibold tabular-nums">{offer.price}</span>
                       )}
@@ -446,7 +447,7 @@ export function TraderSidebar({
               </ul>
             )}
             {linked.length > 0 && (
-              <ul aria-label="此聊天中关联的物品"
+              <ul aria-label={__ui("此聊天中关联的物品")}
                 className="space-y-1">
                 {linked.map(({ listing, listed }) => {
                   const market = prices.get(listing._id);
@@ -480,7 +481,7 @@ export function TraderSidebar({
                             listed ? 'bg-success/15 text-success' : 'bg-muted text-muted-foreground',
                           )}
                         >
-                          {listed ? '已上架' : '未上架'}
+                          {listed ? __ui("已上架") : __ui("未上架")}
                         </span>
                       </button>
                     </li>
@@ -491,8 +492,7 @@ export function TraderSidebar({
             {offers.length === 0 && linked.length === 0 && (
               <p className="flex items-center gap-1.5 px-0.5 text-xs text-muted-foreground">
                 <Link2 className="size-3.5" />
-                暂无报价或关联物品。
-              </p>
+                {" " + __ui("暂无报价或关联物品。") + " "}</p>
             )}
           </Section>
 
@@ -500,7 +500,7 @@ export function TraderSidebar({
           {thread.userId && (
             <Section
               icon={PackageSearch}
-              title="对方的市场挂单"
+              title={__ui("对方的市场挂单")}
               aside={
                 profile.status === 'ready' &&
                 profile.total > grid.length &&
@@ -510,8 +510,7 @@ export function TraderSidebar({
                     onClick={() => openUrl(marketUrl(username))}
                     className="inline-flex items-center gap-0.5 rounded-sm normal-case tracking-normal text-primary outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring/60"
                   >
-                    另有 {profile.total - grid.length} 件
-                    <ExternalLink aria-hidden
+                    {" " + __ui("另有") + " "}{profile.total - grid.length} {" " + __ui("件") + " "}<ExternalLink aria-hidden
                       className="size-3" />
                   </button>
                 )
@@ -524,18 +523,17 @@ export function TraderSidebar({
           {/* In-game */}
           {thread.people.length > 0 && (
             <Section icon={Gamepad2}
-              title="游戏内状态">
+              title={__ui("游戏内状态")}>
               <div className="space-y-1.5 rounded-lg border border-border/60 bg-background/30 px-2.5 py-2 text-xs">
                 <div className="flex items-center justify-between gap-2">
                   <span className="flex items-center gap-1.5 text-muted-foreground">
                     <MessageCircle className="size-3.5" />
-                    密语
-                  </span>
+                    {" " + __ui("密语") + " "}</span>
                   <span className="font-semibold tabular-nums">{whisperCount}</span>
                 </div>
                 {lastWhisper > 0 && (
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-muted-foreground">最近的密语</span>
+                    <span className="text-muted-foreground">{"" + __ui("最近的密语") + ""}</span>
                     <span title={moment(lastWhisper).format('ddd, MMM D YYYY · h:mm A')}>
                       {shortAgo(lastWhisper, now)}
                     </span>

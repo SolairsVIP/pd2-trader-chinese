@@ -688,6 +688,49 @@ describe('closeOnBlur', () => {
     expect(invoke).toHaveBeenLastCalledWith('set_outside_click_watch', { enabled: false });
   });
 
+  it('dismisses idle login-style panels on a game click but protects an active login flow', async () => {
+    mount();
+    await act(async () => {});
+    let busy = true;
+    const stop = api.guardPanelDismissal('settings', () => !busy);
+    act(() => api.openPanel('settings'));
+    act(() => events.get(OUTSIDE_CLICK_EVENT)!());
+    expect(api.isOpen('settings')).toBe(true);
+    act(() => focus.onChange!(false));
+    act(() => vi.advanceTimersByTime(CLOSE_ON_BLUR_MS + 1));
+    expect(api.isOpen('settings')).toBe(true);
+    busy = false;
+    act(() => events.get(OUTSIDE_CLICK_EVENT)!());
+    expect(api.isOpen('settings')).toBe(false);
+    stop();
+  });
+
+  it('rechecks a flow guard when a previously scheduled blur dismissal fires', () => {
+    mount();
+    let busy = false;
+    const stop = api.guardPanelDismissal('settings', () => !busy);
+    act(() => api.openPanel('settings'));
+    act(() => focus.onChange!(false));
+    busy = true;
+    act(() => vi.advanceTimersByTime(CLOSE_ON_BLUR_MS + 1));
+    expect(api.isOpen('settings')).toBe(true);
+    // Explicit Close must still abort a stuck login.
+    act(() => api.closePanel('settings'));
+    expect(api.isOpen('settings')).toBe(false);
+    stop();
+  });
+
+  it('keeps the game dock anchored when another panel opens and closes', () => {
+    game.state = { ...game.state, gameRect: { x: 80, y: 120, width: 800, height: 600 } };
+    mount();
+    act(() => api.openPanel('chatButton'));
+    const before = { left: frame('chatButton')!.style.left, top: frame('chatButton')!.style.top };
+    act(() => api.openPanel('signIn'));
+    expect(frame('chatButton')!.style).toMatchObject(before);
+    act(() => api.closePanel('signIn'));
+    expect(frame('chatButton')!.style).toMatchObject(before);
+  });
+
   it('keeps panels open when focus returns within the delay', () => {
     mount();
     act(() => api.openPanel('chat'));

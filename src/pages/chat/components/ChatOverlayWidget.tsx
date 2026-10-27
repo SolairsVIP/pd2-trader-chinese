@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { MessageSquare, MessagesSquare } from 'lucide-react';
@@ -85,6 +86,7 @@ const findThread = (threads: InboxThread[], id: string | null) =>
   id === null ? undefined : (threads.find((t) => t.id === id) ?? threads.find((t) => threadAliases(t).includes(id)));
 
 export default function ChatOverlayWidget({ onClose }: ChatOverlayWidgetProps) {
+  const __ui = useUiText();
   const {
     authData,
     subscribeSocket,
@@ -557,7 +559,7 @@ export default function ChatOverlayWidget({ onClose }: ChatOverlayWidgetProps) {
         {/* Top Bar (WindowChrome is the panel drag handle) */}
         <div id="titlebar-drag-handle">
           <WindowChrome
-            title="PD2 聊天"
+            title={__ui("PD2 聊天")}
             icon={<MessageSquare className="text-primary" />}
             onClose={onClose}
             closeLabel="关闭聊天"
@@ -565,8 +567,7 @@ export default function ChatOverlayWidget({ onClose }: ChatOverlayWidgetProps) {
               !signedIn && (
                 <Badge variant="destructive"
                   className="mr-1 text-xs">
-                  未登录
-                </Badge>
+                  {" " + __ui("未登录") + " "}</Badge>
               )
             }
           />
@@ -744,8 +745,8 @@ export default function ChatOverlayWidget({ onClose }: ChatOverlayWidgetProps) {
                 <EmptyState
                   className="m-auto max-w-sm"
                   icon={<MessagesSquare />}
-                  title="选择一个会话以查看消息"
-                  description={threads.length > 0 ? '从左侧选择聊天。' : undefined}
+                  title={__ui("选择一个会话以查看消息")}
+                  description={threads.length > 0 ? __ui("从左侧选择聊天。") : undefined}
                 />
               )}
             </section>

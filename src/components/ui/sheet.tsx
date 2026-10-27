@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 'use client';
 
 import * as React from 'react';
@@ -50,6 +51,7 @@ function SheetContent({
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: 'top' | 'right' | 'bottom' | 'left';
 }) {
+  const __ui = useUiText();
   // Inside an overlay panel the sheet slides over the panel, not the monitor edge
   const inPanel = !!usePanelPortalContainer();
   return (
@@ -75,7 +77,7 @@ function SheetContent({
         {children}
         <SheetPrimitive.Close className="ring-offset-background focus-visible:ring-ring/60 text-muted-foreground hover:text-foreground hover:bg-accent data-[state=open]:bg-secondary absolute top-4 right-4 rounded-md p-0.5 opacity-80 transition-[color,background-color,opacity,transform] duration-(--dur-fast) ease-out hover:opacity-100 motion-safe:active:scale-90 focus-visible:ring-2 focus-visible:ring-offset-0 focus:outline-hidden disabled:pointer-events-none">
           <XIcon className="size-4" />
-          <span className="sr-only">关闭</span>
+          <span className="sr-only">{"" + __ui("关闭") + ""}</span>
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>
     </SheetPortal>

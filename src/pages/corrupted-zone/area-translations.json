@@ -1,0 +1,366 @@
+{
+  "river of flame": {
+    "traditional": "火焰之河",
+    "simplified": "火焰之河"
+  },
+  "outer steppes": {
+    "traditional": "郊外大草原",
+    "simplified": "郊外大草原"
+  },
+  "plains of despair": {
+    "traditional": "絕望平原",
+    "simplified": "绝望平原"
+  },
+  "city of the damned": {
+    "traditional": "神罰之城",
+    "simplified": "神罚之城"
+  },
+  "durance of hate level 3": {
+    "traditional": "憎恨的囚牢第三層",
+    "simplified": "憎恨的囚牢第三层"
+  },
+  "durance of hate level 2": {
+    "traditional": "憎恨的囚牢第二層",
+    "simplified": "憎恨的囚牢第二层"
+  },
+  "durance of hate level 1": {
+    "traditional": "憎恨的囚牢第一層",
+    "simplified": "憎恨的囚牢第一层"
+  },
+  "disused reliquary": {
+    "traditional": "廢棄的聖物",
+    "simplified": "废弃的圣物"
+  },
+  "ruined fane": {
+    "traditional": "殘破的寺院",
+    "simplified": "残破的寺院"
+  },
+  "forgotten temple": {
+    "traditional": "遺忘神殿",
+    "simplified": "遗忘神殿"
+  },
+  "forgotten reliquary": {
+    "traditional": "遺忘的聖物",
+    "simplified": "遗忘的圣物"
+  },
+  "disused fane": {
+    "traditional": "廢棄的寺院",
+    "simplified": "废弃的寺院"
+  },
+  "ruined temple": {
+    "traditional": "殘破神殿",
+    "simplified": "残破神殿"
+  },
+  "flayer dungeon level 3": {
+    "traditional": "剝皮地窖第三層",
+    "simplified": "剥皮地窖第三层"
+  },
+  "flayer dungeon level 2": {
+    "traditional": "剝皮地窖第二層",
+    "simplified": "剥皮地窖第二层"
+  },
+  "flayer dungeon level 1": {
+    "traditional": "剝皮地窖第一層",
+    "simplified": "剥皮地窖第一层"
+  },
+  "swampy pit level 3": {
+    "traditional": "沼澤地洞第三層",
+    "simplified": "沼泽地洞第三层"
+  },
+  "swampy pit level 2": {
+    "traditional": "沼澤地洞第二層",
+    "simplified": "沼泽地洞第二层"
+  },
+  "swampy pit level 1": {
+    "traditional": "沼澤地洞第一層",
+    "simplified": "沼泽地洞第一层"
+  },
+  "spider cavern": {
+    "traditional": "蜘蛛洞窟",
+    "simplified": "蜘蛛洞窟"
+  },
+  "travincal": {
+    "traditional": "崔凡克",
+    "simplified": "崔凡克"
+  },
+  "upper kurast": {
+    "traditional": "庫拉斯特上層",
+    "simplified": "库拉斯特上层"
+  },
+  "kurast bazaar": {
+    "traditional": "庫拉斯特商場",
+    "simplified": "库拉斯特商场"
+  },
+  "lower kurast": {
+    "traditional": "庫拉斯特下層",
+    "simplified": "库拉斯特下层"
+  },
+  "flayer jungle": {
+    "traditional": "剝皮叢林",
+    "simplified": "剥皮丛林"
+  },
+  "great marsh": {
+    "traditional": "龐大濕地",
+    "simplified": "庞大湿地"
+  },
+  "spider forest": {
+    "traditional": "蜘蛛森林",
+    "simplified": "蜘蛛森林"
+  },
+  "arcane sanctuary": {
+    "traditional": "神秘庇難所",
+    "simplified": "神秘庇难所"
+  },
+  "tal rasha's tomb": {
+    "traditional": "塔.拉夏的古墓",
+    "simplified": "塔-拉夏的古墓"
+  },
+  "ancient tunnels": {
+    "traditional": "古代通道",
+    "simplified": "古代通道"
+  },
+  "maggot lair level 3": {
+    "traditional": "蛆蟲巢穴第三層",
+    "simplified": "蛆虫巢穴第三层"
+  },
+  "maggot lair level 2": {
+    "traditional": "蛆蟲巢穴第二層",
+    "simplified": "蛆虫巢穴第二层"
+  },
+  "maggot lair level 1": {
+    "traditional": "蛆蟲巢穴第一層",
+    "simplified": "蛆虫巢穴第一层"
+  },
+  "claw viper temple level 2": {
+    "traditional": "利爪腹蛇神殿第二層",
+    "simplified": "利爪腹蛇神殿第二层"
+  },
+  "halls of the dead level 3": {
+    "traditional": "死亡之殿第三層",
+    "simplified": "死亡之殿第三层"
+  },
+  "stony tomb level 2": {
+    "traditional": "石製古墓第二層",
+    "simplified": "石制古墓第二层"
+  },
+  "claw viper temple level 1": {
+    "traditional": "利爪腹蛇神殿第一層",
+    "simplified": "利爪腹蛇神殿第一层"
+  },
+  "halls of the dead level 2": {
+    "traditional": "死亡之殿第二層",
+    "simplified": "死亡之殿第二层"
+  },
+  "halls of the dead level 1": {
+    "traditional": "死亡之殿第一層",
+    "simplified": "死亡之殿第一层"
+  },
+  "stony tomb level 1": {
+    "traditional": "石製古墓第一層",
+    "simplified": "石制古墓第一层"
+  },
+  "palace cellar level 3": {
+    "traditional": "皇宮監牢第三層",
+    "simplified": "皇宫监牢第三层"
+  },
+  "palace cellar level 2": {
+    "traditional": "皇宮監牢第二層",
+    "simplified": "皇宫监牢第二层"
+  },
+  "palace cellar level 1": {
+    "traditional": "皇宮監牢第一層",
+    "simplified": "皇宫监牢第一层"
+  },
+  "sewers level 3": {
+    "traditional": "下水道第三層",
+    "simplified": "下水道第三层"
+  },
+  "sewers level 2": {
+    "traditional": "下水道第二層",
+    "simplified": "下水道第二层"
+  },
+  "sewers level 1": {
+    "traditional": "下水道第一層",
+    "simplified": "下水道第一层"
+  },
+  "canyon of the magi": {
+    "traditional": "術士的峽谷",
+    "simplified": "术士的峡谷"
+  },
+  "lost city": {
+    "traditional": "遺失的城市",
+    "simplified": "遗失的城市"
+  },
+  "far oasis": {
+    "traditional": "遙遠的綠洲",
+    "simplified": "遥远的绿洲"
+  },
+  "dry hills": {
+    "traditional": "乾燥的高地",
+    "simplified": "干燥的高地"
+  },
+  "rocky waste": {
+    "traditional": "碎石荒地",
+    "simplified": "碎石荒地"
+  },
+  "tristram": {
+    "traditional": "崔斯特瑞姆",
+    "simplified": "崔斯特瑞姆"
+  },
+  "catacombs level 4": {
+    "traditional": "地下墓穴第四層",
+    "simplified": "地下墓穴第四层"
+  },
+  "catacombs level 3": {
+    "traditional": "地下墓穴第三層",
+    "simplified": "地下墓穴第三层"
+  },
+  "catacombs level 2": {
+    "traditional": "地下墓穴第二層",
+    "simplified": "地下墓穴第二层"
+  },
+  "catacombs level 1": {
+    "traditional": "地下墓穴第一層",
+    "simplified": "地下墓穴第一层"
+  },
+  "cathedral": {
+    "traditional": "大教堂",
+    "simplified": "大教堂"
+  },
+  "inner cloister": {
+    "traditional": "內側迴廊",
+    "simplified": "内侧回廊"
+  },
+  "jail level 3": {
+    "traditional": "監牢第三層",
+    "simplified": "监牢第三层"
+  },
+  "jail level 2": {
+    "traditional": "監牢第二層",
+    "simplified": "监牢第二层"
+  },
+  "jail level 1": {
+    "traditional": "監牢第一層",
+    "simplified": "监牢第一层"
+  },
+  "barracks": {
+    "traditional": "軍營",
+    "simplified": "军营"
+  },
+  "outer cloister": {
+    "traditional": "外側迴廊",
+    "simplified": "外侧回廊"
+  },
+  "tower cellar level 5": {
+    "traditional": "高塔地牢第五層",
+    "simplified": "高塔地牢第五层"
+  },
+  "tower cellar level 4": {
+    "traditional": "高塔地牢第四層",
+    "simplified": "高塔地牢第四层"
+  },
+  "tower cellar level 3": {
+    "traditional": "高塔地牢第三層",
+    "simplified": "高塔地牢第三层"
+  },
+  "tower cellar level 2": {
+    "traditional": "高塔地牢第二層",
+    "simplified": "高塔地牢第二层"
+  },
+  "tower cellar level 1": {
+    "traditional": "高塔地牢第一層",
+    "simplified": "高塔地牢第一层"
+  },
+  "forgotten tower": {
+    "traditional": "遺忘之塔",
+    "simplified": "遗忘之塔"
+  },
+  "mausoleum": {
+    "traditional": "大陵寢",
+    "simplified": "大陵寝"
+  },
+  "burial grounds": {
+    "traditional": "埋骨之地",
+    "simplified": "埋骨之地"
+  },
+  "pit level 2": {
+    "traditional": "地穴第二層",
+    "simplified": "地穴第二层"
+  },
+  "hole level 2": {
+    "traditional": "地洞第二層",
+    "simplified": "地洞第二层"
+  },
+  "underground passage level 2": {
+    "traditional": "地底通道第二層",
+    "simplified": "地底通道第二层"
+  },
+  "cave level 2": {
+    "traditional": "洞窟第二層",
+    "simplified": "洞窟第二层"
+  },
+  "pit level 1": {
+    "traditional": "地穴第一層",
+    "simplified": "地穴第一层"
+  },
+  "hole level 1": {
+    "traditional": "地洞第一層",
+    "simplified": "地洞第一层"
+  },
+  "underground passage level 1": {
+    "traditional": "地底通道第一層",
+    "simplified": "地底通道第一层"
+  },
+  "cave level 1": {
+    "traditional": "洞窟第一層",
+    "simplified": "洞窟第一层"
+  },
+  "den of evil": {
+    "traditional": "邪惡洞窟",
+    "simplified": "邪恶洞窟"
+  },
+  "tamoe highland": {
+    "traditional": "泰摩高地",
+    "simplified": "泰摩高地"
+  },
+  "black marsh": {
+    "traditional": "黑色荒地",
+    "simplified": "黑色荒地"
+  },
+  "dark wood": {
+    "traditional": "黑暗森林",
+    "simplified": "黑暗森林"
+  },
+  "stony field": {
+    "traditional": "石塊曠野",
+    "simplified": "石块旷野"
+  },
+  "cold plains": {
+    "traditional": "冰冷之原",
+    "simplified": "冰冷之原"
+  },
+  "blood moor": {
+    "traditional": "鮮血荒地",
+    "simplified": "鲜血荒地"
+  },
+  "bloody foothills": {
+    "traditional": "血腥丘陵",
+    "simplified": "血腥丘陵"
+  },
+  "arreat plateau": {
+    "traditional": "亞瑞特高原",
+    "simplified": "亚瑞特高原"
+  },
+  "halls of anguish": {
+    "traditional": "悲痛之廳",
+    "simplified": "悲痛之厅"
+  },
+  "halls of vaught": {
+    "traditional": "瓦特之廳",
+    "simplified": "瓦特之厅"
+  },
+  "throne of destruction": {
+    "traditional": "毀減的王座",
+    "simplified": "毁减的王座"
+  }
+}

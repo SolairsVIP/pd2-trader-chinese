@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, {
   forwardRef,
   useId,
@@ -198,6 +199,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
   { value, onChange, onSend, placeholder, templateVars, channel, onChannelChange, whisperTarget },
   ref,
 ) {
+  const __ui = useUiText();
   const { settings, updateSettings } = useOptions();
   const chatTemplates = useChatTemplates();
   const { openPanel } = useOverlay();
@@ -512,7 +514,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
   };
 
   const canSend = value.trim().length > 0;
-  const whisperTip = `复制密语命令 /w *${whisperTarget ?? '账号'} …，粘贴到游戏聊天框发送`;
+  const whisperTip = `${__ui('复制密语命令')} /w *${whisperTarget ?? __ui('账号')} …，${__ui('粘贴到游戏聊天框发送')}`;
 
   return (
     <div className="@container shrink-0 px-3 pb-3 pt-1.5">
@@ -528,7 +530,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
           >
             <div className="flex items-center gap-1.5 border-b border-border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
               <FileText className="size-3 shrink-0" />
-              <span className="shrink-0">模板</span>
+              <span className="shrink-0">{"" + __ui("模板") + ""}</span>
               <span className="ml-auto truncate font-normal normal-case tracking-normal">
                 {formSetup
                   ? 'Ctrl+Enter 保存 · Esc 返回'
@@ -570,7 +572,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
                 }}
               />
             ) : (
-              <ul id={menuId} role="listbox" aria-label="消息模板" className="max-h-72 overflow-y-auto p-1">
+              <ul id={menuId} role="listbox" aria-label={__ui("消息模板")} className="max-h-72 overflow-y-auto p-1">
                 {matches.map((t, i) => (
                   <li
                     key={t.key}
@@ -598,8 +600,8 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
                       <button
                         type="button"
                         tabIndex={-1}
-                        aria-label={`编辑模板：${t.label}`}
-                        title="编辑（Ctrl+E）"
+                        aria-label={`${__ui('编辑模板：')}${t.label}`}
+                        title={__ui("编辑（Ctrl+E）")}
                         onMouseDown={(e) => e.preventDefault()}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -613,8 +615,8 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
                         <button
                           type="button"
                           tabIndex={-1}
-                          aria-label={`删除模板：${t.label}`}
-                          title="删除（Ctrl+D）"
+                          aria-label={`${__ui('删除模板：')}${t.label}`}
+                          title={__ui("删除（Ctrl+D）")}
                           onMouseDown={(e) => e.preventDefault()}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -631,9 +633,9 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
                       <button
                         type="button"
                         tabIndex={-1}
-                        aria-label={`${t.favorite ? '取消收藏' : '收藏'}模板：${t.label}`}
+                        aria-label={`${__ui(t.favorite ? '取消收藏' : '收藏')}${__ui('模板：')}${t.label}`}
                         aria-pressed={t.favorite}
-                        title={`${t.favorite ? '取消收藏' : '收藏并显示在消息框上方'}（Ctrl+S）`}
+                        title={`${__ui(t.favorite ? '取消收藏' : '收藏并显示在消息框上方')}（Ctrl+S）`}
                         onMouseDown={(e) => e.preventDefault()}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -654,8 +656,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
                 ))}
                 {matches.length === 0 ? (
                   <li role="presentation" className="px-2.5 py-1.5 text-xs text-muted-foreground">
-                    暂无模板
-                  </li>
+                    {" " + __ui("暂无模板") + " "}</li>
                 ) : (
                   <li role="presentation" aria-hidden className="mx-1 my-1 h-px bg-border" />
                 )}
@@ -689,44 +690,44 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
         {/* One sideways-scrolling line (no scrollbar). The Website/Whisper labels drop to icons only when the composer itself is under 380px wide */}
         <div
           role="toolbar"
-          aria-label="快捷回复"
+          aria-label={__ui("快捷回复")}
           className="flex flex-nowrap items-center gap-1.5 overflow-x-auto border-b border-border/50 px-2 py-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {onChannelChange && (
             <ToggleGroup
               type="single"
               size="sm"
-              aria-label="回复方式"
+              aria-label={__ui("回复方式")}
               value={channel}
               onValueChange={(next) => next && onChannelChange(next as ReplyChannel)}
               className={cn('mr-1 shrink-0', segmentedClass)}
             >
-              <Tip label="发送网站消息（对方会在 projectdiablo2.com 收到）">
+              <Tip label={__ui("发送网站消息（对方会在 projectdiablo2.com 收到）")}>
                 <ToggleGroupItem
                   value="website"
-                  aria-label="网站消息"
+                  aria-label={__ui("网站消息")}
                   className={cn('h-6 flex-none gap-1.5 px-3 text-xs', segmentItemClass)}
                 >
                   <Globe className="size-3" />
-                  <span className="@max-[380px]:sr-only">网站</span>
+                  <span className="@max-[380px]:sr-only">{"" + __ui("网站") + ""}</span>
                 </ToggleGroupItem>
               </Tip>
               <Tip label={whisperTip}>
                 <ToggleGroupItem
                   value="whisper"
-                  aria-label="游戏密语（复制）"
+                  aria-label={__ui("游戏密语（复制）")}
                   className={cn('h-6 flex-none gap-1.5 px-3 text-xs', segmentItemClass)}
                 >
                   <Gamepad2 className="size-3" />
-                  <span className="@max-[380px]:sr-only">游戏密语（复制）</span>
+                  <span className="@max-[380px]:sr-only">{"" + __ui("游戏密语（复制）") + ""}</span>
                 </ToggleGroupItem>
               </Tip>
             </ToggleGroup>
           )}
-          <Tip label="消息模板（或输入 /）">
+          <Tip label={__ui("消息模板（或输入 /）")}>
             <button
               type="button"
-              aria-label="消息模板"
+              aria-label={__ui("消息模板")}
               aria-expanded={menuOpen}
               // Keep the draft's caret: a template picked from here goes in where the user was typing
               onMouseDown={(e) => e.preventDefault()}
@@ -770,12 +771,10 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
             ))
           ) : (
             <span className="shrink-0 whitespace-nowrap text-[11px] text-muted-foreground/80">
-              ★ 收藏模板后会固定显示在这里
-            </span>
+              {" " + __ui("★ 收藏模板后会固定显示在这里") + " "}</span>
           )}
           <span className="ml-auto hidden truncate pr-1 text-[10px] text-muted-foreground/80 @min-[640px]:inline">
-            <kbd className="font-sans font-semibold">Shift+Enter</kbd> 换行
-          </span>
+            <kbd className="font-sans font-semibold">Shift+Enter</kbd> {" " + __ui("换行") + " "}</span>
         </div>
 
         <div className="flex items-end gap-1 p-1.5">
@@ -793,7 +792,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
               ref={editorRef}
               role="textbox"
               aria-multiline="true"
-              aria-label="消息"
+              aria-label={__ui("消息")}
               aria-placeholder={placeholder}
               aria-controls={listShown ? menuId : undefined}
               aria-activedescendant={listShown ? `${menuId}-${activeIndex}` : undefined}
@@ -841,10 +840,10 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
               );
             })}
           </div>
-          <Tip label={channel === 'whisper' ? `${whisperTip}（Enter）` : '发送（Enter）'}>
+          <Tip label={channel === 'whisper' ? `${whisperTip}（Enter）` : __ui('发送（Enter）')}>
             <button
               type="button"
-              aria-label={channel === 'whisper' ? '复制游戏密语' : '发送'}
+              aria-label={channel === 'whisper' ? __ui('复制游戏密语') : __ui('发送')}
               disabled={!canSend}
               onClick={send}
               className="inline-flex size-8 shrink-0 items-center justify-center rounded-xl bg-linear-to-b from-primary to-primary/80 text-primary-foreground shadow-sm outline-none transition-[opacity,transform,box-shadow] duration-(--dur-fast) hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring/60 active:scale-95 disabled:pointer-events-none disabled:opacity-40"
@@ -857,9 +856,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
           <p className="flex items-center gap-1.5 border-t border-border/50 px-3 py-1 text-[11px] text-muted-foreground">
             <ClipboardCopy aria-hidden className="size-3 shrink-0 text-warning" />
             <span className="truncate">
-              按 Enter 复制 <span className="font-medium text-foreground/85">/w *{whisperTarget ?? '账号'} …</span> —
-              粘贴到游戏聊天框即可发送
-            </span>
+              {" " + __ui("按 Enter 复制") + " "}<span className="font-medium text-foreground/85">/w *{whisperTarget ?? '账号'} …</span> {" " + __ui("— 粘贴到游戏聊天框即可发送") + " "}</span>
           </p>
         )}
       </div>

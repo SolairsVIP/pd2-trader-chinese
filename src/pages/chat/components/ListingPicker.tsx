@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useMemo, useRef, useState } from 'react';
 import { localizeBaseName, localizeMarketItemName } from '@/lib/localize-item-name';
 import { AlertTriangle, Loader2, PackagePlus, RotateCw, Search } from 'lucide-react';
@@ -31,6 +32,7 @@ export function ListingPicker({
   /** The popover closed (picked or dismissed); focus goes back to the composer. */
   onClosed: () => void;
 }) {
+  const __ui = useUiText();
   const { authData, getMarketListings } = usePd2Website();
   const { settings } = useOptions();
   const userId = authData?.user?._id;
@@ -78,7 +80,7 @@ export function ListingPicker({
     body = (
       <div aria-busy
         className="space-y-1 p-1.5">
-        <span className="sr-only">正在加载你的挂单…</span>
+        <span className="sr-only">{"" + __ui("正在加载你的挂单…") + ""}</span>
         {Array.from({ length: 4 }, (_, i) => (
           <div key={i}
             className="flex items-center gap-2.5 px-1.5 py-1">
@@ -93,19 +95,17 @@ export function ListingPicker({
     body = (
       <div className="flex flex-col items-center gap-2 px-3 py-6 text-center text-xs text-muted-foreground">
         <AlertTriangle className="size-4 text-destructive" />
-        无法加载你的挂单。
-        <Button variant="outline"
+        {" " + __ui("无法加载你的挂单。") + " "}<Button variant="outline"
           size="sm"
           onClick={() => void load()}>
           <RotateCw className="size-3.5" />
-          重试
-        </Button>
+          {" " + __ui("重试") + " "}</Button>
       </div>
     );
   } else if (matches.length === 0) {
     body = (
       <p className="px-3 py-6 text-center text-xs text-muted-foreground">
-        {state.listings.length === 0 ? '你在此赛季没有正在出售的挂单。' : '没有符合条件的挂单。'}
+        {state.listings.length === 0 ? __ui("你在此赛季没有正在出售的挂单。") : __ui("没有符合条件的挂单。")}
       </p>
     );
   } else {
@@ -148,9 +148,9 @@ export function ListingPicker({
         }
       }}
     >
-      <Tip label="关联我的一条挂单">
+      <Tip label={__ui("关联我的一条挂单")}>
         <PopoverTrigger
-          aria-label="关联我的一条挂单"
+          aria-label={__ui("关联我的一条挂单")}
           disabled={!userId}
           className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground outline-none transition-colors duration-(--dur-fast) hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring/60 disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
         >
@@ -168,7 +168,7 @@ export function ListingPicker({
         }}
       >
         <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">我的挂单</span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{"" + __ui("我的挂单") + ""}</span>
           {state.status === 'loading' && (
             <Loader2 aria-hidden
               className="size-3.5 animate-spin text-muted-foreground" />
@@ -178,7 +178,7 @@ export function ListingPicker({
           <Search className="pointer-events-none absolute left-4.5 top-1/2 mt-1 size-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
             autoFocus
-            placeholder="搜索我的挂单…"
+            placeholder={__ui("搜索我的挂单…")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => {

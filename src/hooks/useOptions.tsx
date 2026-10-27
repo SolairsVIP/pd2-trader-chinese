@@ -1,3 +1,4 @@
+import { UiLanguageProvider } from '@/lib/ui-language';
 import * as React from 'react';
 import { Dialog } from '@/components/ui/dialog';
 import { useCallback, useEffect } from 'react';
@@ -23,6 +24,7 @@ export type NetWorthTickerAnchor =
   | 'custom';
 
 export interface ISettings {
+  uiLanguage?: 'zh-CN' | 'zh-TW';
   ladder: 'ladder' | 'non-ladder';
   mode: 'hardcore' | 'softcore';
   hotkeyModifier: 'ctrl' | 'alt';
@@ -111,6 +113,7 @@ interface OptionsContextProps {
 }
 
 const DEFAULT_SETTINGS: ISettings = {
+  uiLanguage: 'zh-CN',
   mode: 'softcore',
   ladder: 'ladder',
   hotkeyModifier: 'ctrl',
@@ -411,7 +414,7 @@ export const OptionsProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   return (
     <OptionsContext.Provider value={{ isOpen, setIsOpen, settings, updateSettings, isLoading }}>
-      {children}
+      <UiLanguageProvider value={settings.uiLanguage ?? 'zh-CN'}>{children}</UiLanguageProvider>
     </OptionsContext.Provider>
   );
 };

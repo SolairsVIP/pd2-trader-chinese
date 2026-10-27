@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useId, useRef, useState } from 'react';
 import { CornerDownLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -26,6 +27,7 @@ interface TemplateFillProps {
  * and inserts from the last one (Ctrl/Cmd+Enter from any), Esc goes back to the list.
  */
 export function TemplateFill({ label, template, placeholders, vars, onInsert, onCancel }: TemplateFillProps) {
+  const __ui = useUiText();
   const id = useId();
   const [answers, setAnswers] = useState<Record<string, string>>(() =>
     Object.fromEntries(placeholders.map((name) => [name, rememberedAnswers.get(name) ?? ''])),
@@ -92,7 +94,7 @@ export function TemplateFill({ label, template, placeholders, vars, onInsert, on
       {/* Preview and actions on one line */}
       <div className="flex items-center gap-2">
         <p
-          aria-label="消息预览"
+          aria-label={__ui("消息预览")}
           title={preview}
           className="min-w-0 flex-1 truncate rounded-md bg-muted/40 px-2 py-1 text-xs text-foreground/90"
         >
@@ -102,19 +104,17 @@ export function TemplateFill({ label, template, placeholders, vars, onInsert, on
           size="sm"
           className="h-7 px-2.5 text-xs">
           <CornerDownLeft />
-          插入消息
-        </Button>
+          {" " + __ui("插入消息") + " "}</Button>
         <Button type="button"
           variant="ghost"
           size="sm"
           className="h-7 px-2 text-xs"
           onClick={onCancel}>
-          取消
-        </Button>
+          {" " + __ui("取消") + " "}</Button>
       </div>
       {blank.length > 0 && (
         <p className="-mt-1 text-[11px] text-muted-foreground">
-          以下字段留空时将插入空内容：{blank.map((name) => `{${name}}`).join(' ')}
+          {" " + __ui("以下字段留空时将插入空内容：") + ""}{blank.map((name) => `{${name}}`).join(' ')}
         </p>
       )}
     </form>

@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useMemo, useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { PackageOpen, Search, SearchX, X } from 'lucide-react';
@@ -92,6 +93,7 @@ function ShareCell({ share }: { share: number }) {
 }
 
 export function HoldingsTable({ lines, totalHr, showTab = false, toolbar }: HoldingsTableProps) {
+  const __ui = useUiText();
   const [query, setQuery] = useState('');
   const [hideZero, setHideZero] = useState(true);
   const columns = useMemo(() => createColumns(totalHr, showTab), [totalHr, showTab]);
@@ -119,14 +121,14 @@ export function HoldingsTable({ lines, totalHr, showTab = false, toolbar }: Hold
                 setQuery('');
               }
             }}
-            placeholder="搜索…"
-            aria-label="搜索仓库物品"
+            placeholder={__ui("搜索…")}
+            aria-label={__ui("搜索仓库物品")}
             className="h-9 pl-8 pr-8"
           />
           {query && (
             <button
               type="button"
-              aria-label="清除搜索"
+              aria-label={__ui("清除搜索")}
               onClick={() => setQuery('')}
               className="absolute right-1.5 top-1/2 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground outline-none transition-colors duration-(--dur-fast) hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
             >
@@ -140,8 +142,7 @@ export function HoldingsTable({ lines, totalHr, showTab = false, toolbar }: Hold
             onCheckedChange={setHideZero} />
           <Label htmlFor="hide-zero"
             className="cursor-pointer text-xs text-muted-foreground">
-            隐藏零估值物品
-          </Label>
+            {" " + __ui("隐藏零估值物品") + " "}</Label>
         </div>
         {toolbar}
       </div>
@@ -159,7 +160,7 @@ export function HoldingsTable({ lines, totalHr, showTab = false, toolbar }: Hold
         </p>
         {visible.length > 0 && (
           <p className="shrink-0 tabular-nums">
-            {visible.length} 件物品 ·{' '}
+            {visible.length} {" " + __ui("件物品 ·") + ""}{' '}
             <span className="font-medium text-foreground">{formatHr(visibleHr)}</span>
           </p>
         )}

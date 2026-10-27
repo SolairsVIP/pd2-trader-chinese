@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import { describeUiError } from '@/lib/ui-error';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -32,6 +33,7 @@ const toValues = (p: ProfileSettings): ProfileFormValues => ({
  * Every change is saved immediately; on failure the controls snap back to the server state.
  */
 export function PublicProfileGroup() {
+  const __ui = useUiText();
   const { settings } = useOptions();
   const token = settings?.pd2Token ?? null;
   const [state, setState] = React.useState<LoadState>({ kind: 'loading' });
@@ -92,8 +94,7 @@ export function PublicProfileGroup() {
     ) : saving ? (
       <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
         <Loader2 className="size-3 animate-spin" />
-        正在保存
-      </span>
+        {" " + __ui("正在保存") + " "}</span>
     ) : null;
 
   const description = (() => {
@@ -111,14 +112,14 @@ export function PublicProfileGroup() {
 
   return (
     <Form {...form}>
-      <SettingsGroup title="排行榜"
+      <SettingsGroup title={__ui("排行榜")}
         aside={status}>
         <FormField
           control={form.control}
           name="optedIn"
           render={({ field }) => (
             <SettingsRow
-              label="公开个人资料"
+              label={__ui("公开个人资料")}
               description={description}
               disabled={!ready}
               control={
@@ -129,8 +130,7 @@ export function PublicProfileGroup() {
                     className="gap-1.5"
                     onClick={load}>
                     <RotateCw className="size-3.5" />
-                    重试
-                  </Button>
+                    {" " + __ui("重试") + " "}</Button>
                 ) : (
                   <FormControl>
                     <Switch
@@ -154,8 +154,8 @@ export function PublicProfileGroup() {
                 name="displayName"
                 render={({ field }) => (
                   <SettingsRow
-                    label="显示名称"
-                    description="选择用于个人资料名称的游戏账号。"
+                    label={__ui("显示名称")}
+                    description={__ui("选择用于个人资料名称的游戏账号。")}
                     control={
                       <Select
                         value={field.value}
@@ -164,7 +164,7 @@ export function PublicProfileGroup() {
                       >
                         <FormControl>
                           <SelectTrigger className="w-[220px]">
-                            <SelectValue placeholder="账号" />
+                            <SelectValue placeholder={__ui("账号")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -186,8 +186,8 @@ export function PublicProfileGroup() {
               name="showHoldings"
               render={({ field }) => (
                 <SettingsRow
-                  label="显示仓库物品"
-                  description="同时在个人资料中展示高价值物品及各类别估值占比。"
+                  label={__ui("显示仓库物品")}
+                  description={__ui("同时在个人资料中展示高价值物品及各类别估值占比。")}
                   control={
                     <FormControl>
                       <Switch
@@ -213,8 +213,7 @@ export function PublicProfileGroup() {
                   onClick={() => openUrl(`${BACKEND_URL}/u/${encodeURIComponent(profile.slug!)}`)}
                 >
                   <ExternalLink className="size-3.5" />
-                  查看个人资料
-                </Button>
+                  {" " + __ui("查看个人资料") + " "}</Button>
               </div>
             )}
           </>

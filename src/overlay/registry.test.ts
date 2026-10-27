@@ -6,6 +6,10 @@ import { isPanelVisible, type PanelState } from './OverlayProvider';
 const open = { open: true, placing: false } as PanelState;
 
 describe('PANEL_DEFS', () => {
+  it('centers sign-in in the game and keeps browser OAuth alive outside the game', () => {
+    expect(PANEL_DEFS.signIn).toMatchObject({ placement: 'gameCenter', keepMounted: false, hideOnGameBlur: false });
+    expect(PANEL_DEFS.signIn.closeOnBlur).toBe(true);
+  });
   it('keeps the corruption experiment bounded, without keyboard capture, and closes on leaving it', () => {
     expect(PANEL_DEFS.corruptionLuck).toMatchObject({
       size: { width: 424, height: 700 },

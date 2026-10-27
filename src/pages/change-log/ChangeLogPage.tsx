@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import { useOptions } from '@/hooks/useOptions';
 import { usePanel } from '@/overlay';
 import { Sparkles } from 'lucide-react';
@@ -54,6 +55,7 @@ function VersionSection({
   isCurrent: boolean;
   stagger: boolean;
 }) {
+  const __ui = useUiText();
   return (
     <motion.section
       variants={stagger ? listItem : undefined}
@@ -77,12 +79,10 @@ function VersionSection({
           <Badge variant="outline"
             className="gap-1 border-primary/50 text-xs text-primary">
             <Sparkles />
-            当前版本
-          </Badge>
+            {" " + __ui("当前版本") + " "}</Badge>
         )}
         <span className="ml-auto text-[11px] tabular-nums text-muted-foreground">
-          {entries.length} 项更新
-        </span>
+          {entries.length} {" " + __ui("项更新") + " "}</span>
       </div>
       <ul className="space-y-1.5">
         {entries.map((entry, idx) => {
@@ -120,6 +120,7 @@ function ChangelogSkeleton() {
 }
 
 export default function ChangelogPage() {
+  const __ui = useUiText();
   const { settings, updateSettings } = useOptions();
   const { close } = usePanel();
   const [currentVersion, setCurrentVersion] = useState<string | null>(null);
@@ -140,7 +141,7 @@ export default function ChangelogPage() {
       <WindowPanel animate
         className="h-full w-full">
         <WindowChrome
-          title="更新内容"
+          title={__ui("更新内容")}
           icon={<Sparkles className="text-primary" />}
           onClose={close}
           closeLabel="关闭更新日志"

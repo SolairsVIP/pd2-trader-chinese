@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useId, useLayoutEffect, useRef, useState } from 'react';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -48,6 +49,7 @@ export function ChatTemplateForm({
   tokens = CHAT_TEMPLATE_TOKENS,
   className,
 }: ChatTemplateFormProps) {
+  const __ui = useUiText();
   const id = useId();
   const [name, setName] = useState(initial.name);
   const [text, setText] = useState(initial.text);
@@ -109,8 +111,7 @@ export function ChatTemplateForm({
         <div className="flex flex-col gap-1">
           <label htmlFor={`${id}-name`}
             className="text-xs font-medium text-foreground">
-            名称
-          </label>
+            {" " + __ui("名称") + " "}</label>
           <Input
             id={`${id}-name`}
             value={name}
@@ -118,7 +119,7 @@ export function ChatTemplateForm({
               setName(e.target.value);
               setErrors((current) => ({ ...current, name: undefined }));
             }}
-            placeholder="例如：还在吗？"
+            placeholder={__ui("例如：还在吗？")}
             aria-invalid={errors.name ? true : undefined}
             aria-describedby={errors.name ? `${id}-name-error` : undefined}
             autoFocus
@@ -138,8 +139,7 @@ export function ChatTemplateForm({
         <div className="flex items-baseline justify-between gap-2">
           <label htmlFor={`${id}-text`}
             className="text-xs font-medium text-foreground">
-            消息
-          </label>
+            {" " + __ui("消息") + " "}</label>
           <span
             className={cn(
               'text-[11px] tabular-nums',
@@ -162,7 +162,7 @@ export function ChatTemplateForm({
             if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) submit(e);
           }}
           rows={3}
-          placeholder="例如：你好，你的 {itemName} 还在吗？"
+          placeholder={__ui("例如：你好，你的 {itemName} 还在吗？")}
           aria-invalid={errors.text ? true : undefined}
           aria-describedby={errors.text ? `${id}-text-error` : `${id}-tokens ${id}-asks`}
           autoFocus={fixedName}
@@ -177,7 +177,7 @@ export function ChatTemplateForm({
         )}
         <div id={`${id}-tokens`}
           className="flex flex-wrap items-center gap-1.5 pt-0.5">
-          <span className="text-[11px] text-muted-foreground">插入：</span>
+          <span className="text-[11px] text-muted-foreground">{"" + __ui("插入：") + ""}</span>
           {tokens.map(({ token, description }) => (
             <button
               key={token}
@@ -196,8 +196,7 @@ export function ChatTemplateForm({
           className="text-[11px] leading-relaxed text-muted-foreground">
           {asks.length > 0 ? (
             <>
-              使用时询问：
-              {asks.map((name) => (
+              {" " + __ui("使用时询问：") + " "}{asks.map((name) => (
                 <React.Fragment key={name}>
                   {' '}
                   <code className="rounded bg-primary/12 px-1 py-px font-mono text-primary">{`{${name}}`}</code>
@@ -205,7 +204,7 @@ export function ChatTemplateForm({
               ))}
             </>
           ) : (
-            '使用模板时会询问其他 {name} 占位内容。'
+            __ui("使用模板时会询问其他 {name} 占位内容。")
           )}
         </p>
       </div>
@@ -220,8 +219,7 @@ export function ChatTemplateForm({
           variant="ghost"
           size="sm"
           onClick={onCancel}>
-          取消
-        </Button>
+          {" " + __ui("取消") + " "}</Button>
       </div>
     </form>
   );

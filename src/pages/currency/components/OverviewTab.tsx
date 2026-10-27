@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Coins, Info, PackageOpen } from 'lucide-react';
@@ -20,6 +21,7 @@ function SectionTitle({ children, aside }: { children: React.ReactNode; aside?: 
 }
 
 export function OverviewTab({ valuation }: { valuation: Valuation }) {
+  const __ui = useUiText();
   const total = valuation.totalHr;
   const shares = NET_WORTH_CATEGORIES.map((category) => ({
     category,
@@ -65,22 +67,22 @@ export function OverviewTab({ valuation }: { valuation: Valuation }) {
               </span>
             </span>
           ))}
-          {shares.length === 0 && <span>暂无可估值物品。</span>}
+          {shares.length === 0 && <span>{"" + __ui("暂无可估值物品。") + ""}</span>}
         </div>
       </section>
 
       <section>
-        <SectionTitle aside={top.length > 0 ? `按估值排序 · 前 ${top.length} 件` : undefined}>估值最高的物品</SectionTitle>
+        <SectionTitle aside={top.length > 0 ? `按估值排序 · 前 ${top.length} 件` : undefined}>{"" + __ui("估值最高的物品") + ""}</SectionTitle>
         <div className="overflow-hidden rounded-lg border border-border bg-card/40">
           <div
             className={`${TOP_GRID} border-b border-border bg-muted/30 py-2 text-xs font-medium uppercase tracking-wide text-muted-foreground`}
           >
-            <span>物品</span>
-            <span className="text-right">数量</span>
-            <span className="text-right">单价</span>
-            <span className="text-right">估值</span>
+            <span>{"" + __ui("物品") + ""}</span>
+            <span className="text-right">{"" + __ui("数量") + ""}</span>
+            <span className="text-right">{"" + __ui("单价") + ""}</span>
+            <span className="text-right">{"" + __ui("估值") + ""}</span>
             <span className="text-right">7d</span>
-            <span className="text-right">估值依据</span>
+            <span className="text-right">{"" + __ui("估值依据") + ""}</span>
           </div>
           {top.length > 0 ? (
             <motion.div variants={listStagger}
@@ -112,22 +114,20 @@ export function OverviewTab({ valuation }: { valuation: Valuation }) {
               <span className="flex size-9 items-center justify-center rounded-full bg-muted/60">
                 <PackageOpen className="size-4" />
               </span>
-              暂无可估值物品。
-            </div>
+              {" " + __ui("暂无可估值物品。") + " "}</div>
           )}
         </div>
         <p className="mt-2 flex items-start gap-1.5 text-xs leading-relaxed text-muted-foreground">
           <Info className="mt-0.5 size-3.5 shrink-0 opacity-70" />
           <span>
-            {valuation.unpricedCount} 件物品暂无价格 · {formatHr(valuation.uncertainHr)} HR 估值可信度较低，未计入总值 ·{' '}
-            <Coins className="mb-0.5 inline size-3 text-q-gold" /> {valuation.gold.toLocaleString()} 金币（未折算）
-          </span>
+            {valuation.unpricedCount} {" " + __ui("件物品暂无价格 ·") + " "}{formatHr(valuation.uncertainHr)} {" " + __ui("HR 估值可信度较低，未计入总值 ·") + ""}{' '}
+            <Coins className="mb-0.5 inline size-3 text-q-gold" /> {valuation.gold.toLocaleString()} {" " + __ui("金币（未折算）") + " "}</span>
         </p>
       </section>
 
       {tabs.length > 0 && (
         <section>
-          <SectionTitle>按仓库页分类</SectionTitle>
+          <SectionTitle>{"" + __ui("按仓库页分类") + ""}</SectionTitle>
           <div className="space-y-2 rounded-lg border border-border bg-card/40 p-3">
             {tabs.map(([tab, value], i) => (
               <div key={tab}

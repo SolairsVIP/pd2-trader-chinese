@@ -281,6 +281,38 @@ describe('listing mutations', () => {
 });
 
 describe('market browser API', () => {
+  it.each(['getFavorites', 'addFavorite', 'removeFavorite'] as const)('%s preserves a valid login when favorites alone returns 401', async (method) => {
+    fetchMock.mockResolvedValueOnce(fakeResponse(401, { name: 'NotAuthenticated' }))
+      .mockResolvedValueOnce(fakeResponse(200, { user: { _id: 'user-1' } }));
+    const { actions, onAuthError } = market();
+    const request = method === 'getFavorites' ? actions.getFavorites()
+      : method === 'addFavorite' ? actions.addFavorite('L1', 'S1') : actions.removeFavorite('F1');
+    await expect(request).rejects.toMatchObject({ name: 'FavoriteAccessError', userId: 'user-1' });
+    expect(onAuthError).not.toHaveBeenCalled();
+    expect(lastCall().url).toBe('https://pd2trader.com/api/auth/oauth/me');
+  });
+
+  it('prompts real reauthentication when the independent identity check also rejects the login', async () => {
+    fetchMock.mockResolvedValueOnce(fakeResponse(401, {})).mockResolvedValueOnce(fakeResponse(401, {}));
+    const { actions, onAuthError } = market();
+    await expect(actions.addFavorite('L1', 'S1')).rejects.toMatchObject({ name: 'AuthenticationError' });
+    expect(onAuthError).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not sign out or fall back to local when identity verification is temporarily unavailable', async () => {
+    fetchMock.mockResolvedValueOnce(fakeResponse(401, {})).mockResolvedValueOnce(fakeResponse(503, {}));
+    const { actions, onAuthError } = market();
+    await expect(actions.getFavorites()).rejects.toThrow('暂时无法验证登录状态');
+    expect(onAuthError).not.toHaveBeenCalled();
+  });
+
+  it('accepts an empty successful delete response', async () => {
+    fetchMock.mockResolvedValueOnce(fakeResponse(204, ''));
+    const { actions } = market();
+    await expect(actions.removeFavorite('F1')).resolves.toBeUndefined();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
   it('getFavorites pages newest first with each listing and its seller resolved', async () => {
     fetchMock.mockResolvedValueOnce(fakeResponse(200, { total: 0, data: [] }));
     const { actions } = market();

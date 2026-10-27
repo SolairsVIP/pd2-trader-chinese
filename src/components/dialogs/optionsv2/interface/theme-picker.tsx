@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React from 'react';
 import { Check } from 'lucide-react';
 import { useOptions } from '@/hooks/useOptions';
@@ -11,6 +12,7 @@ const ARROW_STEP: Record<string, number> = { ArrowRight: 1, ArrowDown: 1, ArrowL
 
 /** Miniature overlay window rendered with the given theme's own tokens. */
 function ThemePreview({ theme }: { theme: Theme }) {
+  const __ui = useUiText();
   return (
     <div
       aria-hidden
@@ -27,15 +29,14 @@ function ThemePreview({ theme }: { theme: Theme }) {
           className="space-y-0.5 rounded-sm border border-border bg-card px-1.5 py-1 text-[10px] leading-tight"
           style={{ fontFamily: 'DiabloFont' }}
         >
-          <div className="truncate text-q-unique">谐角之冠</div>
-          <div className="truncate text-q-set">西刚的面甲</div>
-          <div className="truncate text-q-magic">珠宝匠之君主盾</div>
+          <div className="truncate text-q-unique">{"" + __ui("谐角之冠") + ""}</div>
+          <div className="truncate text-q-set">{"" + __ui("西刚的面甲") + ""}</div>
+          <div className="truncate text-q-magic">{"" + __ui("珠宝匠之君主盾") + ""}</div>
         </div>
         <div className="flex items-center gap-1">
           <span className="rounded-sm bg-primary px-1.5 py-0.5 text-[9px] font-semibold text-primary-foreground">
-            上架
-          </span>
-          <span className="rounded-sm bg-secondary px-1.5 py-0.5 text-[9px] text-secondary-foreground">报价</span>
+            {" " + __ui("上架") + " "}</span>
+          <span className="rounded-sm bg-secondary px-1.5 py-0.5 text-[9px] text-secondary-foreground">{"" + __ui("报价") + ""}</span>
           <span className="ml-auto text-[9px] text-muted-foreground">
             <span className="text-q-gold">1.5</span> HR
           </span>
@@ -46,6 +47,7 @@ function ThemePreview({ theme }: { theme: Theme }) {
 }
 
 export function ThemePicker() {
+  const __ui = useUiText();
   const { settings, isLoading, updateSettings } = useOptions();
   const [filter, setFilter] = React.useState<ModeFilter>('all');
   const optionRefs = React.useRef<(HTMLButtonElement | null)[]>([]);
@@ -83,29 +85,26 @@ export function ThemePicker() {
           size="sm"
           value={filter}
           onValueChange={(value) => value && setFilter(value as ModeFilter)}
-          aria-label="按外观模式筛选主题"
+          aria-label={__ui("按外观模式筛选主题")}
         >
           <ToggleGroupItem value="all"
             className="px-3">
-            全部
-          </ToggleGroupItem>
+            {" " + __ui("全部") + " "}</ToggleGroupItem>
           <ToggleGroupItem value="dark"
             className="px-3">
-            深色
-          </ToggleGroupItem>
+            {" " + __ui("深色") + " "}</ToggleGroupItem>
           <ToggleGroupItem value="light"
             className="px-3">
-            浅色
-          </ToggleGroupItem>
+            {" " + __ui("浅色") + " "}</ToggleGroupItem>
         </ToggleGroup>
         <span className="truncate text-sm text-muted-foreground">
-          当前主题：<span className="font-medium text-foreground">{current.name}</span>
+          {" " + __ui("当前主题：") + ""}<span className="font-medium text-foreground">{__ui(current.name)}</span>
         </span>
       </div>
 
       <div
         role="radiogroup"
-        aria-label="颜色主题"
+        aria-label={__ui("颜色主题")}
         className="grid grid-cols-[repeat(auto-fill,minmax(10.5rem,1fr))] gap-3"
       >
         {visible.map((theme, index) => {
@@ -119,8 +118,8 @@ export function ThemePicker() {
               type="button"
               role="radio"
               aria-checked={checked}
-              aria-label={`${theme.name}（${theme.mode === 'dark' ? '深色' : '浅色'}）`}
-              title={theme.description}
+              aria-label={`${__ui(theme.name)}（${__ui(theme.mode === 'dark' ? '深色' : '浅色')}）`}
+              title={__ui(theme.description)}
               tabIndex={theme.id === tabStopId ? 0 : -1}
               onClick={() => select(theme.id)}
               onKeyDown={(e) => onOptionKeyDown(e, index)}
@@ -135,8 +134,8 @@ export function ThemePicker() {
               <ThemePreview theme={theme} />
               <div className="flex items-center justify-between gap-2 px-0.5">
                 <div className="min-w-0">
-                  <div className="truncate text-sm font-medium text-card-foreground">{theme.name}</div>
-                  <div className="text-xs text-muted-foreground">{theme.mode === 'dark' ? '深色' : '浅色'}</div>
+                  <div className="truncate text-sm font-medium text-card-foreground">{__ui(theme.name)}</div>
+                  <div className="text-xs text-muted-foreground">{theme.mode === 'dark' ? __ui("深色") : __ui("浅色")}</div>
                 </div>
                 <span
                   aria-hidden

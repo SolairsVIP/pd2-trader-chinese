@@ -1,5 +1,6 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useEffect, useRef, useState } from 'react';
-import { usePanel } from '@/overlay';
+import { useOverlay, usePanel } from '@/overlay';
 import { useOAuth } from '@/hooks/useOAuth';
 import { useOptions } from '@/hooks/useOptions';
 import { fetch as tauriFetch } from '@/lib/browser-http';
@@ -53,12 +54,25 @@ function BrandHeader({ eyebrow, lead, compact = false }: { eyebrow: string; lead
 }
 
 function SignInContent() {
+  const __ui = useUiText();
   const { startOAuthFlow } = useOAuth();
   const { updateSettings } = useOptions();
   const { close } = usePanel();
+  const { gameFocused, guardPanelDismissal } = useOverlay();
   const [loading, setLoading] = useState(false);
   const [accounts, setAccounts] = useState<string[] | null>(null);
   const [selectedAccount, setSelectedAccount] = useState<string | null>(null);
+  const dismissBlocked = useRef(false);
+  dismissBlocked.current = loading || !!accounts;
+  useEffect(() => guardPanelDismissal('signIn', () => !dismissBlocked.current), [guardPanelDismissal]);
+  const previouslyFocused = useRef(gameFocused);
+  useEffect(() => {
+    const returnedToGame = gameFocused && !previouslyFocused.current;
+    previouslyFocused.current = gameFocused;
+    // Idle prompts left behind the windowed game expand the cropped native host.
+    // Keep active browser login and account selection alive while dismissing idle prompts.
+    if (returnedToGame && !loading && !accounts) close();
+  }, [gameFocused, loading, accounts, close]);
   // The panel unmounts when closed; abort the browser flow so it stops polling, frees the sign-in lock for the next
   // open, and never updates this unmounted component.
   const flowRef = useRef<AbortController | null>(null);
@@ -128,7 +142,7 @@ function SignInContent() {
       type="button"
       onClick={handleLater}
       className="absolute top-2.5 right-2.5 z-10 inline-flex size-7 items-center justify-center rounded-md text-muted-foreground outline-none transition-[color,background-color,transform] duration-(--dur-fast) ease-out hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60 motion-safe:active:scale-95"
-      aria-label="关闭"
+      aria-label={__ui("关闭")}
     >
       <X className="w-4 h-4" />
     </button>
@@ -144,8 +158,8 @@ function SignInContent() {
 
         <BrandHeader
           compact
-          eyebrow="还差一步"
-          lead="此登录关联了多个游戏账号，请选择要用于交易的账号。"
+          eyebrow={__ui("还差一步")}
+          lead={__ui("此登录关联了多个游戏账号，请选择要用于交易的账号。")}
         />
 
         <ScrollArea className="relative w-full min-h-0 flex-1"
@@ -153,7 +167,7 @@ function SignInContent() {
           <motion.div
             className="flex flex-col gap-2 p-0.5"
             role="listbox"
-            aria-label="游戏账号"
+            aria-label={__ui("游戏账号")}
             variants={listStagger}
             initial="hidden"
             animate="visible"
@@ -214,8 +228,8 @@ function SignInContent() {
       {closeButton}
 
       <BrandHeader
-        eyebrow="登录"
-        lead="关联你的 Project Diablo 2 账号，即可查询物品价格、上架物品并在游戏中聊天。"
+        eyebrow={__ui("登录")}
+        lead={__ui("关联你的 Project Diablo 2 账号，即可查询物品价格、上架物品并在游戏中聊天。")}
       />
 
       <motion.ul
@@ -223,7 +237,7 @@ function SignInContent() {
         initial="hidden"
         animate="visible"
         className="relative flex items-center justify-center gap-x-4"
-        aria-label="登录说明"
+        aria-label={__ui("登录说明")}
       >
         {TRUST_POINTS.map(({ icon: Icon, label }) => (
           <motion.li
@@ -233,7 +247,7 @@ function SignInContent() {
           >
             <Icon aria-hidden
               className="size-3 text-glow" />
-            {label}
+            {__ui(label)}
           </motion.li>
         ))}
       </motion.ul>
@@ -263,7 +277,7 @@ function SignInContent() {
                 className="size-5 rounded-full ring-1 ring-primary-foreground/30"
               />
             )}
-            {loading ? '正在打开浏览器…' : '使用 PD2 账号登录'}
+            {loading ? __ui('正在打开浏览器…') : __ui('使用 PD2 账号登录')}
           </span>
           {!loading && (
             <ArrowRight className="size-4 opacity-60 transition-[opacity,transform] duration-(--dur-fast) group-hover:translate-x-0.5 group-hover:opacity-100" />
@@ -273,8 +287,8 @@ function SignInContent() {
         <p className="h-4 text-[11px] text-muted-foreground"
           aria-live="polite">
           {loading
-            ? '请在浏览器中完成登录，然后返回此窗口。'
-            : '将在浏览器中打开 projectdiablo2.com。'}
+            ? __ui("请在浏览器中完成登录，然后返回此窗口。")
+            : __ui("将在浏览器中打开 projectdiablo2.com。")}
         </p>
 
         <Button
@@ -284,8 +298,7 @@ function SignInContent() {
           disabled={loading}
           className="text-muted-foreground hover:text-foreground"
         >
-          稍后
-        </Button>
+          {" " + __ui("稍后") + " "}</Button>
       </motion.div>
     </WindowPanel>
   );

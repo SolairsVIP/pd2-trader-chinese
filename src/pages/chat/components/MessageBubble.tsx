@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React from 'react';
 import { motion } from 'framer-motion';
 import moment from 'moment';
@@ -69,6 +70,7 @@ export function MessageBubble({
   listings: ReadonlyMap<string, ChatListingState>;
   onRetry: (conversationId: string, clientId: string) => void;
 }) {
+  const __ui = useUiText();
   const { entry, startsDay, continuesGroup: followsInGroup, groupContinues } = row;
   // The divider splits a group: the bubble below it starts fresh
   const continuesGroup = followsInGroup && !startsUnread;
@@ -97,12 +99,11 @@ export function MessageBubble({
       )}
       {startsUnread && (
         <div role="separator"
-          aria-label="新消息"
+          aria-label={__ui("新消息")}
           className="mb-2.5 flex items-center gap-2 px-1">
           <span className="h-px flex-1 bg-linear-to-r from-transparent to-destructive/60" />
           <span className="rounded-full bg-destructive/12 px-2 py-px text-[10px] font-semibold uppercase tracking-wider text-destructive ring-1 ring-inset ring-destructive/30">
-            新消息
-          </span>
+            {" " + __ui("新消息") + " "}</span>
           <span className="h-px flex-1 bg-linear-to-l from-transparent to-destructive/60" />
         </div>
       )}
@@ -149,33 +150,30 @@ export function MessageBubble({
             {failed && message.clientId ? (
               <span className="flex items-center gap-1 text-destructive">
                 <AlertCircle className="size-3" />
-                发送失败 ·
-                <button
+                {" " + __ui("发送失败 ·") + " "}<button
                   type="button"
                   onClick={() => onRetry(message.conversation_id, message.clientId!)}
                   className="inline-flex items-center gap-0.5 rounded-sm font-semibold underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
                 >
                   <RotateCw className="size-2.5" />
-                  重试
-                </button>
+                  {" " + __ui("重试") + " "}</button>
               </span>
             ) : (
               <>
                 <SourceIcon
                   role="img"
-                  aria-label={whisper ? '游戏内密语' : '网站消息'}
+                  aria-label={whisper ? __ui("游戏内密语") : __ui("网站消息")}
                   className="size-2.5 text-muted-foreground/70"
                 />
                 <span>{time}</span>
                 {entry.copied && (
                   <span
-                    title="已复制为 /w *账号 …，粘贴到游戏聊天框（Enter、Ctrl+V）即可发送。游戏中显示后会标记为已发送。"
+                    title={__ui("已复制为 /w *账号 …，粘贴到游戏聊天框（Enter、Ctrl+V）即可发送。游戏中显示后会标记为已发送。")}
                     className="ml-0.5 inline-flex cursor-help items-center gap-0.5 rounded-sm bg-warning/15 px-1 font-medium text-warning"
                   >
                     <ClipboardCopy aria-hidden
                       className="size-2.5" />
-                    已复制
-                  </span>
+                    {" " + __ui("已复制") + " "}</span>
                 )}
                 {sending && <Loader2 aria-hidden
                   className="size-3 animate-spin" />}

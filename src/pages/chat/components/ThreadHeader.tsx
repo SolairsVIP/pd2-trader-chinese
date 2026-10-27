@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React from 'react';
 import {
   Archive,
@@ -81,6 +82,7 @@ export function ThreadHeader({
   onDeleteConversation?: () => void;
   onForgetWhispers?: () => void;
 }) {
+  const __ui = useUiText();
   const username = participant?.username;
   return (
     <div className="relative flex h-16 shrink-0 items-center justify-between gap-2 border-b border-border/70 bg-linear-to-b from-card/80 to-card/30 px-3">
@@ -88,8 +90,8 @@ export function ThreadHeader({
         {onBack && (
           <button
             type="button"
-            aria-label="返回会话列表"
-            title="返回会话列表（Esc）"
+            aria-label={__ui("返回会话列表")}
+            title={__ui("返回会话列表（Esc）")}
             onClick={onBack}
             className={cn(iconButtonClass, '-ml-1')}
           >
@@ -117,15 +119,15 @@ export function ThreadHeader({
               {name}
             </button>
             {muted && <BellOff role="img"
-              aria-label="已静音"
+              aria-label={__ui("已静音")}
               className="size-3 shrink-0 text-muted-foreground" />}
             {pinned && <Pin role="img"
-              aria-label="已置顶"
+              aria-label={__ui("已置顶")}
               className="size-3 shrink-0 text-primary/80" />}
           </h3>
           <p className="mt-1 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
             {username && (
-              <Tip label="打开对方的 Project Diablo 2 个人资料"
+              <Tip label={__ui("打开对方的 Project Diablo 2 个人资料")}
                 side="bottom">
                 <button
                   type="button"
@@ -149,7 +151,7 @@ export function ThreadHeader({
             {account && (
               <span
                 className="ml-0.5 flex min-w-0 items-center gap-1 rounded-full border border-border/70 bg-background/50 px-1.5 py-px"
-                title="游戏账号"
+                title={__ui("游戏账号")}
               >
                 <Gamepad2 aria-hidden
                   className="size-3 shrink-0" />
@@ -159,20 +161,19 @@ export function ThreadHeader({
             {inGameOnly && (
               <span
                 className="shrink-0 rounded-sm bg-muted px-1 text-[10px] font-medium uppercase tracking-wide"
-                title="尚未关联网站账号：回复会复制为游戏内密语"
+                title={__ui("尚未关联网站账号：回复会复制为游戏内密语")}
               >
-                仅限游戏内
-              </span>
+                {" " + __ui("仅限游戏内") + " "}</span>
             )}
           </p>
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-0.5">
-        <Tip label={traderOpen ? '隐藏交易者详情' : '显示交易者详情'}
+        <Tip label={traderOpen ? __ui("隐藏交易者详情") : __ui("显示交易者详情")}
           side="bottom">
           <button
             type="button"
-            aria-label="交易者详情"
+            aria-label={__ui("交易者详情")}
             aria-pressed={traderOpen}
             onClick={onToggleTrader}
             className={cn(
@@ -184,7 +185,7 @@ export function ThreadHeader({
           </button>
         </Tip>
         <DropdownMenu>
-          <DropdownMenuTrigger aria-label="会话选项"
+          <DropdownMenuTrigger aria-label={__ui("会话选项")}
             className={iconButtonClass}>
             <MoreHorizontal className="size-4" />
           </DropdownMenuTrigger>
@@ -194,32 +195,30 @@ export function ThreadHeader({
             <DropdownMenuItem onSelect={onTogglePin}
               className="cursor-pointer">
               {pinned ? <PinOff className="size-4" /> : <Pin className="size-4" />}
-              {pinned ? '取消置顶' : '置顶'}
+              {pinned ? __ui("取消置顶") : __ui("置顶")}
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={onToggleMute}
               className="cursor-pointer">
               {muted ? <Bell className="size-4" /> : <BellOff className="size-4" />}
-              {muted ? '取消静音' : '静音'}
+              {muted ? __ui("取消静音") : __ui("静音")}
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={onToggleArchive}
               className="cursor-pointer">
               {archived ? <ArchiveRestore className="size-4" /> : <Archive className="size-4" />}
-              {archived ? '取消归档' : '归档'}
+              {archived ? __ui("取消归档") : __ui("归档")}
             </DropdownMenuItem>
             {(username || characterName) && <DropdownMenuSeparator />}
             {username && (
               <DropdownMenuItem onSelect={() => openUrl(profileUrl(username))}
                 className="cursor-pointer">
                 <UserRound className="size-4" />
-                查看个人资料
-              </DropdownMenuItem>
+                {" " + __ui("查看个人资料") + " "}</DropdownMenuItem>
             )}
             {characterName && (
               <DropdownMenuItem onSelect={() => openUrl(characterUrl(characterName))}
                 className="cursor-pointer">
                 <Swords className="size-4" />
-                查看角色
-              </DropdownMenuItem>
+                {" " + __ui("查看角色") + " "}</DropdownMenuItem>
             )}
             {(onForgetWhispers || onDeleteConversation) && <DropdownMenuSeparator />}
             {onForgetWhispers && (
@@ -227,16 +226,14 @@ export function ThreadHeader({
                 onSelect={onForgetWhispers}
                 className="cursor-pointer">
                 <Eraser className="size-4" />
-                删除密语记录
-              </DropdownMenuItem>
+                {" " + __ui("删除密语记录") + " "}</DropdownMenuItem>
             )}
             {onDeleteConversation && (
               <DropdownMenuItem variant="destructive"
                 onSelect={onDeleteConversation}
                 className="cursor-pointer">
                 <Trash2 className="size-4" />
-                删除会话
-              </DropdownMenuItem>
+                {" " + __ui("删除会话") + " "}</DropdownMenuItem>
             )}
           </DropdownMenuContent>
         </DropdownMenu>

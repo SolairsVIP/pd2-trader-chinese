@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import moment from 'moment';
@@ -116,6 +117,7 @@ export function ConversationList({
   now: number;
   className?: string;
 }) {
+  const __ui = useUiText();
   const query = search.trim();
   const empty = EMPTY_TEXT[filter];
   const presenceOf = useKnownPresence(now);
@@ -127,7 +129,7 @@ export function ConversationList({
     body = (
       <div aria-busy
         className="space-y-1 p-2">
-        <span className="sr-only">正在加载会话…</span>
+        <span className="sr-only">{"" + __ui("正在加载会话…") + ""}</span>
         {Array.from({ length: 6 }, (_, i) => (
           <div key={i}
             className="flex items-center gap-3 rounded-xl px-2.5 py-2.5">
@@ -149,15 +151,14 @@ export function ConversationList({
         compact
         className="px-4 pt-10"
         icon={<AlertTriangle />}
-        title="无法加载会话"
-        description="请检查网络连接后重试。"
+        title={__ui("无法加载会话")}
+        description={__ui("请检查网络连接后重试。")}
         action={
           <Button variant="outline"
             size="sm"
             onClick={onReload}>
             <RotateCw className="size-3.5" />
-            重试
-          </Button>
+            {" " + __ui("重试") + " "}</Button>
         }
       />
     );
@@ -167,22 +168,21 @@ export function ConversationList({
         compact
         className="px-4 pt-10"
         icon={query ? <SearchX /> : filter === 'archived' ? <Archive /> : <MessagesSquare />}
-        title={query ? '没有符合搜索条件的会话' : empty.title}
+        title={__ui(query ? '没有符合搜索条件的会话' : empty.title)}
         description={
           query
             ? undefined
-            : (empty.description ??
+            : (empty.description ? __ui(empty.description) :
               (signedIn
-                ? '网站聊天和游戏内密语会显示在这里。'
-                : '请前往“设置 → 账号”登录 Project Diablo 2。'))
+                ? __ui("网站聊天和游戏内密语会显示在这里。")
+                : __ui("请前往“设置 → 账号”登录 Project Diablo 2。")))
         }
         action={
           query ? (
             <Button variant="ghost"
               size="sm"
               onClick={() => onSearchChange('')}>
-              清除搜索
-            </Button>
+              {" " + __ui("清除搜索") + " "}</Button>
           ) : undefined
         }
       />
@@ -190,7 +190,7 @@ export function ConversationList({
   } else {
     body = (
       <motion.ul
-            aria-label="会话列表"
+            aria-label={__ui("会话列表")}
         className="space-y-1 p-2"
         variants={listStagger}
         initial="hidden"
@@ -260,13 +260,13 @@ export function ConversationList({
                     {thread.muted && (
                       <BellOff
                         role="img"
-                        aria-label="已静音"
+                        aria-label={__ui("已静音")}
                         className="size-3 shrink-0 self-center text-muted-foreground/80"
                       />
                     )}
                     {thread.pinned && (
                       <Pin role="img"
-                        aria-label="已置顶"
+                        aria-label={__ui("已置顶")}
                         className="size-3 shrink-0 self-center text-primary/80" />
                     )}
                     {latest && (
@@ -285,7 +285,7 @@ export function ConversationList({
                       {latest.source === 'whisper' && (
                         <Gamepad2
                           role="img"
-                          aria-label="游戏内密语"
+                          aria-label={__ui("游戏内密语")}
                           className="size-3 shrink-0 text-muted-foreground/70"
                         />
                       )}
@@ -307,12 +307,12 @@ export function ConversationList({
                           unread ? 'text-foreground/85' : 'text-muted-foreground',
                         )}
                       >
-                        {own && <span className="text-muted-foreground">我： </span>}
+                        {own && <span className="text-muted-foreground">{"" + __ui("我：") + " "}</span>}
                         {linked ? latest.text.replace(/^📦 /, '') : latest.text}
                       </span>
                       {offer && (
                         <span
-                          title={offer.isIncoming ? '对方对你挂单发出的未完成报价' : '你发出的未完成报价'}
+                          title={offer.isIncoming ? __ui("对方对你挂单发出的未完成报价") : __ui("你发出的未完成报价")}
                           className={cn(
                             'flex max-w-20 shrink-0 items-center gap-0.5 rounded-full px-1.5 text-[10px] font-semibold leading-4 tabular-nums',
                             offer.isIncoming ? 'bg-success/15 text-success' : 'bg-info/15 text-info',
@@ -325,7 +325,7 @@ export function ConversationList({
                             <ArrowDownLeft aria-hidden
                               className="size-2.5 shrink-0" />
                           )}
-                          <span className="truncate">{offer.price ?? '报价'}</span>
+                          <span className="truncate">{offer.price ?? __ui("报价")}</span>
                         </span>
                       )}
                       {unread && (
@@ -354,7 +354,7 @@ export function ConversationList({
     >
       <div className="shrink-0 space-y-2.5 px-3 pb-3 pt-3">
         <div className="flex items-center gap-2 px-1">
-          <h2 className="text-lg font-semibold tracking-tight text-foreground">消息</h2>
+          <h2 className="text-lg font-semibold tracking-tight text-foreground">{"" + __ui("消息") + ""}</h2>
           <AnimatePresence>
             {unreadTotal > 0 && (
               <motion.span key="unread"
@@ -369,14 +369,13 @@ export function ConversationList({
           </AnimatePresence>
           {total > 0 && (
             <span className="ml-auto text-[11px] tabular-nums text-muted-foreground">
-              {total} 个会话
-            </span>
+              {total} {" " + __ui("个会话") + " "}</span>
           )}
         </div>
         <div className="group relative">
           <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground transition-colors duration-(--dur-fast) group-focus-within:text-foreground" />
           <Input
-            placeholder="搜索聊天…"
+            placeholder={__ui("搜索聊天…")}
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             onKeyDown={(e) => {
@@ -390,7 +389,7 @@ export function ConversationList({
           {search && (
             <button
               type="button"
-              aria-label="清除搜索"
+              aria-label={__ui("清除搜索")}
               onClick={() => onSearchChange('')}
               className="absolute right-1 top-1/2 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors duration-(--dur-fast) hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
             >
@@ -401,7 +400,7 @@ export function ConversationList({
         <ToggleGroup
           type="single"
           size="sm"
-          aria-label="显示范围"
+          aria-label={__ui("显示范围")}
           value={filter}
           // Radix reports '' when the pressed item is clicked again: keep the current filter
           onValueChange={(value) => value && onFilterChange(value as InboxFilter)}
@@ -411,13 +410,13 @@ export function ConversationList({
             <ToggleGroupItem key={value}
               value={value}
               className={cn('h-6 text-xs', segmentItemClass)}>
-              {label}
+              {__ui(label)}
             </ToggleGroupItem>
           ))}
           <ToggleGroupItem
             value="archived"
-            aria-label="已归档"
-            title="已归档的聊天"
+            aria-label={__ui("已归档")}
+            title={__ui("已归档的聊天")}
             className={cn('h-6 max-w-9 text-xs', segmentItemClass)}
           >
             <Archive className="size-3.5" />

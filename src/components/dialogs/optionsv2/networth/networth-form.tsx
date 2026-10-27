@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -60,6 +61,7 @@ function toFormValues(settings: ISettings | undefined): NetWorthFormValues {
 }
 
 export function NetWorthForm() {
+  const __ui = useUiText();
   const { settings, isLoading, updateSettings } = useOptions();
   const debounceRef = React.useRef<number | undefined>(undefined);
 
@@ -109,14 +111,14 @@ export function NetWorthForm() {
   return (
     <Form {...form}>
       <div className="flex flex-col gap-y-6">
-        <SettingsGroup title="估值历史">
+        <SettingsGroup title={__ui("估值历史")}>
           <FormField
             control={form.control}
             name="netWorthTrackingEnabled"
             render={({ field }) => (
               <SettingsRow
-                label="保存估值历史"
-                description="将仓库估值快照保存到 pd2trader.com，以查看历史记录和游戏会话。关闭后仍会计算估值，但不会保存记录。"
+                label={__ui("保存估值历史")}
+                description={__ui("将仓库估值快照保存到 pd2trader.com，以查看历史记录和游戏会话。关闭后仍会计算估值，但不会保存记录。")}
                 control={
                   <FormControl>
                     <Switch checked={field.value}
@@ -133,14 +135,14 @@ export function NetWorthForm() {
             name="netWorthAutoSnapshotMinutes"
             render={({ field }) => (
               <SettingsRow
-                label="自动记录快照"
-                description="Diablo II 处于前台时，按此间隔记录估值快照。"
+                label={__ui("自动记录快照")}
+                description={__ui("Diablo II 处于前台时，按此间隔记录估值快照。")}
                 control={
                   <Select value={String(field.value)}
                     onValueChange={(value) => field.onChange(Number(value))}>
                     <FormControl>
                       <SelectTrigger className="w-[220px]">
-                        <SelectValue placeholder="选择间隔" />
+                        <SelectValue placeholder={__ui("选择间隔")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -162,14 +164,14 @@ export function NetWorthForm() {
 
         <PublicProfileGroup />
 
-        <SettingsGroup title="估值悬浮窗">
+        <SettingsGroup title={__ui("估值悬浮窗")}>
           <FormField
             control={form.control}
             name="netWorthTickerEnabled"
             render={({ field }) => (
               <SettingsRow
-                label="显示估值悬浮窗"
-                description="在游戏画面上显示仓库估值、本次会话变化和每小时 HR 收益。点击悬浮窗可查看详情。"
+                label={__ui("显示估值悬浮窗")}
+                description={__ui("在游戏画面上显示仓库估值、本次会话变化和每小时 HR 收益。点击悬浮窗可查看详情。")}
                 control={
                   <FormControl>
                     <Switch checked={field.value}
@@ -186,14 +188,14 @@ export function NetWorthForm() {
             name="netWorthTickerAnchor"
             render={({ field }) => (
               <SettingsRow
-                label="悬浮窗位置"
-                description="将悬浮窗固定在游戏画面的角落，或拖动到屏幕任意位置（会切换为自定义）。"
+                label={__ui("悬浮窗位置")}
+                description={__ui("将悬浮窗固定在游戏画面的角落，或拖动到屏幕任意位置（会切换为自定义）。")}
                 control={
                   <Select value={field.value}
                     onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="w-[220px]">
-                        <SelectValue placeholder="选择位置" />
+                        <SelectValue placeholder={__ui("选择位置")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -218,7 +220,7 @@ export function NetWorthForm() {
               <SettingsRow
                 label={
                   <>
-                    悬浮窗不透明度：<span className="tabular-nums">{field.value}%</span>
+                    {" " + __ui("悬浮窗不透明度：") + ""}<span className="tabular-nums">{field.value}%</span>
                   </>
                 }
                 control={
@@ -235,7 +237,7 @@ export function NetWorthForm() {
                     </FormControl>
                     <span
                       aria-hidden
-                      title="预览"
+                      title={__ui("预览")}
                       style={{ opacity: field.value / 100 }}
                       className="rounded-md border border-border bg-surface px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-surface-foreground shadow-xs transition-opacity duration-(--dur-fast)"
                     >
@@ -250,17 +252,16 @@ export function NetWorthForm() {
           />
         </SettingsGroup>
 
-        <SettingsGroup title="通知">
+        <SettingsGroup title={__ui("通知")}>
           <FormField
             control={form.control}
             name="netWorthToastThresholdHr"
             render={({ field }) => (
               <SettingsRow
-                label="快照变化提醒阈值（HR）"
+                label={__ui("快照变化提醒阈值（HR）")}
                 description={
                   <>
-                    启用悬浮窗后，当快照显示的仓库估值变化达到此数值时弹出提醒。可在<SettingsLink to="Chat">聊天设置</SettingsLink>中开启仓库估值提醒。
-                  </>
+                    {" " + __ui("启用悬浮窗后，当快照显示的仓库估值变化达到此数值时弹出提醒。可在") + ""}<SettingsLink to="Chat">{"" + __ui("聊天设置") + ""}</SettingsLink>{"" + __ui("中开启仓库估值提醒。") + " "}</>
                 }
                 control={
                   <div className="flex items-center gap-2">
@@ -285,8 +286,7 @@ export function NetWorthForm() {
         </SettingsGroup>
 
         <SettingsHint>
-          可在<SettingsLink to="Hotkeys">快捷键设置</SettingsLink>中配置记录估值快照的快捷键。
-        </SettingsHint>
+          {" " + __ui("可在") + ""}<SettingsLink to="Hotkeys">{"" + __ui("快捷键设置") + ""}</SettingsLink>{"" + __ui("中配置记录估值快照的快捷键。") + " "}</SettingsHint>
       </div>
     </Form>
   );

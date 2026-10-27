@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import React, { useState } from 'react';
 import {
   ArrowDownLeft,
@@ -171,6 +172,7 @@ function AcceptButton({
   game: { name: string; password: string; set: (name: string, password: string) => void };
   onAccept: (gameInfo: string) => Promise<void> | void;
 }) {
+  const __ui = useUiText();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const submit = async () => {
@@ -188,13 +190,13 @@ function AcceptButton({
       <Tip
         label={
           requireGame
-            ? '接受 / Accept：复制包含房间信息的密语 / copy a whisper with game details'
-            : '接受报价 / Accept offer'
+            ? __ui("接受 / Accept：复制包含房间信息的密语 / copy a whisper with game details")
+            : __ui("接受报价 / Accept offer")
         }
       >
         <PopoverTrigger disabled={disabled} className={cn(actionClass, ACTION_TONE.filled)}>
           <Check className="size-3.5" />
-          <span className={actionLabelClass}>接受 / Accept</span>
+          <span className={actionLabelClass}>{"" + __ui("接受 / Accept") + ""}</span>
         </PopoverTrigger>
       </Tip>
       <PopoverContent align="end" className="w-auto p-2.5">
@@ -207,30 +209,29 @@ function AcceptButton({
         >
           <p className="px-0.5 text-xs font-medium text-muted-foreground">
             {requireGame
-              ? '复制接受密语并附上游戏房间信息 / Copy acceptance whisper with game details'
-              : '接受报价 / Accept offer（可附上游戏房间信息 / optionally include game details）'}
+              ? __ui("复制接受密语并附上游戏房间信息 / Copy acceptance whisper with game details")
+              : __ui("接受报价 / Accept offer（可附上游戏房间信息 / optionally include game details）")}
           </p>
           {/* Fields on one row, the button below: fits a narrow (360px) chat panel */}
           <div className="flex gap-2">
             <Input
               value={game.name}
               onChange={(e) => game.set(e.target.value, game.password)}
-              placeholder="游戏房间"
-              aria-label="游戏房间名称"
+              placeholder={__ui("游戏房间")}
+              aria-label={__ui("游戏房间名称")}
               className="h-8 w-28 text-sm md:text-sm"
             />
             <Input
               value={game.password}
               onChange={(e) => game.set(game.name, e.target.value)}
-              placeholder="密码"
-              aria-label="游戏房间密码"
+              placeholder={__ui("密码")}
+              aria-label={__ui("游戏房间密码")}
               className="h-8 w-28 text-sm md:text-sm"
             />
           </div>
           <Button type="submit" size="sm" disabled={(requireGame && !game.name) || busy} className="h-8">
             {busy ? <Loader2 className="animate-spin" /> : <Check />}
-            接受报价 / Accept offer
-          </Button>
+            {" " + __ui("接受报价 / Accept offer") + " "}</Button>
         </form>
       </PopoverContent>
     </Popover>
@@ -268,6 +269,7 @@ export function ThreadDeals({
   onWhisper: (person: WhisperPerson, text: string) => void;
   onDismissTrade: (person: WhisperPerson, tradeId: string) => void;
 }): React.JSX.Element | null {
+  const __ui = useUiText();
   const {
     acceptOffer,
     rejectOffer,
@@ -342,7 +344,7 @@ export function ThreadDeals({
   /** Rare and destructive actions live in the row's ⋯ menu. */
   const moreMenu = (itemName: string | undefined, items: React.ReactNode) => (
     <DropdownMenu>
-      <Tip label="更多操作">
+      <Tip label={__ui("更多操作")}>
         <DropdownMenuTrigger
           aria-label={`${itemName ?? '此报价'}的更多操作`}
           disabled={busyId !== null}
@@ -377,8 +379,7 @@ export function ThreadDeals({
       }
     >
       <Trash2 className="size-4" />
-      删除挂单
-    </DropdownMenuItem>
+      {" " + __ui("删除挂单") + " "}</DropdownMenuItem>
   );
 
   const offerActions = (offer: TradeOffer, status: DealStatus, disabled: boolean) => {
@@ -386,8 +387,8 @@ export function ThreadDeals({
     if (status === 'hidden') {
       return (
         <ActionButton
-          title="重新显示此报价"
-          label="显示"
+          title={__ui("重新显示此报价")}
+          label={__ui("显示")}
           tone="muted"
           disabled={disabled}
           onClick={() => restoreOutgoingOffer(offer.id)}
@@ -401,8 +402,8 @@ export function ThreadDeals({
         <>
           {status === 'open' && (
             <ActionButton
-              title="撤回报价"
-              label="撤回"
+              title={__ui("撤回报价")}
+              label={__ui("撤回")}
               tone="destructive"
               disabled={disabled}
               onClick={() => void run(offer.id, () => revokeOffer(offer.id))}
@@ -411,8 +412,8 @@ export function ThreadDeals({
             </ActionButton>
           )}
           <ActionButton
-            title="隐藏此报价"
-            label="隐藏"
+            title={__ui("隐藏此报价")}
+            label={__ui("隐藏")}
             tone="muted"
             disabled={disabled}
             onClick={() => deleteOutgoingOffer(offer.id)}
@@ -458,8 +459,8 @@ export function ThreadDeals({
         {status === 'open' && (
           <>
             <ActionButton
-              title="在输入框中填写还价 / Draft a counteroffer"
-              label="还价 / Counter"
+              title={__ui("在输入框中填写还价 / Draft a counteroffer")}
+              label={__ui("还价 / Counter")}
               tone="outline"
               disabled={disabled}
               onClick={() => onCounter(offer.itemName ? `Counteroffer for ${offer.itemName}: ` : 'Counteroffer: ')}
@@ -467,8 +468,8 @@ export function ThreadDeals({
               <Reply className="size-3.5" />
             </ActionButton>
             <ActionButton
-              title="拒绝报价 / Decline offer"
-              label="拒绝 / Decline"
+              title={__ui("拒绝报价 / Decline offer")}
+              label={__ui("拒绝 / Decline")}
               tone="destructive"
               disabled={disabled}
               onClick={() => void run(offer.id, () => rejectOffer(offer.id))}
@@ -479,8 +480,8 @@ export function ThreadDeals({
         )}
         {status === 'accepted' && listingId && (
           <ActionButton
-            title="取消接受报价"
-            label="取消接受"
+            title={__ui("取消接受报价")}
+            label={__ui("取消接受")}
             tone="outline"
             disabled={disabled}
             onClick={() => void run(offer.id, () => unacceptOffer(listingId))}
@@ -511,8 +512,8 @@ export function ThreadDeals({
               onAccept={(gameInfo) => onWhisper(person, template('acceptOfferMessageTemplate', { ...vars, gameInfo }))}
             />
             <ActionButton
-              title="复制物品已售出的密语 / Copy item-sold whisper"
-              label="已售出 / Sold"
+              title={__ui("复制物品已售出的密语 / Copy item-sold whisper")}
+              label={__ui("已售出 / Sold")}
               tone="outline"
               disabled={disabled}
               onClick={() => onWhisper(person, template('soldOfferMessageTemplate', vars))}
@@ -520,8 +521,8 @@ export function ThreadDeals({
               <CheckSquare className="size-3.5" />
             </ActionButton>
             <ActionButton
-              title="复制拒绝报价的密语 / Copy offer-declined whisper"
-              label="拒绝 / Decline"
+              title={__ui("复制拒绝报价的密语 / Copy offer-declined whisper")}
+              label={__ui("拒绝 / Decline")}
               tone="destructive"
               disabled={disabled}
               onClick={() => onWhisper(person, template('rejectOfferMessageTemplate', vars))}
@@ -531,8 +532,8 @@ export function ThreadDeals({
           </>
         )}
         <ActionButton
-          title="忽略此笔交易"
-          label="忽略"
+          title={__ui("忽略此笔交易")}
+          label={__ui("忽略")}
           tone="muted"
           disabled={disabled}
           onClick={() => onDismissTrade(person, trade.id)}
@@ -545,7 +546,7 @@ export function ThreadDeals({
 
   return (
     <div className="@container px-3 pt-2">
-      <ul aria-label="与此用户的报价" className="space-y-1.5">
+      <ul aria-label={__ui("与此用户的报价")} className="space-y-1.5">
         {shown.map((deal) => {
           const status = dealStatus(deal);
           const disabled = busyId !== null;
@@ -597,7 +598,7 @@ export function ThreadDeals({
                   {live && <span className="font-semibold opacity-80">{` · ${shortAgo(at, now)}`}</span>}
                 </div>
                 <div className="truncate text-sm font-semibold leading-snug text-foreground">
-                  {itemName ?? '未知物品'}
+                  {itemName ?? __ui("未知物品")}
                 </div>
               </div>
               {context.length > 0 && (
@@ -631,7 +632,7 @@ export function ThreadDeals({
               onClick={() => setExpanded((open) => !open)}
             >
               <ChevronDown className={cn('size-3.5 transition-transform', expanded && 'rotate-180')} />
-              {expanded ? '收起' : `另有 ${deals.length - 1} 笔`}
+              {expanded ? __ui("收起") : `另有 ${deals.length - 1} 笔`}
             </button>
           </li>
         )}

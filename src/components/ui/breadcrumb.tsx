@@ -1,3 +1,4 @@
+import { useUiText } from '@/lib/ui-language';
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
@@ -5,7 +6,8 @@ import { ChevronRight, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 function Breadcrumb({ ...props }: React.ComponentProps<'nav'>) {
-  return <nav aria-label="导航路径"
+  const __ui = useUiText();
+  return <nav aria-label={__ui("导航路径")}
     data-slot="breadcrumb"
     {...props} />;
 }
@@ -73,6 +75,7 @@ function BreadcrumbSeparator({ children, className, ...props }: React.ComponentP
 }
 
 function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<'span'>) {
+  const __ui = useUiText();
   return (
     <span
       data-slot="breadcrumb-ellipsis"
@@ -82,7 +85,7 @@ function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<'span'
       {...props}
     >
       <MoreHorizontal className="size-4" />
-      <span className="sr-only">更多</span>
+      <span className="sr-only">{"" + __ui("更多") + ""}</span>
     </span>
   );
 }
