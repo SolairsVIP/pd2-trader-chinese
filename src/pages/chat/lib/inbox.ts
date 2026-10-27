@@ -10,6 +10,7 @@ import type { ChatMessage } from '../hooks/useChatStore';
 import { otherParticipant, participantName } from '../components/chat-parts';
 import { knownAccounts, linkSender, whisperThreadId } from './identity';
 import { messagePreview } from './market-links';
+import { gameAccount } from '@/lib/game-account';
 
 /** 'archived' shows only archived threads; the others leave them out. */
 export type InboxFilter = 'all' | 'selling' | 'buying' | 'archived';
@@ -229,7 +230,7 @@ export function visibleThreads(threads: readonly InboxThread[], filter: InboxFil
  * the first account known for its website user; undefined when no account is known.
  */
 export const threadWhisperAccount = (thread: Pick<InboxThread, 'people' | 'accounts'>) =>
-  thread.people[0] ? whisperTarget(thread.people[0]) : thread.accounts[0];
+  gameAccount(thread.people[0] ? whisperTarget(thread.people[0]) : thread.accounts[0]);
 
 /** One message of a thread's timeline, from either source. */
 export interface TimelineEntry {

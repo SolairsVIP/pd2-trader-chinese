@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useSyncExternalStore } from 'react';
 import { showToast, useOverlay } from '@/overlay';
 import { openUrl } from '@/lib/browser-opener';
 import { writeText } from '@/lib/browser-clipboard';
@@ -11,6 +11,8 @@ import { itemDisplayName, listingUrl, sellerAccount } from '../lib/listing';
 import { buildWhisper } from '../lib/whisper';
 
 export interface ListingActions {
+  /** This account opened the seller's chat during the current app session. */
+  chatOpened: boolean;
   /** Copies `/w *account …` (default wording, or `template` in buildWhisper's tokens) and toasts. */
   copyWhisper: (template?: string) => Promise<void>;
   /**
@@ -29,11 +31,22 @@ export interface ListingActions {
 const askingPrice = (l: MarketListingEntry) => (l.hr_price > 0 ? `${l.hr_price} HR` : l.price?.trim() || '未标价');
 const changeKey = (l: MarketListingEntry) => `${l.price ?? ''}|${l.hr_price ?? ''}|${l.item?.hash ?? ''}`;
 
+// Session-only: scope by the signed-in account and identify sellers by their PD2 user ID.
+const openedChats = new Set<string>();
+const listeners = new Set<() => void>();
+const subscribe = (listener: () => void) => {
+  listeners.add(listener);
+  return () => { listeners.delete(listener); };
+};
+
 /** Whisper / message / website actions shared by the detail pane and the result cards. */
 export function useListingActions(listing: MarketListingEntry): ListingActions {
   const { openPanel } = useOverlay();
   const { templates } = useChatTemplates();
-  const { marketApi } = usePd2Website();
+  const { marketApi, authData } = usePd2Website();
+  const buyerId = authData?.user?._id;
+  const chatKey = buyerId && listing.user_id ? JSON.stringify([buyerId, listing.user_id]) : null;
+  const chatOpened = useSyncExternalStore(subscribe, () => chatKey !== null && openedChats.has(chatKey));
   /** The change the user was already warned about; acting again goes ahead. */
   const acknowledgedRef = useRef<string | null>(null);
   // buildWhisper falls back to the website username, as the price check does
@@ -66,6 +79,7 @@ export function useListingActions(listing: MarketListingEntry): ListingActions {
   };
 
   return {
+    chatOpened,
     whisperTemplates: templates
       .filter((t) => templatePlaceholders(t.text).length === 0)
       .map((t) => ({
@@ -89,15 +103,20 @@ export function useListingActions(listing: MarketListingEntry): ListingActions {
       }
       const current = await ensureFresh();
       if (!current) return;
+      const currentAccount = sellerAccount(current) || current.user?.username;
+      if (!currentAccount) {
+        showToast({ title: '没有游戏账号', description: '此挂单未提供游戏账号，请在网站上联系卖家。', variant: 'warning' });
+        return;
+      }
       try {
         await writeText(buildWhisper(current, template));
-        showToast({ title: '游戏密语已复制', description: `粘贴到游戏聊天框即可联系 *${account}。` });
+        showToast({ title: '游戏密语已复制', description: `粘贴到游戏聊天框即可联系 *${currentAccount}。` });
       } catch {
         showToast({ title: '未能复制密语', description: '无法写入剪贴板。', variant: 'error' });
       }
     },
     ensureFresh,
-    openDm: () =>
+    openDm: () => {
       openPanel(
         'chat',
         {
@@ -107,7 +126,12 @@ export function useListingActions(listing: MarketListingEntry): ListingActions {
           reply: true,
         },
         { focus: true },
-      ),
+      );
+      if (chatKey && !openedChats.has(chatKey)) {
+        openedChats.add(chatKey);
+        listeners.forEach((listener) => listener());
+      }
+    },
     openWebsite: () => void openUrl(listingUrl(listing)),
   };
 }

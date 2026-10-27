@@ -682,28 +682,31 @@ describe('ItemOverlayWidget market search', () => {
     expect(screen.queryByText('Load more')).toBeNull();
   });
 
-  it('copies a whisper to the seller of an online listing', async () => {
+  it.each([
+    ['IngameAcc', 'IngameAcc'],
+    ['Moe_DrDru*rocad2', 'rocad2'],
+  ])('copies a whisper to the account in %s', async (inGameAccount, expectedAccount) => {
     vi.mocked(writeText).mockResolvedValue(undefined);
     getMarketListings.mockResolvedValue(
       page([
         listing({
           hr_price: 3,
           user_last_ingame: '2026-10-18T11:58:00Z',
-          user: { username: 'webname', in_game_account: 'IngameAcc' },
+          user: { username: 'webname', in_game_account: inGameAccount },
           item: { name: 'Doom Coil' },
         }),
         listing({ hr_price: 4, user_last_ingame: '2026-10-18T10:00:00Z' }),
       ]),
     );
     renderWidget(rareRing());
-    fireEvent.click(searchButton());
+    fireEvent.click(screen.getByRole('button', { name: '搜索' }));
     await screen.findByText('3 HR');
     // only the recently-seen seller counts as online
-    const buttons = screen.getAllByRole('button', { name: 'Copy whisper' });
+    const buttons = screen.getAllByRole('button', { name: '复制游戏密语' });
     expect(buttons).toHaveLength(1);
     fireEvent.click(buttons[0]);
     await waitFor(() =>
-      expect(writeText).toHaveBeenCalledWith("/w *IngameAcc Hi, I'm interested in your Doom Coil listed for 3 HR"),
+      expect(writeText).toHaveBeenCalledWith(`/w *${expectedAccount} Hi, I'm interested in your Doom Coil listed for 3 HR`),
     );
   });
 });

@@ -192,6 +192,24 @@ export function ThreadHeader({
           <DropdownMenuContent align="end"
             side="bottom"
             sideOffset={5}>
+            <ConversationMenuItems username={username} characterName={characterName} pinned={pinned} muted={muted} archived={archived}
+              onTogglePin={onTogglePin} onToggleMute={onToggleMute} onToggleArchive={onToggleArchive}
+              onDeleteConversation={onDeleteConversation} onForgetWhispers={onForgetWhispers} />
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
+  );
+}
+
+/** Shared actions for the header and the conversation-list context menu. */
+export function ConversationMenuItems({ username, characterName, pinned, muted, archived, onTogglePin, onToggleMute, onToggleArchive, onDeleteConversation, onForgetWhispers }: {
+  username?: string; characterName?: string; pinned: boolean; muted: boolean; archived: boolean;
+  onTogglePin: () => void; onToggleMute: () => void; onToggleArchive: () => void;
+  onDeleteConversation?: () => void; onForgetWhispers?: () => void;
+}) {
+  const __ui = useUiText();
+  return <>
             <DropdownMenuItem onSelect={onTogglePin}
               className="cursor-pointer">
               {pinned ? <PinOff className="size-4" /> : <Pin className="size-4" />}
@@ -235,9 +253,5 @@ export function ThreadHeader({
                 <Trash2 className="size-4" />
                 {" " + __ui("删除会话") + " "}</DropdownMenuItem>
             )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </div>
-  );
+  </>;
 }

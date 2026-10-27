@@ -330,6 +330,55 @@ afterEach(() => {
 });
 
 describe('ChatOverlayWidget conversation list', () => {
+  it('opens the right-clicked conversation menu and pins that conversation, not the selected one', async () => {
+    await renderWidget([
+      conv('c1', ALICE, { latest: msg('m1', 'c1', 'alice', 'a', 1) }),
+      conv('c2', BOB, { latest: msg('m2', 'c2', 'bob', 'b', 2) }),
+    ]);
+    const list = screen.getByRole('list', { name: '会话列表' });
+    const alice = within(list).getByText('Alice').closest('li')!;
+    const bob = within(list).getByText('bob').closest('li')!;
+    fireEvent.click(within(alice).getAllByRole('button').at(-1)!);
+    fireEvent.contextMenu(bob, { clientX: 80, clientY: 100 });
+    await flush();
+    expect(screen.getByRole('menuitem', { name: '置顶' })).not.toBeNull();
+    expect(screen.getByRole('menuitem', { name: '静音' })).not.toBeNull();
+    fireEvent.click(screen.getByRole('menuitem', { name: '置顶' }));
+    await flush();
+    expect(within(bob).getByLabelText('已置顶')).not.toBeNull();
+    expect(within(alice).queryByLabelText('已置顶')).toBeNull();
+  });
+
+  it('anchors the context menu at the pointer relative to the conversation panel', async () => {
+    await renderWidget([conv('c1', ALICE, { latest: msg('m1', 'c1', 'alice', 'a', 1) })]);
+    const list = screen.getByRole('list', { name: '会话列表' });
+    const aside = list.closest('aside')!;
+    vi.spyOn(aside, 'getBoundingClientRect').mockReturnValue({ left: 300, top: 200, right: 600, bottom: 700, width: 300, height: 500, x: 300, y: 200, toJSON: () => ({}) });
+    fireEvent.contextMenu(within(list).getByText('Alice').closest('li')!, { clientX: 380, clientY: 270 });
+    await flush();
+    const anchor = screen.getByLabelText('会话选项');
+    expect(anchor.style.position).toBe('absolute');
+    expect(anchor.style.left).toBe('80px');
+    expect(anchor.style.top).toBe('70px');
+  });
+
+  it('deletes only the right-clicked conversation and retains the undo option', async () => {
+    await renderWidget([
+      conv('c1', ALICE, { latest: msg('m1', 'c1', 'alice', 'a', 1) }),
+      conv('c2', BOB, { latest: msg('m2', 'c2', 'bob', 'b', 2) }),
+    ]);
+    const list = screen.getByRole('list', { name: '会话列表' });
+    fireEvent.contextMenu(within(list).getByText('bob').closest('li')!, { clientX: 80, clientY: 100 });
+    await flush();
+    fireEvent.click(screen.getByRole('menuitem', { name: '删除会话' }));
+    await flush();
+    expect(within(list).queryByText('bob')).toBeNull();
+    expect(within(list).getByText('Alice')).not.toBeNull();
+    expect(undoToasts.at(-1)?.title).toBe('会话已删除');
+    act(() => undoToasts.at(-1)!.onUndo());
+    await flush();
+    expect(within(list).getByText('bob')).not.toBeNull();
+  });
   it('lists conversations with messages, most recent first, with names and unread badges', async () => {
     await renderWidget([
       conv('c-old', BOB, { latest: msg('m1', 'c-old', 'bob', 'old news', 120) }),

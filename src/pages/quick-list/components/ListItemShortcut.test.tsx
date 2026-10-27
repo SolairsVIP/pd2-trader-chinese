@@ -15,7 +15,7 @@ import type { Item as PriceCheckItem } from '@/pages/price-check/lib/interfaces'
 import ListItemShortcutForm from './ListItemShortcut';
 import { GameItemMatchingError } from '@/lib/game-stash-input';
 
-const panel = vi.hoisted(() => ({ close: (() => {}) as () => void }));
+const panel = vi.hoisted(() => ({ close: (() => {}) as () => void, payloadVersion: 0 }));
 vi.mock('@/overlay', () => ({ showToast: vi.fn(), usePanel: () => panel }));
 vi.mock('framer-motion', () => import('@/pages/quick-list/motion-mock'));
 vi.mock('@tauri-apps/api/core', () => ({ isTauri: () => true }));
@@ -116,6 +116,7 @@ async function selectTab(name: RegExp) {
 }
 
 beforeEach(() => {
+  panel.payloadVersion = 0;
   vi.useFakeTimers({ toFake: ['Date', 'setInterval', 'clearInterval'] });
   vi.setSystemTime(new Date('2026-03-01T12:00:00Z'));
   localStorage.clear();
@@ -153,6 +154,17 @@ afterEach(() => {
 });
 
 describe('tabs', () => {
+  it('checks listings again each time the panel is reopened', async () => {
+    const view = renderForm(null);
+    await flush();
+    api.getMarketListings.mockClear();
+    userListings = [marketListing(1)];
+    panel.payloadVersion += 1;
+    view.setItem(null);
+    await flush();
+    expect(api.getMarketListings).toHaveBeenCalled();
+    expect(await screen.findByTitle('Shako #1')).not.toBeNull();
+  });
   it('opens on List Item for a stash item', async () => {
     renderForm();
     await flush();

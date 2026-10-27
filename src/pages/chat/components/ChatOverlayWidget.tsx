@@ -1,4 +1,5 @@
 import { useUiText } from '@/lib/ui-language';
+import { buildGameWhisper, gameAccount } from '@/lib/game-account';
 import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { MessageSquare, MessagesSquare } from 'lucide-react';
@@ -514,9 +515,13 @@ export default function ChatOverlayWidget({ onClose }: ChatOverlayWidgetProps) {
 
   /** Copies `/w *<account> <text>` for the game chat and records it as an outgoing whisper. */
   const sendWhisper = async (target: { accountName?: string; playerName: string }, text: string) => {
-    const account = target.accountName || target.playerName;
+    const account = gameAccount(target.accountName || target.playerName);
+    if (!account) {
+      showToast({ title: '无法识别游戏账号', description: '请检查对方账号后重试。', variant: 'warning' });
+      return;
+    }
     try {
-      await writeText(`/w *${account} ${text}`);
+      await writeText(buildGameWhisper(account, text)!);
     } catch {
       showToast({ title: '未能复制游戏密语', description: '无法写入剪贴板。', variant: 'error' });
       return;
@@ -586,6 +591,19 @@ export default function ChatOverlayWidget({ onClose }: ChatOverlayWidgetProps) {
               selectedId={selectedThread?.id ?? null}
               onSelect={selectThread}
               onOpenTrader={openTrader}
+              onThreadAction={(thread, action) => {
+                if (action === 'pin') setPrefs(thread, { pinnedAt: thread.pinned ? undefined : Date.now() });
+                if (action === 'mute') setPrefs(thread, { muted: !thread.muted });
+                if (action === 'archive') {
+                  setPrefs(thread, { archivedAt: thread.archived ? undefined : Math.max(Date.now(), thread.latest?.at ?? 0) });
+                  if (!thread.archived && selectedThread?.id === thread.id) selectThread(null);
+                }
+                if (action === 'delete' && thread.conversation) handleDeleteConversation(thread.conversation._id, thread.name);
+                if (action === 'forget') {
+                  thread.people.forEach((person) => whispers.forget(person.key));
+                  if (!thread.userId) clearDraft(thread.id);
+                }
+              }}
               loading={loadingConversations}
               failed={chat.conversationsFailed}
               signedIn={signedIn}

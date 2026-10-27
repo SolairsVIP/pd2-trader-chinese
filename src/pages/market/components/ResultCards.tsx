@@ -11,6 +11,9 @@ import { localizeItemType } from '@/lib/localize-item-type';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useWhisperHistory } from '@/hooks/useWhisperHistory';
+import { shortAgo } from '@/pages/chat/hooks/useTraderProfile';
+import { sellerWhispers } from '../lib/seller-whispers';
 import { ListingThumb } from '@/pages/chat/components/ListingCard';
 import { useListingMarketPrices } from '@/pages/chat/hooks/useListingMarketPrices';
 import { DealBadge } from '@/pages/market/enrich/DealBadge';
@@ -272,6 +275,8 @@ const ResultCard = React.memo(function ResultCard({
   const { item } = listing;
   const model = useMemo(() => buildCardModel(item), [item]);
   const actions = useListingActions(listing);
+  const whispers = useWhisperHistory();
+  const summary = sellerWhispers(whispers.people, [sellerAccount(listing), ...(listing.user?.game?.accounts ?? [])]);
   const [hovered, setHovered] = useState<number | null>(null);
 
   // Socket prices (runes, priced uniques…) through the economy service, one pseudo-listing per group
@@ -307,17 +312,22 @@ const ResultCard = React.memo(function ResultCard({
   const account = sellerAccount(listing) || listing.user?.username;
 
   return (
+    <Tooltip>
+    <TooltipTrigger asChild>
     <article
       role="option"
       aria-selected={selected}
       data-listing-id={listing._id}
+      data-chat-opened={actions.chatOpened || undefined}
       onClick={() => onSelect(listing._id)}
       className={cn(
         'cursor-default overflow-hidden rounded-lg border bg-foreground/[0.015] transition-colors duration-(--dur-fast)',
         selected ? 'border-primary' : 'border-border/60 hover:border-border',
         pin && 'ring-2 ring-primary/30',
+        actions.chatOpened && 'opacity-15',
       )}
     >
+      {actions.chatOpened && <span className="sr-only">已打开与此卖家的聊天</span>}
       {pin && (
         <div className="flex items-center gap-1.5 border-b border-primary/30 bg-primary/10 px-3 py-1 text-[11px] text-primary">
           <Bell className="size-3 shrink-0" />
@@ -553,6 +563,23 @@ const ResultCard = React.memo(function ResultCard({
         </span>
       </footer>
     </article>
+    </TooltipTrigger>
+    {actions.chatOpened && (
+      <TooltipContent side="top" className="w-64 space-y-2 rounded-lg p-3 text-xs">
+        <div className="flex justify-between gap-3"><span>密语记录</span><strong>{summary.count}</strong></div>
+        {summary.last > 0 ? (
+          <div className="flex justify-between gap-3"><span>最近的密语</span><span>{shortAgo(summary.last, Date.now())}</span></div>
+        ) : <div className="text-muted-foreground">本机暂无相关密语记录</div>}
+        {summary.people.map((person) => (
+          <div key={person.key} className="flex justify-between gap-3 text-muted-foreground">
+            <span className="truncate">{person.characterName ? `${person.characterName} · ` : ''}*{person.accountName ?? person.playerName}</span>
+            <span>{person.messages.length}</span>
+          </div>
+        ))}
+        <div className="text-muted-foreground">含已复制的密语，不代表已发送</div>
+      </TooltipContent>
+    )}
+    </Tooltip>
   );
 });
 

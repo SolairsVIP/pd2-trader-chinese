@@ -17,6 +17,8 @@ import {
   X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@/components/ui/dropdown-menu';
+import { ConversationMenuItems } from './ThreadHeader';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -89,6 +91,7 @@ export function ConversationList({
   selectedId,
   onSelect,
   onOpenTrader,
+  onThreadAction,
   loading,
   failed,
   signedIn,
@@ -109,6 +112,7 @@ export function ConversationList({
   onSelect: (threadId: string) => void;
   /** Opens the thread with its Trader details showing. */
   onOpenTrader: (threadId: string) => void;
+  onThreadAction: (thread: InboxThread, action: 'pin' | 'mute' | 'archive' | 'delete' | 'forget') => void;
   loading: boolean;
   failed: boolean;
   signedIn: boolean;
@@ -118,6 +122,9 @@ export function ConversationList({
   className?: string;
 }) {
   const __ui = useUiText();
+  const panelRef = React.useRef<HTMLElement>(null);
+  const [context, setContext] = React.useState<{ id: string; x: number; y: number } | null>(null);
+  const contextThread = threads.find((thread) => thread.id === context?.id);
   const query = search.trim();
   const empty = EMPTY_TEXT[filter];
   const presenceOf = useKnownPresence(now);
@@ -213,6 +220,12 @@ export function ConversationList({
           return (
             <motion.li
               key={thread.id}
+              onContextMenu={(event) => {
+                event.preventDefault();
+                const bounds = panelRef.current?.getBoundingClientRect();
+                if (!bounds) return;
+                setContext({ id: thread.id, x: event.clientX - bounds.left, y: event.clientY - bounds.top });
+              }}
               layout="position"
               variants={listItem}
               className={cn(
@@ -347,11 +360,28 @@ export function ConversationList({
 
   return (
     <aside
+      ref={panelRef}
       className={cn(
-        'flex min-h-0 w-[300px] shrink-0 flex-col overflow-hidden border-r border-border bg-linear-to-b from-card/60 to-card/30',
+        'relative flex min-h-0 w-[300px] shrink-0 flex-col overflow-hidden border-r border-border bg-linear-to-b from-card/60 to-card/30',
         className,
       )}
     >
+      <DropdownMenu open={!!contextThread} onOpenChange={(open) => { if (!open) setContext(null); }}>
+        <DropdownMenuTrigger aria-label={__ui('会话选项')} tabIndex={-1}
+          style={{ position: 'absolute', left: context?.x ?? 0, top: context?.y ?? 0, width: 1, height: 1, opacity: 0, pointerEvents: 'none' }} />
+        <DropdownMenuContent align="start" sideOffset={0} onCloseAutoFocus={(event) => event.preventDefault()}>
+          {contextThread && <ConversationMenuItems
+            username={contextThread.participant?.username}
+            characterName={contextThread.people.find((person) => person.characterName)?.characterName}
+            pinned={contextThread.pinned} muted={contextThread.muted} archived={contextThread.archived}
+            onTogglePin={() => onThreadAction(contextThread, 'pin')}
+            onToggleMute={() => onThreadAction(contextThread, 'mute')}
+            onToggleArchive={() => onThreadAction(contextThread, 'archive')}
+            onForgetWhispers={contextThread.people.length ? () => onThreadAction(contextThread, 'forget') : undefined}
+            onDeleteConversation={contextThread.conversation ? () => onThreadAction(contextThread, 'delete') : undefined}
+          />}
+        </DropdownMenuContent>
+      </DropdownMenu>
       <div className="shrink-0 space-y-2.5 px-3 pb-3 pt-3">
         <div className="flex items-center gap-2 px-1">
           <h2 className="text-lg font-semibold tracking-tight text-foreground">{"" + __ui("消息") + ""}</h2>

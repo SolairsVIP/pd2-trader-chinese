@@ -133,6 +133,36 @@ describe('loading', () => {
     expect(api.getMarketListings).not.toHaveBeenCalled();
   });
 
+  it('refreshes the first page when new listings appear before an existing row', async () => {
+    const oldFirstPage = [server[0], server[1], server[2], server[5]];
+    const view = renderTab({ initialListings: oldFirstPage, initialTotalCount: 4 });
+    view.rerender(
+      <TooltipProvider>
+        <ListedItemsTab onClose={vi.fn()} initialListings={server.slice(0, 5)} initialTotalCount={6} />
+      </TooltipProvider>,
+    );
+    await waitFor(() => {
+      expect(screen.getByTitle('Item 4')).not.toBeNull();
+      expect(screen.getByTitle('Item 5')).not.toBeNull();
+    });
+  });
+
+  it('manually refreshes from the first page when the market changes', async () => {
+    renderTab({ initialListings: [server[0], server[1], server[2], server[5]], initialTotalCount: 4 });
+    await click(screen.getByRole('button', { name: '刷新挂单' }));
+    expect(await screen.findByTitle('Item 4')).not.toBeNull();
+    expect(screen.getByTitle('Item 5')).not.toBeNull();
+    expect(queries).toContainEqual({ limit: 5, skip: 0, hc: true, ladder: false });
+  });
+
+  it('preserves existing listings and reports a failed manual refresh', async () => {
+    renderTab({ initialListings: server.slice(0, 5), initialTotalCount: 7 });
+    api.getMarketListings.mockRejectedValueOnce(new Error('offline'));
+    await click(screen.getByRole('button', { name: '刷新挂单' }));
+    expect(screen.getByTitle('Item 1')).not.toBeNull();
+    expect(showToast).toHaveBeenCalled();
+  });
+
   async function scrollToSentinel() {
     const view = renderTab({ initialListings: server, initialTotalCount: 7 });
     inView = true;
@@ -327,6 +357,22 @@ describe('editing', () => {
 });
 
 describe('search', () => {
+  it('reports a search request failure instead of claiming there are no matches', async () => {
+    renderTab({ initialListings: server.slice(0, 5), initialTotalCount: 7 });
+    api.getMarketListings.mockRejectedValueOnce(new Error('offline'));
+    fireEvent.change(screen.getByLabelText('搜索挂单'), { target: { value: 'Ruby Jewel' } });
+    expect(await screen.findByText('搜索挂单失败，请稍后重试。')).not.toBeNull();
+    expect(screen.queryByText('没有匹配结果')).toBeNull();
+  });
+  it('finds a listed jewel by its English name in the full market response', async () => {
+    server[5].item.name = 'Ruby Jewel of Truth';
+    server[5].item.base.name = 'Jewel';
+    server[5].item.quality.name = 'Magic';
+    renderTab({ initialListings: server.slice(0, 5), initialTotalCount: 7 });
+    fireEvent.change(screen.getByLabelText('搜索挂单'), { target: { value: 'Ruby Jewel of Truth' } });
+    expect(await screen.findByTitle('Ruby Jewel of Truth')).not.toBeNull();
+    expect(queries.some((q) => q.limit === 1000 && q.skip === 0)).toBe(true);
+  });
   const search = () => screen.getByLabelText('Search listings') as HTMLInputElement;
 
   it('searches across all listings (not just the loaded page) and updates the count', async () => {

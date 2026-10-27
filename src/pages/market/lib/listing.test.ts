@@ -32,6 +32,9 @@ describe('listing helpers', () => {
   it('whispers the account in game, else the item’s account, else the first linked one', () => {
     const l = listing();
     expect(sellerAccount(withUser(l, { in_game_account: 'Playing' }))).toBe('Playing');
+    expect(sellerAccount(withUser(l, { in_game_account: '*Playing' }))).toBe('Playing');
+    expect(sellerAccount(withUser(l, { in_game_account: 'Broken*' }))).toBe('selleracc');
+    expect(sellerAccount(withUser(l, { in_game_account: 'a*b*c' }))).toBe('selleracc');
     expect(sellerAccount(l)).toBe('selleracc');
     expect(sellerAccount({ ...l, item: { ...l.item, account_id: '' } })).toBe('selleracc');
     expect(sellerAccount({ ...l, item: { ...l.item, account_id: '' }, user: undefined })).toBeNull();
@@ -61,6 +64,11 @@ describe('listing helpers', () => {
 });
 
 describe('buildWhisper', () => {
+  it('whispers the account after the character separator without copying the character name', () => {
+    const entry = withUser(listing({ hr: 1 }), { in_game_account: 'Moe_DrDru*rocad2' });
+    expect(sellerAccount(entry)).toBe('rocad2');
+    expect(buildWhisper(entry)).toBe("/w *rocad2 Hi, I'm interested in your Rare Amulet listed for 1 HR");
+  });
   it('uses the price check wording with the HR price', () => {
     expect(buildWhisper(listing({ hr: 3, name: 'Harlequin Crest' }))).toBe(
       "/w *selleracc Hi, I'm interested in your Harlequin Crest listed for 3 HR",

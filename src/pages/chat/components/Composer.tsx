@@ -286,6 +286,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
   const [filling, setFilling] = useState<MenuTemplate | null>(null);
   const [active, setActive] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuPointerDownRef = useRef(false);
   const slash = SLASH_COMMAND.exec(value);
   // Every token gets a value ('' when the conversation has none)
   const vars = useMemo(
@@ -393,7 +394,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
       lastSelectionRef.current = null;
       onChange('');
     }
-    openPanel('settings', { section: 'Chat' });
+    openPanel('settings', { section: 'Chat' }, { focus: true });
   };
 
   const runAction = (action: MenuAction) => {
@@ -517,12 +518,17 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
   const whisperTip = `${__ui('复制密语命令')} /w *${whisperTarget ?? __ui('账号')} …，${__ui('粘贴到游戏聊天框发送')}`;
 
   return (
-    <div className="@container shrink-0 px-3 pb-3 pt-1.5">
+    <div data-keep-overlay-keyboard className="@container shrink-0 px-3 pb-3 pt-1.5">
       <div className="relative rounded-2xl border border-border/80 bg-linear-to-b from-card to-card/85 shadow-panel ring-1 ring-inset ring-foreground/5 transition-[border-color,box-shadow] duration-(--dur-fast) focus-within:border-ring/50 focus-within:ring-ring/20">
         {menuOpen && (
           <motion.div
             key="templates"
             ref={menuRef}
+            data-keep-overlay-keyboard
+            onPointerDownCapture={() => { menuPointerDownRef.current = true; }}
+            onPointerUpCapture={() => { setTimeout(() => { menuPointerDownRef.current = false; }, 0); }}
+            onPointerCancelCapture={() => { menuPointerDownRef.current = false; }}
+            onClickCapture={() => { menuPointerDownRef.current = false; }}
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
@@ -813,7 +819,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
                 const editor = editorRef.current;
                 lastSelectionRef.current = editor ? selectionOffsets(editor) : null;
                 // Clicking away closes the Templates button's menu; its own form keeps it open
-                if (!menuRef.current?.contains(e.relatedTarget as Node | null)) setBrowsing(false);
+                if (!menuPointerDownRef.current && !menuRef.current?.contains(e.relatedTarget as Node | null)) setBrowsing(false);
               }}
               onPaste={(e) => {
                 // Plain text only (never pasted markup); listing URLs in it become pills

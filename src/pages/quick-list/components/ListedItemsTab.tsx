@@ -98,9 +98,12 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [allListingsForSearch, setAllListingsForSearch] = useState<MarketListingEntry[]>([]);
   const [isLoadingAllListings, setIsLoadingAllListings] = useState(false);
+  const [searchError, setSearchError] = useState(false);
   const [hasInitialized, setHasInitialized] = useState(false);
   const [hasReachedEnd, setHasReachedEnd] = useState(false);
   const isDeletingRef = React.useRef(false);
+  const lastParentListingsRef = React.useRef(initialListings);
+  const refreshGenerationRef = React.useRef(0);
 
   const { ref: loaderRef, inView } = useInView({
     threshold: 0,
@@ -145,11 +148,13 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
   const fetchListings = useCallback(async () => {
     if (!marketQuery) return;
 
+    const generation = refreshGenerationRef.current;
     setIsLoading(true);
     setError(null);
     const startTime = performance.now();
     try {
       const result = await getMarketListings(marketQuery);
+      if (generation !== refreshGenerationRef.current) return;
       const duration = performance.now() - startTime;
 
       if (result.data.length === 0) {
@@ -184,14 +189,38 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
         onListingsChange(result.data);
       }
     } catch (err) {
+      if (generation !== refreshGenerationRef.current) return;
       const duration = performance.now() - startTime;
       trackMeasurement('listed_items_fetch', { duration_ms: duration }, { outcome: 'error', page: currentPage });
       console.error('Failed to fetch market listings:', err);
       setError(describeUiError(err, '加载挂单失败，请稍后重试。'));
     } finally {
-      setIsLoading(false);
+      if (generation === refreshGenerationRef.current) setIsLoading(false);
     }
   }, [marketQuery, getMarketListings, onTotalCountChange, onListingsChange, currentPage]);
+
+  const refreshListings = async () => {
+    if (!marketQuery) return;
+    const generation = ++refreshGenerationRef.current;
+    setIsLoading(true);
+    setError(null);
+    try {
+      const result = await getMarketListings({ ...marketQuery, $skip: 0 });
+      if (generation !== refreshGenerationRef.current) return;
+      setSearchQuery('');
+      setCurrentPage(0);
+      setHasReachedEnd(false);
+      setListings(result.data);
+      setTotalCount(result.total);
+      onTotalCountChange?.(result.total);
+      onListingsChange?.(result.data);
+    } catch (err) {
+      if (generation !== refreshGenerationRef.current) return;
+      showToast(describeUiError(err, '刷新挂单失败，请稍后重试。'));
+    } finally {
+      if (generation === refreshGenerationRef.current) setIsLoading(false);
+    }
+  };
 
   // Handle infinite scroll trigger
   useEffect(() => {
@@ -213,6 +242,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
 
   // Fetch all listings for search (fetch when query becomes available, or when user starts typing)
   useEffect(() => {
+    let cancelled = false;
     const fetchAllForSearch = async () => {
       if (!allListingsQuery) {
         setAllListingsForSearch([]);
@@ -226,24 +256,32 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
       }
 
       setIsLoadingAllListings(true);
+      setSearchError(false);
       try {
         // Fetch all listings (not paginated) for search
         const result = await getMarketListings(allListingsQuery);
+        if (cancelled) return;
         setAllListingsForSearch(result.data);
         hasFetchedAllListings.current = true;
       } catch (err) {
+        if (cancelled) return;
         console.error('Failed to fetch all listings for search:', err);
         setAllListingsForSearch([]);
+        setSearchError(true);
         hasFetchedAllListings.current = false;
       } finally {
-        setIsLoadingAllListings(false);
+        if (!cancelled) setIsLoadingAllListings(false);
       }
     };
 
     // Fetch when query is available and (user is searching OR we don't have data yet)
     if (allListingsQuery && (searchQuery.trim() || !hasFetchedAllListings.current)) {
       fetchAllForSearch();
+    } else if (!allListingsQuery) {
+      setIsLoadingAllListings(false);
+      setSearchError(false);
     }
+    return () => { cancelled = true; };
   }, [allListingsQuery, getMarketListings, searchQuery]);
 
   // Initialize with initial data if available, or fetch if not
@@ -297,17 +335,22 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
     }
   }, [searchQuery]);
 
-  // Refresh when initial data changes (e.g., after authentication)
-  // Skip this effect if we're currently deleting to prevent overwriting local state
-  // Only sync from initialListings if we're on page 0 and have no local listings (initialization case)
+  // A refreshed first page and its count must come from the same snapshot.
   useEffect(() => {
-    if (isDeletingRef.current) {
-      return; // Don't overwrite state while deleting
+    const changed = lastParentListingsRef.current !== initialListings;
+    lastParentListingsRef.current = initialListings;
+    if (isDeletingRef.current) return;
+    if (changed && hasInitialized && initialListings && initialTotalCount !== undefined && currentPage !== 0) {
+      refreshGenerationRef.current += 1;
+      setIsLoading(false);
+      setCurrentPage(0);
+      setHasReachedEnd(false);
+      setListings(initialListings.slice(0, ITEMS_PER_PAGE));
+      setTotalCount(initialTotalCount);
+      return;
     }
     if (hasInitialized && initialTotalCount !== undefined && marketQuery && currentPage === 0) {
-      // Only sync from initialListings if we have no local listings (initialization)
-      // This prevents overwriting local state when parent refetches after tab switch
-      if (listings.length === 0) {
+      if (changed || listings.length === 0) {
         if (initialListings && initialListings.length > 0) {
           setListings(initialListings.slice(0, ITEMS_PER_PAGE));
         } else if (initialTotalCount === 0) {
@@ -315,6 +358,7 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
           setListings([]);
         }
         setTotalCount(initialTotalCount);
+        setHasReachedEnd(false);
       } else {
         // If we have local listings, only update total count if it's different
         // This allows the count to stay in sync without overwriting local state
@@ -673,6 +717,10 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
             <span className="sr-only">（{isSearching ? filteredListings.length : totalCount} {" " + __ui("件）") + ""}</span>
           </span>
         </div>
+        <Button size="sm" variant="outline" className="h-8 text-xs" aria-label={__ui('刷新挂单')}
+          onClick={refreshListings} disabled={!marketQuery || isLoading}>
+          <RotateCw className="h-3.5 w-3.5" /> {__ui('刷新')}
+        </Button>
         <Tooltip delayDuration={0}>
           <TooltipTrigger asChild>
             <Button
@@ -718,7 +766,10 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
           variants={listStagger}
           initial="hidden"
           animate="visible">
-          {displayListings.length === 0 && isSearching && !isLoadingAllListings && (
+          {isSearching && !isLoadingAllListings && searchError && (
+            <EmptyState icon={<CircleAlert />} title={__ui('搜索挂单失败，请稍后重试。')} className="p-6" />
+          )}
+          {displayListings.length === 0 && isSearching && !isLoadingAllListings && !searchError && (
             <EmptyState icon={<SearchX />}
               title={__ui("没有匹配结果")}
               className="p-6">

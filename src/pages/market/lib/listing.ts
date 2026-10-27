@@ -2,6 +2,7 @@ import type { ItemDetail, MarketListingEntry } from '@/common/types/pd2-website/
 import { allItems } from '@/assets/items';
 import type { ItemType } from '@/assets/itemFuzzySearch';
 import { listingArtUrl } from '@/pages/chat/lib/listing-art';
+import { gameAccount } from '@/lib/game-account';
 
 /** The listing's page on projectdiablo2.com (the format the site's own share/"I'm interested" links use). */
 export function listingUrl(listing: Pick<MarketListingEntry, '_id'>): string {
@@ -29,7 +30,12 @@ export function listingAge(
  * else the account holding the item, else their first linked account. Null when the listing names none.
  */
 export function sellerAccount(listing: Pick<MarketListingEntry, 'user' | 'item'>): string | null {
-  return listing.user?.in_game_account || listing.item?.account_id || listing.user?.game?.accounts?.[0] || null;
+  const values = [listing.user?.in_game_account, listing.item?.account_id, ...(listing.user?.game?.accounts ?? [])];
+  for (const value of values) {
+    const account = gameAccount(value);
+    if (account) return account;
+  }
+  return null;
 }
 
 /** Name as the site's listing card titles it: rares/magic/crafted by quality + base, everything else by name. */

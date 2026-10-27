@@ -163,6 +163,11 @@ describe('buildInbox', () => {
     expect(threadWhisperAccount(threads[0])).toBe('Thumoi');
   });
 
+  it('resolves a combined character and account when replying to an in-game thread', () => {
+    expect(threadWhisperAccount({ people: [person('Moe_DrDru*rocad2')], accounts: [] })).toBe('rocad2');
+    expect(threadWhisperAccount({ people: [], accounts: ['Moe_DrDru*rocad2'] })).toBe('rocad2');
+  });
+
   it('marks threads selling/buying from offers and open trade whispers', () => {
     const trade = (isIncoming: boolean, age = 0, dismissed?: true) => ({
       id: `t${Number(isIncoming)}${age}`,

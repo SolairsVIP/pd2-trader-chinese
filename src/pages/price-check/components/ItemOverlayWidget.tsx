@@ -48,6 +48,7 @@ import { useStatSelection } from '../hooks/useStatSelection';
 import ItemStatsDisplay from '../../quick-list/components/ItemStatsDisplay';
 import { buildGetMarketListingQuery, buildTradeUrl } from '../lib/tradeUrlBuilder';
 import { priceCheckToMarketFilters } from '@/pages/market/store/priceCheckFilters';
+import { sellerAccount } from '@/pages/market/lib/listing';
 import { RunePricePopover } from './RunePricePopover';
 import { getStatKey } from '../lib/utils';
 import { skillFilterUnavailableReason } from '../lib/skill-stats';
@@ -1962,7 +1963,7 @@ const ListingRow = ({ listing, idx }: { listing: MarketListingEntry; idx: number
   const copyWhisper = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const account = listing.user?.in_game_account || listing.user?.game?.accounts?.[0] || listing.user?.username || '';
+    const account = sellerAccount(listing) || listing.user?.username || '';
     const itemName = listing.item?.name || listing.item?.base?.name || 'item';
     const priceStr = listing.hr_price ? `${listing.hr_price} HR` : listing.price || '';
     const message = `/w *${account} Hi, I'm interested in your ${itemName}${priceStr ? ` listed for ${priceStr}` : ''}`;

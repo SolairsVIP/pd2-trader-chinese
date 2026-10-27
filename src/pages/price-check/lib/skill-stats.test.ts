@@ -202,6 +202,16 @@ describe('skill filter catalogue and query parity', () => {
       1,
     );
   });
+  it('uses the explicit misspelled Assassin tree from the game instead of the unrelated display label', () => {
+    const stat: Stat = {
+      name: '+%d to Javelin and Spear Skills',
+      skill: 'Shadow Desciplines (Assassin)',
+      value: 1,
+    };
+    expect(getSkillFilter(stat)).toMatchObject({ property: 'item_addskill_tab', params: [49], value: 1 });
+    expect(normalizeSkillStat(stat).name).toBe('Shadow Disciplines (Assassin)');
+    assertQueryParity(stat, 'item_addskill_tab', [49], 1);
+  });
   it('uses the class qualifier to disambiguate a display alias shared with a proc', () => {
     assertQueryParity(
       { stat_id: 107, name: '+2 to Amplify Damage (Necromancer Only)', skill: 'Amplify Damage', value: 2 },

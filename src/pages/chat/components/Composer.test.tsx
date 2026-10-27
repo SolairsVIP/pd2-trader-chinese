@@ -700,3 +700,48 @@ describe('Composer listing picker', () => {
     expect(onSend).toHaveBeenCalledWith(`look ${URL} hello`);
   });
 });
+
+describe('中文模板菜单焦点', () => {
+  it('keeps overlay keyboard while opening the new-template form', () => {
+    render(<Harness />);
+    fireEvent.click(screen.getByRole('button', { name: '消息模板' }));
+    const option = screen.getByRole('option', { name: '新建模板' });
+    expect(option.closest('[data-keep-overlay-keyboard]')).not.toBeNull();
+    fireEvent.pointerDown(option);
+    fireEvent.blur(screen.getByRole('textbox', { name: '消息' }), { relatedTarget: null });
+    fireEvent.mouseDown(option);
+    fireEvent.click(option);
+    expect(screen.getByRole('form', { name: '新建模板' })).toBeTruthy();
+  });
+  it('opens chat settings in front with focus when managing templates', () => {
+    render(<Harness />);
+    fireEvent.click(screen.getByRole('button', { name: '消息模板' }));
+    const option = screen.getByRole('option', { name: '管理模板…' });
+    expect(option.closest('[data-keep-overlay-keyboard]')).not.toBeNull();
+    fireEvent.pointerDown(option);
+    fireEvent.blur(screen.getByRole('textbox', { name: '消息' }), { relatedTarget: null });
+    fireEvent.mouseDown(option);
+    fireEvent.click(option);
+    expect(openPanel).toHaveBeenCalledWith('settings', { section: 'Chat' }, { focus: true });
+  });
+});
+
+it('keeps keyboard ownership when opening or using favorite templates after returning to the game', () => {
+  settings.chatTemplates = [{ id: 'x', name: 'Quick reply', text: 'Still available?', favorite: true }];
+  render(<Harness />);
+  const toggle = screen.getByRole('button', { name: '消息模板' });
+  expect(toggle.closest('[data-keep-overlay-keyboard]')).not.toBeNull();
+  const favorite = screen.getByRole('button', { name: 'Quick reply' });
+  expect(favorite.closest('[data-keep-overlay-keyboard]')).not.toBeNull();
+  fireEvent.pointerDown(toggle);
+  fireEvent.mouseDown(toggle);
+  fireEvent.click(toggle);
+  const choice = screen.getByRole('option', { name: /Quick reply/ });
+  fireEvent.pointerDown(choice);
+  // A native focus transition can blur the editor between pointerdown and click.
+  fireEvent.blur(screen.getByRole('textbox', { name: '消息' }), { relatedTarget: null });
+  expect(screen.getByRole('option', { name: /Quick reply/ })).toBeTruthy();
+  fireEvent.mouseDown(choice);
+  fireEvent.click(choice);
+  expect(screen.getByRole('textbox', { name: '消息' }).textContent).toContain('Still available?');
+});

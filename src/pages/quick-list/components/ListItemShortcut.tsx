@@ -98,7 +98,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
     defaultValues: { type: 'exact', note: '', price: '', currency: 'HR' },
   });
 
-  const { close: handleClose } = usePanel<'quickList'>();
+  const { close: handleClose, payloadVersion } = usePanel<'quickList'>();
 
   // Complete reset function for new items
   // Note: Does not clear queuedListingIds - queued items should persist across item selections
@@ -260,7 +260,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
 
   useEffect(() => {
     fetchAllListings();
-  }, [fetchAllListings]);
+  }, [fetchAllListings, payloadVersion]);
 
   // Process a queued listing once item is found
   const processQueuedListing = useCallback(
