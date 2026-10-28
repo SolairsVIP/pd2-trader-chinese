@@ -58,6 +58,10 @@ export default function CorruptedZoneSettings() {
           </div>
         </SettingsGroup>
         <SettingsGroup title={t('显示与位置')}>
+          <FormField name="mini" control={form.control} render={() => (
+            <SettingsRow label={t('迷你模式')} description={t('缩小提示窗口，显示区域名称和倒计时；默认放在左上角，可拖动。')}
+              control={<FormControl><Switch checked={settings.corruptedZoneMini === true} onCheckedChange={(mini) => updateSettings({ corruptedZoneMini: mini })} /></FormControl>} />
+          )} />
           <FormField
             name="enabled"
             control={form.control}
@@ -234,13 +238,15 @@ export default function CorruptedZoneSettings() {
       <div
         aria-label={t('腐化区提示效果预览')}
         className="max-w-full"
-        style={{ width: zoneWidth(settings.corruptedZoneWidth) }}
+        style={{ width: settings.corruptedZoneMini ? 320 : zoneWidth(settings.corruptedZoneWidth) }}
       >
         <p className="mb-2 text-xs text-muted-foreground">{t('外观预览（实际窗口按屏幕空间自动适配）')}</p>
         <CorruptedZoneCard
           language={settings.uiLanguage}
           now={now}
           expanded={settings.corruptedZoneExpanded === true}
+          mini={settings.corruptedZoneMini === true}
+          onMiniChange={(mini) => updateSettings({ corruptedZoneMini: mini })}
           customColors={settings.corruptedZoneCustomColors}
           colors={colors}
           transparency={settings.corruptedZoneTransparency}

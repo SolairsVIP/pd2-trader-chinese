@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown, ChevronUp, MapPin, RotateCcw, Settings, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, MapPin, RotateCcw, Settings, X, Minimize2, Maximize2 } from 'lucide-react';
 import { WindowPanel } from '@/components/custom/window-chrome';
 import { countdown, localTime, rotationAt, upcomingRotations } from './schedule';
 import { zoneStyle, type ZoneColors } from './appearance';
@@ -16,6 +16,8 @@ interface Props {
   language?: UiLanguage;
   now: number;
   expanded: boolean;
+  mini?: boolean;
+  onMiniChange?: (mini: boolean) => void;
   customColors?: boolean;
   colors?: Partial<ZoneColors>;
   transparency?: number;
@@ -33,6 +35,8 @@ export default function CorruptedZoneCard({
   now,
   language,
   expanded,
+  mini = false,
+  onMiniChange,
   customColors = false,
   colors,
   transparency,
@@ -59,6 +63,15 @@ export default function CorruptedZoneCard({
         : 'opacity-65';
   const buttonClass =
     'inline-flex size-6 shrink-0 cursor-default items-center justify-center rounded hover:bg-current/10 focus-visible:outline focus-visible:outline-2';
+  if (mini) return (
+    <WindowPanel style={zoneStyle(customColors, colors, transparency, themeId)} className="w-full text-sm">
+      <div {...dragHandlers} data-zone-strip className="flex min-h-[46px] touch-none select-none items-center gap-2 px-2 py-1 cursor-grab active:cursor-grabbing" title={`${zone.name}\n${current.zone.english}\n${zone.detail}`}>
+        <span className="min-w-0 flex-1 break-words text-sm font-semibold leading-4">{zone.name}</span>
+        <span className="shrink-0 font-mono text-[24px] font-bold leading-8 tabular-nums text-primary" aria-label={t('剩余时间')}>{countdown(current.end, now)}</span>
+        {onMiniChange && <button type="button" className={buttonClass} aria-label={t('恢复完整模式')} title={t('恢复完整模式')} onClick={() => onMiniChange(false)}><Maximize2 className="size-3" /></button>}
+      </div>
+    </WindowPanel>
+  );
   return (
     <WindowPanel style={zoneStyle(customColors, colors, transparency, themeId)} className="w-full text-sm">
       <div
@@ -110,6 +123,7 @@ export default function CorruptedZoneCard({
           {countdown(current.end, now)}
         </span>
         <div className="flex shrink-0 items-center gap-0.5">
+          {onMiniChange && <button type="button" className={buttonClass} aria-label={t('切换迷你模式')} title={t('切换迷你模式')} onClick={() => onMiniChange(true)}><Minimize2 className="size-3" /></button>}
           {onReset && (
             <button
               type="button"

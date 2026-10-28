@@ -233,7 +233,7 @@ describe('NetWorthTicker placement', () => {
     ['top-right', { x: 100 + 1280 - 181 - 12, y: 62 }],
     ['bottom-left', { x: 112, y: 50 + 720 - 28 - 12 }],
     ['bottom-right', { x: 100 + 1280 - 181 - 12, y: 50 + 720 - 28 - 12 }],
-    // right-aligned 4px above the chat dock (720px tall game: 29x109 tab flush on the right edge, 6px up)
+    // right-aligned 4px above the chat dock (720px tall game: 23x109 tab flush on the right edge, 6px up)
     ['above-chat', { x: 100 + 1280 - 181, y: 50 + 720 - 6 - 109 - 28 - 4 }],
   ] as const)('anchors %s on the game', (anchor, position) => {
     settings = { netWorthTickerAnchor: anchor };

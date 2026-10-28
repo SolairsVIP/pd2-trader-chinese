@@ -6,13 +6,13 @@ import type { OverlayRect } from '@/overlay';
  * corner, on the statue beside the mana orb, and can be dragged up or down along the edge; where it sits is saved as
  * a share of the game height, so it keeps its spot across resolutions.
  *
- * Its size follows the game height (the HUD art scales with it): 4% of the height wide, 4.75× as tall.
+ * Its size follows the game height (the HUD art scales with it): 3.2% of the height wide, 4.75× as tall.
  * The extra rows keep each click target readable with the market and experimental corruption shortcuts.
  */
-const WIDTH_RATIO = 0.04;
+const WIDTH_RATIO = 0.032;
 const HEIGHT_PER_WIDTH = 4.75;
 const MIN_WIDTH = 22;
-const MAX_WIDTH = 64;
+const MAX_WIDTH = 52;
 /** Default gap between the tab and the game's bottom edge, as a share of the game height. */
 const DEFAULT_OFFSET = 0.008;
 const STORAGE_KEY = 'pd2-chat-dock-offset-v1';

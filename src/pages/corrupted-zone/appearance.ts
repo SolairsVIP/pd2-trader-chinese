@@ -61,15 +61,16 @@ export function zoneRect(
   height: number,
   viewport: OverlayRect,
   position?: { x: number; y: number } | null,
+  mini = false,
 ): OverlayRect {
-  const w = Math.min(zoneWidth(width), Math.max(1, viewport.width - 16));
+  const w = Math.min(mini ? 320 : zoneWidth(width), Math.max(1, viewport.width - 16));
   const h = Math.min(Math.max(1, height), viewport.height);
   const custom = position && Number.isFinite(position.x) && Number.isFinite(position.y) ? position : null;
   return {
     x: Math.round(
       Math.max(
         viewport.x,
-        Math.min(custom?.x ?? viewport.x + (viewport.width - w) / 2, viewport.x + viewport.width - w),
+        Math.min(custom?.x ?? (mini ? viewport.x + 8 : viewport.x + (viewport.width - w) / 2), viewport.x + viewport.width - w),
       ),
     ),
     y: Math.round(Math.max(viewport.y, Math.min(custom?.y ?? viewport.y + 8, viewport.y + viewport.height - h))),

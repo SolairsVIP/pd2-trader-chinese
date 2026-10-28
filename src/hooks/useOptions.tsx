@@ -82,6 +82,8 @@ export interface ISettings {
   corruptedZoneWidth?: number;
   corruptedZoneTransparency?: number; // Independent background transparency, 0-90%; text stays opaque.
   corruptedZoneExpanded?: boolean;
+  corruptedZoneMini?: boolean;
+  corruptedZoneMiniPosition?: { x: number; y: number } | null;
   corruptedZonePosition?: { x: number; y: number } | null;
   corruptedZoneCustomColors?: boolean;
   corruptedZoneColors?: { background: string; text: string; accent: string };

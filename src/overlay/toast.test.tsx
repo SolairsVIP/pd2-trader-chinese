@@ -81,8 +81,8 @@ describe('ToastLayer', () => {
     await renderLayer();
     await show(() => showToast('hello'));
     const toaster = document.querySelector<HTMLElement>('[data-sonner-toaster]')!;
-    // 720px game: 29px dock on the edge → right = 540 + 29 + 8
-    expect(toaster.style.getPropertyValue('--offset-right')).toBe('577px');
+    // 720px game: 23px dock on the edge → right = 540 + 23 + 8
+    expect(toaster.style.getPropertyValue('--offset-right')).toBe('571px');
     expect(toaster.style.getPropertyValue('--offset-bottom')).toBe('326px');
   });
 

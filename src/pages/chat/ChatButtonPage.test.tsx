@@ -31,10 +31,11 @@ afterAll(() => {
 });
 
 const updateSettings = vi.fn();
-// A 1920x1080 game: the dock is 43x204, flush on the right edge, 9px above the bottom (x 1877, y 867)
+// A 1920x1080 game: the dock is 35x166, flush on the right edge, 9px above the bottom.
 const overlay = { openPanel: vi.fn(), togglePanel: vi.fn(), gameRect: { x: 0, y: 0, width: 1920, height: 1080 } };
 
 beforeEach(() => {
+  Object.defineProperty(window, 'innerHeight', { configurable: true, value: 1080 });
   vi.clearAllMocks();
   updateSettings.mockResolvedValue(undefined);
   vi.mocked(useOptions).mockImplementation(() => ({ updateSettings }) as never);
@@ -53,6 +54,24 @@ afterEach(() => {
 });
 
 describe('ChatButtonPage', () => {
+  it('uses a smaller dock for a 1080-pixel game while keeping the five controls', () => {
+    render(<ChatButtonPage />);
+    const dock = screen.getByTitle('拖动以移动').closest<HTMLElement>('.absolute.right-0')!;
+    expect(dock.style.width).toBe('35px');
+    expect(dock.style.height).toBe('166px');
+    expect(screen.getAllByRole('button')).toHaveLength(5);
+  });
+  it('keeps the entire dock inside the overlay when a fullscreen game extends below the work area', () => {
+    const original = window.innerHeight;
+    Object.defineProperty(window, 'innerHeight', { configurable: true, value: 1032 });
+    try {
+      render(<ChatButtonPage />);
+      const dock = screen.getByTitle('拖动以移动').closest<HTMLElement>('.absolute.right-0')!;
+      expect(parseFloat(dock.style.top) + parseFloat(dock.style.height)).toBeLessThanOrEqual(1032);
+    } finally {
+      Object.defineProperty(window, 'innerHeight', { configurable: true, value: original });
+    }
+  });
   it('opens the corruption experiment through the existing panel API', () => {
     render(<ChatButtonPage />);
     fireEvent.click(screen.getByRole('button', { name: '打开腐化前试试手气' }));
@@ -129,7 +148,7 @@ describe('ChatButtonPage', () => {
   it.each([
     ['交易大厅', ['market']],
     // Beside the dock: right edges aligned, above it (no room below)
-    ['仓库估值', ['netWorthPanel', undefined, { placement: { x: 1560, y: 439 } }]],
+    ['仓库估值', ['netWorthPanel', undefined, { placement: { x: 1560, y: 477 } }]],
     ['仓库价值', ['currency']],
     // Offers: chat on the Selling filter
     ['报价', ['chat', { filter: 'selling' }]],
@@ -148,11 +167,11 @@ describe('ChatButtonPage', () => {
     render(<ChatButtonPage />);
     const tab = screen.getByTitle('拖动以移动');
     const dock = () => tab.closest<HTMLElement>('.absolute.right-0')!;
-    expect(dock().style.top).toBe('867px');
+    expect(dock().style.top).toBe('905px');
 
     fireEvent.pointerDown(tab, { button: 0, clientY: 1000, pointerId: 1 });
     fireEvent.pointerMove(tab, { clientY: 900, pointerId: 1 });
-    expect(dock().style.top).toBe('767px');
+    expect(dock().style.top).toBe('805px');
     expect(localStorage.getItem('pd2-chat-dock-offset-v1')).toBeNull(); // saved on release only
 
     // Dragged past the top: stops with the tab inside the game
@@ -161,7 +180,7 @@ describe('ChatButtonPage', () => {
     fireEvent.pointerUp(tab, { pointerId: 1 });
     fireEvent.click(screen.getByRole('button', { name: '打开 PD2 聊天' }));
     expect(overlay.togglePanel).not.toHaveBeenCalled();
-    expect(Number(localStorage.getItem('pd2-chat-dock-offset-v1'))).toBeCloseTo(1 - 204 / 1080);
+    expect(Number(localStorage.getItem('pd2-chat-dock-offset-v1'))).toBeCloseTo(1 - 166 / 1080);
 
     // Near the top the menu opens below the tab
     fireEvent.click(screen.getByRole('button', { name: '更多' }));

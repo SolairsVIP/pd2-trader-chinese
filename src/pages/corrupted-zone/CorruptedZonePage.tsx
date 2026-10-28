@@ -23,7 +23,8 @@ export default function CorruptedZonePage() {
     moved: boolean;
   } | null>(null);
   const width = settings.corruptedZoneWidth;
-  const position = settings.corruptedZonePosition;
+  const mini = settings.corruptedZoneMini === true;
+  const position = mini ? settings.corruptedZoneMiniPosition : settings.corruptedZonePosition;
   useEffect(() => {
     const resize = () => setViewport(viewportRect());
     window.addEventListener('resize', resize);
@@ -46,8 +47,8 @@ export default function CorruptedZonePage() {
     return () => observer.disconnect();
   }, []);
   useLayoutEffect(() => {
-    if (!drag.current) setRect(zoneRect(width, height, viewport, position));
-  }, [width, height, viewport, position, setRect, visible]);
+    if (!drag.current) setRect(zoneRect(width, height, viewport, position, mini));
+  }, [width, height, viewport, position, setRect, visible, mini]);
   useEffect(() => {
     if (!visible && drag.current) {
       drag.current.release();
@@ -63,6 +64,10 @@ export default function CorruptedZonePage() {
     if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
     press.release();
     if (press.moved) {
+      if (mini) {
+        updateSettings({ corruptedZoneMiniPosition: { x: press.latest.x, y: press.latest.y } });
+        return;
+      }
       // Close to the top edge snaps back to the default top-centre anchor.
       updateSettings({ corruptedZonePosition: press.latest.y <= 24 ? null : { x: press.latest.x, y: press.latest.y } });
       if (press.latest.y <= 24) setRect(zoneRect(width, height, viewport));
@@ -75,6 +80,8 @@ export default function CorruptedZonePage() {
           language={settings.uiLanguage}
           now={now}
           expanded={settings.corruptedZoneExpanded === true}
+          mini={mini}
+          onMiniChange={(value) => updateSettings({ corruptedZoneMini: value })}
           customColors={settings.corruptedZoneCustomColors}
           colors={settings.corruptedZoneColors}
           transparency={settings.corruptedZoneTransparency}
@@ -109,14 +116,14 @@ export default function CorruptedZonePage() {
                 dy = e.clientY - press.y;
               if (!press.moved && Math.hypot(dx, dy) < 4) return;
               press.moved = true;
-              press.latest = zoneRect(width, height, viewport, { x: press.origin.x + dx, y: press.origin.y + dy });
+              press.latest = zoneRect(width, height, viewport, { x: press.origin.x + dx, y: press.origin.y + dy }, mini);
               setRect(press.latest);
             },
             onPointerUp: endDrag,
             onPointerCancel: endDrag,
             onLostPointerCapture: endDrag,
             onDoubleClick: (e) => {
-              if (!(e.target as Element).closest('button'))
+              if (!mini && !(e.target as Element).closest('button'))
                 updateSettings({ corruptedZoneExpanded: !settings.corruptedZoneExpanded });
             },
           }}

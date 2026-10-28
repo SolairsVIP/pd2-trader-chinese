@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ChatButton } from '@/components/custom/ChatButton';
 import { useOptions } from '@/hooks/useOptions';
 import { confirmToast, showToast, useBadgeCount, useOverlay } from '@/overlay';
@@ -17,7 +17,16 @@ const ChatButtonPage: React.FC = () => {
   // One offers badge: open trade whispers + website offers
   const tradeOffersCount = useBadgeCount('whisperTrades') + useBadgeCount('tradeOffers');
   const offset = useChatDockOffset();
-  const dock = chatDockRect(gameRect, offset);
+  const [viewportHeight, setViewportHeight] = useState(() => window.innerHeight);
+  useEffect(() => {
+    const resize = () => setViewportHeight(window.innerHeight);
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  }, []);
+  const desiredDock = chatDockRect(gameRect, offset);
+  const frameHeight = Math.min(gameRect.height, viewportHeight);
+  const frameTop = Math.max(0, Math.min(gameRect.y, viewportHeight - frameHeight));
+  const dock = { ...desiredDock, y: Math.max(frameTop, Math.min(desiredDock.y, frameTop + frameHeight - desiredDock.height)) };
   const dragStart = useRef<number | null>(null);
 
   const handleDisableClick = () =>
@@ -35,7 +44,7 @@ const ChatButtonPage: React.FC = () => {
     // The panel frame spans the game's right edge, full height (click-through); the tab sits at its saved height.
     <div
       className="pointer-events-none absolute right-0"
-      style={{ top: dock.y - gameRect.y, width: dock.width, height: dock.height }}
+      style={{ top: dock.y - frameTop, width: dock.width, height: dock.height }}
     >
       <ChatButton
         size={dock}

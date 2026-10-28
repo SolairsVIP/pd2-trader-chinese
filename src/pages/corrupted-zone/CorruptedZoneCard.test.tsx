@@ -8,6 +8,14 @@ afterEach(cleanup);
 const now = Date.parse('2026-10-26T00:00:00Z');
 
 describe('corrupted-zone card', () => {
+  it('shows a compact zone and readable countdown with a way back to the full view', () => {
+    const change = vi.fn();
+    render(<CorruptedZoneCard now={now} expanded={false} mini onMiniChange={change} />);
+    expect(screen.getByLabelText('剩余时间').textContent).toBe('15:00');
+    expect(screen.queryByText("Nihlathak's Temple")).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: '恢复完整模式' }));
+    expect(change).toHaveBeenCalledWith(false);
+  });
   it('switches the zone controls and countdown label to Traditional Chinese', () => {
     const { rerender } = render(<CorruptedZoneCard now={now} expanded language="zh-TW" />);
     expect(screen.getByLabelText('剩餘時間').textContent).toBe('15:00');

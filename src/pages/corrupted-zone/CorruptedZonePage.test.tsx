@@ -44,6 +44,17 @@ afterEach(() => {
 });
 
 describe('corrupted-zone lifecycle', () => {
+  it('uses a separate saved position for the compact view and restores the full view position', () => {
+    state.settings = { corruptedZoneMini: true, corruptedZonePosition: { x: 600, y: 200 } };
+    const { rerender } = render(<CorruptedZonePage />);
+    expect(state.setRect).toHaveBeenLastCalledWith({ x: 8, y: 8, width: 320, height: 48 });
+    state.settings = { ...state.settings, corruptedZoneMiniPosition: { x: 100, y: 60 } };
+    rerender(<CorruptedZonePage />);
+    expect(state.setRect).toHaveBeenLastCalledWith({ x: 100, y: 60, width: 320, height: 48 });
+    state.settings = { ...state.settings, corruptedZoneMini: false };
+    rerender(<CorruptedZonePage />);
+    expect(state.setRect).toHaveBeenLastCalledWith({ x: 600, y: 200, width: 720, height: 48 });
+  });
   it('applies the saved local transparency to the floating card independently of the app', () => {
     state.settings = { corruptedZoneTransparency: 65, windowTransparency: 10 };
     const { container, rerender } = render(<CorruptedZonePage />);
