@@ -707,7 +707,7 @@ export default function ChatOverlayWidget({ onClose }: ChatOverlayWidgetProps) {
                     }}
                     placeholder={
                       channel === 'whisper'
-                        ? `游戏密语 *${whisperAccount} — 已复制，可粘贴到游戏聊天框`
+                        ? `输入游戏密语内容，按 Enter 复制给 *${whisperAccount}`
                         : `发送消息给 ${selectedThread.name}…（输入 / 使用模板）`
                     }
                     templateVars={templateVars}

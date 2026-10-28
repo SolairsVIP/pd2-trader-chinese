@@ -1211,7 +1211,7 @@ describe('ChatOverlayWidget unified inbox', () => {
     await select('Zed');
     expect(screen.queryByText('in-game only')).not.toBeNull();
     expect(screen.queryByRole('group', { name: 'Reply via' })).toBeNull();
-    expect(composer().getAttribute('aria-placeholder')).toBe('Whisper *Zed — copied for in-game chat');
+    expect(composer().getAttribute('aria-placeholder')).toBe('输入游戏密语内容，按 Enter 复制给 *Zed');
 
     await type('2 ist');
     expect(writeText).toHaveBeenCalledWith('/w *Zed 2 ist');

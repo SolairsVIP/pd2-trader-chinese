@@ -745,3 +745,18 @@ it('keeps keyboard ownership when opening or using favorite templates after retu
   fireEvent.click(choice);
   expect(screen.getByRole('textbox', { name: '消息' }).textContent).toContain('Still available?');
 });
+
+
+describe('一键复制询问', () => {
+  it('优先询问草稿中关联的物品，不清空草稿', () => {
+    render(<ItemsProvider items={[]}><Composer value="https://projectdiablo2.com/market/listing/aa11?display=Ruby%20Jewel" onChange={vi.fn()} onSend={onSend} placeholder="消息" templateVars={VARS} channel="whisper" whisperTarget="AliceAcc" /></ItemsProvider>);
+    fireEvent.click(screen.getByRole('button', { name: '一键复制询问' }));
+    expect(onSend).toHaveBeenCalledWith('Hi, is your Ruby Jewel still available?');
+    expect(screen.getByRole('textbox', { name: '消息' }).textContent).toContain('Ruby Jewel');
+  });
+  it('没有关联物品时使用通用询问', () => {
+    render(<ItemsProvider items={[]}><Composer value="" onChange={vi.fn()} onSend={onSend} placeholder="消息" templateVars={{}} channel="whisper" whisperTarget="AliceAcc" /></ItemsProvider>);
+    fireEvent.click(screen.getByRole('button', { name: '一键复制询问' }));
+    expect(onSend).toHaveBeenCalledWith('Hi, is your item still available?');
+  });
+});

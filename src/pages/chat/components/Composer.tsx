@@ -783,6 +783,22 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
             <kbd className="font-sans font-semibold">Shift+Enter</kbd> {" " + __ui("换行") + " "}</span>
         </div>
 
+        {channel === 'whisper' && (
+          <div className="border-b border-border/50 px-2 py-1">
+            <button
+              type="button"
+              onClick={() => {
+                const linkedName = findMarketLinks(value).at(-1)?.displayName;
+                const item = (linkedName || templateVars.itemName || 'item').replace(/[\x00-\x1f\x7f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80) || 'item';
+                onSend(`Hi, is your ${item} still available?`);
+              }}
+              className="rounded-md border border-primary/40 px-2.5 py-1 text-xs text-primary hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-primary"
+            >
+              {__ui('一键复制询问')}
+            </button>
+          </div>
+        )}
+
         <div className="flex items-end gap-1 p-1.5">
           <ListingPicker onPick={insertListing} onClosed={() => editorRef.current?.focus()} />
           <div className="relative min-w-0 flex-1 self-center">
