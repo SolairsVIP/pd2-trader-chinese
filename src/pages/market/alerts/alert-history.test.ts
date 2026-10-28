@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { mergeAlertHistory, rememberLiveAlerts, liveAlertHistory, unexpiredAlerts, claimAlertPopup, closeAlertHistory } from './alert-history';
+import { mergeAlertHistory, rememberLiveAlerts, liveAlertHistory, unexpiredAlerts } from './alert-history';
 import type { MarketAlert } from './saved-search-api';
 const item = (id: string, matchedAt: string) => ({ id, matchedAt, listingId: id, savedSearchId: 's', savedSearchName: '测试', listing: {} }) as MarketAlert;
 describe('alert history', () => {
@@ -8,14 +8,6 @@ describe('alert history', () => {
     rememberLiveAlerts('account-a', [fresh]);
     expect(liveAlertHistory('account-a')).toEqual([fresh]);
     expect(liveAlertHistory('account-b')).toEqual([]);
-  });
-  it('shows only one popup until the history panel is closed', () => {
-    closeAlertHistory();
-    expect(claimAlertPopup()).toBe(true);
-    expect(claimAlertPopup()).toBe(false);
-    closeAlertHistory();
-    expect(claimAlertPopup()).toBe(true);
-    closeAlertHistory();
   });
   it('removes each record after 30 minutes', () => {
     const now = Date.parse('2026-10-28T04:00:00Z');

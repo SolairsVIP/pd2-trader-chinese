@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { alertListingText } from './alert-logic';
 import { subscribeMarketAlerts } from './alert-events';
-import { ALERT_RETENTION_MS, clearLiveAlerts, closeAlertHistory, liveAlertHistory, mergeAlertHistory, unexpiredAlerts } from './alert-history';
+import { ALERT_RETENTION_MS, clearLiveAlerts, liveAlertHistory, mergeAlertHistory, unexpiredAlerts } from './alert-history';
 import { listMarketAlerts, type MarketAlert } from './saved-search-api';
 
 const temporaryClearTimes = new Map<string, number>();
@@ -22,12 +22,10 @@ function visibleAlerts(alerts: readonly MarketAlert[], token?: string, accountId
   return unexpiredAlerts(alerts).filter((alert) => Date.parse(alert.matchedAt) > cutoff);
 }
 
-export function AlertHistory({ token, accountId, onView, visible = true }: { token?: string; accountId?: string; onView: (alert: MarketAlert) => void; visible?: boolean }) {
+export function AlertHistory({ token, accountId, onView }: { token?: string; accountId?: string; onView: (alert: MarketAlert) => void; visible?: boolean }) {
   const [items, setItems] = useState<MarketAlert[]>([]);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [revision, setRevision] = useState(0);
-  useEffect(() => { if (!visible) closeAlertHistory(); }, [visible]);
-  useEffect(() => () => closeAlertHistory(), []);
   useEffect(() => { setItems(visibleAlerts(liveAlertHistory(token), token, accountId)); }, [token, accountId]);
   useEffect(() => subscribeMarketAlerts((alerts) => setItems((current) => visibleAlerts(mergeAlertHistory(current, alerts), token, accountId))), [token, accountId]);
   useEffect(() => {

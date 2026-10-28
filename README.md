@@ -12,11 +12,11 @@
 >
 > **中文版开发者：Solaris · 开源许可：[MIT License](LICENSE)**。保留原项目版权声明与许可证。
 
-**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.13/PD2.Trader.CN_0.11.13_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.13/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.13)**
+**[下载 Windows x64 安装包](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.14/PD2.Trader.CN_0.11.14_x64-setup.exe) · [完整图文 PDF](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.14/PD2.Trader.CN_User.Guide.pdf) · [发布页面](https://github.com/SolairsVIP/pd2-trader-chinese/releases/tag/v0.11.14)**
 
-当前版本：**0.11.13 正式版**，发布于 2026-10-28。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
+当前版本：**0.11.14 正式版**，发布于 2026-10-28。插件界面为中文，无需为两种游戏客户端分别安装或手动切换语言。
 
-本版优化覆盖层与手柄操作，新增市场窗口固定、提醒历史和密语记录提示。[完整更新说明](docs/releases/v0.11.13.md)。
+本版将市场关注提醒上限提高至 5 条，并按 30 秒间隔汇总新匹配弹窗。[完整更新说明](docs/releases/v0.11.14.md)。
 
 > **新增腐化区提示，原作者：Blyat。** 感谢提供原始工具与区域资料。横条默认顶部居中，仅在游戏激活时显示；右下角“更多 → 腐化区提示”可恢复显示，设置中可调整宽度与配色。参见 [功能说明、来源与验证范围](docs/corrupted-zone.md)。
 
@@ -227,7 +227,7 @@
 - [0.11.0 兼容范围与历史校验值](docs/releases/v0.11.0.md)
 - [0.11 大版本更新记录](docs/发布记录-0.11.0.md)
 - [历史修复与阶段性验证记录](docs/历史修复记录.md)
-- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.13/SHA256SUMS.txt)
+- [下载 SHA-256 校验文件](https://github.com/SolairsVIP/pd2-trader-chinese/releases/download/v0.11.14/SHA256SUMS.txt)
 - [上游原项目](https://github.com/errolgr/pd2-trade) · [本项目开源仓库](https://github.com/SolairsVIP/pd2-trader-chinese) · [MIT 许可证](LICENSE)
 
 <details>

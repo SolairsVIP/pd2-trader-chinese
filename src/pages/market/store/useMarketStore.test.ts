@@ -284,12 +284,12 @@ describe('server saved searches', () => {
     expect(actions.setSearchAlert('s0', true)).toBe(false);
   });
 
-  it('allows three alerts and refuses a fourth even if the server allows more', async () => {
+  it('allows five alerts and refuses a sixth even if the server allows more', async () => {
     await loadFrom({});
-    await signIn([server('a', { alert: true }), server('b', { alert: true }), server('c'), server('d')]);
-    vi.mocked(updateSavedSearch).mockResolvedValue(server('c', { alert: true }));
-    expect(actions.setSearchAlert('c', true)).toBe(true);
-    expect(actions.setSearchAlert('d', true)).toBe(false);
+    await signIn([server('a', { alert: true }), server('b', { alert: true }), server('c', { alert: true }), server('d', { alert: true }), server('e'), server('f')]);
+    vi.mocked(updateSavedSearch).mockResolvedValue(server('e', { alert: true }));
+    expect(actions.setSearchAlert('e', true)).toBe(true);
+    expect(actions.setSearchAlert('f', true)).toBe(false);
     expect(actions.saveSearch('new', filters('new'), true)).toBeNull();
     expect(createSavedSearch).not.toHaveBeenCalled();
   });

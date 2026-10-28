@@ -30,7 +30,7 @@ export const MARKET_PREFS_FILENAME = 'market-prefs.json';
 const PREFS_DIR = BaseDirectory.AppConfig;
 
 /** Saved searches that may alert at once (server cap; the server's `limits` win once listed). */
-export const MAX_ALERT_SEARCHES = 3;
+export const MAX_ALERT_SEARCHES = 5;
 
 /** Ids of saved searches the server has not confirmed yet (no edits until it has). */
 export const PENDING_ID_PREFIX = 'pending:';

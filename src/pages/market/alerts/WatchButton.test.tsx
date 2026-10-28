@@ -114,7 +114,7 @@ describe('WatchButton', () => {
   });
 
   it('refuses locally at the watch cap', async () => {
-    const watched = Array.from({ length: 3 }, (_, i) => ({
+    const watched = Array.from({ length: 5 }, (_, i) => ({
       ...serverCopy(`w${i}`, true),
       filters: { ...shako(), itemName: `I${i}` },
     }));

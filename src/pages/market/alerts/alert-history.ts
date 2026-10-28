@@ -21,7 +21,7 @@ function scheduleExpiry(): void {
 let owner: string | undefined;
 let live: MarketAlert[] = [];
 export function rememberLiveAlerts(token: string | undefined, alerts: readonly MarketAlert[]): void {
-  if (owner !== token) { owner = token; live = []; closeAlertHistory(); }
+  if (owner !== token) { owner = token; live = []; }
   if (token) live = unexpiredAlerts(mergeAlertHistory(live, alerts)).slice(0, 500);
   scheduleExpiry();
 }
@@ -31,11 +31,3 @@ export function clearLiveAlerts(token: string | undefined): void {
 export function liveAlertHistory(token: string | undefined): MarketAlert[] {
   return token && owner === token ? unexpiredAlerts(live) : [];
 }
-
-let popupShown = false;
-export function claimAlertPopup(): boolean {
-  if (popupShown) return false;
-  popupShown = true;
-  return true;
-}
-export function closeAlertHistory(): void { popupShown = false; }

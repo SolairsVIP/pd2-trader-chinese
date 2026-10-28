@@ -8,7 +8,6 @@ import type { SavedSearch } from '@/pages/market/lib/types';
 import { resetMarketPrefs } from '@/pages/market/store/useMarketStore';
 import { listMarketAlerts, listSavedSearches, openAlertStream, type MarketAlert } from './saved-search-api';
 import type * as SavedSearchApi from './saved-search-api';
-import { closeAlertHistory } from './alert-history';
 import { useMarketAlerts } from './useMarketAlerts';
 
 const h = vi.hoisted(() => ({
@@ -81,7 +80,6 @@ const settle = () => act(() => vi.advanceTimersByTimeAsync(0));
 beforeEach(() => {
   vi.useFakeTimers();
   resetMarketPrefs();
-  closeAlertHistory();
   vi.mocked(exists).mockResolvedValue(false);
   vi.mocked(readTextFile).mockReset();
   vi.mocked(showToast).mockClear();
@@ -120,6 +118,28 @@ describe('useMarketAlerts', () => {
       action: { data: { tab: 'alerts' } },
     });
     expect(playNotificationSound).toHaveBeenCalledWith(40);
+  });
+
+  it('每 30 秒汇总尚未弹窗的新匹配，旧记录不会重复提醒', async () => {
+    vi.mocked(listSavedSearches).mockResolvedValue({ items: [search('s1', true)], limits: { maxSearches: 25, maxAlerting: 10 } });
+    let writer!: ReadableStreamDefaultController<Uint8Array>;
+    vi.mocked(openAlertStream).mockResolvedValue(new Response(new ReadableStream<Uint8Array>({ start(c) { writer = c; } })));
+    renderHook(() => useMarketAlerts());
+    await settle();
+    const push = async (item: MarketAlert) => {
+      await act(async () => { writer.enqueue(new TextEncoder().encode(`event: market.alert\ndata: ${JSON.stringify(item)}\n\n`)); });
+    };
+    await push(alert);
+    expect(showToast).toHaveBeenCalledTimes(1);
+    await push({ ...alert, id: 'al2' });
+    await push({ ...alert, id: 'al3' });
+    await act(() => vi.advanceTimersByTimeAsync(29_999));
+    expect(showToast).toHaveBeenCalledTimes(1);
+    await act(() => vi.advanceTimersByTimeAsync(1));
+    expect(showToast).toHaveBeenCalledTimes(2);
+    expect(vi.mocked(showToast).mock.calls[1][0]).toEqual(expect.objectContaining({ description: expect.stringContaining('新增 2 条') }));
+    await act(() => vi.advanceTimersByTimeAsync(30_000));
+    expect(showToast).toHaveBeenCalledTimes(2);
   });
 
   it('stays quiet when the alert sound is off', async () => {

@@ -3,7 +3,6 @@ import React from 'react';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, expect, it, vi } from 'vitest';
 import { AlertHistory } from './AlertHistory';
-import { claimAlertPopup, closeAlertHistory } from './alert-history';
 import { publishMarketAlerts } from './alert-events';
 import { listMarketAlerts, type MarketAlert } from './saved-search-api';
 vi.mock('./saved-search-api', () => ({ listMarketAlerts: vi.fn() }));
@@ -32,27 +31,6 @@ it('removes an alert from the open panel when its 30 minutes expire', async () =
     act(() => vi.advanceTimersByTime(30 * 60 * 1000));
     expect(screen.queryByText('物品expiry — 1')).toBeNull();
   } finally { vi.useRealTimers(); }
-});
-
-it('allows another popup when the market history is closed', async () => {
-  closeAlertHistory();
-  vi.mocked(listMarketAlerts).mockResolvedValue({ items: [] });
-  const view = render(<AlertHistory token="token" visible onView={vi.fn()} />);
-  await act(async () => {});
-  expect(claimAlertPopup()).toBe(true);
-  expect(claimAlertPopup()).toBe(false);
-  view.rerender(<AlertHistory token="token" visible={false} onView={vi.fn()} />);
-  expect(claimAlertPopup()).toBe(true);
-});
-
-it('does not rearm merely by reopening the history panel', async () => {
-  closeAlertHistory();
-  vi.mocked(listMarketAlerts).mockResolvedValue({ items: [] });
-  const view = render(<AlertHistory token="token" visible={false} onView={vi.fn()} />);
-  await act(async () => {});
-  expect(claimAlertPopup()).toBe(true);
-  view.rerender(<AlertHistory token="token" visible onView={vi.fn()} />);
-  expect(claimAlertPopup()).toBe(false);
 });
 
 it('clears history and keeps it cleared after refresh while showing later alerts', async () => {
