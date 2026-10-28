@@ -206,7 +206,7 @@ export interface SavedSearch {
   createdAt: string;
 }
 
-export type MarketTab = 'search' | 'favorites' | 'saved';
+export type MarketTab = 'search' | 'favorites' | 'saved' | 'alerts';
 
 /** Payload for `openPanel('market', payload)`. */
 export interface MarketPanelPayload {

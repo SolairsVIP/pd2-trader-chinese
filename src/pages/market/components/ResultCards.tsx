@@ -30,6 +30,7 @@ import { LoadMoreFooter, type LoadMoreState, OnlineDots, formatHrPrice } from '.
 import { formatStat, statWithValue } from './stat-text';
 import { AddAllModsButton, ModMenu } from './ModMenu';
 import { EnterOnce, type EnterTracker } from './EnterOnce';
+import { WhisperHistoryPopup } from './WhisperHistoryPopup';
 import type { AlertGlow } from '../hooks/useLiveAlertGlow';
 
 const ESTIMATED_CARD_HEIGHT = 340;
@@ -278,6 +279,7 @@ const ResultCard = React.memo(function ResultCard({
   const whispers = useWhisperHistory();
   const summary = sellerWhispers(whispers.people, [sellerAccount(listing), ...(listing.user?.game?.accounts ?? [])]);
   const [hovered, setHovered] = useState<number | null>(null);
+  const [whisperPointer, setWhisperPointer] = useState<{ x: number; y: number } | null>(null);
 
   // Socket prices (runes, priced uniques…) through the economy service, one pseudo-listing per group
   const groupListings = useMemo(
@@ -312,14 +314,15 @@ const ResultCard = React.memo(function ResultCard({
   const account = sellerAccount(listing) || listing.user?.username;
 
   return (
-    <Tooltip>
-    <TooltipTrigger asChild>
+    <>
     <article
       role="option"
       aria-selected={selected}
       data-listing-id={listing._id}
       data-chat-opened={actions.chatOpened || undefined}
       onClick={() => onSelect(listing._id)}
+      onPointerMove={(event) => { if (actions.chatOpened && event.pointerType !== 'touch') setWhisperPointer({ x: event.clientX, y: event.clientY }); }}
+      onPointerLeave={() => setWhisperPointer(null)}
       className={cn(
         'cursor-default overflow-hidden rounded-lg border bg-foreground/[0.015] transition-colors duration-(--dur-fast)',
         selected ? 'border-primary' : 'border-border/60 hover:border-border',
@@ -563,9 +566,9 @@ const ResultCard = React.memo(function ResultCard({
         </span>
       </footer>
     </article>
-    </TooltipTrigger>
-    {actions.chatOpened && (
-      <TooltipContent side="top" className="w-64 space-y-2 rounded-lg p-3 text-xs">
+    {actions.chatOpened && whisperPointer && (
+      <WhisperHistoryPopup pointer={whisperPointer}>
+        <div className="text-primary">已打开与该卖家的聊天窗</div>
         <div className="flex justify-between gap-3"><span>密语记录</span><strong>{summary.count}</strong></div>
         {summary.last > 0 ? (
           <div className="flex justify-between gap-3"><span>最近的密语</span><span>{shortAgo(summary.last, Date.now())}</span></div>
@@ -577,9 +580,9 @@ const ResultCard = React.memo(function ResultCard({
           </div>
         ))}
         <div className="text-muted-foreground">含已复制的密语，不代表已发送</div>
-      </TooltipContent>
+      </WhisperHistoryPopup>
     )}
-    </Tooltip>
+    </>
   );
 });
 

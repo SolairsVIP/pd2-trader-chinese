@@ -268,7 +268,7 @@ describe('server saved searches', () => {
     await flush();
     expect(getMarketPrefs().savedSearches).toEqual([]);
     expect(showToast).toHaveBeenCalledWith(
-      expect.objectContaining({ title: 'Limit reached', description: 'Alert limit reached (10)', variant: 'error' }),
+      expect.objectContaining({ title: '已达到数量上限', variant: 'error' }),
     );
   });
 
@@ -281,7 +281,17 @@ describe('server saved searches', () => {
     expect(actions.saveSearch('x', filters('x'), true)).toBeNull();
     vi.mocked(updateSavedSearch).mockResolvedValue(server('s0'));
     expect(actions.setSearchAlert('s0', false)).toBe(true);
-    expect(actions.setSearchAlert('s0', true)).toBe(true);
+    expect(actions.setSearchAlert('s0', true)).toBe(false);
+  });
+
+  it('allows three alerts and refuses a fourth even if the server allows more', async () => {
+    await loadFrom({});
+    await signIn([server('a', { alert: true }), server('b', { alert: true }), server('c'), server('d')]);
+    vi.mocked(updateSavedSearch).mockResolvedValue(server('c', { alert: true }));
+    expect(actions.setSearchAlert('c', true)).toBe(true);
+    expect(actions.setSearchAlert('d', true)).toBe(false);
+    expect(actions.saveSearch('new', filters('new'), true)).toBeNull();
+    expect(createSavedSearch).not.toHaveBeenCalled();
   });
 
   it('toggles the alert optimistically and restores it when the server refuses', async () => {

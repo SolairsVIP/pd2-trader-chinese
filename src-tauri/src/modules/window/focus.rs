@@ -60,6 +60,18 @@ static LAST_OWNER: Mutex<Foreground> = Mutex::new(Foreground::Unknown);
 type FocusRefresh = dyn Fn(bool) + Send + Sync;
 static REFRESH: OnceLock<Arc<FocusRefresh>> = OnceLock::new();
 
+struct FocusActions {
+    refit: bool,
+    notify: bool,
+}
+
+fn focus_actions(context_changed: bool, owner_changed: bool, heartbeat: bool) -> FocusActions {
+    FocusActions {
+        refit: context_changed || owner_changed,
+        notify: context_changed || heartbeat,
+    }
+}
+
 /// Reconcile live OS state before a hotkey/focus query, even if a WinEvent was missed.
 pub fn refresh_game_context() -> bool {
     if let Some(refresh) = REFRESH.get() {
@@ -98,7 +110,8 @@ pub fn initialize_diablo_focus_monitoring(
         let context_changed = next != current || force_emit;
         let mut emitted_at = last_emit.lock().unwrap_or_else(|p| p.into_inner());
         let heartbeat = next && emitted_at.elapsed() >= std::time::Duration::from_secs(2);
-        let notify = context_changed || heartbeat;
+        let actions = focus_actions(context_changed, owner_changed, heartbeat);
+        let notify = actions.notify;
         if notify {
             *emitted_at = std::time::Instant::now();
         }
@@ -109,7 +122,7 @@ pub fn initialize_diablo_focus_monitoring(
             crate::debug_logger::overlay_trace(&format!("native owner={:?} game={}", owner, next));
         }
         // Wake/re-fit the native host BEFORE asking a previously hidden renderer to render UI.
-        if notify {
+        if actions.refit {
             on_change(next);
         }
         if owner != Foreground::Unknown && (owner_changed || notify) {
@@ -145,6 +158,16 @@ pub fn initialize_diablo_focus_monitoring(
 mod tests {
     use super::Foreground::*;
     use super::*;
+
+    #[test]
+    fn heartbeat_notifies_renderer_without_refitting_an_unchanged_window() {
+        let actions = focus_actions(false, false, true);
+        assert!(actions.notify);
+        assert!(!actions.refit);
+        assert!(focus_actions(true, false, false).refit);
+        assert!(focus_actions(false, true, false).refit);
+        assert!(!focus_actions(false, false, false).refit);
+    }
 
     fn run(start: bool, steps: &[Foreground]) -> Vec<bool> {
         steps

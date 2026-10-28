@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { EASE_OUT, springSnappy } from '@/lib/motion';
 import { showToast, usePanel } from '@/overlay';
 import type { MarketFilters } from '@/pages/market/lib/types';
-import { isPendingSearch, retrySavedSearchSync, useMarketStore } from '@/pages/market/store/useMarketStore';
+import { MAX_ALERT_SEARCHES, isPendingSearch, retrySavedSearchSync, useMarketStore } from '@/pages/market/store/useMarketStore';
 import { findWatch } from './alert-logic';
 
 /**
@@ -47,7 +47,7 @@ export function WatchButton({ filters, className }: { filters: MarketFilters | n
       if (!store.setSearchAlert(saved.id, true)) {
         showToast({
           title: '提醒数量已达上限',
-          description: `最多可同时提醒 ${store.limits.maxAlerting} 个搜索，请先在“已保存”页关闭一个提醒。`,
+          description: `最多可开启 ${Math.min(MAX_ALERT_SEARCHES, store.limits.maxAlerting)} 个提醒，请先在“已保存”页关闭已有提醒。`,
           variant: 'warning',
         });
       }

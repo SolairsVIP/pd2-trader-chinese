@@ -116,8 +116,8 @@ export function overlayReducer(state: OverlayState, action: OverlayAction): Over
 }
 
 /** True when the panel occupies the screen: open, placed and not hidden by game blur. */
-export function isPanelVisible(def: PanelDef, panel: PanelState | undefined, gameFocused: boolean): boolean {
-  return !!panel?.open && !panel.placing && !(def.hideOnGameBlur && !gameFocused);
+export function isPanelVisible(def: PanelDef, panel: PanelState | undefined, gameFocused: boolean, pinned = false): boolean {
+  return !!panel?.open && !panel.placing && !(def.hideOnGameBlur && !gameFocused && !pinned);
 }
 
 const isGameAnchored = (placement: Placement): placement is 'gameCenter' | 'gameRight' =>
@@ -176,6 +176,7 @@ export function computePlacement(
 export interface OverlayApi {
   /** Temporarily protect an in-progress flow from outside-click/blur dismissal; explicit Close still works. */
   guardPanelDismissal(id: PanelId, canDismiss: () => boolean): () => void;
+  setMarketPinned(pinned: boolean): void;
   /** Opens or, if open, updates payload + brings to front (OpenOptions.keepPayload: only brings to front). */
   openPanel<K extends PanelId>(id: K, payload?: PanelPayloads[K], opts?: OpenOptions): void;
   closePanel(id: PanelId, options?: { focusGame?: boolean }): void;
@@ -197,6 +198,7 @@ export const OUTSIDE_CLICK_EVENT = 'overlay-outside-click';
 
 interface OverlayInternals {
   defs: PanelDefs;
+  marketPinned: boolean;
   state: OverlayState;
   gameFocused: boolean;
   /** Commit a panel rect (drag/resize end, usePanel().setRect); persisted when def.persist. */
@@ -225,6 +227,9 @@ export function usePanelOpen(id: PanelId): boolean {
 
 export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.ReactNode }> = ({ defs, children }) => {
   const [state, setState] = useState(() => initialOverlayState(defs));
+  const [marketPinned, setMarketPinned] = useState(false);
+  const marketPinnedRef = useRef(false);
+  marketPinnedRef.current = marketPinned;
   const yieldedToOtherApps = useSyncExternalStore(subscribeOverlayYield, getOverlayYieldedToOtherApps, () => false);
   const { toasts } = useSonner();
   const stateRef = useRef(state);
@@ -241,11 +246,12 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
   // Yield it as soon as another app becomes foreground. The game-focus state is
   // intentionally debounced for panel visibility; it must not control the native z-order.
   const visiblePanels = Object.entries(state.panels).filter(([id, panel]) =>
-    isPanelVisible(defs[id as PanelId], panel, gameFocused),
+    isPanelVisible(defs[id as PanelId], panel, gameFocused, id === 'market' && marketPinned),
   );
   const hasVisibleUi = visiblePanels.length > 0 || toasts.length > 0;
   // Only float over the game context. Being the app's foreground window is not enough: Settings opened
   // from the tray while Diablo is not active must behave like an ordinary desktop window.
+  const pinnedMarketVisible = marketPinned && !!state.panels.market?.open && !state.panels.market.placing;
   const shouldFloatOverlay = hasVisibleUi && gameFocused && !yieldedToOtherApps;
 
   // The host must yield for every panel category, including sign-in and settings.
@@ -290,10 +296,10 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
 
   useEffect(() => {
     if (!isTauri()) return;
-    invoke('set_overlay_z_order', { topmost: shouldFloatOverlay }).catch((error) =>
+    invoke('set_overlay_z_order', { topmost: shouldFloatOverlay, pinned: pinnedMarketVisible }).catch((error) =>
       console.warn('[overlay] set_overlay_z_order failed:', error),
     );
-  }, [shouldFloatOverlay]);
+  }, [shouldFloatOverlay, pinnedMarketVisible]);
 
   // Synchronous reducer so back-to-back calls (open then toggle in one tick) see each other's result.
   const apply = useCallback((action: OverlayAction) => {
@@ -370,7 +376,7 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
       pendingFocus.current = null;
       return;
     }
-    if (!isPanelVisible(defs[request.id], panel, gameFocused)) return;
+    if (!isPanelVisible(defs[request.id], panel, gameFocused, request.id === 'market' && marketPinned)) return;
     let cancelled = false;
     void (async () => {
       try {
@@ -389,7 +395,7 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
     return () => {
       cancelled = true;
     };
-  }, [state, defs, gameFocused]);
+  }, [state, defs, gameFocused, marketPinned]);
 
   // Open panels stay on screen: game-anchored ones (default game* placement, not moved by the user) follow the
   // game window; the rest are clamped into the overlay when it shrinks. Only the live rect changes: the saved
@@ -427,7 +433,7 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
 
   const togglePanel = useCallback(
     <K extends PanelId>(id: K, payload?: PanelPayloads[K], opts?: OpenOptions) => {
-      if (isPanelVisible(defs[id], stateRef.current.panels[id], gameRef.current.gameFocused)) closePanel(id);
+      if (isPanelVisible(defs[id], stateRef.current.panels[id], gameRef.current.gameFocused, id === 'market' && marketPinnedRef.current)) closePanel(id);
       else openPanel(id, payload, opts);
     },
     [closePanel, defs, openPanel],
@@ -446,12 +452,12 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
 
   // No `state` here: panel transitions must not re-render (and re-run the effects of) every consumer.
   const api = useMemo<OverlayApi>(
-    () => ({ openPanel, closePanel, togglePanel, isOpen, bringToFront, gameRect, gameFocused, guardPanelDismissal }),
+    () => ({ openPanel, closePanel, togglePanel, isOpen, bringToFront, gameRect, gameFocused, guardPanelDismissal, setMarketPinned }),
     [openPanel, closePanel, togglePanel, isOpen, bringToFront, gameRect, gameFocused, guardPanelDismissal],
   );
   const internals = useMemo<OverlayInternals>(
-    () => ({ defs, state, gameFocused, commitRect }),
-    [defs, state, gameFocused, commitRect],
+    () => ({ defs, state, gameFocused, commitRect, marketPinned }),
+    [defs, state, gameFocused, commitRect, marketPinned],
   );
 
   // Main lost OS focus (the user clicked into the game or another app): close closeOnBlur panels unless focus

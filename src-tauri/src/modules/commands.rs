@@ -33,9 +33,10 @@ pub fn get_foreground_owner() -> window::Foreground {
 /// Keep the overlay topmost while it is being used over Diablo II, then yield it without activation
 /// as soon as another application becomes foreground.
 #[tauri::command]
-pub fn set_overlay_z_order(overlay: tauri::Window, topmost: bool) -> Result<(), String> {
+pub fn set_overlay_z_order(overlay: tauri::Window, topmost: bool, pinned: bool) -> Result<(), String> {
     #[cfg(target_os = "windows")]
     {
+        window::set_overlay_pinned(pinned);
         let hwnd = overlay.hwnd().map_err(|error| error.to_string())?;
         window::set_overlay_z_order(hwnd.0 as isize, topmost)
     }

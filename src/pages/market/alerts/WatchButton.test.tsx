@@ -72,26 +72,26 @@ describe('WatchButton', () => {
   it('watches the current filters, then shows Watching and stops watching on the next click', async () => {
     render(<WatchButton filters={shako()} />);
     await signIn([]);
-    expect(button().textContent).toBe('Watch');
+    expect(button().textContent).toBe('开启提醒');
 
     vi.mocked(createSavedSearch).mockResolvedValue(serverCopy('w1', true));
     fireEvent.click(button());
     expect(createSavedSearch).toHaveBeenCalledWith('tok', { name: undefined, filters: shako(), alert: true });
     await settle();
-    expect(button().textContent).toBe('Watching');
+    expect(button().textContent).toBe('提醒中');
     expect(button().getAttribute('aria-pressed')).toBe('true');
 
     vi.mocked(updateSavedSearch).mockResolvedValue(serverCopy('w1', false));
     fireEvent.click(button());
     expect(updateSavedSearch).toHaveBeenCalledWith('tok', 'w1', { alert: false });
     await settle();
-    expect(button().textContent).toBe('Watch');
+    expect(button().textContent).toBe('开启提醒');
   });
 
   it('recognises a watch saved elsewhere with the same filters (server-normalized)', async () => {
     render(<WatchButton filters={shako()} />);
     await signIn([serverCopy('w1', true)]);
-    expect(button().textContent).toBe('Watching');
+    expect(button().textContent).toBe('提醒中');
   });
 
   it('turns the alert on for an existing saved search with these filters instead of saving another', async () => {
@@ -109,12 +109,12 @@ describe('WatchButton', () => {
     vi.mocked(createSavedSearch).mockRejectedValue(new SavedSearchApiError('Alert limit reached (10)', 409));
     fireEvent.click(button());
     await settle();
-    expect(button().textContent).toBe('Watch');
-    expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ title: 'Limit reached', variant: 'error' }));
+    expect(button().textContent).toBe('开启提醒');
+    expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ title: '已达到数量上限', variant: 'error' }));
   });
 
   it('refuses locally at the watch cap', async () => {
-    const watched = Array.from({ length: 10 }, (_, i) => ({
+    const watched = Array.from({ length: 3 }, (_, i) => ({
       ...serverCopy(`w${i}`, true),
       filters: { ...shako(), itemName: `I${i}` },
     }));
@@ -122,7 +122,7 @@ describe('WatchButton', () => {
     await signIn(watched);
     fireEvent.click(button());
     expect(createSavedSearch).not.toHaveBeenCalled();
-    expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ title: 'Too many watches' }));
+    expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ title: '提醒数量已达上限' }));
   });
 
   it('is disabled signed out and for sold-listing searches', async () => {
@@ -131,7 +131,7 @@ describe('WatchButton', () => {
     await signIn([]);
     rerender(<WatchButton filters={{ ...shako(), source: 'archive' }} />);
     expect((button() as HTMLButtonElement).disabled).toBe(true);
-    expect(button().getAttribute('aria-label')).toBe('Sold listings cannot be watched');
+    expect(button().getAttribute('aria-label')).toBe('无法为已售挂单开启提醒');
   });
 
   it('is disabled (saying why) while the saved searches failed to load, and retries when the panel shows', async () => {
@@ -141,7 +141,7 @@ describe('WatchButton', () => {
     await act(async () => syncSavedSearches('tok'));
     await settle();
     expect((button() as HTMLButtonElement).disabled).toBe(true);
-    expect(button().getAttribute('title')).toMatch(/couldn't be loaded/);
+    expect(button().getAttribute('title')).toMatch(/无法从 pd2trader.com 加载已保存的搜索/);
     fireEvent.click(button());
     expect(createSavedSearch).not.toHaveBeenCalled();
 
@@ -150,6 +150,6 @@ describe('WatchButton', () => {
     rerender(<WatchButton filters={shako()} />);
     await settle();
     expect(listSavedSearches).toHaveBeenCalledTimes(2);
-    expect(button().textContent).toContain('Watching');
+    expect(button().textContent).toContain('提醒中');
   });
 });

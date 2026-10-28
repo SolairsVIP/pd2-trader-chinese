@@ -8,7 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { showToast, undoToast } from '@/overlay';
 import { EmptyState } from '@/pages/currency/components/StatePanel';
-import { type MarketStore, retrySavedSearchSync } from '@/pages/market/store/useMarketStore';
+import { MAX_ALERT_SEARCHES, type MarketStore, retrySavedSearchSync } from '@/pages/market/store/useMarketStore';
 import { ITEM_TYPES } from '../lib/catalog';
 import { filterName } from './stat-text';
 import type { MarketFilters, SavedSearch, StatFilter } from '../lib/types';
@@ -75,7 +75,7 @@ export function SavedSearches({ store, current, onRun }: SavedSearchesProps) {
     if (!store.setSearchAlert(search.id, on)) {
       showToast({
         title: '提醒数量已达上限',
-        description: `最多可同时提醒 ${store.limits.maxAlerting} 个已保存搜索，请先关闭一个提醒。`,
+        description: `最多可开启 ${Math.min(MAX_ALERT_SEARCHES, store.limits.maxAlerting)} 个提醒，请先关闭已有提醒。`,
         variant: 'warning',
       });
     }
@@ -105,7 +105,7 @@ export function SavedSearches({ store, current, onRun }: SavedSearchesProps) {
         </Button>
       </form>
       <div className="flex items-center justify-between gap-2 border-b border-border/60 px-3 py-1.5 text-[11px] text-muted-foreground">
-        <span>{`${alerting}/${store.limits.maxAlerting} 个提醒 · 悬浮层运行时弹出新匹配结果`}</span>
+        <span>{`${alerting}/${Math.min(MAX_ALERT_SEARCHES, store.limits.maxAlerting)} 个提醒 · 悬浮层运行时弹出新匹配结果`}</span>
         <label className="flex items-center gap-1.5">
           提醒
           <Switch
@@ -116,6 +116,7 @@ export function SavedSearches({ store, current, onRun }: SavedSearchesProps) {
           />
         </label>
       </div>
+      {alerting > Math.min(MAX_ALERT_SEARCHES, store.limits.maxAlerting) && <p className="border-b border-border/60 px-3 py-2 text-xs text-destructive">已有多个提醒，请关闭多余提醒后再开启新的提醒。</p>}
       {store.syncStatus === 'signedOut' ? (
         <EmptyState
           className="m-4"

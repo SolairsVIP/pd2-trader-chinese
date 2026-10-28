@@ -8,6 +8,7 @@ import type { SavedSearch } from '@/pages/market/lib/types';
 import { resetMarketPrefs } from '@/pages/market/store/useMarketStore';
 import { listMarketAlerts, listSavedSearches, openAlertStream, type MarketAlert } from './saved-search-api';
 import type * as SavedSearchApi from './saved-search-api';
+import { closeAlertHistory } from './alert-history';
 import { useMarketAlerts } from './useMarketAlerts';
 
 const h = vi.hoisted(() => ({
@@ -44,7 +45,7 @@ const alert: MarketAlert = {
   savedSearchId: 's1',
   savedSearchName: 'Cheap Shako',
   listingId: 'l1',
-  matchedAt: '2026-10-21T08:01:00Z',
+  matchedAt: new Date().toISOString(),
   listing: {
     id: 'l1',
     isLadder: true,
@@ -80,6 +81,7 @@ const settle = () => act(() => vi.advanceTimersByTimeAsync(0));
 beforeEach(() => {
   vi.useFakeTimers();
   resetMarketPrefs();
+  closeAlertHistory();
   vi.mocked(exists).mockResolvedValue(false);
   vi.mocked(readTextFile).mockReset();
   vi.mocked(showToast).mockClear();
@@ -113,8 +115,9 @@ describe('useMarketAlerts', () => {
     expect(openAlertStream).toHaveBeenCalledWith('tok', expect.any(AbortSignal));
     expect(showToast).toHaveBeenCalledTimes(1);
     expect(vi.mocked(showToast).mock.calls[0][0]).toMatchObject({
-      description: 'Cheap Shako: Harlequin Crest — 0.5 HR',
-      action: { data: { savedSearchId: 's1', focusListingId: 'l1' } },
+      description: 'Cheap Shako：Harlequin Crest — 0.5 HR',
+      id: 'market-alert',
+      action: { data: { tab: 'alerts' } },
     });
     expect(playNotificationSound).toHaveBeenCalledWith(40);
   });

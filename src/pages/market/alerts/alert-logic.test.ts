@@ -43,31 +43,24 @@ const search = (id: string, filters: MarketFilters, alert: boolean): SavedSearch
 });
 
 describe('alert popups', () => {
-  it('shows "<search>: <item> — <price>" with a View action on the listing', () => {
-    expect(alertToasts([alert('a')])).toEqual([
-      {
-        title: 'Market watch',
-        description: 'Cheap Shako: Harlequin Crest — 0.5 HR',
-        action: {
-          label: 'View',
-          type: ToastActionType.OPEN_MARKET_PANEL,
-          data: { savedSearchId: 's1', focusListingId: 'l-a', tab: 'search' },
-        },
-      },
-    ]);
+  it('uses a single replaceable popup that opens the alert history', () => {
+    expect(alertToasts([alert('a')])).toEqual([{
+      id: 'market-alert', title: '市场提醒', duration: 10000,
+      description: 'Cheap Shako：Harlequin Crest — 0.5 HR',
+      action: { label: '查看提醒', type: ToastActionType.OPEN_MARKET_PANEL, data: { tab: 'alerts' } },
+    }]);
+    expect(alertToasts([alert('a'), alert('b')])).toHaveLength(1);
+    expect(alertToasts([alert('a'), alert('b')])[0].id).toBe('market-alert');
   });
 
   it('falls back to the base name and the price note', () => {
     expect(alertListingText(alert('a', { name: null, hrPrice: null, price: '  wug  ' }))).toBe('Shako — wug');
-    expect(alertListingText(alert('a', { hrPrice: 0, price: null }))).toBe('Harlequin Crest — no price');
+    expect(alertListingText(alert('a', { hrPrice: 0, price: null }))).toBe('Harlequin Crest — 未标价');
   });
 
-  it('sums up a big catch-up in one popup on the newest alert', () => {
+  it('summarizes a batch in one popup', () => {
     const many = Array.from({ length: MAX_ALERT_TOASTS + 2 }, (_, i) => alert(`a${i}`));
-    const toasts = alertToasts(many);
-    expect(toasts).toHaveLength(1);
-    expect(toasts[0].description).toMatch(/^5 new matches\. Newest: Cheap Shako: /);
-    expect(toasts[0].action?.data.focusListingId).toBe(`l-a${many.length - 1}`);
+    expect(alertToasts(many)[0].description).toMatch(/^新增 5 条匹配挂单/);
   });
 });
 

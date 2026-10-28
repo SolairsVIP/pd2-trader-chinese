@@ -613,6 +613,38 @@ describe('closeOnBlur', () => {
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
 
+  it('keeps a pinned market open on outside click and blur, while manual close still works', async () => {
+    mount();
+    await act(async () => {});
+    const stop = api.guardPanelDismissal('market', () => false);
+    act(() => { api.openPanel('market'); api.openPanel('chat'); });
+    act(() => events.get(OUTSIDE_CLICK_EVENT)!());
+    expect(api.isOpen('market')).toBe(true);
+    expect(api.isOpen('chat')).toBe(false);
+    act(() => focus.onChange!(false));
+    act(() => vi.advanceTimersByTime(CLOSE_ON_BLUR_MS + 1));
+    expect(api.isOpen('market')).toBe(true);
+    act(() => api.closePanel('market'));
+    expect(api.isOpen('market')).toBe(false);
+    stop();
+  });
+
+  it('keeps the pinned market visible while yielding to other applications until manually closed', async () => {
+    tauri.on = true;
+    mount();
+    await act(async () => {});
+    act(() => { api.openPanel('market'); api.setMarketPinned(true); });
+    act(() => events.get('foreground-changed')?.({ payload: 'other' }));
+    setGame({ gameFocused: false });
+    expect(shown('market')).toBe(true);
+    expect(nativeOverlay.calls.filter(call => call.command === 'set_overlay_z_order').at(-1)?.args)
+      .toEqual({ topmost: false, pinned: true });
+    act(() => api.closePanel('market', { focusGame: false }));
+    expect(shown('market')).toBe(false);
+    expect(nativeOverlay.calls.filter(call => call.command === 'set_overlay_z_order').at(-1)?.args)
+      .toEqual({ topmost: false, pinned: false });
+  });
+
   it('does not let a preceding tray blur close newly opened Settings', () => {
     mount();
     act(() => {
@@ -750,16 +782,16 @@ describe('native overlay z-order', () => {
 
     const zOrderCalls = () =>
       nativeOverlay.calls.filter((call) => call.command === 'set_overlay_z_order').map((call) => call.args);
-    expect(zOrderCalls()).toContainEqual({ topmost: false }); // no visible UI at startup
+    expect(zOrderCalls()).toContainEqual({ topmost: false, pinned: false }); // no visible UI at startup
 
     act(() => api.openPanel('settings'));
-    expect(zOrderCalls().at(-1)).toEqual({ topmost: true });
+    expect(zOrderCalls().at(-1)).toEqual({ topmost: true, pinned: false });
 
     act(() => events.get('foreground-changed')?.({ payload: 'other' }));
-    expect(zOrderCalls().at(-1)).toEqual({ topmost: false });
+    expect(zOrderCalls().at(-1)).toEqual({ topmost: false, pinned: false });
 
     act(() => events.get('foreground-changed')?.({ payload: 'diablo' }));
-    expect(zOrderCalls().at(-1)).toEqual({ topmost: true });
+    expect(zOrderCalls().at(-1)).toEqual({ topmost: true, pinned: false });
   });
 
   it('does not float Settings over desktop apps when the game context is inactive', async () => {
@@ -773,8 +805,8 @@ describe('native overlay z-order', () => {
 
     const zOrderCalls = () =>
       nativeOverlay.calls.filter((call) => call.command === 'set_overlay_z_order').map((call) => call.args);
-    expect(zOrderCalls()).toContainEqual({ topmost: false });
-    expect(zOrderCalls()).not.toContainEqual({ topmost: true });
+    expect(zOrderCalls()).toContainEqual({ topmost: false, pinned: false });
+    expect(zOrderCalls()).not.toContainEqual({ topmost: true, pinned: false });
   });
 });
 

@@ -97,6 +97,7 @@ export function showToast(payload: ToastPayload): void {
     return;
   }
   toast(custom.title || DEFAULT_TITLE, {
+    id: custom.id,
     description: custom.description,
     duration: custom.duration,
     closeButton: true,

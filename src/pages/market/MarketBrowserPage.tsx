@@ -31,9 +31,11 @@ import { SavedSearches } from './components/SavedSearches';
 import { type ModActionsApi, ModActionsProvider } from './components/ModMenu';
 import { mergeStatFilters } from './lib/mod-keys';
 import { WatchButton } from './alerts/WatchButton';
+import { AlertHistory } from './alerts/AlertHistory';
 import { fetchMarketListing } from './alerts/saved-search-api';
 import { useEnterTracker } from './components/EnterOnce';
 import { useLiveAlertGlow } from './hooks/useLiveAlertGlow';
+import MarketPinButton from './components/MarketPinButton';
 
 /** Card hotkeys (lowercase key → action on the selected card). */
 const CARD_HOTKEYS: Record<string, CardCommand['action']> = { o: 'offer', w: 'whisper', f: 'favorite' };
@@ -380,7 +382,7 @@ const MarketBrowserPage: React.FC = () => {
                   <Tabs value={tab}
                     onValueChange={(v) => setTab(v as MarketTab)}>
                     <TabsList className="h-7 p-0.5">
-                      {(['search', 'favorites', 'saved'] as const).map((value) => {
+                      {(['search', 'favorites', 'saved', 'alerts'] as const).map((value) => {
                         const count =
                           value === 'favorites'
                             ? favorites.favorites.length
@@ -402,7 +404,7 @@ const MarketBrowserPage: React.FC = () => {
                               />
                             )}
                             <span className="relative">
-                              {value === 'search' ? '搜索' : value === 'favorites' ? '收藏' : '已保存'}
+                              {value === 'search' ? '搜索' : value === 'favorites' ? '收藏' : value === 'saved' ? '已保存' : '提醒'}
                               {count > 0 && (
                                 <span className="ml-1 text-[10px] text-muted-foreground tabular-nums">{count}</span>
                               )}
@@ -416,10 +418,10 @@ const MarketBrowserPage: React.FC = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className={cn('size-7 p-0', tab === 'saved' && 'invisible')}
+                    className={cn('size-7 p-0', (tab === 'saved' || tab === 'alerts') && 'invisible')}
                     aria-label="刷新"
-                    aria-hidden={tab === 'saved' || undefined}
-                    tabIndex={tab === 'saved' ? -1 : undefined}
+                    aria-hidden={tab === 'saved' || tab === 'alerts' || undefined}
+                    tabIndex={tab === 'saved' || tab === 'alerts' ? -1 : undefined}
                     title="刷新"
                     onClick={() => (tab === 'favorites' ? void favorites.reload() : search.refresh())}
                   >
@@ -431,6 +433,7 @@ const MarketBrowserPage: React.FC = () => {
                       )}
                     />
                   </Button>
+                  <MarketPinButton />
                 </>
               }
             />
@@ -466,7 +469,9 @@ const MarketBrowserPage: React.FC = () => {
                       exit="exit"
                       className="flex min-h-0 flex-1 flex-col"
                     >
-                      {tab === 'saved' ? (
+                      {tab === 'alerts' ? (
+                        <AlertHistory visible={visible} accountId={authData?.user?._id} token={settings?.pd2Token} onView={(alert) => openPanel('market', { savedSearchId: alert.savedSearchId, focusListingId: alert.listingId, tab: 'search' })} />
+                      ) : tab === 'saved' ? (
                         <SavedSearches
                           store={store}
                           current={filters}

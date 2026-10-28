@@ -14,6 +14,7 @@ import { showToast } from '@/overlay';
 import { syncSavedSearches, useMarketStore } from '@/pages/market/store/useMarketStore';
 import { publishMarketAlerts } from './alert-events';
 import { alertToasts } from './alert-logic';
+import { claimAlertPopup, rememberLiveAlerts, unexpiredAlerts } from './alert-history';
 import { runAlertStream } from './alert-stream';
 import { listMarketAlerts, type MarketAlert, openAlertStream } from './saved-search-api';
 
@@ -23,6 +24,7 @@ export function useMarketAlerts(): void {
   const { savedSearches, alertsEnabled } = useMarketStore();
 
   useEffect(() => {
+    rememberLiveAlerts(token, []);
     syncSavedSearches(token ?? null);
   }, [token]);
 
@@ -42,8 +44,13 @@ export function useMarketAlerts(): void {
     if (!active || !token) return;
     const controller = new AbortController();
     const onAlerts = (alerts: MarketAlert[]) => {
-      alertToasts(alerts).forEach((toast) => showToast(toast));
-      if (sound.current.enabled) playNotificationSound(sound.current.volume);
+      alerts = unexpiredAlerts(alerts);
+      if (!alerts.length) return;
+      rememberLiveAlerts(token, alerts);
+      if (claimAlertPopup()) {
+        alertToasts(alerts).forEach((toast) => showToast(toast));
+        if (sound.current.enabled) playNotificationSound(sound.current.volume);
+      }
       // The open market panel lights up matching cards of the watched search on screen
       publishMarketAlerts(alerts);
     };

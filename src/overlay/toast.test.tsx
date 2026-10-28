@@ -234,6 +234,15 @@ describe('showToast action toasts', () => {
     expect(openMarket).toHaveBeenCalledWith({ savedSearchId: 's1', focusListingId: 'l1', tab: 'search' });
   });
 
+  it('updates a market reminder in place instead of stacking multiple popups', async () => {
+    await renderLayer();
+    const action = { label: '查看提醒', type: ToastActionType.OPEN_MARKET_PANEL, data: { tab: 'alerts' } };
+    await show(() => showToast({ id: 'market-alert', title: '市场提醒', description: '第一件物品', action }));
+    await show(() => showToast({ id: 'market-alert', title: '市场提醒', description: '第二件物品', action }));
+    expect(screen.queryByText('第一件物品')).toBeNull();
+    expect(screen.getAllByText('第二件物品')).toHaveLength(1);
+  });
+
   it('installs the update from the action button', async () => {
     await renderLayer();
     await show(() =>

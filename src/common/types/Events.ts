@@ -7,6 +7,7 @@ export enum ToastActionType {
 }
 
 export interface CustomToastPayload {
+  id?: string;
   title?: string;
   description?: string;
   /** ms; sonner's default when unset. */

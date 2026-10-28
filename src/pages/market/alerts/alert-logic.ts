@@ -20,30 +20,17 @@ export function alertListingText(alert: MarketAlert): string {
   return `${item} — ${price}`;
 }
 
-const viewAction = (alert: MarketAlert): CustomToastPayload['action'] => ({
-  label: '查看',
-  type: ToastActionType.OPEN_MARKET_PANEL,
-  data: { savedSearchId: alert.savedSearchId, focusListingId: alert.listingId, tab: 'search' },
-});
-
-/** The popups for new alerts (oldest first): one each, or one summary when there are many. */
+/** One replaceable popup directs the user to the complete alert history. */
 export function alertToasts(alerts: readonly MarketAlert[]): CustomToastPayload[] {
-  if (alerts.length === 0) return [];
-  if (alerts.length > MAX_ALERT_TOASTS) {
-    const newest = alerts[alerts.length - 1];
-    return [
-      {
-        title: '市场提醒',
-        description: `有 ${alerts.length} 条新匹配结果。最新：${newest.savedSearchName}：${alertListingText(newest)}`,
-        action: viewAction(newest),
-      },
-    ];
-  }
-  return alerts.map((alert) => ({
-    title: '市场提醒',
-    description: `${alert.savedSearchName}: ${alertListingText(alert)}`,
-    action: viewAction(alert),
-  }));
+  if (!alerts.length) return [];
+  const newest = alerts[alerts.length - 1];
+  return [{
+    id: 'market-alert', title: '市场提醒', duration: 10000,
+    description: alerts.length === 1
+      ? `${newest.savedSearchName}：${alertListingText(newest)}`
+      : `新增 ${alerts.length} 条匹配挂单，最新：${alertListingText(newest)}`,
+    action: { label: '查看提醒', type: ToastActionType.OPEN_MARKET_PANEL, data: { tab: 'alerts' } },
+  }];
 }
 
 /**

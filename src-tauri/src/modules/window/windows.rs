@@ -1,5 +1,5 @@
 use super::{Foreground, WindowRect};
-use std::sync::atomic::{AtomicIsize, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicIsize, Ordering};
 use std::sync::{Arc, Mutex};
 use std::{ffi::OsStr, iter, os::windows::prelude::OsStrExt, ptr};
 use tauri::AppHandle;
@@ -14,7 +14,8 @@ use windows_sys::Win32::{
     UI::Accessibility::{SetWinEventHook, UnhookWinEvent, HWINEVENTHOOK},
     UI::WindowsAndMessaging::{
         BringWindowToTop, FindWindowW, GetForegroundWindow, GetWindowRect,
-        GetWindowThreadProcessId, IsIconic, SetForegroundWindow, SetWindowPos, ShowWindow,
+        GetWindowThreadProcessId, GetWindowLongW, IsIconic, SetForegroundWindow, SetWindowPos, ShowWindow,
+        GWL_EXSTYLE, WS_EX_TOPMOST,
         EVENT_SYSTEM_FOREGROUND, HWND_BOTTOM, HWND_NOTOPMOST, HWND_TOPMOST, SWP_NOACTIVATE,
         SWP_NOMOVE, SWP_NOSIZE, SW_RESTORE, WINEVENT_OUTOFCONTEXT,
     },
@@ -52,6 +53,11 @@ pub fn get_diablo_rect(_app: &AppHandle) -> Option<WindowRect> {
 
 /// The overlay window (Main), the only one of ours that counts as `Foreground::OwnWindow`.
 static OVERLAY_WINDOW: AtomicIsize = AtomicIsize::new(0);
+static OVERLAY_PINNED: AtomicBool = AtomicBool::new(false);
+
+pub fn set_overlay_pinned(pinned: bool) {
+    OVERLAY_PINNED.store(pinned, Ordering::SeqCst);
+}
 
 pub fn set_overlay_window(hwnd: HWND) {
     OVERLAY_WINDOW.store(hwnd, Ordering::SeqCst);
@@ -59,7 +65,7 @@ pub fn set_overlay_window(hwnd: HWND) {
 
 /// Float only in the game context. A stale frontend request must not cover a newly focused app.
 pub fn set_overlay_z_order(hwnd: HWND, topmost: bool) -> Result<(), String> {
-    let insert_after = overlay_z_order_target(foreground(), super::is_game_context(), topmost);
+    let insert_after = overlay_z_order_target_with_pin(foreground(), super::is_game_context(), topmost, OVERLAY_PINNED.load(Ordering::SeqCst));
     let ok = unsafe {
         SetWindowPos(
             hwnd,
@@ -72,10 +78,23 @@ pub fn set_overlay_z_order(hwnd: HWND, topmost: bool) -> Result<(), String> {
         )
     };
     if ok == 0 {
-        Err("SetWindowPos failed while changing overlay z-order".to_string())
-    } else {
-        Ok(())
+        return Err("SetWindowPos failed while changing overlay z-order".to_string());
     }
+    // A pinned market stays on the desktop, immediately behind a normal foreground app.
+    // If that app is itself topmost (e.g. a capture overlay), demotion already leaves it above us.
+    if insert_after == HWND_NOTOPMOST && OVERLAY_PINNED.load(Ordering::SeqCst) && foreground() == Foreground::Other {
+        let active = unsafe { GetForegroundWindow() };
+        if active != 0 && unsafe { GetWindowLongW(active, GWL_EXSTYLE) as u32 & WS_EX_TOPMOST == 0 } {
+            let placed = unsafe { SetWindowPos(hwnd, active, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE) };
+            if placed == 0 { return Err("SetWindowPos failed while yielding to foreground application".to_string()); }
+        }
+    }
+    Ok(())
+}
+
+fn overlay_z_order_target_with_pin(owner: Foreground, in_game: bool, topmost: bool, pinned: bool) -> HWND {
+    if pinned && owner == Foreground::Other { return HWND_NOTOPMOST; }
+    overlay_z_order_target(owner, in_game, topmost)
 }
 
 fn overlay_z_order_target(owner: Foreground, in_game: bool, topmost: bool) -> HWND {
@@ -266,6 +285,14 @@ mod tests {
     const DIABLO: HWND = 20;
     const TRAY_MENU_OWNER: HWND = 30;
     const BROWSER: HWND = 40;
+
+    #[test]
+    fn pinned_market_yields_topmost_when_other_app_is_foreground() {
+        assert_eq!(overlay_z_order_target_with_pin(Foreground::Other, false, false, true), HWND_NOTOPMOST);
+        assert_eq!(overlay_z_order_target_with_pin(Foreground::Other, false, false, false), HWND_BOTTOM);
+        assert_eq!(overlay_z_order_target_with_pin(Foreground::Diablo, true, true, true), HWND_TOPMOST);
+        assert_eq!(overlay_z_order_target_with_pin(Foreground::OwnWindow, false, true, true), HWND_NOTOPMOST);
+    }
 
     #[test]
     fn desktop_settings_loses_topmost_status_without_being_buried() {

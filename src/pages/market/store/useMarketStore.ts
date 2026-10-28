@@ -30,7 +30,7 @@ export const MARKET_PREFS_FILENAME = 'market-prefs.json';
 const PREFS_DIR = BaseDirectory.AppConfig;
 
 /** Saved searches that may alert at once (server cap; the server's `limits` win once listed). */
-export const MAX_ALERT_SEARCHES = DEFAULT_LIMITS.maxAlerting;
+export const MAX_ALERT_SEARCHES = 3;
 
 /** Ids of saved searches the server has not confirmed yet (no edits until it has). */
 export const PENDING_ID_PREFIX = 'pending:';
@@ -424,7 +424,7 @@ const alertingCount = () => remote.savedSearches.filter((s) => s.alert).length;
 const capMessage = (what: 'searches' | 'alerting', limits: SavedSearchLimits) =>
   what === 'searches'
     ? `最多可保存 ${limits.maxSearches} 条搜索，请先删除一条。`
-    : `最多可同时开启 ${limits.maxAlerting} 个搜索提醒，请先关闭一个。`;
+    : `最多可开启 ${Math.min(MAX_ALERT_SEARCHES, limits.maxAlerting)} 个搜索提醒，请先关闭已有提醒。`;
 
 /** Store actions; usable outside React (they read the current state). */
 export const marketStoreActions = {
@@ -451,7 +451,7 @@ export const marketStoreActions = {
       showToast({ title: '已保存的搜索数量已达上限', description: capMessage('searches', limits), variant: 'warning' });
       return null;
     }
-    if (session && alert && alertingCount() >= limits.maxAlerting) {
+    if (session && alert && alertingCount() >= Math.min(MAX_ALERT_SEARCHES, limits.maxAlerting)) {
       showToast({ title: '提醒数量已达上限', description: capMessage('alerting', limits), variant: 'warning' });
       return null;
     }
@@ -487,7 +487,7 @@ export const marketStoreActions = {
     const search = remote.savedSearches.find((s) => s.id === id);
     if (!search || isPendingSearch(search)) return false;
     if (search.alert === alert) return true;
-    if (alert && alertingCount() >= remote.limits.maxAlerting) return false;
+    if (alert && alertingCount() >= Math.min(MAX_ALERT_SEARCHES, remote.limits.maxAlerting)) return false;
     marketStoreActions.patchSearch(id, { alert }, alert ? '无法开启提醒' : '无法关闭提醒');
     return true;
   },
@@ -531,7 +531,7 @@ export const marketStoreActions = {
   /** Saves a deleted search again (Undo); it gets a new id. */
   restoreSearch(search: SavedSearch): void {
     if (remote.savedSearches.some((s) => s.id === search.id)) return;
-    const alert = search.alert && alertingCount() < remote.limits.maxAlerting;
+    const alert = search.alert && alertingCount() < Math.min(MAX_ALERT_SEARCHES, remote.limits.maxAlerting);
     marketStoreActions.saveSearch(search.name, search.filters, alert);
   },
   addPreset(preset: Omit<StatPreset, 'id' | 'builtIn'>): StatPreset {

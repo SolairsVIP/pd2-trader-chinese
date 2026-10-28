@@ -84,7 +84,7 @@ export function resizeRect(
 
 /** Panel frame: position/size, drag via [data-panel-drag], resize, z-order and keyboard policy. */
 export const Panel: React.FC<{ id: PanelId }> = ({ id }) => {
-  const { defs, state, gameFocused, commitRect } = useOverlayInternals();
+  const { defs, state, gameFocused, commitRect, marketPinned } = useOverlayInternals();
   const { bringToFront, closePanel } = useOverlay();
   const def = defs[id];
   const panel = state.panels[id];
@@ -95,7 +95,7 @@ export const Panel: React.FC<{ id: PanelId }> = ({ id }) => {
   const close = useCallback(() => closePanel(id), [closePanel, id]);
   const setRect = useCallback((r: Partial<OverlayRect>) => commitRect(id, r), [commitRect, id]);
   const rect = panel?.rect ?? { x: 0, y: 0, ...def.size };
-  const visible = isPanelVisible(def, panel, gameFocused);
+  const visible = isPanelVisible(def, panel, gameFocused, id === 'market' && marketPinned);
 
   const ctx = useMemo<PanelContextValue>(
     () => ({
