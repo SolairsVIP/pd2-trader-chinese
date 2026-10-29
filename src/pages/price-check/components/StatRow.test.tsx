@@ -174,7 +174,7 @@ describe('StatRow', () => {
       stat: { stat_id: 107, name: 'to Blizzard', skill: 'Blizzard', value: 3 },
       selected: new Set(['skill:item_singleskill{59}']),
     });
-    fireEvent.change(screen.getByLabelText('to Blizzard最小值'), { target: { value: '2' } });
+    fireEvent.change(screen.getByLabelText('暴风雪最小值'), { target: { value: '2' } });
     expect(updateFilter).toHaveBeenCalledWith('skill:item_singleskill{59}', 'min', '2');
   });
 

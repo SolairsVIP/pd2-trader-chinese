@@ -51,8 +51,8 @@ function Harness(props: {
   );
 }
 
-const submitButton = () => screen.getByRole('button', { name: /^(Post|Update|Queue Item)$/ }) as HTMLButtonElement;
-const noteInput = () => screen.getByPlaceholderText('Note...') as HTMLInputElement;
+const submitButton = () => screen.getByRole('button', { name: /^(发布挂单|更新挂单|加入上架队列)$/ }) as HTMLButtonElement;
+const noteInput = () => screen.getByPlaceholderText('价格备注…') as HTMLInputElement;
 const priceInput = () => screen.getByPlaceholderText('HR') as HTMLInputElement;
 
 beforeEach(() => {
@@ -68,16 +68,16 @@ afterEach(cleanup);
 describe('submit button', () => {
   it('reads Post for an unlisted item, Update for a listed one, Queue Item when queuing', () => {
     const { unmount } = render(<Harness />);
-    expect(submitButton().textContent).toBe('Post');
+    expect(submitButton().textContent).toBe('发布挂单');
     unmount();
 
     render(<Harness currentListings={[listingFor(shako)]} />);
-    expect(submitButton().textContent).toBe('Update');
+    expect(submitButton().textContent).toBe('更新挂单');
     cleanup();
 
     render(<Harness selectedItem={null}
       allowQueue />);
-    expect(submitButton().textContent).toBe('Queue Item');
+    expect(submitButton().textContent).toBe('加入上架队列');
   });
 
   it('stays disabled until a note or a positive price is entered', () => {
@@ -124,14 +124,14 @@ describe('submit button', () => {
 describe('note macros', () => {
   async function openSheet() {
     await act(async () => {
-      fireEvent.click(screen.getByLabelText('Note macros'));
+      fireEvent.click(screen.getByLabelText('备注模板'));
     });
   }
 
   it('counts only valid macros on the trigger badge', () => {
     macros = [{ label: 'a', text: 'x' }, { label: 'broken' }, { label: 'b', text: 'y' }];
     render(<Harness />);
-    expect(screen.getByLabelText('Note macros').textContent).toBe('2');
+    expect(screen.getByLabelText('备注模板').textContent).toBe('2');
   });
 
   it('applies a placeholder-free macro with the selected item name and closes the sheet', async () => {
@@ -139,10 +139,10 @@ describe('note macros', () => {
     render(<Harness />);
     await openSheet();
     await act(async () => {
-      fireEvent.click(screen.getByTitle('Use this macro'));
+      fireEvent.click(screen.getByTitle('使用此模板'));
     });
     expect(noteInput().value).toBe('WTS Harlequin Crest fast');
-    expect(screen.queryByText('Note Macros')).toBeNull();
+    expect(screen.queryByText('备注模板')).toBeNull();
     // Setting the note enables posting without a price.
     expect(submitButton().disabled).toBe(false);
   });
@@ -152,7 +152,7 @@ describe('note macros', () => {
     render(<Harness />);
     await openSheet();
     await act(async () => {
-      fireEvent.click(screen.getByTitle('Use this macro'));
+      fireEvent.click(screen.getByTitle('使用此模板'));
     });
     expect(noteInput().value).toBe('');
     const os = screen.getByPlaceholderText('os');
@@ -170,10 +170,10 @@ describe('note macros', () => {
       allowQueue />);
     await openSheet();
     await act(async () => {
-      fireEvent.click(screen.getByTitle('Use this macro'));
+      fireEvent.click(screen.getByTitle('使用此模板'));
     });
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /Apply/ }));
+      fireEvent.click(screen.getByRole('button', { name: /应用/ }));
     });
     expect(noteInput().value).toBe('{itemName} {os}os');
   });
@@ -184,13 +184,13 @@ describe('note macros', () => {
     fireEvent.change(noteInput(), { target: { value: 'keep' } });
     await openSheet();
     await act(async () => {
-      fireEvent.click(screen.getByTitle('Use this macro'));
+      fireEvent.click(screen.getByTitle('使用此模板'));
     });
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+      fireEvent.click(screen.getByRole('button', { name: '取消' }));
     });
     expect(screen.queryByPlaceholderText('os')).toBeNull();
-    expect(screen.queryByTitle('Use this macro')).not.toBeNull();
+    expect(screen.queryByTitle('使用此模板')).not.toBeNull();
     expect(noteInput().value).toBe('keep');
     expect(formRef.current!.getValues('note')).toBe('keep');
   });

@@ -426,7 +426,13 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
       const keyboardPanelOpen = Object.entries(stateRef.current.panels).some(
         ([pid, panel]) => panel?.open && defs[pid as PanelId].keyboard === 'onPointerDown',
       );
-      if (isKeyboardClaimed() && !keyboardPanelOpen) void releaseKeyboard({ focusGame });
+      const pending = pendingFocus.current;
+      const target = pending && stateRef.current.panels[pending.id];
+      const focusTransferPending = !!target?.open && target.payloadVersion === pending?.version;
+      if (isKeyboardClaimed() && !keyboardPanelOpen && !focusTransferPending) {
+        window.dispatchEvent(new Event('controller-deactivate'));
+        void releaseKeyboard({ focusGame });
+      }
     },
     [apply, defs],
   );
@@ -475,6 +481,7 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
       clearTimeout(blurTimer);
       blurTimer = undefined;
       if (focused || handoff) return;
+      window.dispatchEvent(new Event('controller-deactivate'));
       // A blur that preceded a tray action must never dismiss a newly opened panel. Capture
       // the exact open versions now, rather than closing whatever happens to be open later.
       const candidates = Object.entries(stateRef.current.panels)

@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import React, { useEffect } from 'react';
-import { act, cleanup, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
@@ -22,6 +22,7 @@ import { claimKeyboard, isKeyboardClaimed, releaseKeyboard } from './keyboard';
 import { syncRegionBeforeFocus } from './region';
 import { LAYOUT_STORAGE_KEY, savePanelRect } from './layout-storage';
 import type { PanelDef, PanelDefs, PanelId } from './types';
+import { clickControllerPointer } from '@/pages/price-check/controller-pointer';
 
 const game = vi.hoisted(() => ({
   state: { gameRect: { x: 100, y: 50, width: 1280, height: 720 }, gameFocused: true },
@@ -122,6 +123,7 @@ const def = (id: PanelId, extra: Partial<PanelDef> = {}): PanelDef => ({
 });
 
 const DEFS = {
+  controllerMenu: def('controllerMenu', { closeOnBlur: true }),
   itemSearch: def('itemSearch', { placement: 'gameRight', keepMounted: true }),
   quickList: def('quickList', { placement: 'cursor' }),
   currency: def('currency', { placement: 'screenCenter', persist: true }),
@@ -158,6 +160,68 @@ function mount() {
 
 const frame = (id: PanelId) => document.querySelector<HTMLElement>(`[data-panel-id="${id}"]`);
 const shown = (id: PanelId) => !!frame(id) && frame(id)!.style.display !== 'none';
+
+it('keeps controller focus while switching from a menu to the corruption notice', async () => {
+  vi.mocked(isKeyboardClaimed).mockReturnValue(true);
+  mount();
+  act(() => api.openPanel('settings'));
+  act(() => {
+    api.openPanel('corruptedZone', undefined, { focus: true });
+    api.closePanel('settings', { focusGame: false });
+  });
+  expect(releaseKeyboard).not.toHaveBeenCalled();
+  await act(async () => {});
+  expect(claimKeyboard).toHaveBeenCalled();
+  vi.mocked(isKeyboardClaimed).mockReturnValue(false);
+});
+
+it('deactivates the controller cursor when the user leaves the overlay', () => {
+  const onDeactivate = vi.fn();
+  window.addEventListener('controller-deactivate', onDeactivate);
+  try {
+    mount();
+    act(() => focus.onChange!(false, false));
+    expect(onDeactivate).toHaveBeenCalledTimes(1);
+    act(() => focus.onChange!(false, true));
+    expect(onDeactivate).toHaveBeenCalledTimes(1);
+  } finally { window.removeEventListener('controller-deactivate', onDeactivate); }
+});
+
+it('deactivates the controller cursor after closing the last interactive panel while the corruption notice remains open', () => {
+  const onDeactivate = vi.fn();
+  window.addEventListener('controller-deactivate', onDeactivate);
+  vi.mocked(isKeyboardClaimed).mockReturnValue(true);
+  try {
+    mount();
+    act(() => {
+      api.openPanel('corruptedZone');
+      api.openPanel('market');
+    });
+    act(() => api.closePanel('market'));
+    expect(api.isOpen('corruptedZone')).toBe(true);
+    expect(releaseKeyboard).toHaveBeenCalledWith({ focusGame: true });
+    expect(onDeactivate).toHaveBeenCalledTimes(1);
+  } finally {
+    window.removeEventListener('controller-deactivate', onDeactivate);
+    vi.mocked(isKeyboardClaimed).mockReturnValue(false);
+  }
+});
+
+it('deactivates the controller cursor when a real mouse click returns focus to the game', () => {
+  const onDeactivate = vi.fn();
+  window.addEventListener('controller-deactivate', onDeactivate);
+  vi.mocked(isKeyboardClaimed).mockReturnValue(true);
+  try {
+    mount();
+    act(() => api.openPanel('market'));
+    fireEvent.pointerDown(screen.getByTestId('button-market'));
+    expect(releaseKeyboard).toHaveBeenCalled();
+    expect(onDeactivate).toHaveBeenCalledTimes(1);
+  } finally {
+    window.removeEventListener('controller-deactivate', onDeactivate);
+    vi.mocked(isKeyboardClaimed).mockReturnValue(false);
+  }
+});
 
 beforeEach(() => {
   tauri.on = false;
@@ -449,6 +513,20 @@ describe('OverlayProvider', () => {
     });
     expect(releaseKeyboard).toHaveBeenCalledTimes(1);
     expect(claimKeyboard).toHaveBeenCalledTimes(1);
+  });
+
+  it('focuses a controller-selected field and accepts keyboard text without releasing focus', () => {
+    mount();
+    act(() => api.openPanel('chat'));
+    vi.mocked(isKeyboardClaimed).mockReturnValue(true);
+    const input = screen.getByTestId('field-chat') as HTMLInputElement;
+    const point = vi.spyOn(document, 'elementFromPoint').mockReturnValue(input);
+    act(() => clickControllerPointer(frame('chat')!, { x: 10, y: 10 }));
+    expect(document.activeElement).toBe(input);
+    fireEvent.change(input, { target: { value: 'test message' } });
+    expect(input.value).toBe('test message');
+    expect(releaseKeyboard).not.toHaveBeenCalled();
+    point.mockRestore();
   });
 
   it('a click outside a text field leaves an unclaimed keyboard alone', () => {

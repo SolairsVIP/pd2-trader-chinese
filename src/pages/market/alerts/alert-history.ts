@@ -20,6 +20,7 @@ function scheduleExpiry(): void {
 }
 let owner: string | undefined;
 let live: MarketAlert[] = [];
+const clearListeners = new Set<(token: string) => void>();
 export function rememberLiveAlerts(token: string | undefined, alerts: readonly MarketAlert[]): void {
   if (owner !== token) { owner = token; live = []; }
   if (token) live = unexpiredAlerts(mergeAlertHistory(live, alerts)).slice(0, 500);
@@ -27,6 +28,12 @@ export function rememberLiveAlerts(token: string | undefined, alerts: readonly M
 }
 export function clearLiveAlerts(token: string | undefined): void {
   if (token && owner === token) { live = []; scheduleExpiry(); }
+  if (token) clearListeners.forEach((listener) => listener(token));
+}
+/** Notify the live-popup queue when the user clears this account's history. */
+export function subscribeAlertHistoryCleared(listener: (token: string) => void): () => void {
+  clearListeners.add(listener);
+  return () => { clearListeners.delete(listener); };
 }
 export function liveAlertHistory(token: string | undefined): MarketAlert[] {
   return token && owner === token ? unexpiredAlerts(live) : [];

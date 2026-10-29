@@ -55,7 +55,7 @@ describe('DelistHandler / useDelist', () => {
     render(<DelistHandler />);
     await delistItem(RAW);
     expect(deleteMarketListing).toHaveBeenCalledWith('L1');
-    expect(showToast).toHaveBeenCalledWith({ title: 'Delist', description: 'Removed Item 1 listing.' });
+    expect(showToast).toHaveBeenCalledWith({ title: '下架物品', description: '已将「Item 1」从市场下架。' });
     expect(overlay.openPanel).not.toHaveBeenCalled();
   });
 

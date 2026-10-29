@@ -10,6 +10,7 @@ import type { PanelPayloads } from './types';
 
 const DEFAULT_TITLE = 'PD2 Trader';
 const TOAST_MARGIN = 16;
+const MARKET_ALERT_TOASTER = 'market-alert-realtime';
 
 export type ToastPayload = string | GenericToastPayload | CustomToastPayload;
 
@@ -109,6 +110,36 @@ export function showToast(payload: ToastPayload): void {
   });
 }
 
+/** Reports Sonner's actual dismissal so queued alerts do not advance while a toast is paused. */
+export function showMarketAlertToast(payload: CustomToastPayload, onClose: () => void): () => void {
+  let finished = false;
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    onClose();
+  };
+  const action = payload.action;
+  const id = toast(payload.title || DEFAULT_TITLE, {
+    // Let Sonner allocate a fresh id each time: a canceled instance may still be animating out.
+    toasterId: MARKET_ALERT_TOASTER,
+    description: payload.description,
+    duration: payload.duration,
+    closeButton: true,
+    action: action ? { label: action.label, onClick: () => { void runToastAction(action); finish(); } } : undefined,
+    onAutoClose: finish,
+    onDismiss: finish,
+  });
+  return () => {
+    finished = true;
+    toast.dismiss(id);
+  };
+}
+
+/** Dismiss only the summary belonging to a particular market-alert stream. */
+export function dismissMarketAlertSummary(id: string): void {
+  toast.dismiss(id);
+}
+
 export interface ConfirmToastOptions {
   title: string;
   description?: string;
@@ -178,10 +209,35 @@ export function ToastLayer() {
       (dockShown ? dock.width + TOAST_MARGIN / 2 : TOAST_MARGIN),
     bottom: Math.max(0, window.innerHeight - (anchor.y + anchor.height)) + TOAST_MARGIN,
   };
+  const marketOffset = {
+    left: Math.max(0, Math.min(anchor.x, window.innerWidth - 356 - TOAST_MARGIN * 2)) + TOAST_MARGIN,
+    top: Math.max(0, Math.min(anchor.y, window.innerHeight - 96 - TOAST_MARGIN * 2)) + TOAST_MARGIN,
+  };
+  const classNames = {
+    // pointer-events-auto: toasts stay clickable while a modal Radix layer sets body { pointer-events: none }
+    toast:
+      'group toast pointer-events-auto !rounded-lg !border backdrop-blur-md !gap-3 !py-3.5 !pl-4 !pr-4 ' +
+      '!shadow-[inset_3px_0_0_var(--toast-accent,var(--glow)),var(--shadow-panel)]',
+    // sonner always applies `default` too, so the neutral accent is the var() fallback instead
+    success: '[--toast-accent:var(--success)]',
+    error: '[--toast-accent:var(--destructive)]',
+    warning: '[--toast-accent:var(--warning)]',
+    info: '[--toast-accent:var(--info)]',
+    loading: '[--toast-accent:var(--muted-foreground)]',
+    title: '!text-sm !font-semibold !leading-tight tracking-tight',
+    description: '!text-[13px] !leading-snug !text-popover-foreground/80',
+    icon: '!size-4 text-[var(--toast-accent,var(--glow))] [&>svg]:!size-4',
+    actionButton: ACTION_BUTTON_CLASS,
+    cancelButton: CANCEL_BUTTON_CLASS,
+    closeButton:
+      '!border-border !bg-popover !text-muted-foreground transition-colors duration-(--dur-fast) hover:!bg-accent hover:!text-accent-foreground',
+  };
 
   return (
+    <>
     <Toaster
       position="bottom-right"
+      visibleToasts={3}
       richColors
       closeButton
       gap={10}
@@ -189,28 +245,24 @@ export function ToastLayer() {
       mobileOffset={offset}
       style={TOAST_THEME_VARS}
       icons={{ loading: <Loader2 className="size-4 animate-spin text-muted-foreground" /> }}
-      toastOptions={{
-        classNames: {
-          // pointer-events-auto: toasts stay clickable while a modal Radix layer sets body { pointer-events: none }
-          toast:
-            'group toast pointer-events-auto !rounded-lg !border backdrop-blur-md !gap-3 !py-3.5 !pl-4 !pr-4 ' +
-            '!shadow-[inset_3px_0_0_var(--toast-accent,var(--glow)),var(--shadow-panel)]',
-          // sonner always applies `default` too, so the neutral accent is the var() fallback instead
-          success: '[--toast-accent:var(--success)]',
-          error: '[--toast-accent:var(--destructive)]',
-          warning: '[--toast-accent:var(--warning)]',
-          info: '[--toast-accent:var(--info)]',
-          loading: '[--toast-accent:var(--muted-foreground)]',
-          title: '!text-sm !font-semibold !leading-tight tracking-tight',
-          description: '!text-[13px] !leading-snug !text-popover-foreground/80',
-          icon: '!size-4 text-[var(--toast-accent,var(--glow))] [&>svg]:!size-4',
-          actionButton: ACTION_BUTTON_CLASS,
-          cancelButton: CANCEL_BUTTON_CLASS,
-          closeButton:
-            '!border-border !bg-popover !text-muted-foreground transition-colors duration-(--dur-fast) hover:!bg-accent hover:!text-accent-foreground',
-        },
-      }}
+      toastOptions={{ classNames }}
     />
+    <Toaster
+      id={MARKET_ALERT_TOASTER}
+      position="top-left"
+      containerAriaLabel="市场提醒"
+      hotkey={['altKey', 'KeyM']}
+      expand
+      visibleToasts={3}
+      richColors
+      closeButton
+      gap={10}
+      offset={marketOffset}
+      mobileOffset={marketOffset}
+      style={{ ...TOAST_THEME_VARS, '--width': 'min(356px, calc(100vw - 32px))' } as React.CSSProperties}
+      toastOptions={{ classNames: { ...classNames, toast: `${classNames.toast} !max-h-24`, description: `${classNames.description} line-clamp-2` } }}
+    />
+    </>
   );
 }
 

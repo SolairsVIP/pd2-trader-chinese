@@ -5,12 +5,14 @@ import { toast } from 'sonner';
 import { openUrl } from '@/lib/browser-opener';
 import { installUpdateAndRelaunch } from '@/lib/updater';
 import { ToastActionType } from '@/common/types/Events';
-import { ToastLayer, confirmToast, setToastBridge, showToast, undoToast } from './toast';
+import { ToastLayer, confirmToast, dismissMarketAlertSummary, setToastBridge, showMarketAlertToast, showToast, undoToast } from './toast';
 
 vi.mock('@tauri-apps/api/core', () => ({ isTauri: vi.fn(() => false), invoke: vi.fn() }));
 vi.mock('@/lib/browser-opener', () => ({ openUrl: vi.fn() }));
 vi.mock('@/lib/updater', () => ({ installUpdateAndRelaunch: vi.fn() }));
 vi.mock('@/lib/themes', () => ({ useThemeMode: () => 'dark' }));
+const toastSettings = vi.hoisted(() => ({ realtime: false }));
+vi.mock('@/hooks/useOptions', () => ({ useOptions: () => ({ settings: { marketAlertRealtime: toastSettings.realtime } }) }));
 const overlay = vi.hoisted(() => ({ gameFocused: true, dockOpen: false }));
 vi.mock('./OverlayProvider', () => ({
   useOverlay: () => ({ gameRect: { x: 100, y: 50, width: 1280, height: 720 }, gameFocused: overlay.gameFocused }),
@@ -54,6 +56,7 @@ beforeEach(() => {
   window.innerHeight = 1080;
   overlay.gameFocused = true;
   overlay.dockOpen = false;
+  toastSettings.realtime = false;
 });
 
 afterEach(async () => {
@@ -67,6 +70,15 @@ afterEach(async () => {
 });
 
 describe('ToastLayer', () => {
+  it('keeps the usual limit and collapsed layout for ordinary toasts in realtime alert mode', async () => {
+    toastSettings.realtime = true;
+    await renderLayer();
+    await show(() => { for (let i = 0; i < 4; i++) showToast(`实时提醒 ${i}`); });
+    const toasts = document.querySelectorAll('[data-sonner-toast]');
+    expect(toasts).toHaveLength(4);
+    expect(Array.from(toasts).filter((item) => item.getAttribute('data-visible') === 'true')).toHaveLength(3);
+    expect(Array.from(toasts).every((item) => item.getAttribute('data-expanded') === 'false')).toBe(true);
+  });
   it('pins the toaster to the bottom-right corner of the game rect', async () => {
     await renderLayer();
     await show(() => showToast('hello'));
@@ -93,6 +105,100 @@ describe('ToastLayer', () => {
     const toaster = document.querySelector<HTMLElement>('[data-sonner-toaster]')!;
     expect(toaster.style.getPropertyValue('--offset-right')).toBe('16px');
     expect(toaster.style.getPropertyValue('--offset-bottom')).toBe('16px');
+  });
+});
+
+describe('realtime market toast', () => {
+  const action = { label: '查看提醒', type: ToastActionType.OPEN_MARKET_PANEL, data: { tab: 'alerts' } };
+
+  it('uses a separate expanded stack and waits for Sonner to finish the full visible duration', async () => {
+    const done = vi.fn();
+    await renderLayer();
+    await show(() => {
+      showToast('ordinary notification');
+      showMarketAlertToast({ id: 'market-test-1', title: '市场提醒', description: 'market match', duration: 10_000, action }, done);
+    });
+    const market = toastEl('market match')!;
+    const ordinary = toastEl('ordinary notification')!;
+    expect(market.closest('[data-sonner-toaster]')).not.toBe(ordinary.closest('[data-sonner-toaster]'));
+    expect(market.closest('[data-sonner-toaster]')?.getAttribute('data-y-position')).toBe('top');
+    expect(market.getAttribute('data-expanded')).toBe('true');
+    await act(async () => fireEvent.keyDown(document, { altKey: true, code: 'KeyT' }));
+    expect(document.activeElement).toBe(ordinary.closest('[data-sonner-toaster]'));
+    await advance(9_999);
+    expect(done).not.toHaveBeenCalled();
+    await advance(1);
+    expect(done).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not advance while the user hovers, and canceling it leaves ordinary toasts alone', async () => {
+    const done = vi.fn();
+    let cancel = () => {};
+    await renderLayer();
+    await show(() => {
+      showToast({ title: 'Other', description: 'keep me', duration: 60_000 });
+      cancel = showMarketAlertToast({ id: 'market-test-2', description: 'paused match', duration: 10_000, action }, done);
+    });
+    const container = toastEl('paused match')!.closest<HTMLElement>('[data-sonner-toaster]')!;
+    await act(async () => fireEvent.mouseEnter(container));
+    await advance(20_000);
+    expect(done).not.toHaveBeenCalled();
+    await act(async () => fireEvent.mouseLeave(container));
+    await advance(9_999);
+    expect(done).not.toHaveBeenCalled();
+    await advance(1);
+    expect(done).toHaveBeenCalledTimes(1);
+    await show(() => {
+      cancel = showMarketAlertToast({ id: 'market-test-cancel', description: 'cancel me', duration: 10_000, action }, done);
+    });
+    cancel();
+    await advance(1_000);
+    expect(done).toHaveBeenCalledTimes(1);
+    expect(toastEl('keep me')).not.toBeNull();
+  });
+
+  it('keeps a requeued alert alive if its previous instance is still being dismissed', async () => {
+    const firstDone = vi.fn();
+    const secondDone = vi.fn();
+    let cancel = () => {};
+    const payload = { id: 'same-alert', description: 'resized match', duration: 10_000, action };
+    await renderLayer();
+    await show(() => { cancel = showMarketAlertToast(payload, firstDone); });
+    act(() => {
+      cancel();
+      showMarketAlertToast(payload, secondDone);
+    });
+    await advance(1_000);
+    expect(screen.getAllByText('resized match').some((item) => item.closest('[data-sonner-toast]')?.getAttribute('data-removed') === 'false')).toBe(true);
+    expect(firstDone).not.toHaveBeenCalled();
+    expect(secondDone).not.toHaveBeenCalled();
+    await advance(9_000);
+    expect(secondDone).toHaveBeenCalledTimes(1);
+  });
+
+  it('advances the queue when a user opens the alert history', async () => {
+    const done = vi.fn();
+    const openMarket = vi.fn();
+    setToastBridge({ openChat: vi.fn(), openMarket });
+    await renderLayer();
+    await show(() => showMarketAlertToast({ id: 'market-test-3', description: 'open match', action }, done));
+    await click(within(toastEl('open match')!).getByText('查看提醒'));
+    expect(openMarket).toHaveBeenCalledWith({ tab: 'alerts' });
+    expect(done).toHaveBeenCalledTimes(1);
+    await advance(1_000);
+    expect(done).toHaveBeenCalledTimes(1);
+  });
+
+  it('dismisses a specific market summary without dismissing ordinary notifications', async () => {
+    await renderLayer();
+    await show(() => {
+      showToast({ id: 'summary-for-clear', description: 'old summary', duration: 60_000, action });
+      showToast({ title: 'Other', description: 'unrelated toast', duration: 60_000 });
+    });
+    act(() => dismissMarketAlertSummary('summary-for-clear'));
+    await advance(1_000);
+    expect(toastEl('old summary')?.getAttribute('data-removed') ?? 'true').toBe('true');
+    expect(toastEl('unrelated toast')).not.toBeNull();
   });
 });
 

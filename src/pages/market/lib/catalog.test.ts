@@ -16,14 +16,14 @@ describe('catalog', () => {
     expect(ITEM_TYPES).toHaveLength(67);
     const byLabel = Object.fromEntries(ITEM_TYPES.map((t) => [t.label, t.code]));
     expect(byLabel).toMatchObject({
-      Circlet: 'circ',
-      Armor: 'tors',
-      'Barbarian Helm': 'phlm',
-      'Sorceress Orb': 'orb',
-      Jewel: 'jewl',
-      Jewelry: '{"$in": ["amul", "ring", "amus"]}',
-      Charm: '{"$in": ["scha", "mcha", "lcha", "torc"]}',
-      'Fist Weapon': '{"$in": ["h2h", "h2h2"]}',
+      '头环': 'circ',
+      '护甲': 'tors',
+      '野蛮人头盔': 'phlm',
+      '女巫法球': 'orb',
+      '珠宝': 'jewl',
+      '首饰': '{"$in": ["amul", "ring", "amus"]}',
+      '护身符': '{"$in": ["scha", "mcha", "lcha", "torc"]}',
+      '拳套': '{"$in": ["h2h", "h2h2"]}',
     });
   });
 
@@ -38,7 +38,7 @@ describe('catalog', () => {
       baseCode: '{"$in": ["r30", "r30s"]}',
     });
     expect(findBaseOption('nope')).toBeNull();
-    expect(findTypeOption('ring')?.label).toBe('Jewelry');
+    expect(findTypeOption('ring')?.label).toBe('首饰');
     expect(optionCodes('{"$in": ["a", "b"]}')).toEqual(['a', 'b']);
     expect(optionCodes('circ')).toEqual(['circ']);
   });
@@ -46,11 +46,11 @@ describe('catalog', () => {
   it('suggests item names: prefix first, then word starts, then substrings', () => {
     const names = itemNameOptions('shako').map((o) => o.name);
     expect(names[0]).toBe('Shako');
-    expect(itemNameOptions('harlequin')).toEqual([{ name: 'Harlequin Crest', quality: 'Unique', slot: 'Helm' }]);
+    expect(itemNameOptions('harlequin')).toEqual([{ name: 'Harlequin Crest', quality: 'Unique', slot: '头盔' }]);
     expect(itemNameOptions('enigma')[0]).toEqual({ name: 'Enigma', quality: 'Runeword' });
     expect(itemNameOptions('ber')[0]).toMatchObject({ name: 'Ber Rune', quality: 'Base' });
-    expect(itemNameOptions('stone of jordan')[0].slot).toBe('Ring');
-    expect(itemNameOptions('mage plate')[0].slot).toBe('Body Armor');
+    expect(itemNameOptions('stone of jordan')[0].slot).toBe('戒指');
+    expect(itemNameOptions('mage plate')[0].slot).toBe('护甲');
     expect(itemNameOptions('enigma')[0]).not.toHaveProperty('slot');
     expect(itemNameOptions('  ')).toEqual([]);
     expect(itemNameOptions('a', 5)).toHaveLength(5);
@@ -63,7 +63,7 @@ describe('catalog', () => {
       label: 'Faster Cast Rate',
       rolled: true,
     });
-    expect(option('item_numsockets')).toEqual({ value: 'item_numsockets', label: 'Sockets', rolled: false });
+    expect(option('item_numsockets')).toEqual({ value: 'item_numsockets', label: '孔数', rolled: false });
     // Not a property key: labelled by the property it rolls
     expect(option('dmg-max')).toEqual({ value: 'dmg-max', label: 'to Maximum Damage', rolled: false });
     // No site property: the modifier's own label

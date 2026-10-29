@@ -44,19 +44,19 @@ describe('formatUnitPrice', () => {
 
 describe('formatDuration', () => {
   it('shows minutes only under an hour', () => {
-    expect(formatDuration(0)).toBe('0m');
-    expect(formatDuration(59)).toBe('59m');
+    expect(formatDuration(0)).toBe('0分');
+    expect(formatDuration(59)).toBe('59分');
   });
 
   it('shows hours with zero-padded minutes from one hour', () => {
-    expect(formatDuration(60)).toBe('1h00');
-    expect(formatDuration(65)).toBe('1h05');
-    expect(formatDuration(150)).toBe('2h30');
+    expect(formatDuration(60)).toBe('1小时');
+    expect(formatDuration(65)).toBe('1小时5分');
+    expect(formatDuration(150)).toBe('2小时30分');
   });
 
   it('rounds fractional minutes', () => {
-    expect(formatDuration(12.4)).toBe('12m');
-    expect(formatDuration(61.6)).toBe('1h02');
+    expect(formatDuration(12.4)).toBe('12分');
+    expect(formatDuration(61.6)).toBe('1小时2分');
   });
 });
 

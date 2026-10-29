@@ -189,6 +189,7 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
       const existingQueued = pendingListings.find((p) => JSON.stringify(p.item) === JSON.stringify(item));
       if (existingQueued) {
         // Switch to queued tab if item is already queued
+        resetAllState();
         setActiveTab('queued');
       } else {
         // Always search for matching items - queued items are handled separately
@@ -246,15 +247,17 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
   }, [authData, settings]);
 
   const fetchAllListings = useCallback(async () => {
-    if (!allListingsQuery) return;
+    if (!allListingsQuery) return null;
     try {
       const result = await getMarketListings(allListingsQuery);
       setAllListings(result.data);
       setTotalListingsCount(result.total);
+      return result.total;
     } catch (err) {
       console.error('Failed to fetch all listings:', err);
       setAllListings([]);
       setTotalListingsCount(0);
+      return null;
     }
   }, [allListingsQuery, getMarketListings]);
 
@@ -529,8 +532,8 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
     if (!selectedItem && item) {
       setSubmitLoading(true);
       // Check listing count before queuing
-      await fetchAllListings();
-      if (totalListingsCount >= 50) {
+      const refreshedTotal = await fetchAllListings();
+      if ((refreshedTotal ?? totalListingsCount) >= 50) {
         const warningToast: GenericToastPayload = {
           title: '挂单数量已达上限',
           description:
@@ -748,7 +751,8 @@ const ListItemShortcutForm: React.FC<ListItemShortcutFormProps> = ({ item }) => 
   // Otherwise default to Manage tab
   useEffect(() => {
     if (item && isStashItem(item)) {
-      setActiveTab('list-item');
+      const alreadyQueued = pendingListingsRef.current.some((p) => JSON.stringify(p.item) === JSON.stringify(item));
+      setActiveTab(alreadyQueued ? 'queued' : 'list-item');
     } else {
       setActiveTab('listed-items');
     }

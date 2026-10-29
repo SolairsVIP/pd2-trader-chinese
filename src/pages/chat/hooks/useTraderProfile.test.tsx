@@ -40,20 +40,20 @@ describe('traderPresence', () => {
   it('is "in game" while the newest in-game stamp is under 5 minutes old', () => {
     const presence = traderPresence([listing('a', { ingame: 30 }), listing('b', { ingame: 3, online: 1 })], NOW);
     expect(presence).toEqual({ kind: 'ingame', at: NOW - 3 * 60_000 });
-    expect(presenceLabel(presence, NOW)).toBe('In game now');
+    expect(presenceLabel(presence, NOW)).toBe('当前游戏中');
   });
 
   it('otherwise reads the newest in-game or online stamp: online within the hour, else last seen', () => {
     const online = traderPresence([listing('a', { ingame: 600, online: 12 }), listing('b', { online: 40 })], NOW);
-    expect(presenceLabel(online, NOW)).toBe('Online 12m ago');
+    expect(presenceLabel(online, NOW)).toBe('在线（12 分钟前）');
     const seen = traderPresence([listing('a', { ingame: 3 * 24 * 60 + 5, online: 4 * 24 * 60 })], NOW);
-    expect(presenceLabel(seen, NOW)).toBe('Last seen 3d ago');
+    expect(presenceLabel(seen, NOW)).toBe('最后出现于 3 天前');
   });
 
   it('is unknown without listings or stamps (bad dates ignored)', () => {
     expect(traderPresence([], NOW)).toEqual({ kind: 'unknown' });
     const bad = { _id: 'x', user_last_ingame: 'not a date' } as unknown as MarketListingEntry;
-    expect(presenceLabel(traderPresence([bad, listing('y')], NOW), NOW)).toBe('Unknown');
+    expect(presenceLabel(traderPresence([bad, listing('y')], NOW), NOW)).toBe('未知');
   });
 });
 

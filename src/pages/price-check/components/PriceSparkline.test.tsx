@@ -41,18 +41,18 @@ describe('PriceSparkline', () => {
     const { promise, resolve } = Promise.withResolvers<PriceHistoryResponse>();
     vi.mocked(fetchPriceHistory).mockReturnValue(promise);
     render(<PriceSparkline query={query()} />);
-    expect(screen.getByText('Loading price history...')).not.toBeNull();
+    expect(screen.getByText('正在加载价格历史记录……')).not.toBeNull();
 
     resolve(response([1, 2]));
     expect(await screen.findByRole('img')).not.toBeNull();
-    expect(screen.queryByText('Loading price history...')).toBeNull();
+    expect(screen.queryByText('正在加载价格历史记录……')).toBeNull();
   });
 
   it('shows a positive change in green with a leading plus', async () => {
     vi.mocked(fetchPriceHistory).mockResolvedValue(response([2, 3, 2.5]));
     render(<PriceSparkline query={query()} />);
     const svg = await screen.findByRole('img');
-    expect(svg.getAttribute('aria-label')).toBe('Price over the last 3 days with sales: 2.00 to 2.50 HR');
+    expect(svg.getAttribute('aria-label')).toBe('有成交记录的最近 3 天价格：2.00 至 2.50 HR');
     const change = screen.getByText('+25.0%');
     expect(change.className).toContain('text-success');
     expect(change.getAttribute('title')).toBe('2.00 → 2.50 HR');
@@ -78,7 +78,7 @@ describe('PriceSparkline', () => {
   it('drops zero-price days before deciding whether there is a trend', async () => {
     vi.mocked(fetchPriceHistory).mockResolvedValue(response([0, 3, 0]));
     render(<PriceSparkline query={query()} />);
-    expect(await screen.findByText('Not enough sales in the last 30 days for a trend.')).not.toBeNull();
+    expect(await screen.findByText('过去 30 天的成交数据不足，无法显示走势。')).not.toBeNull();
   });
 
   it('computes the change from the first and last non-zero days', async () => {
@@ -90,7 +90,7 @@ describe('PriceSparkline', () => {
   it('shows the empty message when the lookup fails', async () => {
     vi.mocked(fetchPriceHistory).mockResolvedValue(null);
     render(<PriceSparkline query={query()} />);
-    expect(await screen.findByText('Not enough sales in the last 30 days for a trend.')).not.toBeNull();
+    expect(await screen.findByText('过去 30 天的成交数据不足，无法显示走势。')).not.toBeNull();
   });
 
   it('caches a successful lookup across mounts for the same item and mode', async () => {
@@ -122,7 +122,7 @@ describe('PriceSparkline', () => {
     vi.mocked(fetchPriceHistory).mockResolvedValueOnce(null).mockResolvedValueOnce(response([1, 3]));
     const q = query();
     const first = render(<PriceSparkline query={q} />);
-    await screen.findByText('Not enough sales in the last 30 days for a trend.');
+    await screen.findByText('过去 30 天的成交数据不足，无法显示走势。');
     first.unmount();
 
     render(<PriceSparkline query={q} />);

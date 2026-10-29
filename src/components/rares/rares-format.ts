@@ -3,6 +3,7 @@
  * Same wording as the pd2trader.com Net Worth view (client/src/components/wealth/rares/raresFormat.js).
  */
 import type { AppraisedStat, CraftRecipe, RareAppraisal, RareSlot, Stars, Verdict } from '@/lib/rare-appraisal-api';
+import { localizeItemType } from '@/lib/localize-item-type';
 
 /** Season the model's asking prices come from (shown on the "est." hint). */
 export const MODEL_SEASON = 'S13';
@@ -245,7 +246,9 @@ export const isLowValue = (r: RareAppraisal): boolean => r.verdict === 'check' &
 /** "War Belt · Belt · Shared 1" (row line; position is in the detail); the slot is skipped when it equals the base name (Ring, Jewel). */
 export function locationText(rare: RareAppraisal): string {
   const slot = SLOT_LABELS[rare.slot] ?? rare.slot;
-  return [rare.baseName, slot === rare.baseName ? null : slot, rare.tab].filter(Boolean).join(' · ');
+  return [rare.baseName, slot === localizeItemType(rare.baseName) ? null : slot, rare.tab]
+    .filter(Boolean)
+    .join(' · ');
 }
 
 /** "Shared 1 · col 5, row 1" (raw 0-based PD2 grid coordinates shown 1-based); null without a tab or position. */

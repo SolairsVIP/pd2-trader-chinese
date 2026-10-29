@@ -54,7 +54,7 @@ function renderPill(props: Partial<React.ComponentProps<typeof RareAppraisalPill
 describe('RareAppraisalPillSkeleton', () => {
   it('announces that the rare is being appraised', () => {
     const { container } = render(<RareAppraisalPillSkeleton />);
-    expect(container.textContent).toContain('Appraising rare...');
+    expect(container.textContent).toContain('正在评估稀有物品……');
     expect(container.querySelector('[aria-busy="true"]')).not.toBeNull();
   });
 });
@@ -62,18 +62,18 @@ describe('RareAppraisalPillSkeleton', () => {
 describe('RareAppraisalPill', () => {
   it('shows the verdict, the rank within the slot and the usual asking band', () => {
     const { container } = renderPill();
-    expect(screen.getByText('Keep')).not.toBeNull();
-    expect(screen.getByText('top 8%')).not.toBeNull();
-    expect(screen.getByText('of rings')).not.toBeNull();
+    expect(screen.getByText('建议保留')).not.toBeNull();
+    expect(screen.getByText('排名前 8%')).not.toBeNull();
+    expect(screen.getByText('件戒指')).not.toBeNull();
     expect(container.textContent).toContain('1.5–3.2 HR');
-    expect(container.textContent).toContain('usually listed');
+    expect(container.textContent).toContain('常见挂单价');
   });
 
   it('reads a low rank as "bottom" and omits the band without market data', () => {
     const { container } = renderPill({ appraisal: appraisal({ verdict: 'vendor', rank: 0.12, market: null }) });
-    expect(screen.getByText('Vendor')).not.toBeNull();
-    expect(screen.getByText('bottom 12%')).not.toBeNull();
-    expect(container.textContent).not.toContain('usually listed');
+    expect(screen.getByText('建议卖商店')).not.toBeNull();
+    expect(screen.getByText('排名后 12%')).not.toBeNull();
+    expect(container.textContent).not.toContain('常见挂单价');
   });
 
   it('collapses a band whose ends format the same to a single value', () => {
@@ -86,44 +86,44 @@ describe('RareAppraisalPill', () => {
 
   it('adds a hardcore caveat tooltip only in hardcore mode', () => {
     const { container, unmount } = renderPill();
-    expect(container.querySelector('[title^="Hardcore"]')).toBeNull();
+    expect(container.querySelector('[title^="专家模式"]')).toBeNull();
     unmount();
 
     const hc = renderPill({ hardcore: true });
-    const pill = hc.container.querySelector('[title^="Hardcore"]');
-    expect(pill?.getAttribute('title')).toContain('price model and stars from softcore data');
+    const pill = hc.container.querySelector('[title^="专家模式"]');
+    expect(pill?.getAttribute('title')).toContain('价格模型和星级建议基于普通模式数据');
   });
 
   it('hovering opens the detail popover with the item title and slot', () => {
     renderPill({ title: 'Doom Coil' });
     expect(screen.queryByText('Doom Coil')).toBeNull();
-    fireEvent.mouseEnter(screen.getByText('top 8%').closest('.group')!.parentElement!);
+    fireEvent.mouseEnter(screen.getByText('排名前 8%').closest('.group')!.parentElement!);
     expect(screen.getByText('Doom Coil')).not.toBeNull();
-    expect(screen.getByText(/Ring · est\. from S13 listings/)).not.toBeNull();
+    expect(screen.getByText(/戒指 · 估价依据：S13 赛季挂单/)).not.toBeNull();
   });
 });
 
 describe('RareAppraisalPill crafted', () => {
   it('shows no crafted chips for rares', () => {
     renderPill();
-    expect(screen.queryByText(/craft/i)).toBeNull();
-    expect(screen.queryByText('Low confidence')).toBeNull();
+    expect(screen.queryByText(/手工制作/)).toBeNull();
+    expect(screen.queryByText('低可信度')).toBeNull();
   });
 
   it('shows the recipe chip without a low-confidence badge for a normal-confidence craft', () => {
     renderPill({ appraisal: appraisal({ quality: 'Crafted', recipe: 'caster', confidence: 'normal' }) });
-    expect(screen.getByText('Caster craft')).not.toBeNull();
-    expect(screen.queryByText('Low confidence')).toBeNull();
+    expect(screen.getByText('施法者手工制作')).not.toBeNull();
+    expect(screen.queryByText('低可信度')).toBeNull();
   });
 
   it('flags low confidence and falls back to "Crafted" without a recipe', () => {
     renderPill({ appraisal: appraisal({ quality: 'Crafted', recipe: null, confidence: 'low' }) });
-    expect(screen.getByText('Crafted')).not.toBeNull();
-    expect(screen.getByText('Low confidence')).not.toBeNull();
+    expect(screen.getByText('手工制作')).not.toBeNull();
+    expect(screen.getByText('低可信度')).not.toBeNull();
   });
 
   it('announces a crafted appraisal in the skeleton', () => {
     const { container } = render(<RareAppraisalPillSkeleton crafted />);
-    expect(container.textContent).toContain('Appraising crafted item...');
+    expect(container.textContent).toContain('正在评估手工制作物品……');
   });
 });

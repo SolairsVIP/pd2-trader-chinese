@@ -68,16 +68,16 @@ const market = (over: Partial<NonNullable<RareAppraisal['market']>> = {}): NonNu
 
 describe('rankText', () => {
   it('reads high ranks as "top" and low ranks as "bottom"', () => {
-    expect(rankText(0.92)).toBe('top 8%');
-    expect(rankText(0.12)).toBe('bottom 12%');
-    expect(rankText(0.5)).toBe('top 50%');
-    expect(rankText(0.49)).toBe('bottom 49%');
+    expect(rankText(0.92)).toBe('排名前 8%');
+    expect(rankText(0.12)).toBe('排名后 12%');
+    expect(rankText(0.5)).toBe('排名前 50%');
+    expect(rankText(0.49)).toBe('排名后 49%');
   });
 
   it('never prints 0%', () => {
-    expect(rankText(1)).toBe('top 1%');
-    expect(rankText(0.999)).toBe('top 1%');
-    expect(rankText(0)).toBe('bottom 1%');
+    expect(rankText(1)).toBe('排名前 1%');
+    expect(rankText(0.999)).toBe('排名前 1%');
+    expect(rankText(0)).toBe('排名后 1%');
   });
 });
 
@@ -85,7 +85,7 @@ describe('rankBlockIndex', () => {
   it('lights the block that matches the rounded rankText across the whole range', () => {
     for (let i = 0; i <= 1000; i++) {
       const rank = i / 1000;
-      const [, dir, pctText] = /^(top|bottom) (\d+)%$/.exec(rankText(rank))!;
+      const [, dir, pctText] = /^排名(前|后) (\d+)%$/.exec(rankText(rank))!;
       const pct = Number(pctText);
       const idx = rankBlockIndex(rank);
       const [blockDir, blockPctText] = RANK_BLOCKS[idx].label.split(' ');
@@ -99,26 +99,26 @@ describe('rankBlockIndex', () => {
   });
 
   it('puts the rounding edge .75 into "top 25%" as the doc promises', () => {
-    expect(RANK_BLOCKS[rankBlockIndex(0.75)].label).toBe('top 25%');
-    expect(RANK_BLOCKS[rankBlockIndex(0.95)].label).toBe('top 5%');
-    expect(RANK_BLOCKS[rankBlockIndex(0.25)].label).toBe('bottom 25%');
+    expect(RANK_BLOCKS[rankBlockIndex(0.75)].label).toBe('前 25%');
+    expect(RANK_BLOCKS[rankBlockIndex(0.95)].label).toBe('前 5%');
+    expect(RANK_BLOCKS[rankBlockIndex(0.25)].label).toBe('后 25%');
   });
 });
 
 describe('ordinalPercentile', () => {
   it.each([
-    [0.01, '1st'],
-    [0.02, '2nd'],
-    [0.03, '3rd'],
-    [0.04, '4th'],
-    [0.11, '11th'],
-    [0.12, '12th'],
-    [0.13, '13th'],
-    [0.21, '21st'],
-    [0.72, '72nd'],
-    [0.93, '93rd'],
-    [0, '0th'],
-    [1, '100th'],
+    [0.01, '1%'],
+    [0.02, '2%'],
+    [0.03, '3%'],
+    [0.04, '4%'],
+    [0.11, '11%'],
+    [0.12, '12%'],
+    [0.13, '13%'],
+    [0.21, '21%'],
+    [0.72, '72%'],
+    [0.93, '93%'],
+    [0, '0%'],
+    [1, '100%'],
   ])('%s → %s', (rank, text) => {
     expect(ordinalPercentile(rank)).toBe(text);
   });
@@ -131,8 +131,8 @@ describe('stars and key stat titles', () => {
   });
 
   it('prefers the exact multiplier, then the star range', () => {
-    expect(starTitle(stat({ stars: 2, multiplier: 2.46 }))).toBe('Key stat: ×2.5 late-season price for this tier');
-    expect(starTitle(stat({ stars: 3 }))).toBe('Key stat: ×4+ late-season price for this tier');
+    expect(starTitle(stat({ stars: 2, multiplier: 2.46 }))).toBe('关键词条：该词条对这一等级后期赛季价格的影响系数为 ×2.5');
+    expect(starTitle(stat({ stars: 3 }))).toBe('关键词条：该词条对这一等级后期赛季价格的影响系数为 ×4+');
   });
 });
 
@@ -156,11 +156,11 @@ describe('price bands', () => {
     expect(marketBandText(rare())).toBeNull();
     expect(marketSource(rare())).toBeNull();
     expect(marketBandText(rare({ market: market() }))).toBe('~1.5–3.2 HR');
-    expect(marketSource(rare({ slot: 'circ', market: market() }))).toBe('circlets at this rank · S13');
+    expect(marketSource(rare({ slot: 'circ', market: market() }))).toBe('同排名头环 · S13 赛季');
     expect(marketSource(rare({ market: market({ source: 'last-season', mode: 'hardcore' }) }))).toBe(
-      'rings at this rank · last season',
+      '同排名戒指 · 上赛季',
     );
-    expect(marketSource(rare({ market: market({ mode: 'hardcore' }) }))).toBe('rings at this rank · hardcore listings');
+    expect(marketSource(rare({ market: market({ mode: 'hardcore' }) }))).toBe('同排名戒指 · 专家模式挂单');
   });
 });
 
@@ -168,27 +168,27 @@ describe('statNotes', () => {
   it('tags corruption-only key stats with the short stat name', () => {
     expect(
       statNotes(stat({ stars: 2, corruptionOnly: true, key: 'item_fastercastrate__x', value: 20 }), 'ring'),
-    ).toEqual({ tag: 'C', note: '20 FCR on rings only via corruption' });
+    ).toEqual({ tag: 'C', note: '20 FCR 仅能通过腐化出现在戒指上' });
   });
 
   it('falls back to the stat label without a short name or value', () => {
     expect(statNotes(stat({ stars: 1, corruptionOnly: true, key: 'item_unknown', label: '+1 Foo' }), 'amul')).toEqual({
       tag: 'C',
-      note: '+1 Foo on amulets only via corruption',
+      note: '+1 Foo 仅能通过腐化出现在项链上',
     });
     expect(
       statNotes(stat({ stars: 1, corruptionOnly: true, key: 'item_magicbonus', value: null, label: 'MF' }), 'boot'),
-    ).toEqual({ tag: 'C', note: 'MF on boots only via corruption' });
+    ).toEqual({ tag: 'C', note: 'MF 仅能通过腐化出现在靴子上' });
   });
 
   it('describes near misses with or without the tier multiplier', () => {
     expect(statNotes(stat({ keyFrom: 20, keyFromMultiplier: 2.04 }), 'amul')).toEqual({
       tag: '↑20',
-      note: 'near miss: 20+ is ×2.0 on amulets',
+      note: '词条达到 20+ 时在项链上可达关键价值（系数 ×2.0）',
     });
     expect(statNotes(stat({ keyFrom: 10, corruptionOnly: true }), 'glov')).toEqual({
       tag: '↑10',
-      note: 'valuable from 10 on gloves (only via corruption)',
+      note: '10+ 以上的词条在手套上具有价值（仅能通过腐化获得）',
     });
   });
 
@@ -237,18 +237,18 @@ describe('hardcoreNote', () => {
 
   it('describes the rank reference and price listings on hardcore', () => {
     expect(hardcoreNote(rare({ rankReference: 'hardcore', market: market({ mode: 'hardcore' }) }), true)).toBe(
-      'Hardcore: price model and stars from softcore data; ranked against hardcore listings; prices from hardcore listings',
+      '专家模式：价格模型和星级建议基于普通模式数据；排名参照专家模式挂单；价格参考专家模式挂单',
     );
     expect(hardcoreNote(rare({ rankReference: 'blended', rankReferenceWeight: 0.426 }), true)).toBe(
-      'Hardcore: price model and stars from softcore data; ranked against hardcore listings blended with softcore (43% hardcore)',
+      '专家模式：价格模型和星级建议基于普通模式数据；排名综合参考专家模式与普通模式挂单（专家模式占 43%）',
     );
     expect(hardcoreNote(rare({ market: market() }), true)).toBe(
-      'Hardcore: price model and stars from softcore data; ranked against softcore listings; prices from softcore listings',
+      '专家模式：价格模型和星级建议基于普通模式数据；排名参照普通模式挂单；价格参考普通模式挂单',
     );
   });
 
   it('treats a missing blend weight as 0%', () => {
-    expect(hardcoreNote(rare({ rankReference: 'blended' }), true)).toContain('(0% hardcore)');
+    expect(hardcoreNote(rare({ rankReference: 'blended' }), true)).toContain('（专家模式占 0%）');
   });
 });
 
@@ -269,8 +269,9 @@ describe('check classification', () => {
 describe('location texts', () => {
   it('skips the slot when it equals the base name and drops a missing tab', () => {
     expect(locationText(rare())).toBe('Ring · Shared 1');
-    expect(locationText(rare({ baseName: 'War Belt', slot: 'belt' }))).toBe('War Belt · Belt · Shared 1');
-    expect(locationText(rare({ baseName: 'Tiara', slot: 'circ', tab: null }))).toBe('Tiara · Circlet');
+    expect(locationText(rare({ baseName: '戒指' }))).toBe('戒指 · Shared 1');
+    expect(locationText(rare({ baseName: 'War Belt', slot: 'belt' }))).toBe('War Belt · 腰带 · Shared 1');
+    expect(locationText(rare({ baseName: 'Tiara', slot: 'circ', tab: null }))).toBe('Tiara · 头环');
   });
 
   it('shows 0-based grid positions 1-based, and null when nothing is known', () => {

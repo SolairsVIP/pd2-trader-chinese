@@ -3,6 +3,12 @@ mod tests {
     use super::*;
 
     #[test]
+    fn accepts_sony_compatible_hid_reports_only() {
+        assert!(is_supported_controller_vendor(0x054c));
+        assert!(!is_supported_controller_vendor(0x045e));
+    }
+
+    #[test]
     fn dualshock_and_dualsense_reports_detect_triggers() {
         assert_eq!(
             triggers(0x05c4, &[1, 0, 0, 0, 0, 0, 0, 0, 200, 201]),
@@ -22,15 +28,29 @@ mod tests {
     #[test]
     fn fires_once_and_requires_release_after_activation() {
         let mut latch = TriggerLatch::default();
-        assert!(!latch.update(false, 255, 255));
-        assert!(!latch.update(true, 255, 255));
-        assert!(!latch.update(true, 0, 0));
-        assert!(latch.update(true, 255, 255));
-        assert!(!latch.update(true, 255, 255));
-        assert!(!latch.update(true, 0, 255));
-        assert!(!latch.update(true, 255, 255));
-        assert!(!latch.update(true, 0, 0));
-        assert!(latch.update(true, 255, 255));
+        assert_eq!(latch.update(false, 255, 255, 0), None);
+        assert_eq!(latch.update(true, 255, 255, 1), None);
+        assert_eq!(latch.update(true, 0, 0, 2), None);
+        assert_eq!(latch.update(true, 255, 255, 10), None);
+        assert_eq!(latch.update(true, 255, 255, 300), None);
+        assert_eq!(latch.update(true, 0, 255, 400), Some(TriggerAction::PriceCheck));
+        assert_eq!(latch.update(true, 255, 255, 500), None);
+        assert_eq!(latch.update(true, 0, 0, 600), None);
+        assert_eq!(latch.update(true, 255, 255, 700), None);
+        assert_eq!(latch.tick(true, 1500), Some(TriggerAction::Menu));
+        assert_eq!(latch.tick(true, 1600), None);
+        assert_eq!(latch.update(true, 0, 0, 1700), None);
+        assert_eq!(latch.update(true, 255, 255, 1800), None);
+        assert_eq!(latch.update(false, 0, 0, 1900), None);
+    }
+
+    #[test]
+    fn long_hold_does_not_fire_after_focus_loss() {
+        let mut latch = TriggerLatch::default();
+        latch.update(true, 0, 0, 0);
+        latch.update(true, 255, 255, 100);
+        assert_eq!(latch.tick(false, 1000), None);
+        assert_eq!(latch.update(true, 0, 0, 1100), None);
     }
 
     #[test]
@@ -46,6 +66,22 @@ mod tests {
         assert_eq!(latch.update(menu_buttons(0x0ce6, &[1, 0, 0, 0, 0, 0, 0, 0, 0x08]).unwrap(), true), vec!["close"]);
         assert!(latch.update(menu_buttons(0x0ce6, &[1, 0, 0, 0, 0, 0, 0, 0, 0x08]).unwrap(), true).is_empty());
         assert!(menu_buttons(0x0ce6, &[1]).is_none());
+    }
+
+    #[test]
+    fn shoulder_buttons_switch_tabs_once_per_press_for_sony_reports() {
+        let mut latch = MenuLatch::default();
+        let neutral = menu_buttons(0x05c4, &[1, 0, 0, 0, 0, 8, 0]).unwrap();
+        latch.update(neutral, true);
+        let l1 = menu_buttons(0x05c4, &[1, 0, 0, 0, 0, 8, 1]).unwrap();
+        assert_eq!(latch.update(l1, true), vec!["tab-previous"]);
+        assert!(latch.update(l1, true).is_empty());
+        latch.update(neutral, true);
+        let r1 = menu_buttons(0x0ce6, &[1, 0, 0, 0, 0, 0, 0, 0, 8, 2]).unwrap();
+        assert_eq!(latch.update(r1, true), vec!["tab-next"]);
+        latch.update(neutral, false);
+        assert!(latch.update(r1, false).is_empty());
+        assert!(latch.update(r1, true).is_empty());
     }
 
     #[test]
@@ -77,9 +113,32 @@ mod tests {
     }
 
     #[test]
-    fn xbox_buttons_and_axes_match_controller_actions() {
-        assert_eq!(xinput_menu_buttons(0x1000 | 0x0001 | 0x0008), 16 | 1 | 8);
-        assert_eq!(xinput_menu_buttons(0x2000 | 0x0002 | 0x0004), 32 | 2 | 4);
+    fn xbox_price_check_only_fires_once_per_trigger_chord() {
+        let mut latch = XboxPriceTrigger::default();
+        assert!(!latch.update(false, 255, 255));
+        assert!(!latch.update(true, 255, 255));
+        assert!(!latch.update(true, 0, 0));
+        assert!(latch.update(true, 255, 255));
+        assert!(!latch.update(true, 255, 255));
+        assert!(!latch.update(true, 0, 255));
+        assert!(!latch.update(true, 255, 255));
+        assert!(!latch.update(true, 0, 0));
+        assert!(latch.update(true, 255, 255));
+    }
+
+    #[test]
+    fn xbox_b_returns_on_release_and_other_menu_controls_are_not_mapped() {
+        let mut latch = MenuLatch::default();
+        assert!(latch.update(xinput_price_buttons(0x2000), true).is_empty());
+        assert_eq!(latch.update(xinput_price_buttons(0), true), vec!["close"]);
+        assert_eq!(latch.update(xinput_price_buttons(0x1000), true), vec!["confirm"]);
+        assert_eq!(xinput_price_buttons(0x0100 | 0x0200), 0);
+        assert!(latch.update(xinput_price_buttons(0x2000), false).is_empty());
+        assert!(latch.update(xinput_price_buttons(0), true).is_empty());
+    }
+
+    #[test]
+    fn xbox_sticks_use_the_same_coordinate_system_as_sony_sticks() {
         assert_eq!(xinput_axis(0, false), 128);
         assert_eq!(xinput_axis(i16::MIN, false), 0);
         assert_eq!(xinput_axis(i16::MAX, false), 255);
@@ -87,22 +146,28 @@ mod tests {
         assert_eq!(xinput_axis(i16::MIN, true), 255);
     }
 
-    #[test]
-    fn xbox_b_closes_only_after_release_and_triggers_require_rearming() {
-        let mut menu = MenuLatch::default();
-        let mut trigger = TriggerLatch::default();
-        assert!(menu.update(xinput_menu_buttons(0x2000), true).is_empty());
-        assert_eq!(menu.update(xinput_menu_buttons(0), true), vec!["close"]);
-        assert!(!trigger.update(true, 0, 0));
-        assert!(trigger.update(true, 255, 255));
-        assert!(!trigger.update(true, 255, 255));
+}
+
+fn is_supported_controller_vendor(vendor: u32) -> bool { vendor == 0x054c }
+
+#[derive(Default)]
+struct XboxPriceTrigger { armed: bool }
+
+impl XboxPriceTrigger {
+    fn update(&mut self, active: bool, left: u8, right: u8) -> bool {
+        if !active { self.armed = false; return false; }
+        if left < 30 && right < 30 { self.armed = true; return false; }
+        if self.armed && left >= 180 && right >= 180 {
+            self.armed = false;
+            return true;
+        }
+        false
     }
 }
-fn xinput_menu_buttons(buttons: u16) -> u8 {
+
+fn xinput_price_buttons(buttons: u16) -> u8 {
     (if buttons & 0x0001 != 0 { 1 } else { 0 }) |
     (if buttons & 0x0002 != 0 { 2 } else { 0 }) |
-    (if buttons & 0x0004 != 0 { 4 } else { 0 }) |
-    (if buttons & 0x0008 != 0 { 8 } else { 0 }) |
     (if buttons & 0x1000 != 0 { 16 } else { 0 }) |
     (if buttons & 0x2000 != 0 { 32 } else { 0 })
 }
@@ -123,7 +188,8 @@ impl MenuLatch {
         let released_close = active && self.close_armed && self.previous & 32 != 0 && buttons & 32 == 0;
         if buttons & 32 == 0 { self.close_armed = false; }
         self.previous = buttons;
-        let mut actions: Vec<_> = [(1, "up"), (2, "down"), (4, "left"), (8, "right"), (16, "confirm")]
+        if !active { return Vec::new(); }
+        let mut actions: Vec<_> = [(1, "up"), (2, "down"), (4, "left"), (8, "right"), (16, "confirm"), (64, "tab-previous"), (128, "tab-next")]
             .into_iter().filter_map(|(bit, name)| (fresh & bit != 0).then_some(name)).collect();
         if released_close { actions.push("close"); }
         actions
@@ -143,7 +209,9 @@ fn menu_buttons(product: u32, data: &[u8]) -> Option<u8> {
         0 => 1, 1 => 1 | 8, 2 => 8, 3 => 2 | 8,
         4 => 2, 5 => 2 | 4, 6 => 4, 7 => 1 | 4, _ => 0,
     };
-    Some(direction | if buttons & 0x20 != 0 { 16 } else { 0 } | if buttons & 0x40 != 0 { 32 } else { 0 })
+    let shoulders = data.get(offset + 1).copied().unwrap_or(0);
+    Some(direction | if buttons & 0x20 != 0 { 16 } else { 0 } | if buttons & 0x40 != 0 { 32 } else { 0 }
+        | if shoulders & 0x01 != 0 { 64 } else { 0 } | if shoulders & 0x02 != 0 { 128 } else { 0 })
 }
 
 fn left_stick(product: u32, data: &[u8]) -> Option<(u8, u8)> {
@@ -167,23 +235,43 @@ fn right_stick_y(product: u32, data: &[u8]) -> Option<u8> {
 #[derive(Default)]
 struct TriggerLatch {
     armed: bool,
+    started: Option<u64>,
+    long_fired: bool,
 }
 
+#[derive(Debug, PartialEq, Eq)]
+enum TriggerAction { PriceCheck, Menu }
+
 impl TriggerLatch {
-    fn update(&mut self, active: bool, left: u8, right: u8) -> bool {
+    fn tick(&mut self, active: bool, now: u64) -> Option<TriggerAction> {
         if !active {
-            self.armed = false;
-            return false;
+            *self = Self::default();
+            return None;
+        }
+        if !self.long_fired && self.started.is_some_and(|start| now.saturating_sub(start) >= 800) {
+            self.long_fired = true;
+            return Some(TriggerAction::Menu);
+        }
+        None
+    }
+    fn update(&mut self, active: bool, left: u8, right: u8, now: u64) -> Option<TriggerAction> {
+        if !active { return self.tick(false, now); }
+        if self.started.is_some() && (left < 180 || right < 180) {
+            let result = if self.long_fired { None } else if now.saturating_sub(self.started.unwrap()) >= 800 { Some(TriggerAction::Menu) } else { Some(TriggerAction::PriceCheck) };
+            self.started = None;
+            self.long_fired = false;
+            self.armed = left < 30 && right < 30;
+            return result;
         }
         if left < 30 && right < 30 {
             self.armed = true;
-            return false;
+            return None;
         }
         if self.armed && left >= 180 && right >= 180 {
             self.armed = false;
-            return true;
+            self.started = Some(now);
         }
-        false
+        self.tick(true, now)
     }
 }
 
@@ -200,7 +288,7 @@ fn triggers(product: u32, data: &[u8]) -> Option<(u8, u8)> {
 
 #[cfg(target_os = "windows")]
 mod windows {
-    use super::{left_stick, right_stick_y, menu_buttons, triggers, xinput_axis, xinput_menu_buttons, MenuLatch, TriggerLatch};
+    use super::{left_stick, right_stick_y, menu_buttons, triggers, is_supported_controller_vendor, xinput_axis, xinput_price_buttons, MenuLatch, TriggerLatch, TriggerAction, XboxPriceTrigger};
     use std::{
         collections::HashMap,
         mem,
@@ -222,6 +310,39 @@ mod windows {
     static MENU_LATCHES: OnceLock<Mutex<HashMap<isize, MenuLatch>>> = OnceLock::new();
     static STICK_SENT: OnceLock<Mutex<HashMap<isize, (Instant, bool, bool)>>> = OnceLock::new();
 
+    #[cfg(test)]
+    #[test]
+    fn removing_a_controller_cancels_its_pending_long_hold_without_affecting_others() {
+        const REMOVED: isize = 101;
+        const REMAINING: isize = 102;
+        let mut held = TriggerLatch::default();
+        held.update(true, 0, 0, 0);
+        held.update(true, 255, 255, 100);
+        let latches = LATCHES.get_or_init(Default::default);
+        {
+            let mut latches = latches.lock().unwrap();
+            latches.insert(REMOVED, held);
+            latches.insert(REMAINING, TriggerLatch::default());
+        }
+        MENU_LATCHES.get_or_init(Default::default).lock().unwrap().insert(REMOVED, MenuLatch::default());
+        STICK_SENT.get_or_init(Default::default).lock().unwrap().insert(REMOVED, (Instant::now(), false, false));
+
+        unsafe { wndproc(0, WM_INPUT_DEVICE_CHANGE, GIDC_REMOVAL as WPARAM, REMOVED); }
+
+        let mut latches = latches.lock().unwrap();
+        assert!(latches.get_mut(&REMOVED).is_none(), "a disconnected controller must not fire its pending hold");
+        assert!(latches.contains_key(&REMAINING), "other controllers must remain armed");
+        latches.remove(&REMAINING);
+        assert!(!MENU_LATCHES.get().unwrap().lock().unwrap().contains_key(&REMOVED));
+        assert!(!STICK_SENT.get().unwrap().lock().unwrap().contains_key(&REMOVED));
+    }
+    fn millis() -> u64 { static START: OnceLock<Instant> = OnceLock::new(); START.get_or_init(Instant::now).elapsed().as_millis() as u64 }
+    fn emit_trigger(action: Option<TriggerAction>) {
+        if let (Some(app), Some(action)) = (APP.get(), action) {
+            let _ = app.emit(match action { TriggerAction::PriceCheck => "controller-price-check", TriggerAction::Menu => "controller-open-menu" }, ());
+        }
+    }
+
     pub fn set_controller_price_check_enabled(enabled: bool) {
         ENABLED.store(enabled, Ordering::Relaxed);
         if let Some(latches) = LATCHES.get() {
@@ -235,6 +356,18 @@ mod windows {
     }
 
     unsafe extern "system" fn wndproc(hwnd: HWND, msg: u32, wp: WPARAM, lp: LPARAM) -> LRESULT {
+        if msg == WM_INPUT_DEVICE_CHANGE && wp as u32 == GIDC_REMOVAL {
+            if let Some(latches) = LATCHES.get() {
+                if let Ok(mut latches) = latches.lock() { latches.remove(&lp); }
+            }
+            if let Some(latches) = MENU_LATCHES.get() {
+                if let Ok(mut latches) = latches.lock() { latches.remove(&lp); }
+            }
+            if let Some(sent) = STICK_SENT.get() {
+                if let Ok(mut sent) = sent.lock() { sent.remove(&lp); }
+            }
+            return 0;
+        }
         if msg == WM_INPUT && ENABLED.load(Ordering::Relaxed) {
             let header_size = mem::size_of::<RAWINPUTHEADER>() as u32;
             let mut size = 0;
@@ -268,7 +401,7 @@ mod windows {
                             && info.dwType == RIM_TYPEHID
                         {
                             let hid = info.Anonymous.hid;
-                            if hid.dwVendorId == 0x054c {
+                            if is_supported_controller_vendor(hid.dwVendorId) {
                                 let start = header_size as usize + 8;
                                 let report_size = u32::from_ne_bytes(
                                     bytes[header_size as usize..header_size as usize + 4]
@@ -312,15 +445,11 @@ mod windows {
                                         if let Ok(mut latches) =
                                             LATCHES.get_or_init(Default::default).lock()
                                         {
-                                            if latches
+                                            let action = latches
                                                 .entry(header.hDevice)
                                                 .or_default()
-                                                .update(active, left, right)
-                                            {
-                                                if let Some(app) = APP.get() {
-                                                    let _ = app.emit("controller-price-check", ());
-                                                }
-                                            }
+                                                .update(active, left, right, millis());
+                                            emit_trigger(action);
                                         }
                                     }
                                 }
@@ -336,6 +465,17 @@ mod windows {
     pub fn start(app: AppHandle) {
         let _ = APP.set(app);
         start_xinput();
+        std::thread::spawn(|| loop {
+            if ENABLED.load(Ordering::Relaxed) {
+                let active = crate::modules::window::is_game_context();
+                if let Some(latches) = LATCHES.get() {
+                    if let Ok(mut latches) = latches.lock() {
+                        for latch in latches.values_mut() { emit_trigger(latch.tick(active, millis())); }
+                    }
+                }
+            }
+            std::thread::sleep(Duration::from_millis(50));
+        });
         std::thread::spawn(|| unsafe {
             let name: Vec<u16> = "PD2TraderControllerInput\0".encode_utf16().collect();
             let mut class: WNDCLASSW = mem::zeroed();
@@ -364,7 +504,7 @@ mod windows {
             let devices = [4u16, 5].map(|usage| RAWINPUTDEVICE {
                 usUsagePage: 1,
                 usUsage: usage,
-                dwFlags: RIDEV_INPUTSINK,
+                dwFlags: RIDEV_INPUTSINK | RIDEV_DEVNOTIFY,
                 hwndTarget: hwnd,
             });
             if RegisterRawInputDevices(
@@ -385,7 +525,7 @@ mod windows {
 
     fn start_xinput() {
         std::thread::spawn(|| {
-            let mut triggers: [TriggerLatch; 4] = std::array::from_fn(|_| TriggerLatch::default());
+            let mut triggers: [XboxPriceTrigger; 4] = std::array::from_fn(|_| XboxPriceTrigger::default());
             let mut menus: [MenuLatch; 4] = std::array::from_fn(|_| MenuLatch::default());
             let mut connected = [false; 4];
             let mut next_probe = [Instant::now(); 4];
@@ -393,7 +533,7 @@ mod windows {
             let mut stick_active = [false; 4];
             loop {
                 if !ENABLED.load(Ordering::Relaxed) {
-                    triggers = std::array::from_fn(|_| TriggerLatch::default());
+                    triggers = std::array::from_fn(|_| XboxPriceTrigger::default());
                     menus = std::array::from_fn(|_| MenuLatch::default());
                     stick_active = [false; 4];
                     std::thread::sleep(Duration::from_millis(100));
@@ -408,7 +548,7 @@ mod windows {
                     if unsafe { XInputGetState(index as u32, &mut state) } != ERROR_SUCCESS {
                         connected[index] = false;
                         next_probe[index] = now + Duration::from_secs(1);
-                        triggers[index] = TriggerLatch::default();
+                        triggers[index] = XboxPriceTrigger::default();
                         menus[index] = MenuLatch::default();
                         stick_active[index] = false;
                         continue;
@@ -418,17 +558,17 @@ mod windows {
                     if triggers[index].update(active, pad.bLeftTrigger, pad.bRightTrigger) {
                         if let Some(app) = APP.get() { let _ = app.emit("controller-price-check", ()); }
                     }
-                    let actions = menus[index].update(xinput_menu_buttons(pad.wButtons), owns_focus);
+                    let actions = menus[index].update(xinput_price_buttons(pad.wButtons), owns_focus);
                     if owns_focus {
                         if let Some(app) = APP.get() {
-                            for action in actions { let _ = app.emit("controller-menu-action", action); }
+                            for action in actions { let _ = app.emit("controller-xbox-price-action", action); }
                         }
                         let x = xinput_axis(pad.sThumbLX, false);
                         let y = xinput_axis(pad.sThumbLY, true);
                         let scroll_y = xinput_axis(pad.sThumbRY, true);
                         let moving = (i16::from(x) - 128).abs() >= 23 || (i16::from(y) - 128).abs() >= 23 || (i16::from(scroll_y) - 128).abs() >= 23;
                         if moving != stick_active[index] || (moving && now.duration_since(last_stick[index]) >= Duration::from_millis(33)) {
-                            if let Some(app) = APP.get() { let _ = app.emit("controller-stick", (x, y, scroll_y)); }
+                            if let Some(app) = APP.get() { let _ = app.emit("controller-xbox-price-stick", (x, y, scroll_y)); }
                             last_stick[index] = now;
                         }
                         stick_active[index] = moving;

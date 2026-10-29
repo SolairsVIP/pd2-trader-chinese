@@ -123,9 +123,9 @@ describe('NetWorthPanel signed out', () => {
     settings = {};
     setNetWorth({ status: 'signed-out', owner: null, latest: null });
     await renderPanel();
-    expect(screen.getByText('Sign in with your PD2 account to track your net worth.')).not.toBeNull();
-    expect(screen.queryByRole('button', { name: /Open full view/ })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
+    expect(screen.getByText('登录 PD2 账号以追踪仓库估值。')).not.toBeNull();
+    expect(screen.queryByRole('button', { name: /打开完整视图/ })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: '登录' }));
     expect(openPanel.mock.calls).toEqual([['signIn']]);
     expect(getPoints).not.toHaveBeenCalled();
   });
@@ -133,8 +133,8 @@ describe('NetWorthPanel signed out', () => {
   it('shows no sign-in button when a token exists but no account is chosen', async () => {
     setNetWorth({ owner: null });
     await renderPanel();
-    expect(screen.getByText('Sign in with your PD2 account to track your net worth.')).not.toBeNull();
-    expect(screen.queryByRole('button', { name: 'Sign in' })).toBeNull();
+    expect(screen.getByText('登录 PD2 账号以追踪仓库估值。')).not.toBeNull();
+    expect(screen.queryByRole('button', { name: '登录' })).toBeNull();
   });
 });
 
@@ -143,12 +143,12 @@ describe('NetWorthPanel summary', () => {
     setNetWorth({ latest: latest(12.5, { uncertainHr: 0.84 }) });
     await renderPanel();
     expect(screen.getByText('12.5')).not.toBeNull();
-    expect(screen.getByText('+0.8 HR uncertain')).not.toBeNull();
+    expect(screen.getByText('+0.8 HR 待确认')).not.toBeNull();
   });
 
   it('omits the uncertain line when everything is priced', async () => {
     await renderPanel();
-    expect(screen.queryByText(/uncertain/)).toBeNull();
+    expect(screen.queryByText(/待确认/)).toBeNull();
   });
 
   it('shows a dash and the error when the first valuation failed', async () => {
@@ -160,17 +160,17 @@ describe('NetWorthPanel summary', () => {
 
   it('opens the full view on the History tab and closes its panel on Hide', async () => {
     await renderPanel();
-    fireEvent.click(screen.getByRole('button', { name: /Open full view/ }));
+    fireEvent.click(screen.getByRole('button', { name: /打开完整视图/ }));
     expect(vi.mocked(netWorth.openNetWorth).mock.calls).toEqual([['history']]);
-    fireEvent.click(screen.getByRole('button', { name: 'Hide' }));
+    fireEvent.click(screen.getByRole('button', { name: '隐藏' }));
     expect(close).toHaveBeenCalledTimes(1);
   });
 
   it('shows the open session gain, rate and length', async () => {
     setNetWorth({ currentSession: session({ startHr: 10, endHr: 9.4, hrPerHour: -1.2 }) });
     await renderPanel();
-    expect(screen.getByText('-0.6 HR session').className).toContain('text-destructive');
-    expect(screen.getByText('-1.2 HR/h · 30 min')).not.toBeNull();
+    expect(screen.getByText('-0.6 HR 本次收益').className).toContain('text-destructive');
+    expect(screen.getByText('-1.2 HR/h · 30 分钟')).not.toBeNull();
   });
 });
 
@@ -196,14 +196,14 @@ describe('NetWorthPanel history', () => {
   it('says no changes were recorded with fewer than two points', async () => {
     vi.mocked(getPoints).mockResolvedValue({ points: [point(10, 6)] });
     await renderPanel();
-    expect(screen.getByText('No changes recorded yet.')).not.toBeNull();
-    expect(screen.getByText('Not enough snapshots yet')).not.toBeNull();
+    expect(screen.getByText('尚无估值变化记录。')).not.toBeNull();
+    expect(screen.getByText('快照数量不足')).not.toBeNull();
   });
 
   it('charts the last 24 hours with the change, coloured by direction', async () => {
     vi.mocked(getPoints).mockResolvedValue({ points: [point(600, 8), point(300, 9), point(10, 7.5)] });
     await renderPanel();
-    expect(screen.getByText('Last 24 hours')).not.toBeNull();
+    expect(screen.getByText('最近 24 小时')).not.toBeNull();
     const change = screen.getByText('-0.5');
     expect(change.className).toContain('text-destructive');
     expect(sparkline()).toBe('0.0,36.0 160.0,4.0 320.0,52.0');
@@ -213,7 +213,7 @@ describe('NetWorthPanel history', () => {
     setNetWorth({ currentSession: session({ start: new Date(NOW.getTime() - 30 * 60_000).toISOString() }) });
     vi.mocked(getPoints).mockResolvedValue({ points: [point(600, 100), point(25, 8), point(5, 9)] });
     await renderPanel();
-    expect(screen.getByText('This session')).not.toBeNull();
+    expect(screen.getByText('本次会话')).not.toBeNull();
     const change = screen.getByText('+1.0', { selector: '.tabular-nums' });
     expect(change.className).toContain('text-success');
     expect(sparkline()).toBe('0.0,52.0 320.0,4.0');
@@ -228,7 +228,7 @@ describe('NetWorthPanel history', () => {
   it('shows a failed points request', async () => {
     vi.mocked(getPoints).mockRejectedValue(new Error('Net worth API 500'));
     await renderPanel();
-    expect(screen.getByText('Net worth API 500')).not.toBeNull();
+    expect(screen.getByText('服务器暂时无法处理请求，请稍后重试。（HTTP 500）')).not.toBeNull();
   });
 
   it('reloads points when a new snapshot lands, but not for an equal owner object', async () => {
@@ -258,8 +258,8 @@ describe('NetWorthPanel history', () => {
   it('explains how to turn history on and skips loading points when tracking is off', async () => {
     setNetWorth({ trackingEnabled: false });
     await renderPanel();
-    expect(screen.getByText(/History is off/)).not.toBeNull();
-    expect(screen.queryByRole('button', { name: /session/ })).toBeNull();
+    expect(screen.getByText(/历史记录已关闭/)).not.toBeNull();
+    expect(screen.queryByRole('button', { name: /会话/ })).toBeNull();
     expect(getPoints).not.toHaveBeenCalled();
   });
 });
@@ -269,8 +269,8 @@ describe('NetWorthPanel actions', () => {
     const pending = Promise.withResolvers<null>();
     setNetWorth({ takeSnapshot: vi.fn(() => pending.promise) });
     await renderPanel();
-    const snap = screen.getByRole('button', { name: /Snapshot now/ }) as HTMLButtonElement;
-    const sessionButton = screen.getByRole('button', { name: /Start session/ }) as HTMLButtonElement;
+    const snap = screen.getByRole('button', { name: /立即记录快照/ }) as HTMLButtonElement;
+    const sessionButton = screen.getByRole('button', { name: /开始会话/ }) as HTMLButtonElement;
     fireEvent.click(snap);
     expect(vi.mocked(netWorth.takeSnapshot).mock.calls).toEqual([['manual']]);
     expect(snap.disabled).toBe(true);
@@ -282,13 +282,13 @@ describe('NetWorthPanel actions', () => {
 
   it('starts a session when none is open and stops the open one', async () => {
     const { rerender } = await renderPanel();
-    fireEvent.click(screen.getByRole('button', { name: /Start session/ }));
+    fireEvent.click(screen.getByRole('button', { name: /开始会话/ }));
     await act(async () => {});
     expect(netWorth.startSession).toHaveBeenCalledTimes(1);
 
     setNetWorth({ currentSession: session() });
     rerender(<NetWorthPanelPage />);
-    fireEvent.click(screen.getByRole('button', { name: /Stop session/ }));
+    fireEvent.click(screen.getByRole('button', { name: /结束会话/ }));
     await act(async () => {});
     expect(netWorth.stopSession).toHaveBeenCalledTimes(1);
     expect(netWorth.startSession).toHaveBeenCalledTimes(1);

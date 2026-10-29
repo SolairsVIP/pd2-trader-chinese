@@ -17,11 +17,11 @@ function renderPicker(settings: Partial<ISettings>, isLoading = false) {
   return render(<ThemePicker />);
 }
 
-const radios = () => within(screen.getByRole('radiogroup', { name: 'Color theme' })).getAllByRole('radio');
+const radios = () => within(screen.getByRole('radiogroup', { name: '颜色主题' })).getAllByRole('radio');
 const checked = () => radios().filter((r) => r.getAttribute('aria-checked') === 'true');
 const label = (id: string) => {
   const t = THEMES.find((x) => x.id === id)!;
-  return `${t.name} (${t.mode})`;
+  return `${t.name}（${t.mode === 'dark' ? '深色' : '浅色'}）`;
 };
 
 const darkThemes = THEMES.filter((t) => t.mode === 'dark');
@@ -39,7 +39,7 @@ describe('ThemePicker', () => {
     const theme = lightThemes[1];
     renderPicker({ themeId: theme.id });
     expect(checked().map((r) => r.getAttribute('aria-label'))).toEqual([label(theme.id)]);
-    expect(screen.getByText('Current:').textContent).toContain(theme.name);
+    expect(screen.getByText('当前主题：').textContent).toContain(theme.name);
   });
 
   it('falls back to the default theme for an unknown saved id', () => {
@@ -65,16 +65,16 @@ describe('ThemePicker', () => {
     renderPicker({ themeId: DEFAULT_THEME_ID });
     expect(radios()).toHaveLength(THEMES.length);
 
-    fireEvent.click(screen.getByRole('radio', { name: 'Light' }));
+    fireEvent.click(screen.getByRole('radio', { name: '浅色' }));
     expect(radios().map((r) => r.getAttribute('aria-label'))).toEqual(lightThemes.map((t) => label(t.id)));
 
-    fireEvent.click(screen.getByRole('radio', { name: 'Dark' }));
+    fireEvent.click(screen.getByRole('radio', { name: '深色' }));
     expect(radios()).toHaveLength(darkThemes.length);
   });
 
   it('keeps one tab stop when the current theme is filtered out', () => {
     renderPicker({ themeId: darkThemes[0].id });
-    fireEvent.click(screen.getByRole('radio', { name: 'Light' }));
+    fireEvent.click(screen.getByRole('radio', { name: '浅色' }));
     const tabStops = radios().filter((r) => r.tabIndex === 0);
     expect(tabStops.map((r) => r.getAttribute('aria-label'))).toEqual([label(lightThemes[0].id)]);
   });
@@ -92,7 +92,7 @@ describe('ThemePicker', () => {
 
   it('Home/End jump within the filtered list; other keys are ignored', () => {
     renderPicker({ themeId: lightThemes[3].id });
-    fireEvent.click(screen.getByRole('radio', { name: 'Light' }));
+    fireEvent.click(screen.getByRole('radio', { name: '浅色' }));
     fireEvent.keyDown(radios()[3], { key: 'Home' });
     expect(store.updateSettings).toHaveBeenLastCalledWith({ themeId: lightThemes[0].id });
     fireEvent.keyDown(radios()[0], { key: 'End' });

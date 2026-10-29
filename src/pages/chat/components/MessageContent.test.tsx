@@ -183,7 +183,7 @@ describe('MessageContent listing cards', () => {
 
   it('shows a placeholder card while the listing loads', () => {
     renderWith({ status: 'loading' });
-    expect(screen.getByLabelText('Loading listing')).not.toBeNull();
+    expect(screen.getByLabelText('正在加载挂单')).not.toBeNull();
     expect(screen.queryByRole('link')).toBeNull();
   });
 
@@ -193,7 +193,7 @@ describe('MessageContent listing cards', () => {
     expect(card.getAttribute('href')).toBe(URL);
     expect(card.textContent).toBe('Ohm Rune');
     expect(card.querySelector('img')!.getAttribute('src')).toBe('/runes/Ohm_Rune.png');
-    expect(within(card).queryByText('Unlisted')).toBeNull();
+    expect(within(card).queryByText('已下架')).toBeNull();
 
     fireEvent.click(card);
     expect(vi.mocked(openUrl)).toHaveBeenCalledWith(URL);
@@ -201,7 +201,7 @@ describe('MessageContent listing cards', () => {
 
   it('tags archived listings as unlisted', () => {
     renderWith({ status: 'unlisted', listing: listing() });
-    expect(within(screen.getByRole('link')).getByText('Unlisted')).not.toBeNull();
+    expect(within(screen.getByRole('link')).getByText('已下架')).not.toBeNull();
   });
 
   it('falls back to the link chip when the listing does not exist or was not looked up', () => {
@@ -227,14 +227,14 @@ describe('MessageContent listing cards', () => {
     renderWith({ status: 'listed', listing: ohm });
 
     fireEvent.mouseEnter(screen.getByRole('link'));
-    const market = await screen.findByText('Market:');
-    expect(market.parentElement!.textContent).toBe('Market:1.25 HR · 7d20% under market');
+    const market = await screen.findByText('市场参考价:');
+    expect(market.parentElement!.textContent).toBe('市场参考价:1.25 HR · 7d低于市场价 20%');
   });
 
   it('leaves the market row out when the item has no market price', async () => {
     renderWith({ status: 'listed', listing: listing({ hr_price: 1 }) });
     fireEvent.mouseEnter(screen.getByRole('link'));
-    await screen.findByText('Price:');
-    expect(screen.queryByText('Market:')).toBeNull();
+    await screen.findByText('标价:');
+    expect(screen.queryByText('市场参考价:')).toBeNull();
   });
 });

@@ -86,16 +86,17 @@ function renderDeals({
   );
 }
 
-const rows = () => screen.queryAllByRole('listitem').filter((li) => !within(li).queryByText(/more$|Show less/));
+const rows = () =>
+  screen.queryAllByRole('listitem').filter((li) => !within(li).queryByRole('button', { name: /^(另有 \d+ 笔|收起)$/ }));
 const button = (name: RegExp | string) => screen.getByRole('button', { name });
 
 /** Opens an Accept popover, fills the game (and password) and submits it. */
 async function accept(game = '', password = '') {
-  fireEvent.click(button(/^Accept$/));
+  fireEvent.click(button('接受 / Accept'));
   const form = await screen.findByRole('button', { name: /Accept offer/ });
-  if (game) fireEvent.change(screen.getByRole('textbox', { name: 'Game name' }), { target: { value: game } });
+  if (game) fireEvent.change(screen.getByRole('textbox', { name: '游戏房间名称' }), { target: { value: game } });
   if (password) {
-    fireEvent.change(screen.getByRole('textbox', { name: 'Game password' }), { target: { value: password } });
+    fireEvent.change(screen.getByRole('textbox', { name: '游戏房间密码' }), { target: { value: password } });
   }
   await act(async () => {
     fireEvent.click(form);
@@ -133,14 +134,14 @@ describe('ThreadDeals website offers', () => {
     const text = rows().map((row) => row.textContent);
     expect(text).toHaveLength(1);
     expect(text[0]).toContain('Harlequin Crest');
-    expect(text[0]).toContain('accepted');
+    expect(text[0]).toContain('已接受');
 
-    fireEvent.click(button(/2 more/));
+    fireEvent.click(button('另有 2 笔'));
     const expanded = rows().map((row) => row.textContent ?? '');
     expect(expanded).toHaveLength(3);
     // Each row says whose offer it is and how fresh, then the item and the offered price
-    expect(expanded.some((row) => /^Your offer · .*Ber Rune1 ber/.test(row))).toBe(true);
-    expect(expanded.some((row) => /^New offer · 3m agoArachnid Mesh2 ist/.test(row))).toBe(true);
+    expect(expanded.some((row) => /^你发出的报价 · .*Ber Rune1 ber/.test(row))).toBe(true);
+    expect(expanded.some((row) => /^收到新报价 · 3 分钟前Arachnid Mesh2 ist/.test(row))).toBe(true);
     expect(expanded.some((row) => row.includes('Mara'))).toBe(false);
   });
 
@@ -169,7 +170,7 @@ describe('ThreadDeals website offers', () => {
     await accept('trade-1', 'pw');
     expect(onSendWebsite).toHaveBeenCalledTimes(1);
     expect(actions.acceptOffer).not.toHaveBeenCalled();
-    expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ title: 'Offer not accepted' }));
+    expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ title: '报价未接受' }));
   });
 
   it('counters and declines an open incoming offer', async () => {
@@ -178,7 +179,7 @@ describe('ThreadDeals website offers', () => {
     expect(actions.rejectOffer).toHaveBeenCalledWith('o7');
     await waitFor(() => expect(button(/Counter/)).toHaveProperty('disabled', false));
     fireEvent.click(button(/Counter/));
-    expect(onCounter).toHaveBeenCalledWith('Counter for Harlequin Crest: ');
+    expect(onCounter).toHaveBeenCalledWith('Counteroffer for Harlequin Crest: ');
   });
 
   it('disables the actions while a request runs and recovers when it fails', async () => {
@@ -187,31 +188,31 @@ describe('ThreadDeals website offers', () => {
     renderDeals({ offers: [offer({})] });
 
     fireEvent.click(button(/Decline/));
-    expect(button(/^Accept$/)).toHaveProperty('disabled', true);
+    expect(button('接受 / Accept')).toHaveProperty('disabled', true);
     fail(new Error('nope'));
-    await waitFor(() => expect(button(/^Accept$/)).toHaveProperty('disabled', false));
+    await waitFor(() => expect(button('接受 / Accept')).toHaveProperty('disabled', false));
   });
 
   it('unaccepts an accepted incoming offer by its listing', () => {
     renderDeals({ offers: [offer({ id: 'o3', listingId: 'l3', acceptedOfferId: 'o3' })], listingIds: ['l3'] });
-    expect(screen.queryByRole('button', { name: /^Accept$/ })).toBeNull();
-    fireEvent.click(button(/Unaccept/));
+    expect(screen.queryByRole('button', { name: '接受 / Accept' })).toBeNull();
+    fireEvent.click(button('取消接受'));
     expect(actions.unacceptOffer).toHaveBeenCalledWith('l3');
   });
 
   it('deletes the listing after confirmation and refreshes the offers', async () => {
     renderDeals({ offers: [offer({ listingId: 'l1' })] });
     // A rare, destructive action: in the row's ⋯ menu
-    expect(screen.queryByRole('button', { name: /Delete listing/ })).toBeNull();
+    expect(screen.queryByRole('button', { name: '删除挂单' })).toBeNull();
     await act(async () => {
-      fireEvent.pointerDown(button('More actions for Harlequin Crest'), {
+      fireEvent.pointerDown(button('Harlequin Crest的更多操作'), {
         button: 0,
         ctrlKey: false,
         pointerType: 'mouse',
       });
     });
     await act(async () => {
-      fireEvent.click(screen.getByRole('menuitem', { name: /Delete listing/ }));
+      fireEvent.click(screen.getByRole('menuitem', { name: '删除挂单' }));
     });
     expect(actions.deleteMarketListing).not.toHaveBeenCalled();
     const options = vi.mocked(confirmToast).mock.calls[0][0] as ConfirmToastOptions;
@@ -230,15 +231,15 @@ describe('ThreadDeals website offers', () => {
       listingIds: ['l4'],
     });
     expect(screen.queryByRole('button', { name: /Accept|Decline|Counter/ })).toBeNull();
-    fireEvent.click(button(/Revoke/));
+    fireEvent.click(button('撤回'));
     expect(actions.revokeOffer).toHaveBeenCalledWith('o4');
-    await waitFor(() => expect(button(/^Hide/)).toHaveProperty('disabled', false));
-    fireEvent.click(button(/^Hide/));
+    await waitFor(() => expect(button('隐藏')).toHaveProperty('disabled', false));
+    fireEvent.click(button('隐藏'));
     expect(actions.deleteOutgoingOffer).toHaveBeenCalledWith('o4');
 
     // The hidden one sorts last, marked hidden
-    expect(rows().at(-1)!.textContent).toContain('hidden');
-    fireEvent.click(button(/Unhide/));
+    expect(rows().at(-1)!.textContent).toContain('已隐藏');
+    fireEvent.click(button('显示'));
     expect(actions.restoreOutgoingOffer).toHaveBeenCalledWith('o5');
   });
 
@@ -253,14 +254,14 @@ describe('ThreadDeals website offers', () => {
       ],
       listingIds: ['l1', 'l2', 'l3'],
     });
-    fireEvent.click(button(/more/));
+    fireEvent.click(button('另有 2 笔'));
 
     const statusOf = (item: string) => rows().find((row) => row.textContent!.includes(item))?.textContent;
-    expect(statusOf('Won Item')).toContain('accepted');
-    expect(statusOf('Lost Item')).toContain('declined');
-    expect(statusOf('Gone Item')).toContain('closed');
+    expect(statusOf('Won Item')).toContain('已接受');
+    expect(statusOf('Lost Item')).toContain('已拒绝');
+    expect(statusOf('Gone Item')).toContain('已关闭');
     expect(statusOf('Stale Item')).toBeUndefined();
-    expect(screen.queryByRole('button', { name: /Revoke/ })).toBeNull();
+    expect(screen.queryByRole('button', { name: '撤回' })).toBeNull();
   });
 });
 
@@ -268,29 +269,29 @@ describe('ThreadDeals trade whispers', () => {
   it('copies accept (game required), reject and sold whispers from the templates and dismisses', async () => {
     renderDeals({ whisperTrades: [{ person, trade: trade() }], listingIds: [] });
     expect(rows()[0].textContent).toContain('Shako');
-    expect(rows()[0].textContent).toContain('in-game');
+    expect(rows()[0].textContent).toContain('收到游戏内交易');
 
-    fireEvent.click(button(/^Accept$/));
+    fireEvent.click(button('接受 / Accept'));
     expect(await screen.findByRole('button', { name: /Accept offer/ })).toHaveProperty('disabled', true);
-    fireEvent.change(screen.getByRole('textbox', { name: 'Game name' }), { target: { value: 'g1' } });
+    fireEvent.change(screen.getByRole('textbox', { name: '游戏房间名称' }), { target: { value: 'g1' } });
     await act(async () => {
       fireEvent.click(button(/Accept offer/));
     });
     expect(onWhisper).toHaveBeenLastCalledWith(person, 'Accepted Shako (2 ist). Game: g1');
 
-    fireEvent.click(button(/Reject/));
+    fireEvent.click(button(/Decline/));
     expect(onWhisper).toHaveBeenLastCalledWith(person, 'Sorry BobAcc, no.');
     fireEvent.click(button(/Sold/));
     expect(onWhisper).toHaveBeenLastCalledWith(person, 'Shako is sold.');
-    fireEvent.click(button(/Dismiss/));
+    fireEvent.click(button('忽略'));
     expect(onDismissTrade).toHaveBeenCalledWith(person, 't1');
     expect(actions.acceptOffer).not.toHaveBeenCalled();
   });
 
   it('only offers Dismiss on a trade whisper you sent', () => {
     renderDeals({ whisperTrades: [{ person, trade: trade({ isIncoming: false }) }], listingIds: [] });
-    expect(rows()[0].textContent).toMatch(/^your in-game offer · /);
-    expect(screen.queryByRole('button', { name: /Accept|Reject|Sold/ })).toBeNull();
-    expect(button(/Dismiss/)).not.toBeNull();
+    expect(rows()[0].textContent).toMatch(/^你发起的游戏内交易 · /);
+    expect(screen.queryByRole('button', { name: /Accept|Decline|Sold/ })).toBeNull();
+    expect(button('忽略')).not.toBeNull();
   });
 });

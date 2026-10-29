@@ -67,8 +67,8 @@ describe('MacroManagerSheet', () => {
     return <MacroManagerSheet onApply={onApply} />;
   }
 
-  const newNameInput = () => screen.getAllByLabelText('Macro name').at(-1)!;
-  const newTextInput = () => screen.getAllByLabelText('Macro text').at(-1)!;
+  const newNameInput = () => screen.getAllByLabelText('模板名称').at(-1)!;
+  const newTextInput = () => screen.getAllByLabelText('模板内容').at(-1)!;
   const labels = () => saves.at(-1)!.map((m) => m.label);
 
   async function click(el: HTMLElement) {
@@ -85,8 +85,8 @@ describe('MacroManagerSheet', () => {
 
   it('shows the empty state and disables Add until both fields are non-blank', () => {
     render(<Harness />);
-    expect(screen.queryByText('No macros yet. Add one below.')).not.toBeNull();
-    const add = screen.getByRole('button', { name: /Add Macro/ }) as HTMLButtonElement;
+    expect(screen.queryByText('暂无备注模板，可在下方添加。')).not.toBeNull();
+    const add = screen.getByRole('button', { name: /添加模板/ }) as HTMLButtonElement;
     expect(add.disabled).toBe(true);
     fireEvent.change(newNameInput(), { target: { value: 'WTS' } });
     fireEvent.change(newTextInput(), { target: { value: '   ' } });
@@ -105,7 +105,7 @@ describe('MacroManagerSheet', () => {
     expect(saves).toEqual([[{ label: 'WTS', text: 'WTS {itemName}' }]]);
     expect((newNameInput() as HTMLInputElement).value).toBe('');
     expect((newTextInput() as HTMLInputElement).value).toBe('');
-    expect(screen.queryByLabelText('Edit WTS')).not.toBeNull();
+    expect(screen.queryByLabelText('编辑 WTS')).not.toBeNull();
   });
 
   it('rejects a duplicate label with an alert that clears when the name is edited', async () => {
@@ -113,9 +113,9 @@ describe('MacroManagerSheet', () => {
     render(<Harness />);
     fireEvent.change(newNameInput(), { target: { value: 'WTS' } });
     fireEvent.change(newTextInput(), { target: { value: 'b' } });
-    await click(screen.getByRole('button', { name: /Add Macro/ }));
+    await click(screen.getByRole('button', { name: /添加模板/ }));
     expect(saves).toEqual([]);
-    expect(screen.getByRole('alert').textContent).toBe('A macro named "WTS" already exists.');
+    expect(screen.getByRole('alert').textContent).toBe('已存在名为“WTS”的宏。');
     fireEvent.change(newNameInput(), { target: { value: 'WTS2' } });
     expect(screen.queryByRole('alert')).toBeNull();
   });
@@ -134,12 +134,12 @@ describe('MacroManagerSheet', () => {
       { label: 'C', text: '3' },
     ];
     render(<Harness />);
-    expect((screen.getByLabelText('Move A up') as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByLabelText('Move C down') as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText('将 A 上移') as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByLabelText('将 C 下移') as HTMLButtonElement).disabled).toBe(true);
 
-    await click(screen.getByLabelText('Move C up'));
+    await click(screen.getByLabelText('将 C 上移'));
     expect(labels()).toEqual(['A', 'C', 'B']);
-    await click(screen.getByLabelText('Move A down'));
+    await click(screen.getByLabelText('将 A 下移'));
     expect(labels()).toEqual(['C', 'A', 'B']);
   });
 
@@ -149,7 +149,7 @@ describe('MacroManagerSheet', () => {
       { label: 'B', text: '2' },
     ];
     render(<Harness />);
-    await click(screen.getByLabelText('Delete A'));
+    await click(screen.getByLabelText('删除 A'));
     expect(saves.at(-1)).toEqual([{ label: 'B', text: '2' }]);
   });
 
@@ -159,13 +159,13 @@ describe('MacroManagerSheet', () => {
       { label: 'B', text: '2' },
     ];
     render(<Harness />);
-    await click(screen.getByLabelText('Edit B'));
-    const [editName] = screen.getAllByLabelText('Macro name');
-    const [editText] = screen.getAllByLabelText('Macro text');
+    await click(screen.getByLabelText('编辑 B'));
+    const [editName] = screen.getAllByLabelText('模板名称');
+    const [editText] = screen.getAllByLabelText('模板内容');
     expect((editName as HTMLInputElement).value).toBe('B');
 
     fireEvent.change(editText, { target: { value: '  ' } });
-    await click(screen.getByRole('button', { name: /Save/ }));
+    await click(screen.getByRole('button', { name: /保存/ }));
     expect(saves).toEqual([]);
 
     fireEvent.change(editName, { target: { value: ' B2 ' } });
@@ -177,35 +177,63 @@ describe('MacroManagerSheet', () => {
       { label: 'A', text: '1' },
       { label: 'B2', text: 'two' },
     ]);
-    expect(screen.queryByRole('button', { name: /Save/ })).toBeNull();
+    expect(screen.queryByRole('button', { name: /保存/ })).toBeNull();
 
-    await click(screen.getByLabelText('Edit A'));
-    await click(screen.getByRole('button', { name: 'Cancel' }));
+    await click(screen.getByLabelText('编辑 A'));
+    await click(screen.getByRole('button', { name: '取消' }));
     expect(saves).toHaveLength(1);
-    expect(screen.queryByLabelText('Edit A')).not.toBeNull();
+    expect(screen.queryByLabelText('编辑 A')).not.toBeNull();
   });
 
-  // BUG: moveUp/moveDown (MacroManagerSheet.tsx:101-115) only follow editingIndex when the *edited* row moves.
-  // Moving its neighbour leaves editingIndex on the old slot, so Save overwrites the neighbour (A is lost and
-  // B is duplicated, bypassing the unique-label rule enforced on add).
-  it.fails('keeps the edit form attached to the macro being edited when a neighbour moves', async () => {
+  it('keeps the edit form attached to the macro being edited when a neighbour moves', async () => {
     stored = [
       { label: 'A', text: '1' },
       { label: 'B', text: '2' },
     ];
     render(<Harness />);
-    await click(screen.getByLabelText('Edit B'));
+    await click(screen.getByLabelText('编辑 B'));
     // While editing B, its row actions are hidden; move A down instead (B becomes index 0).
-    await click(screen.getByLabelText('Move A down'));
+    await click(screen.getByLabelText('将 A 下移'));
     expect(labels()).toEqual(['B', 'A']);
-    const [editName] = screen.getAllByLabelText('Macro name');
+    const [editName] = screen.getAllByLabelText('模板名称');
     expect((editName as HTMLInputElement).value).toBe('B');
     // Saving must overwrite B (now index 0), not A.
-    fireEvent.change(screen.getAllByLabelText('Macro text')[0], { target: { value: 'edited' } });
-    await click(screen.getByRole('button', { name: /Save/ }));
+    fireEvent.change(screen.getAllByLabelText('模板内容')[0], { target: { value: 'edited' } });
+    await click(screen.getByRole('button', { name: /保存/ }));
     expect(saves.at(-1)).toEqual([
       { label: 'B', text: 'edited' },
       { label: 'A', text: '1' },
+    ]);
+  });
+
+  it('keeps editing the same macro when a previous macro is deleted', async () => {
+    stored = [
+      { label: 'A', text: '1' },
+      { label: 'B', text: '2' },
+    ];
+    render(<Harness />);
+    await click(screen.getByLabelText('编辑 B'));
+    await click(screen.getByLabelText('删除 A'));
+    const [editText] = screen.getAllByLabelText('模板内容');
+    fireEvent.change(editText, { target: { value: 'edited' } });
+    await click(screen.getByRole('button', { name: /保存/ }));
+    expect(saves.at(-1)).toEqual([{ label: 'B', text: 'edited' }]);
+  });
+
+  it('keeps editing the same macro when a following neighbour moves up', async () => {
+    stored = [
+      { label: 'A', text: '1' },
+      { label: 'B', text: '2' },
+    ];
+    render(<Harness />);
+    await click(screen.getByLabelText('编辑 A'));
+    await click(screen.getByLabelText('将 B 上移'));
+    const [editText] = screen.getAllByLabelText('模板内容');
+    fireEvent.change(editText, { target: { value: 'edited' } });
+    await click(screen.getByRole('button', { name: /保存/ }));
+    expect(saves.at(-1)).toEqual([
+      { label: 'B', text: '2' },
+      { label: 'A', text: 'edited' },
     ]);
   });
 
@@ -213,7 +241,7 @@ describe('MacroManagerSheet', () => {
     stored = [{ label: 'A', text: '1' }];
     const onApply = vi.fn();
     render(<Harness onApply={onApply} />);
-    fireEvent.click(screen.getByTitle('Use this macro'));
+    fireEvent.click(screen.getByTitle('使用此模板'));
     expect(onApply.mock.calls).toEqual([[{ label: 'A', text: '1' }]]);
   });
 });

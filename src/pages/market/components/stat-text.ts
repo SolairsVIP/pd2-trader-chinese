@@ -20,7 +20,7 @@ export function templateName(template: string): string {
     template
       .replace(PLACEHOLDER, ' ')
       .replace(/\s+/g, ' ')
-      .replace(/^\W+(?=\w)/, '')
+      .replace(/^[^\p{L}\p{N}]+(?=[\p{L}\p{N}])/u, '')
       // "+{X} to Strength": the leading "to" belonged to the value
       .replace(/^to\s+/i, '')
       .trim() || template

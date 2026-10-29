@@ -30,7 +30,7 @@ function renderForm(authData: unknown, settings: Partial<ISettings> = { account:
 const signedIn = (accounts: string[], username: string | null = 'Doreet') => ({
   user: { username: username ?? undefined, game: { accounts } },
 });
-const accountSelect = () => screen.getByLabelText('Account') as HTMLSelectElement;
+const accountSelect = () => screen.getByLabelText('账户') as HTMLSelectElement;
 
 beforeAll(() => {
   MotionGlobalConfig.skipAnimations = true;
@@ -51,27 +51,27 @@ afterEach(cleanup);
 describe('AccountForm', () => {
   it('signed out: warns about missing accounts and disables the picker', () => {
     renderForm(null);
-    expect(screen.queryByText('No accounts available')).not.toBeNull();
-    expect(screen.queryByText('Signed out')).not.toBeNull();
+    expect(screen.queryByText('没有可用的账户')).not.toBeNull();
+    expect(screen.queryByText('未登录')).not.toBeNull();
     expect(accountSelect().disabled).toBe(true);
-    expect(screen.queryByRole('button', { name: /Log out/ })).toBeNull();
+    expect(screen.queryByRole('button', { name: /退出登录/ })).toBeNull();
   });
 
   it('signed in: lists the linked accounts and saves the chosen one', async () => {
     renderForm(signedIn(['Alpha', 'Beta']), { account: 'Alpha', pd2Token: 't' });
-    expect(screen.queryByText('Signed in as Doreet')).not.toBeNull();
-    expect(screen.queryByText(/2 linked game accounts/)).not.toBeNull();
-    await waitFor(() => expect(screen.queryByText('No accounts available')).toBeNull());
+    expect(screen.queryByText('已登录：Doreet')).not.toBeNull();
+    expect(screen.queryByText(/已关联 2 个游戏账户/)).not.toBeNull();
+    await waitFor(() => expect(screen.queryByText('没有可用的账户')).toBeNull());
     expect(accountSelect().value).toBe('Alpha');
 
     fireEvent.change(accountSelect(), { target: { value: 'Beta' } });
     expect(store.updateSettings).toHaveBeenCalledWith({ account: 'Beta' });
   });
 
-  it('uses singular wording for one account and handles a missing username', () => {
+  it('shows the count for one account and handles a missing username', () => {
     renderForm(signedIn(['Solo'], null));
-    expect(screen.queryByText(/1 linked game account\./)).not.toBeNull();
-    expect(screen.queryByText('Signed in')).not.toBeNull();
+    expect(screen.queryByText(/已关联 1 个游戏账户/)).not.toBeNull();
+    expect(screen.queryByText('已登录')).not.toBeNull();
   });
 
   it('shows the login progress and recovers when the OAuth flow fails', async () => {
@@ -80,12 +80,12 @@ describe('AccountForm', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
     renderForm(null);
 
-    await act(async () => fireEvent.click(screen.getByRole('button', { name: /Log in/ })));
-    const button = screen.getByRole('button', { name: /Logging in/ }) as HTMLButtonElement;
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: /登录/ })));
+    const button = screen.getByRole('button', { name: /正在登录/ }) as HTMLButtonElement;
     expect(button.disabled).toBe(true);
 
     await act(async () => fail(new Error('closed')));
-    expect((screen.getByRole('button', { name: /Log in/ }) as HTMLButtonElement).disabled).toBe(false);
+    expect((screen.getByRole('button', { name: /^登录$/ }) as HTMLButtonElement).disabled).toBe(false);
     expect(startOAuthFlow).toHaveBeenCalledTimes(1);
   });
 
@@ -94,21 +94,21 @@ describe('AccountForm', () => {
     logout.mockReturnValue(promise);
     renderForm(signedIn(['Alpha']));
 
-    await act(async () => fireEvent.click(screen.getByRole('button', { name: /Log out/ })));
-    expect((screen.getByRole('button', { name: /Logging out/ }) as HTMLButtonElement).disabled).toBe(true);
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: /退出登录/ })));
+    expect((screen.getByRole('button', { name: /正在退出/ }) as HTMLButtonElement).disabled).toBe(true);
     await act(async () => resolve());
-    expect(screen.queryByRole('button', { name: /Logging out/ })).toBeNull();
+    expect(screen.queryByRole('button', { name: /正在退出/ })).toBeNull();
   });
 
   it('hides the manual token field inside the desktop app', () => {
     renderForm(null);
-    expect(screen.queryByPlaceholderText('Enter your PD2 token')).toBeNull();
+    expect(screen.queryByPlaceholderText('输入 PD2 令牌')).toBeNull();
   });
 
   it('browser mode: saves a pasted token together with the current account', () => {
     vi.mocked(isTauri).mockReturnValue(false);
     renderForm(null, { account: 'Alpha', pd2Token: '' });
-    fireEvent.change(screen.getByPlaceholderText('Enter your PD2 token'), { target: { value: 'abc' } });
+    fireEvent.change(screen.getByPlaceholderText('输入 PD2 令牌'), { target: { value: 'abc' } });
     expect(store.updateSettings).toHaveBeenLastCalledWith({ account: 'Alpha', pd2Token: 'abc' });
   });
 

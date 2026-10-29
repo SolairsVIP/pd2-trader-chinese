@@ -41,7 +41,7 @@ function renderPage(listings: MarketListingEntry[] | undefined) {
 }
 
 const toasts = () => vi.mocked(showToast).mock.calls.map(([p]) => p);
-const card = (name: string) => screen.getByRole('button', { name: `Remove ${name} listing` });
+const card = (name: string) => screen.getByRole('button', { name: `下架「${name}」` });
 
 beforeEach(() => {
   vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -55,16 +55,16 @@ afterEach(cleanup);
 describe('DelistPage', () => {
   it('renders the listings from the panel payload with their prices and a count', () => {
     renderPage([listing(1, { hr_price: 3, price: 'or offer' }), listing(2)]);
-    expect(screen.getAllByRole('button', { name: /^Remove Item \d listing$/ })).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: /^下架「Item \d」$/ })).toHaveLength(2);
     expect(screen.queryByText('3 HR')).not.toBeNull();
     expect(screen.queryByText('or offer')).not.toBeNull();
-    expect(screen.getByLabelText('2 listings').textContent).toBe('2');
+    expect(screen.getByLabelText('2 个上架物品').textContent).toBe('2');
   });
 
   it('renders nothing (and does not crash) without a payload', () => {
     renderPage(undefined);
-    expect(screen.queryAllByRole('button', { name: /^Remove/ })).toHaveLength(0);
-    expect(screen.queryByLabelText(/listings$/)).toBeNull();
+    expect(screen.queryAllByRole('button', { name: /^下架/ })).toHaveLength(0);
+    expect(screen.queryByLabelText(/个上架物品$/)).toBeNull();
   });
 
   it('deletes the clicked listing, toasts, and closes the panel', async () => {
@@ -76,7 +76,7 @@ describe('DelistPage', () => {
       fireEvent.click(card('Item 2'));
     });
     expect(order).toEqual(['delete L2', 'close']);
-    expect(toasts()).toEqual([{ title: 'Delist', description: 'Removed Item 2 listing.' }]);
+    expect(toasts()).toEqual([{ title: '下架物品', description: '已将「Item 2」从市场下架。' }]);
   });
 
   it('ignores further selections while a delete is in flight', async () => {
@@ -86,7 +86,7 @@ describe('DelistPage', () => {
     await act(async () => {
       fireEvent.click(card('Item 1'));
     });
-    expect(screen.getByRole('status').textContent).toContain('Removing...');
+    expect(screen.getByRole('status').textContent).toContain('正在下架…');
     expect(card('Item 2').tabIndex).toBe(-1);
     await act(async () => {
       fireEvent.click(card('Item 2'));
@@ -101,7 +101,7 @@ describe('DelistPage', () => {
     await act(async () => {
       fireEvent.click(card('Item 1'));
     });
-    expect(toasts()).toEqual([{ title: 'Delist', description: 'Failed to remove listing.', variant: 'error' }]);
+    expect(toasts()).toEqual([{ title: '下架物品', description: '下架失败。', variant: 'error' }]);
     expect(close).toHaveBeenCalledTimes(1);
   });
 
@@ -113,7 +113,7 @@ describe('DelistPage', () => {
     const target = card('Item 1');
     // Keys from the nested stats toggle must not trigger a delete.
     await act(async () => {
-      fireEvent.keyDown(screen.getByRole('button', { name: /Show More/ }), { key });
+      fireEvent.keyDown(screen.getByRole('button', { name: /显示更多/ }), { key });
     });
     expect(deleteMarketListing).not.toHaveBeenCalled();
     await act(async () => {
@@ -126,7 +126,7 @@ describe('DelistPage', () => {
     renderPage([withStats()]);
     expect(screen.queryByText('Mod 4')).toBeNull();
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /Show More/ }));
+      fireEvent.click(screen.getByRole('button', { name: /显示更多/ }));
     });
     expect(screen.queryByText('Mod 4')).not.toBeNull();
     expect(deleteMarketListing).not.toHaveBeenCalled();
@@ -152,7 +152,7 @@ describe('DelistPage', () => {
 
   it('close button closes the panel', () => {
     renderPage([listing(1)]);
-    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    fireEvent.click(screen.getByRole('button', { name: '关闭' }));
     expect(close).toHaveBeenCalledTimes(1);
   });
 });

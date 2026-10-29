@@ -20,8 +20,8 @@ vi.mock('@/overlay', () => ({ showToast: vi.fn(), usePanel: () => panel }));
 vi.mock('framer-motion', () => import('@/pages/quick-list/motion-mock'));
 vi.mock('@tauri-apps/api/core', () => ({ isTauri: () => true }));
 vi.mock('@/hooks/pd2website/usePD2Website', () => {
-  class AuthenticationError extends Error {}
-  class AccountMismatchError extends Error {}
+  class AuthenticationError extends Error { name = 'AuthenticationError'; statusCode = 401; }
+  class AccountMismatchError extends Error { name = 'AccountMismatchError'; statusCode = 404; }
   return { usePd2Website: vi.fn(), AuthenticationError, AccountMismatchError };
 });
 vi.mock('@/hooks/useOptions', () => ({ useOptions: vi.fn() }));
@@ -70,7 +70,7 @@ const toasts = () => vi.mocked(showToast).mock.calls.map(([p]) => p);
 const tab = (name: RegExp) => screen.getByRole('tab', { name });
 const submitButton = () => document.querySelector<HTMLButtonElement>('button[type="submit"]')!;
 const priceInput = () => screen.getByPlaceholderText('HR') as HTMLInputElement;
-const noteInput = () => screen.getByPlaceholderText('Note...') as HTMLInputElement;
+const noteInput = () => screen.getByPlaceholderText('价格备注…') as HTMLInputElement;
 const storedQueue = () => JSON.parse(localStorage.getItem(QUEUE_KEY) ?? '[]');
 
 function renderForm(item: PriceCheckItem | null = copied) {
@@ -168,14 +168,14 @@ describe('tabs', () => {
   it('opens on List Item for a stash item', async () => {
     renderForm();
     await flush();
-    expect(tab(/List Item/).getAttribute('data-state')).toBe('active');
+    expect(tab(/上架物品/).getAttribute('data-state')).toBe('active');
   });
 
   it('opens on Manage with List Item disabled for a non-stash item', async () => {
     renderForm({ ...copied, location: 'Equipped' } as never);
     await flush();
-    expect(tab(/Manage/).getAttribute('data-state')).toBe('active');
-    expect((tab(/List Item/) as HTMLButtonElement).disabled).toBe(true);
+    expect(tab(/管理挂单/).getAttribute('data-state')).toBe('active');
+    expect((tab(/上架物品/) as HTMLButtonElement).disabled).toBe(true);
   });
 
   it('shows the user listing count on the Manage tab', async () => {
@@ -183,14 +183,14 @@ describe('tabs', () => {
     userTotal = 12;
     renderForm();
     await flush();
-    expect(tab(/Manage/).textContent).toBe('Manage12');
+    expect(tab(/管理挂单/).textContent).toBe('管理挂单12');
   });
 
   it('close closes the panel', async () => {
     renderForm();
     await flush();
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+      fireEvent.click(screen.getByRole('button', { name: '关闭' }));
     });
     expect(close).toHaveBeenCalledTimes(1);
   });
@@ -203,7 +203,7 @@ describe('finding the item', () => {
     expect(api.findMatchingItems.mock.calls).toEqual([[copied]]);
     const card = screen.getByRole('button', { name: /Shako #1/ });
     expect(card.getAttribute('aria-pressed')).toBe('true');
-    expect(submitButton().textContent).toBe('Post');
+    expect(submitButton().textContent).toBe('发布挂单');
   });
 
   it('requires picking one of multiple matches before the form appears', async () => {
@@ -215,29 +215,29 @@ describe('finding the item', () => {
       fireEvent.click(screen.getByRole('button', { name: /Shako #2/ }));
     });
     expect(screen.getByRole('button', { name: /Shako #2/ }).getAttribute('aria-pressed')).toBe('true');
-    expect(submitButton().textContent).toBe('Post');
+    expect(submitButton().textContent).toBe('发布挂单');
   });
 
   it('shows a retryable error when the stash lookup fails', async () => {
     api.findMatchingItems.mockRejectedValueOnce(new Error('Stash API down'));
     renderForm();
     await flush();
-    expect(screen.getByRole('alert').textContent).toContain('Stash API down');
+    expect(screen.getByRole('alert').textContent).toContain('查找仓库物品失败，请稍后重试。');
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /Retry Search/ }));
+      fireEvent.click(screen.getByRole('button', { name: /重试搜索/ }));
     });
     await flush();
     expect(screen.queryByRole('alert')).toBeNull();
-    expect(submitButton().textContent).toBe('Post');
+    expect(submitButton().textContent).toBe('发布挂单');
   });
 
   it('explains an account mismatch and raises an error toast', async () => {
     api.findMatchingItems.mockRejectedValueOnce(new AccountMismatchError('Wrong account'));
     renderForm();
     await flush();
-    expect(screen.queryByText('Wrong account detected')).not.toBeNull();
+    expect(screen.queryByText('检测到账号不匹配')).not.toBeNull();
     expect(toasts()).toEqual([
-      { title: 'Account Mismatch', description: 'Wrong account', variant: 'error', duration: 8000 },
+      { title: '账号不匹配', description: '所选游戏账号未关联当前登录的网站账号，请检查账号和分区设置。', variant: 'error', duration: 8000 },
     ]);
   });
 
@@ -245,7 +245,7 @@ describe('finding the item', () => {
     api.findMatchingItems.mockRejectedValueOnce(new AuthenticationError('Session expired'));
     renderForm();
     await flush();
-    expect(screen.getByRole('alert').textContent).toContain('Session expired');
+    expect(screen.getByRole('alert').textContent).toContain('登录已失效，请重新登录后重试。');
     expect(console.error).not.toHaveBeenCalled();
     expect(toasts()).toEqual([]);
   });
@@ -260,8 +260,8 @@ describe('finding the item', () => {
   it('prompts to copy an item when none is provided', async () => {
     renderForm(null);
     await flush();
-    await selectTab(/List Item/);
-    expect(screen.queryByText('No Item Selected')).not.toBeNull();
+    await selectTab(/上架物品/);
+    expect(screen.queryByText('未选择物品')).not.toBeNull();
   });
 });
 
@@ -275,9 +275,9 @@ describe('listing a new item', () => {
     expect(api.listSpecificItem.mock.calls).toEqual([[stash(1), 2.5, 'fast trade', 'exact']]);
     expect(toasts()).toEqual([
       {
-        title: 'Item listed!',
-        description: 'Added to the PD2 marketplace.',
-        action: { label: 'Shako #1', type: ToastActionType.OPEN_MARKET_LISTING, data: { listingId: 'NEW' } },
+        title: '物品已上架！',
+        description: '已添加到 PD2 交易市场。',
+        action: { label: '查看挂单', type: ToastActionType.OPEN_MARKET_LISTING, data: { listingId: 'NEW' } },
       },
     ]);
     expect(close).toHaveBeenCalledTimes(1);
@@ -298,7 +298,7 @@ describe('listing a new item', () => {
     fireEvent.change(priceInput(), { target: { value: '1' } });
     await submit();
     expect(api.listSpecificItem).not.toHaveBeenCalled();
-    expect(toasts()).toEqual([expect.objectContaining({ title: 'Maximum listings reached', variant: 'error' })]);
+    expect(toasts()).toEqual([expect.objectContaining({ title: '挂单数量已达上限', variant: 'error' })]);
     expect(close).not.toHaveBeenCalled();
     expect(submitButton().disabled).toBe(false);
   });
@@ -309,7 +309,7 @@ describe('listing a new item', () => {
     await flush();
     fireEvent.change(priceInput(), { target: { value: '1' } });
     await submit();
-    expect(screen.getByRole('alert').textContent).toContain('Item already listed');
+    expect(screen.getByRole('alert').textContent).toContain('上架或更新挂单失败，请稍后重试。');
     expect(close).not.toHaveBeenCalled();
   });
 });
@@ -324,7 +324,7 @@ describe('updating an existing listing', () => {
     await flush();
     expect(noteInput().value).toBe('or best');
     expect(priceInput().value).toBe('3');
-    expect(submitButton().textContent).toBe('Update');
+    expect(submitButton().textContent).toBe('更新挂单');
   });
 
   it('updates the listing and stash item instead of creating a new one', async () => {
@@ -335,7 +335,7 @@ describe('updating an existing listing', () => {
     expect(api.listSpecificItem).not.toHaveBeenCalled();
     expect(api.updateMarketListing.mock.calls).toEqual([['L1', { price: 'or best', hr_price: 0 }]]);
     expect(api.updateItemByHash.mock.calls).toEqual([['h1', { price: 'or best', hr_price: 0 }]]);
-    expect(toasts()).toEqual([{ title: 'PD2 Trader', description: 'Listing updated!' }]);
+    expect(toasts()).toEqual([{ title: 'PD2 Trader', description: '挂单已更新！' }]);
     expect(close).toHaveBeenCalledTimes(1);
   });
 
@@ -352,14 +352,14 @@ describe('updating an existing listing', () => {
     renderForm();
     await flush();
     const card = screen.getByRole('button', { name: /Shako #1/ });
-    fireEvent.mouseEnter(within(card).getByText('Listed').closest('span.relative')!);
+    fireEvent.mouseEnter(within(card).getByText('已上架').closest('span.relative')!);
     await act(async () => {
-      fireEvent.click(within(card).getByRole('button', { name: /Bump/ }));
+      fireEvent.click(within(card).getByRole('button', { name: /置顶/ }));
     });
     await flush();
     expect(api.updateMarketListing.mock.calls[0][0]).toBe('L1');
     expect(api.updateItemByHash.mock.calls[0][0]).toBe('h1');
-    expect(toasts()).toContain('Item bumped successfully!');
+    expect(toasts()).toContain('物品已成功置顶！');
     // The badge's refresh re-runs the stash search.
     expect(api.findMatchingItems).toHaveBeenCalledTimes(2);
   });
@@ -375,14 +375,14 @@ describe('queueing', () => {
     api.findMatchingItems.mockResolvedValue([]);
     renderForm();
     await flush();
-    expect(screen.queryByText('No items found matching "Harlequin Crest"')).not.toBeNull();
-    expect(submitButton().textContent).toBe('Queue Item');
+    expect(screen.queryByText('仓库中没有找到匹配“Harlequin Crest”的物品')).not.toBeNull();
+    expect(submitButton().textContent).toBe('加入上架队列');
     await queueWithNote('wts');
 
-    expect(toasts()[0]).toMatchObject({ title: 'Item queued' });
-    expect(tab(/Queued/).getAttribute('data-state')).toBe('active');
-    expect(tab(/Queued/).textContent).toBe('Queued1');
-    expect(screen.queryByText('Note: wts')).not.toBeNull();
+    expect(toasts()[0]).toMatchObject({ title: '物品已加入队列' });
+    expect(tab(/排队中/).getAttribute('data-state')).toBe('active');
+    expect(tab(/排队中/).textContent).toBe('排队中1');
+    expect(screen.queryByText('备注：wts')).not.toBeNull();
     expect(storedQueue()).toHaveLength(1);
     expect(storedQueue()[0]).toMatchObject({ item: copied, formData: { note: 'wts' } });
     expect(storedQueue()[0].initialMatchingHashes).toBeUndefined();
@@ -401,11 +401,11 @@ describe('queueing', () => {
     await tick(POLL_INTERVAL);
     expect(api.listSpecificItem.mock.calls).toEqual([[stash(9), 2, '', 'exact']]);
     expect(toasts().at(-1)).toMatchObject({
-      title: 'Item listed!',
-      action: { data: { listingId: 'NEW' }, label: 'Shako #9' },
+      title: '物品已上架！',
+      action: { data: { listingId: 'NEW' }, label: '查看挂单' },
     });
     expect(storedQueue()).toEqual([]);
-    expect(tab(/Queued/).textContent).toBe('Queued');
+    expect(tab(/排队中/).textContent).toBe('排队中');
   });
 
   it('"None of these match?" queues against only new stash items', async () => {
@@ -413,9 +413,9 @@ describe('queueing', () => {
     renderForm();
     await flush();
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: 'Queue Item' }));
+      fireEvent.click(screen.getByRole('button', { name: '加入上架队列' }));
     });
-    expect(screen.queryByText(/Queue this item to wait for the new one/)).not.toBeNull();
+    expect(screen.queryByText(/将此物品加入队列，等待它同步到仓库中/)).not.toBeNull();
     await queueWithNote('new one');
     expect(storedQueue()[0].initialMatchingHashes).toEqual(['h1', 'h2']);
 
@@ -437,7 +437,7 @@ describe('queueing', () => {
     expect(storedQueue()).toHaveLength(1);
     await tick(POLL_INTERVAL);
     expect(storedQueue()).toEqual([]);
-    expect(toasts().at(-1)).toMatchObject({ title: 'Listing timeout', variant: 'error' });
+    expect(toasts().at(-1)).toMatchObject({ title: '上架等待超时', variant: 'error' });
     expect(api.listSpecificItem).not.toHaveBeenCalled();
     // Polling stops once the queue is empty.
     const calls = api.findMatchingItems.mock.calls.length;
@@ -453,7 +453,7 @@ describe('queueing', () => {
     api.findMatchingItems.mockRejectedValueOnce(new AccountMismatchError('mismatch'));
     await tick(POLL_INTERVAL);
     expect(storedQueue()).toEqual([]);
-    expect(toasts().at(-1)).toMatchObject({ title: 'Account Mismatch', description: 'mismatch' });
+    expect(toasts().at(-1)).toMatchObject({ title: '账号不匹配', description: '所选游戏账号未关联当前登录的网站账号，请检查账号和分区设置。' });
   });
 
   it('keeps polling after a transient lookup error', async () => {
@@ -478,7 +478,7 @@ describe('queueing', () => {
     api.findMatchingItems.mockResolvedValue([stash(4)]);
     await tick(POLL_INTERVAL);
     expect(api.listSpecificItem).not.toHaveBeenCalled();
-    expect(toasts().at(-1)).toMatchObject({ title: 'Maximum listings reached' });
+    expect(toasts().at(-1)).toMatchObject({ title: '挂单数量已达上限' });
     expect(storedQueue()).toEqual([]);
   });
 
@@ -490,7 +490,7 @@ describe('queueing', () => {
     api.listSpecificItem.mockRejectedValueOnce(new Error('rejected'));
     api.findMatchingItems.mockResolvedValue([stash(4)]);
     await tick(POLL_INTERVAL);
-    expect(toasts().at(-1)).toEqual({ title: 'Failed to list item', description: 'rejected', variant: 'error' });
+    expect(toasts().at(-1)).toEqual({ title: '物品上架失败', description: '排队物品上架失败，请稍后重试。', variant: 'error' });
   });
 
   async function queueThenCancel() {
@@ -500,7 +500,7 @@ describe('queueing', () => {
     await queueWithNote('x');
     const before = api.findMatchingItems.mock.calls.length;
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /Cancel/ }));
+      fireEvent.click(screen.getByRole('button', { name: /取消/ }));
     });
     await flush();
     return before;
@@ -509,17 +509,14 @@ describe('queueing', () => {
   it('cancelling the last queued item stops polling and re-runs the stash search', async () => {
     const before = await queueThenCancel();
     expect(storedQueue()).toEqual([]);
-    expect(screen.queryByText('No Queued Items')).not.toBeNull();
+    expect(screen.queryByText('暂无排队物品')).not.toBeNull();
     const afterCancel = api.findMatchingItems.mock.calls.length;
     expect(afterCancel).toBeGreaterThan(before);
     await tick(3 * POLL_INTERVAL);
     expect(api.findMatchingItems.mock.calls.length).toBe(afterCancel);
   });
 
-  // BUG: the Cancel handler (ListItemShortcut.tsx:927-941) runs side effects (findMatchingItemsInStash, which
-  // itself sets state) inside a setQueuedListingIds updater. React may invoke updaters more than once (eager
-  // state + render), so cancelling fires the stash search twice.
-  it.fails('cancelling runs the stash search exactly once', async () => {
+  it('cancelling runs the stash search exactly once', async () => {
     const before = await queueThenCancel();
     expect(api.findMatchingItems.mock.calls.length).toBe(before + 1);
   });
@@ -543,23 +540,17 @@ describe('queueing', () => {
     expect(api.listSpecificItem.mock.calls).toEqual([[stash(7), 5, '', 'exact']]);
   });
 
-  // BUG: handleSubmit's queue path (ListItemShortcut.tsx:568-569) awaits fetchAllListings() but then reads the
-  // `totalListingsCount` captured by the render closure, so a cap reached since the window opened is ignored and
-  // the user is told the item was queued (it later fails the re-check in processQueuedListing).
-  it.fails('refuses to queue when the refreshed count is at the cap', async () => {
+  it('refuses to queue when the refreshed count is at the cap', async () => {
     api.findMatchingItems.mockResolvedValue([]);
     renderForm();
     await flush();
     userTotal = 50;
     await queueWithNote('x');
     expect(storedQueue()).toEqual([]);
-    expect(toasts()[0]).toMatchObject({ title: 'Maximum listings reached' });
+    expect(toasts()[0]).toMatchObject({ title: '挂单数量已达上限' });
   });
 
-  // BUG: when the copied item is already queued, the item effect (ListItemShortcut.tsx:203) switches to the
-  // Queued tab and skips the stash search, but the later tab effect (ListItemShortcut.tsx:809) immediately
-  // switches back to List Item, which then shows the previous item's stale matches.
-  it.fails('switches to the Queued tab when the copied item is already queued', async () => {
+  it('switches to the Queued tab when the copied item is already queued', async () => {
     api.findMatchingItems.mockResolvedValue([]);
     const view = renderForm();
     await flush();
@@ -570,7 +561,9 @@ describe('queueing', () => {
     await flush();
     view.setItem(copied);
     await flush();
-    expect(tab(/Queued/).getAttribute('data-state')).toBe('active');
+    expect(tab(/排队中/).getAttribute('data-state')).toBe('active');
+    await selectTab(/上架物品/);
+    expect(screen.queryByRole('button', { name: /Shako #2/ })).toBeNull();
   });
 });
 
@@ -578,7 +571,7 @@ it('Manage tab receives the prefetched first page', async () => {
   userListings = [marketListing(5), marketListing(6)];
   renderForm();
   await flush();
-  await selectTab(/Manage/);
+  await selectTab(/管理挂单/);
   await waitFor(() => expect(screen.queryByText('Shako #5')).not.toBeNull());
   expect(screen.queryByText('Shako #6')).not.toBeNull();
 });

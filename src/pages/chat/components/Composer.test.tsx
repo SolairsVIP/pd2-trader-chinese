@@ -62,7 +62,7 @@ function Harness({ initial = '', switchable = false }: { initial?: string; switc
   );
 }
 
-const editor = () => screen.getByRole('textbox', { name: 'Message' });
+const editor = () => screen.getByRole('textbox', { name: '消息' });
 const options = () => screen.queryAllByRole('option').map((o) => o.textContent);
 
 function type(value: string, caret = value.length) {
@@ -125,7 +125,7 @@ describe('Composer sending', () => {
     type('   ');
     fireEvent.keyDown(editor(), { key: 'Enter' });
     expect(onSend).not.toHaveBeenCalled();
-    expect((screen.getByRole('button', { name: 'Send' }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole('button', { name: '发送' }) as HTMLButtonElement).disabled).toBe(true);
   });
 
   it('ignores Enter while an IME composition is active', () => {
@@ -138,51 +138,51 @@ describe('Composer sending', () => {
 
   it('sends with the Send button', () => {
     render(<Harness initial="ty gl" />);
-    fireEvent.click(screen.getByRole('button', { name: 'Send' }));
+    fireEvent.click(screen.getByRole('button', { name: '发送' }));
     expect(onSend).toHaveBeenCalledWith('ty gl');
   });
 
   it('offers the Website/Whisper switch only when both reach the person; Whisper sends as a copied whisper', () => {
     const { unmount } = render(<Harness initial="hi" />);
-    expect(screen.queryByRole('group', { name: 'Reply via' })).toBeNull();
+    expect(screen.queryByRole('group', { name: '回复方式' })).toBeNull();
     unmount();
 
     render(<Harness initial="hi"
       switchable />);
-    const via = screen.getByRole('group', { name: 'Reply via' });
+    const via = screen.getByRole('group', { name: '回复方式' });
     expect(
       within(via)
-        .getByRole('radio', { name: /Website/ })
+        .getByRole('radio', { name: /网站消息/ })
         .getAttribute('aria-checked'),
     ).toBe('true');
-    fireEvent.click(within(via).getByRole('radio', { name: /Whisper/ }));
+    fireEvent.click(within(via).getByRole('radio', { name: /游戏密语/ }));
     expect(
       within(via)
-        .getByRole('radio', { name: /Whisper/ })
+        .getByRole('radio', { name: /游戏密语/ })
         .getAttribute('aria-checked'),
     ).toBe('true');
-    fireEvent.click(screen.getByRole('button', { name: 'Copy whisper' }));
+    fireEvent.click(screen.getByRole('button', { name: '复制游戏密语' }));
     expect(onSend).toHaveBeenCalledWith('hi');
   });
 });
 
 describe('Composer templates', () => {
-  const NEW = 'New template';
-  const MANAGE = 'Manage templates…';
+  const NEW = '新建模板';
+  const MANAGE = '管理模板…';
 
   it('opens on "/" with the labelled templates filled in, filters as you type and inserts on Enter', () => {
     render(<Harness />);
     type('/');
     expect(options()).toEqual([
-      'Offer acceptedAccepted Shako for 2 HR. Game: ',
-      'Offer declinedSorry AliceAcc, declined.',
-      'Item soldThe Shako is sold.',
+      '已接受报价 / Offer acceptedAccepted Shako for 2 HR. Game: ',
+      '已拒绝报价 / Offer declinedSorry AliceAcc, declined.',
+      '物品已售出 / Item soldThe Shako is sold.',
       NEW,
       MANAGE,
     ]);
 
     type('/sold');
-    expect(options()).toEqual(['Item soldThe Shako is sold.', NEW, MANAGE]);
+    expect(options()).toEqual(['物品已售出 / Item soldThe Shako is sold.', NEW, MANAGE]);
     fireEvent.keyDown(editor(), { key: 'Enter' });
 
     expect(editor().textContent).toBe('The Shako is sold.');
@@ -228,9 +228,9 @@ describe('Composer templates', () => {
     expect(options()).toEqual([
       'Still available?Hi, is your Shako still available?',
       'HaggleWould you take 2 HR, AliceAcc?',
-      'Offer acceptedAccepted Shako for 2 HR. Game: ',
-      'Offer declinedSorry AliceAcc, declined.',
-      'Item soldThe Shako is sold.',
+      '已接受报价 / Offer acceptedAccepted Shako for 2 HR. Game: ',
+      '已拒绝报价 / Offer declinedSorry AliceAcc, declined.',
+      '物品已售出 / Item soldThe Shako is sold.',
       NEW,
       MANAGE,
     ]);
@@ -242,7 +242,7 @@ describe('Composer templates', () => {
     type('/aliceacc');
     expect(options()).toEqual([
       'HaggleWould you take 2 HR, AliceAcc?',
-      'Offer declinedSorry AliceAcc, declined.',
+      '已拒绝报价 / Offer declinedSorry AliceAcc, declined.',
       NEW,
       MANAGE,
     ]);
@@ -255,7 +255,7 @@ describe('Composer templates', () => {
     render(<Harness />);
     type('/');
     fireEvent.click(screen.getByRole('option', { name: MANAGE }));
-    expect(openPanel).toHaveBeenCalledWith('settings', { section: 'Chat' });
+    expect(openPanel).toHaveBeenCalledWith('settings', { section: 'Chat' }, { focus: true });
     expect(editor().textContent).toBe('');
     expect(screen.queryByRole('listbox')).toBeNull();
   });
@@ -265,10 +265,10 @@ describe('Composer templates', () => {
     render(<Harness />);
     type('/');
     expect(options()).toEqual([NEW, MANAGE]);
-    expect(screen.queryByText('No templates yet')).not.toBeNull();
+    expect(screen.queryByText('暂无模板')).not.toBeNull();
     fireEvent.keyDown(editor(), { key: 'ArrowUp' });
     fireEvent.keyDown(editor(), { key: 'Enter' });
-    expect(openPanel).toHaveBeenCalledWith('settings', { section: 'Chat' });
+    expect(openPanel).toHaveBeenCalledWith('settings', { section: 'Chat' }, { focus: true });
     expect(onSend).not.toHaveBeenCalled();
   });
 });
@@ -278,8 +278,8 @@ describe('Composer template management', () => {
   const MINE = [{ id: 'a', name: 'Still available?', text: 'Is your {itemName} still available?' }, HAGGLE];
   const savedTemplates = () => store!.updateSettings.mock.calls.at(-1)?.[0].chatTemplates;
   const form = (name: string) => screen.getByRole('form', { name });
-  const nameInput = () => screen.getByLabelText('Name') as HTMLInputElement;
-  const textInput = () => screen.getByLabelText('Message', { selector: 'textarea' }) as HTMLTextAreaElement;
+  const nameInput = () => screen.getByLabelText('名称') as HTMLInputElement;
+  const textInput = () => screen.getByLabelText('消息', { selector: 'textarea' }) as HTMLTextAreaElement;
   const ctrl = (key: string) => fireEvent.keyDown(editor(), { key, ctrlKey: true });
 
   beforeEach(() => {
@@ -289,14 +289,14 @@ describe('Composer template management', () => {
   it('creates a template from the menu: it is saved, listed and the message gets the keyboard back', () => {
     render(<Harness />);
     type('/');
-    fireEvent.click(screen.getByRole('option', { name: 'New template' }));
+    fireEvent.click(screen.getByRole('option', { name: '新建模板' }));
     // The form replaces the list; the menu stays open
     expect(screen.queryByRole('listbox')).toBeNull();
     expect(document.activeElement).toBe(nameInput());
 
     fireEvent.change(nameInput(), { target: { value: 'Thanks' } });
     fireEvent.change(textInput(), { target: { value: 'ty {accountName}, gl' } });
-    fireEvent.click(within(form('New template')).getByRole('button', { name: 'Add template' }));
+    fireEvent.click(within(form('新建模板')).getByRole('button', { name: '添加模板' }));
 
     expect(savedTemplates()).toEqual([
       ...MINE,
@@ -310,24 +310,24 @@ describe('Composer template management', () => {
   it('validates the form like Settings does, and inserts token chips at the caret', () => {
     render(<Harness />);
     type('/');
-    fireEvent.click(screen.getByRole('option', { name: 'New template' }));
-    fireEvent.click(within(form('New template')).getByRole('button', { name: 'Add template' }));
+    fireEvent.click(screen.getByRole('option', { name: '新建模板' }));
+    fireEvent.click(within(form('新建模板')).getByRole('button', { name: '添加模板' }));
     expect(screen.getAllByRole('alert').map((a) => a.textContent)).toEqual([
-      'Give the template a name',
-      'Write the message',
+      '请填写模板名称',
+      '请填写消息内容',
     ]);
     expect(store!.updateSettings).not.toHaveBeenCalled();
 
     fireEvent.change(textInput(), { target: { value: 'Hi  there' } });
     textInput().setSelectionRange(3, 3);
-    fireEvent.click(within(form('New template')).getByRole('button', { name: '{accountName}' }));
+    fireEvent.click(within(form('新建模板')).getByRole('button', { name: '{accountName}' }));
     expect(textInput().value).toBe('Hi {accountName} there');
   });
 
   it('edits a template in the menu with its pencil; Ctrl+Enter saves', () => {
     render(<Harness />);
     type('/');
-    fireEvent.click(screen.getByRole('button', { name: 'Edit Haggle' }));
+    fireEvent.click(screen.getByRole('button', { name: '编辑模板：Haggle' }));
     expect(nameInput().value).toBe('Haggle');
     expect(textInput().value).toBe('Would you take {price}, {accountName}?');
     fireEvent.change(textInput(), { target: { value: 'I can do {price}' } });
@@ -341,26 +341,26 @@ describe('Composer template management', () => {
   it('edits an offer template in place: only its text', () => {
     render(<Harness />);
     type('/declined');
-    fireEvent.click(screen.getByRole('button', { name: 'Edit Offer declined' }));
-    expect(screen.queryByLabelText('Name')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: '编辑模板：已拒绝报价 / Offer declined' }));
+    expect(screen.queryByLabelText('名称')).toBeNull();
     expect(textInput().value).toBe('Sorry {accountName}, declined.');
     fireEvent.change(textInput(), { target: { value: 'No thanks {accountName}' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    fireEvent.click(screen.getByRole('button', { name: '保存' }));
 
     expect(store!.updateSettings).toHaveBeenLastCalledWith({ rejectOfferMessageTemplate: 'No thanks {accountName}' });
-    expect(options()).toContain('Offer declinedNo thanks AliceAcc');
+    expect(options()).toContain('已拒绝报价 / Offer declinedNo thanks AliceAcc');
   });
 
   it('deletes a template right away, and Undo puts it back where it was', () => {
     render(<Harness />);
     type('/');
-    fireEvent.click(screen.getByRole('button', { name: 'Delete Still available?' }));
+    fireEvent.click(screen.getByRole('button', { name: '删除模板：Still available?' }));
     expect(savedTemplates()).toEqual([HAGGLE]);
     expect(options()).not.toContain('Still available?Is your Shako still available?');
-    expect(screen.queryByRole('button', { name: 'Delete Offer declined' })).toBeNull();
+    expect(screen.queryByRole('button', { name: '删除模板：已拒绝报价 / Offer declined' })).toBeNull();
 
     expect(undoToasts).toEqual([
-      expect.objectContaining({ title: 'Template deleted', description: 'Your template "Still available?".' }),
+      expect.objectContaining({ title: '模板已删除', description: '已删除模板“Still available?”。' }),
     ]);
     act(() => undoToasts[0].onUndo());
     expect(savedTemplates()).toEqual(MINE);
@@ -371,7 +371,7 @@ describe('Composer template management', () => {
     render(<Harness />);
     type('/');
     fireEvent.keyDown(editor(), { key: 'ArrowDown' });
-    expect(screen.getByText(/Ctrl\+E edit · Ctrl\+D delete/)).toBeTruthy();
+    expect(screen.getByText(/Ctrl\+E 编辑 · Ctrl\+D 删除/)).toBeTruthy();
 
     ctrl('e');
     expect(nameInput().value).toBe('Haggle');
@@ -392,22 +392,22 @@ describe('Composer template management', () => {
     type('/sold');
     ctrl('d');
     expect(store!.updateSettings).toHaveBeenCalledTimes(1);
-    expect(screen.getByText(/Ctrl\+E edit$/)).toBeTruthy();
+    expect(screen.getByText(/Ctrl\+E 编辑$/)).toBeTruthy();
   });
 
   it('saves the message being written as a template, links kept as their URLs', async () => {
     const url = 'https://www.projectdiablo2.com/market/listing/aa11?display="Harlequin Crest"';
     render(<Harness initial={`wts ${url} 2 HR`} />);
     await act(async () => {});
-    fireEvent.click(screen.getByRole('button', { name: 'Message templates' }));
+    fireEvent.click(screen.getByRole('button', { name: '消息模板' }));
     // Not a "/" search: every template, plus saving the draft
-    expect(options().slice(-3)).toEqual(['Save message as template', 'New template', 'Manage templates…']);
-    fireEvent.click(screen.getByRole('option', { name: 'Save message as template' }));
+    expect(options().slice(-3)).toEqual(['将消息保存为模板', '新建模板', '管理模板…']);
+    fireEvent.click(screen.getByRole('option', { name: '将消息保存为模板' }));
 
     expect(textInput().value).toBe(`wts ${url} 2 HR`);
     fireEvent.change(nameInput(), { target: { value: 'WTS shako' } });
     // Enter in the name submits the form
-    fireEvent.submit(form('Save message as template'));
+    fireEvent.submit(form('将消息保存为模板'));
 
     expect(savedTemplates()?.at(-1)).toEqual({ id: expect.any(String), name: 'WTS shako', text: `wts ${url} 2 HR` });
     // The draft is untouched
@@ -419,12 +419,12 @@ describe('Composer template management', () => {
   it('the Templates button inserts a template at the caret, and closes when typing goes on', () => {
     render(<Harness />);
     type('hi  pls', 3);
-    fireEvent.click(screen.getByRole('button', { name: 'Message templates' }));
+    fireEvent.click(screen.getByRole('button', { name: '消息模板' }));
     fireEvent.click(screen.getByRole('option', { name: /Item sold/ }));
     expect(editor().textContent).toBe('hi The Shako is sold. pls');
     expect(screen.queryByRole('listbox')).toBeNull();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Message templates' }));
+    fireEvent.click(screen.getByRole('button', { name: '消息模板' }));
     expect(screen.getByRole('listbox')).toBeTruthy();
     typeAtCaret(editor(), 'x');
     expect(screen.queryByRole('listbox')).toBeNull();
@@ -433,9 +433,9 @@ describe('Composer template management', () => {
 
 describe('Composer template placeholders', () => {
   const fields = () =>
-    within(screen.getByRole('form', { name: /^Fill in/ })).getAllByRole('textbox') as HTMLInputElement[];
+    within(screen.getByRole('form', { name: /^填写模板：/ })).getAllByRole('textbox') as HTMLInputElement[];
   const labels = () => fields().map((f) => f.getAttribute('aria-label'));
-  const preview = () => screen.getByLabelText('Preview').textContent;
+  const preview = () => screen.getByLabelText('消息预览').textContent;
   const fill = (input: HTMLInputElement, value: string) => fireEvent.change(input, { target: { value } });
 
   it('asks for the custom placeholders first, deduped in order, with a live preview; Enter walks to the end', () => {
@@ -453,14 +453,14 @@ describe('Composer template placeholders', () => {
     expect(labels()).toEqual(['game', 'pw']);
     expect(document.activeElement).toBe(fields()[0]);
     expect(preview()).toBe('Shako is yours, join  / , !');
-    expect(screen.getByText(/Left empty, inserted blank: \{game\} \{pw\}/)).toBeTruthy();
+    expect(screen.getByText(/以下字段留空时将插入空内容：\{game\} \{pw\}/)).toBeTruthy();
 
     fill(fields()[0], 'Baal-12 {price}');
     expect(preview()).toBe('Shako is yours, join Baal-12 {price} / , Baal-12 {price}!');
     fireEvent.keyDown(fields()[0], { key: 'Enter' });
     expect(document.activeElement).toBe(fields()[1]);
     fill(fields()[1], '1');
-    expect(screen.queryByText(/Left empty/)).toBeNull();
+    expect(screen.queryByText(/以下字段留空时将插入空内容/)).toBeNull();
     fireEvent.keyDown(fields()[1], { key: 'Enter' });
 
     // Values go in literally
@@ -498,7 +498,7 @@ describe('Composer template placeholders', () => {
     fireEvent.keyDown(editor(), { key: 'Enter' });
     fill(fields()[0], 'baal-7');
     fill(fields()[1], 'x');
-    fireEvent.click(screen.getByRole('button', { name: 'Insert' }));
+    fireEvent.click(screen.getByRole('button', { name: '插入消息' }));
     expect(editor().textContent).toBe('join baal-7/x');
 
     type('/rejoin');
@@ -511,7 +511,7 @@ describe('Composer template placeholders', () => {
     settings.chatTemplates = [{ id: 'a', name: 'Pw', text: 'pw {passcode} {spot}' }];
     render(<Harness />);
     type('ok  ty', 3);
-    fireEvent.click(screen.getByRole('button', { name: 'Message templates' }));
+    fireEvent.click(screen.getByRole('button', { name: '消息模板' }));
     fireEvent.click(screen.getByRole('option', { name: /^Pw/ }));
     fill(fields()[0], '42');
     fireEvent.keyDown(fields()[0], { key: 'Enter', ctrlKey: true });
@@ -521,12 +521,12 @@ describe('Composer template placeholders', () => {
   it('shows the placeholders a template will ask for while it is written', () => {
     render(<Harness />);
     type('/');
-    fireEvent.click(screen.getByRole('option', { name: 'New template' }));
-    expect(screen.getByText(/Any other \{name\} is asked for/)).toBeTruthy();
-    fireEvent.change(screen.getByLabelText('Message', { selector: 'textarea' }), {
+    fireEvent.click(screen.getByRole('option', { name: '新建模板' }));
+    expect(screen.getByText(/使用模板时会询问其他 \{name\} 占位内容/)).toBeTruthy();
+    fireEvent.change(screen.getByLabelText('消息', { selector: 'textarea' }), {
       target: { value: 'join {game} {itemName} {pw} {game}' },
     });
-    expect(screen.getByText(/Asks when used:/).textContent).toBe('Asks when used: {game} {pw}');
+    expect(screen.getByText(/使用时询问：/).textContent?.replace(/\s+/g, ' ').trim()).toBe('使用时询问： {game} {pw}');
   });
 });
 
@@ -537,7 +537,7 @@ describe('Composer starred templates', () => {
     { id: 'i', name: 'Inv me', text: 'Sure, inv me.', favorite: true },
     { id: 'g', name: 'Game', text: 'join {room}', favorite: true },
   ];
-  const row = () => screen.getByRole('toolbar', { name: 'Quick replies' });
+  const row = () => screen.getByRole('toolbar', { name: '快捷回复' });
   const chips = () =>
     within(row())
       .queryAllByRole('button')
@@ -571,17 +571,17 @@ describe('Composer starred templates', () => {
   it('stars a template from the "/" menu (click or Ctrl+S), offer templates too, and shows its chip', () => {
     render(<Harness />);
     type('/price');
-    expect(screen.getByRole('button', { name: 'Star Price check' }).getAttribute('aria-pressed')).toBe('false');
-    fireEvent.click(screen.getByRole('button', { name: 'Star Price check' }));
+    expect(screen.getByRole('button', { name: '收藏模板：Price check' }).getAttribute('aria-pressed')).toBe('false');
+    fireEvent.click(screen.getByRole('button', { name: '收藏模板：Price check' }));
     expect(savedTemplates()?.[1]).toEqual({ ...STARRED[1], favorite: true });
     expect(chips()).toEqual(['Still available?', 'Price check', 'Inv me', 'Game']);
-    expect(screen.getByRole('button', { name: 'Unstar Price check' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: '取消收藏模板：Price check' }).getAttribute('aria-pressed')).toBe('true');
 
     type('/sold');
-    expect(screen.getByText(/Ctrl\+S star/)).toBeTruthy();
+    expect(screen.getByText(/Ctrl\+S 收藏/)).toBeTruthy();
     fireEvent.keyDown(editor(), { key: 's', ctrlKey: true });
     expect(store!.updateSettings).toHaveBeenLastCalledWith({ favoriteOfferTemplates: ['soldOfferMessageTemplate'] });
-    expect(chips()).toEqual(['Still available?', 'Price check', 'Inv me', 'Game', 'Item sold']);
+    expect(chips()).toEqual(['Still available?', 'Price check', 'Inv me', 'Game', '物品已售出 / Item sold']);
     fireEvent.keyDown(editor(), { key: 's', ctrlKey: true });
     expect(store!.updateSettings).toHaveBeenLastCalledWith({ favoriteOfferTemplates: [] });
   });
@@ -590,14 +590,14 @@ describe('Composer starred templates', () => {
     settings.chatTemplates = [STARRED[1]];
     render(<Harness />);
     expect(chips()).toEqual([]);
-    expect(within(row()).getByText('★ Star templates to pin them here')).toBeTruthy();
+    expect(within(row()).getByText('★ 收藏模板后会固定显示在这里')).toBeTruthy();
   });
 });
 
 describe('Composer listing picker', () => {
   async function openPicker() {
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: 'Link one of my listings' }));
+      fireEvent.click(screen.getByRole('button', { name: '关联我的一条挂单' }));
     });
     await act(async () => {});
     return screen.getByRole('dialog');
@@ -614,9 +614,9 @@ describe('Composer listing picker', () => {
       within(picker)
         .queryAllByRole('button')
         .map((b) => b.textContent);
-    expect(items()).toEqual(['Harlequin CrestShako2.5 HR', "Tal Rasha's Guardianshipoffers"]);
+    expect(items()).toEqual(['谐角之冠军帽2.5 HR', "Tal Rasha's Guardianshipoffers"]);
 
-    fireEvent.change(within(picker).getByPlaceholderText('Search my listings...'), { target: { value: 'tal' } });
+    fireEvent.change(within(picker).getByPlaceholderText('搜索我的挂单…'), { target: { value: 'tal' } });
     expect(items()).toEqual(["Tal Rasha's Guardianshipoffers"]);
   });
 
@@ -632,12 +632,12 @@ describe('Composer listing picker', () => {
     type('want this? ok', 10);
     const picker = await openPicker();
     await act(async () => {
-      fireEvent.click(within(picker).getByRole('button', { name: /Harlequin Crest/ }));
+      fireEvent.click(within(picker).getByRole('button', { name: /谐角之冠/ }));
     });
     await settle();
 
-    expect(pill('Harlequin Crest')).not.toBeNull();
-    expect(editor().textContent).toBe('want this? Harlequin Crest ok');
+    expect(pill('谐角之冠')).not.toBeNull();
+    expect(editor().textContent).toBe('want this? 谐角之冠 ok');
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(onSend).not.toHaveBeenCalled();
 
@@ -652,19 +652,19 @@ describe('Composer listing picker', () => {
   it('removes a whole link with Backspace after its pill, or with its ×', async () => {
     const { unmount } = render(<Harness initial={`hi ${URL}`} />);
     await settle();
-    expect(editor().textContent).toBe('hi Harlequin Crest');
+    expect(editor().textContent).toBe('hi 谐角之冠');
     editor().focus();
     placeCaret(editor(), editor().childNodes.length);
     fireEvent.keyDown(editor(), { key: 'Backspace' });
-    expect(pill('Harlequin Crest')).toBeNull();
+    expect(pill('谐角之冠')).toBeNull();
     sendNow();
     expect(onSend).toHaveBeenLastCalledWith('hi');
     unmount();
 
     render(<Harness initial={`hi ${URL} there`} />);
     await settle();
-    fireEvent.click(screen.getByRole('button', { name: 'Remove Harlequin Crest' }));
-    expect(pill('Harlequin Crest')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: '移除 Harlequin Crest' }));
+    expect(pill('谐角之冠')).toBeNull();
     sendNow();
     expect(onSend).toHaveBeenLastCalledWith('hi  there');
   });
@@ -674,7 +674,7 @@ describe('Composer listing picker', () => {
     type('look here', 5);
     pasteText(editor(), `${URL} `);
     await settle();
-    expect(editor().textContent).toBe('look Harlequin Crest here');
+    expect(editor().textContent).toBe('look 谐角之冠 here');
     expect(editor().textContent).not.toContain('https');
     sendNow();
     expect(onSend).toHaveBeenCalledWith(`look ${URL} here`);
@@ -688,7 +688,7 @@ describe('Composer listing picker', () => {
     typeAtCaret(editor(), ' for 2 ist');
     placeCaret(editor(), 0);
     typeAtCaret(editor(), 'wts ');
-    expect(editor().textContent).toBe('wts Harlequin Crest for 2 ist');
+    expect(editor().textContent).toBe('wts 谐角之冠 for 2 ist');
     sendNow();
     expect(onSend).toHaveBeenCalledWith(`wts ${URL} for 2 ist`);
   });
@@ -749,10 +749,14 @@ it('keeps keyboard ownership when opening or using favorite templates after retu
 
 describe('一键复制询问', () => {
   it('优先询问草稿中关联的物品，不清空草稿', () => {
-    render(<ItemsProvider items={[]}><Composer value="https://projectdiablo2.com/market/listing/aa11?display=Ruby%20Jewel" onChange={vi.fn()} onSend={onSend} placeholder="消息" templateVars={VARS} channel="whisper" whisperTarget="AliceAcc" /></ItemsProvider>);
+    const onChange = vi.fn();
+    // Keep this URL-only fixture independent of cached market listings from the picker tests.
+    vi.mocked(usePd2Website).mockReturnValue({ authData: null } as never);
+    render(<ItemsProvider items={[]}><Composer value="https://projectdiablo2.com/market/listing/cc33?display=Ruby%20Jewel" onChange={onChange} onSend={onSend} placeholder="消息" templateVars={VARS} channel="whisper" whisperTarget="AliceAcc" /></ItemsProvider>);
     fireEvent.click(screen.getByRole('button', { name: '一键复制询问' }));
     expect(onSend).toHaveBeenCalledWith('Hi, is your Ruby Jewel still available?');
     expect(screen.getByRole('textbox', { name: '消息' }).textContent).toContain('Ruby Jewel');
+    expect(onChange).not.toHaveBeenCalled();
   });
   it('没有关联物品时使用通用询问', () => {
     render(<ItemsProvider items={[]}><Composer value="" onChange={vi.fn()} onSend={onSend} placeholder="消息" templateVars={{}} channel="whisper" whisperTarget="AliceAcc" /></ItemsProvider>);

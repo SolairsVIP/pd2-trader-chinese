@@ -49,12 +49,12 @@ afterEach(() => {
 describe('GeneralForm', () => {
   it('shows a skeleton while loading', async () => {
     await renderForm(BASE, true);
-    expect(screen.queryByLabelText('Ladder')).toBeNull();
+    expect(screen.queryByLabelText('天梯')).toBeNull();
   });
 
   it('saves a changed field only after the 500ms debounce', async () => {
     await renderForm();
-    fireEvent.change(select('Mode'), { target: { value: 'hardcore' } });
+    fireEvent.change(select('模式'), { target: { value: 'hardcore' } });
     await advance(499);
     expect(store.updateSettings).not.toHaveBeenCalled();
     await advance(1);
@@ -75,35 +75,35 @@ describe('GeneralForm', () => {
 
   it('does not save when an edit is reverted before the debounce fires', async () => {
     await renderForm();
-    fireEvent.change(select('Ladder'), { target: { value: 'non-ladder' } });
-    fireEvent.change(select('Ladder'), { target: { value: 'ladder' } });
+    fireEvent.change(select('天梯'), { target: { value: 'non-ladder' } });
+    fireEvent.change(select('天梯'), { target: { value: 'ladder' } });
     await advance(600);
     expect(store.updateSettings).not.toHaveBeenCalled();
   });
 
   it('saves the season and debug logging immediately', async () => {
     await renderForm();
-    expect(select('Season').value).toBe('current');
-    fireEvent.change(select('Season'), { target: { value: 's12' } });
+    expect(select('赛季').value).toBe('current');
+    fireEvent.change(select('赛季'), { target: { value: 's12' } });
     expect(store.updateSettings).toHaveBeenLastCalledWith({ selectedSeasonId: 's12' });
 
-    fireEvent.click(screen.getByRole('switch', { name: 'Debug Logging' }));
+    fireEvent.click(screen.getByRole('switch', { name: '调试日志' }));
     expect(store.updateSettings).toHaveBeenLastCalledWith({ debugLoggingEnabled: true });
   });
 
   it('shows the auto-detected directory as a hint only while the field is empty', async () => {
     detected = 'D:\\Games\\Diablo II';
     await renderForm();
-    expect(screen.queryByText('Detected: D:\\Games\\Diablo II')).not.toBeNull();
+    expect(screen.queryByText('已检测到：D:\\Games\\Diablo II')).not.toBeNull();
 
     fireEvent.change(dirInput(), { target: { value: 'E:\\D2' } });
-    expect(screen.queryByText(/Detected:/)).toBeNull();
+    expect(screen.queryByText(/已检测到：/)).toBeNull();
   });
 
   it('Auto-Detect fills the field and the debounced save persists it', async () => {
     await renderForm();
     detected = 'D:\\D2';
-    await act(async () => fireEvent.click(screen.getByRole('button', { name: /Auto-Detect/ })));
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: /自动检测/ })));
     expect(dirInput().value).toBe('D:\\D2');
     await advance(500);
     expect(store.updateSettings.mock.calls[0][0].diablo2Directory).toBe('D:\\D2');
@@ -111,7 +111,7 @@ describe('GeneralForm', () => {
 
   it('Auto-Detect warns when nothing is found and leaves the field alone', async () => {
     await renderForm({ ...BASE, diablo2Directory: 'C:\\Old' });
-    await act(async () => fireEvent.click(screen.getByRole('button', { name: /Auto-Detect/ })));
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: /自动检测/ })));
     expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ variant: 'warning' }));
     expect(dirInput().value).toBe('C:\\Old');
   });
@@ -119,7 +119,7 @@ describe('GeneralForm', () => {
   it('does not attempt detection outside Tauri', async () => {
     vi.mocked(isTauri).mockReturnValue(false);
     await renderForm();
-    await act(async () => fireEvent.click(screen.getByRole('button', { name: /Auto-Detect/ })));
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: /自动检测/ })));
     expect(vi.mocked(invoke)).not.toHaveBeenCalled();
     expect(vi.mocked(showToast)).not.toHaveBeenCalled();
   });

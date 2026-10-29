@@ -41,7 +41,7 @@ function renderBadge(currentListings: MarketListingEntry[]) {
 }
 
 const toasts = () => vi.mocked(showToast).mock.calls.map(([p]) => p);
-const hover = () => fireEvent.mouseEnter(screen.getByText('Listed').closest('span.relative')!);
+const hover = () => fireEvent.mouseEnter(screen.getByText('已上架').closest('span.relative')!);
 
 beforeEach(() => {
   vi.useFakeTimers({ toFake: ['Date'] });
@@ -74,32 +74,32 @@ describe('MarketListingBadge', () => {
     ['bumped exactly 12h ago', hoursAgo(12)],
   ])('offers Bump on hover when %s', (_label, bumpedAt) => {
     renderBadge([listing(bumpedAt)]);
-    expect(screen.queryByRole('button', { name: /Bump/ })).toBeNull();
+    expect(screen.queryByRole('button', { name: /置顶/ })).toBeNull();
     hover();
-    expect(screen.queryByRole('button', { name: /Bump/ })).not.toBeNull();
+    expect(screen.queryByRole('button', { name: /置顶/ })).not.toBeNull();
   });
 
   it('keeps the Listed pill (cooldown) on hover when bumped under 12h ago', () => {
     renderBadge([listing(hoursAgo(11.9))]);
     hover();
-    expect(screen.queryByRole('button', { name: /Bump/ })).toBeNull();
-    expect(screen.getByText('Listed').className).toContain('cursor-not-allowed');
+    expect(screen.queryByRole('button', { name: /置顶/ })).toBeNull();
+    expect(screen.getByText('已上架').className).toContain('cursor-not-allowed');
   });
 
   it('bumps the listing for this item, refreshes, then shows the success state until mouse leave', async () => {
     renderBadge([{ ...listing(null), _id: 'other', item: { hash: 'x' } } as MarketListingEntry, listing(null)]);
     hover();
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /Bump/ }));
+      fireEvent.click(screen.getByRole('button', { name: /置顶/ }));
     });
     expect(onBump.mock.calls).toEqual([['L1', 'h1']]);
     expect(onRefresh).toHaveBeenCalledTimes(1);
-    expect(toasts()).toEqual(['Item bumped successfully!']);
-    expect(screen.queryByRole('button', { name: /Bump/ })).toBeNull();
-    expect(screen.queryByText('Listed')).toBeNull();
+    expect(toasts()).toEqual(['物品已成功置顶！']);
+    expect(screen.queryByRole('button', { name: /置顶/ })).toBeNull();
+    expect(screen.queryByText('已上架')).toBeNull();
 
     fireEvent.mouseLeave(document.querySelector('span.relative')!);
-    expect(screen.queryByText('Listed')).not.toBeNull();
+    expect(screen.queryByText('已上架')).not.toBeNull();
   });
 
   it('reports a failed bump, skips refresh, and leaves Bump available to retry', async () => {
@@ -107,11 +107,11 @@ describe('MarketListingBadge', () => {
     renderBadge([listing(null)]);
     hover();
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /Bump/ }));
+      fireEvent.click(screen.getByRole('button', { name: /置顶/ }));
     });
     expect(onRefresh).not.toHaveBeenCalled();
-    expect(toasts()).toEqual(['Failed to bump item']);
-    const bump = screen.getByRole('button', { name: /Bump/ }) as HTMLButtonElement;
+    expect(toasts()).toEqual(['置顶物品失败。']);
+    const bump = screen.getByRole('button', { name: /置顶/ }) as HTMLButtonElement;
     expect(bump.disabled).toBe(false);
   });
 
@@ -122,27 +122,38 @@ describe('MarketListingBadge', () => {
     close.mockImplementation(() => void order.push('close'));
     renderBadge([listing(null)]);
     await act(async () => {
-      fireEvent.click(screen.getByLabelText('Remove listing'));
+      fireEvent.click(screen.getByLabelText('删除挂单'));
     });
     expect(order).toEqual(['delete L1', 'refresh', 'close']);
-    expect(toasts()).toEqual(['Removed Shako market listing.']);
+    expect(toasts()).toEqual(['已将「Shako」从市场下架。']);
   });
 
-  // BUG: the remove handler (MarketListingBadge.tsx:150-161) has try/finally but no catch: a failed delete
-  // gives the user no toast and surfaces as an unhandled promise rejection from the click handler.
-  // Skipped (not it.fails) because the unhandled rejection would fail the whole vitest run.
-  it.skip('reports a failed removal to the user', async () => {
+  it('reports a failed removal to the user', async () => {
     deleteMarketListing.mockRejectedValueOnce(new Error('500'));
     renderBadge([listing(null)]);
     await act(async () => {
-      fireEvent.click(screen.getByLabelText('Remove listing'));
+      fireEvent.click(screen.getByLabelText('删除挂单'));
     });
-    expect(toasts()).toEqual(['Failed to remove listing']);
+    expect(toasts()).toEqual(['删除挂单失败。']);
+    expect(onRefresh).not.toHaveBeenCalled();
+    expect(close).not.toHaveBeenCalled();
+    expect((screen.getByLabelText('删除挂单') as HTMLButtonElement).disabled).toBe(false);
+  });
+
+  it('reports a refresh failure separately after the listing was removed', async () => {
+    onRefresh.mockRejectedValueOnce(new Error('offline'));
+    renderBadge([listing(null)]);
+    await act(async () => {
+      fireEvent.click(screen.getByLabelText('删除挂单'));
+    });
+    expect(deleteMarketListing).toHaveBeenCalledWith('L1');
+    expect(toasts()).toEqual(['挂单已删除，但刷新失败。']);
+    expect(close).not.toHaveBeenCalled();
   });
 
   it('opens the listing on the trade website', () => {
     renderBadge([listing(null)]);
-    fireEvent.click(screen.getByLabelText('Go to trade website'));
+    fireEvent.click(screen.getByLabelText('前往交易网站'));
     expect(vi.mocked(openUrl).mock.calls).toEqual([['https://projectdiablo2.com/market/listing/L1']]);
   });
 });

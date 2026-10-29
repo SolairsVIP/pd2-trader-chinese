@@ -125,6 +125,14 @@ afterEach(() => {
 });
 
 describe('AppController price check hotkey', () => {
+  it('opens the controller menu when the long-press event arrives', async () => {
+    await mount({ ...SETTINGS, controllerPriceCheckEnabled: true });
+    const handler = vi.mocked(listen).mock.calls.find(([event]) => event === 'controller-open-menu')?.[1];
+    expect(handler).toBeDefined();
+    act(() => handler!({} as never));
+    await advance(0);
+    expect(h.overlay.openPanel).toHaveBeenCalledWith('controllerMenu', undefined, { focus: true });
+  });
   it('only enables the controller listener when requested and copies on an accepted controller event', async () => {
     await mount({ ...SETTINGS, hotkeyKey: 'c', controllerPriceCheckEnabled: true });
     expect(listen).toHaveBeenCalledWith('controller-price-check', expect.any(Function));
@@ -155,7 +163,7 @@ describe('AppController price check hotkey', () => {
     await mount();
     await press(0);
     await advance(300);
-    expect(toasts()).toContainEqual(expect.objectContaining({ description: 'Item is not supported or invalid.' }));
+    expect(toasts()).toContainEqual(expect.objectContaining({ description: '物品不受支持或数据无效。' }));
     expect(clipboard).toBe('user text');
     expect(h.overlay.openPanel).not.toHaveBeenCalledWith('itemSearch', expect.anything());
   });
@@ -233,8 +241,8 @@ describe('AppController list and delist hotkeys', () => {
     );
     expect(toasts()).toContainEqual(
       expect.objectContaining({
-        title: 'Cannot List Item',
-        description: expect.stringContaining('not in your shared stash'),
+        title: '无法上架物品',
+        description: expect.stringContaining('不在共享仓库中'),
       }),
     );
   });
@@ -249,7 +257,7 @@ describe('AppController list and delist hotkeys', () => {
       { error: 'not_shared_stash' },
       { placement: 'cursor' },
     );
-    expect(toasts()).toContainEqual(expect.objectContaining({ description: 'Item is not supported or invalid.' }));
+    expect(toasts()).toContainEqual(expect.objectContaining({ description: '物品不受支持或数据无效。' }));
   });
 
   it('delist hotkey hands a valid item to the delist handler', async () => {
@@ -265,7 +273,7 @@ describe('AppController list and delist hotkeys', () => {
     await press(5);
     await advance(300);
     expect(delistItem).not.toHaveBeenCalled();
-    expect(toasts()).toContainEqual(expect.objectContaining({ title: 'Delist', variant: 'error' }));
+    expect(toasts()).toContainEqual(expect.objectContaining({ title: '下架物品', variant: 'error' }));
   });
 });
 
@@ -344,7 +352,7 @@ describe('AppController panels', () => {
     await advance(1999);
     expect(showToast).not.toHaveBeenCalled();
     await advance(1);
-    expect(toasts()).toEqual(['is now running in the background...']);
+    expect(toasts()).toEqual(['PD2 Trader 已在后台运行…']);
   });
 });
 

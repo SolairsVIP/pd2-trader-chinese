@@ -15,12 +15,18 @@ import MarketBrowserPage from '@/pages/market/MarketBrowserPage';
 import type { PanelDefs } from './types';
 import CorruptedZonePage from '@/pages/corrupted-zone/CorruptedZonePage';
 import CorruptionLuckPage from '@/pages/corruption-luck/CorruptionLuckPage';
+import ControllerMenu from '@/pages/controller/ControllerMenu';
 
 /**
  * Every overlay panel. Each page owner tunes ONLY its own entry. Passed to <OverlayProvider defs={PANEL_DEFS}>
  * from main.tsx (kept out of '@/overlay' so importing the overlay API never pulls in every page).
  */
 export const PANEL_DEFS: PanelDefs = {
+  controllerMenu: {
+    id: 'controllerMenu', component: ControllerMenu, size: { width: 420, height: 340 },
+    resizable: false, placement: 'gameCenter', persist: false, keyboard: 'onPointerDown',
+    keepMounted: false, hideOnGameBlur: true, closeOnBlur: true,
+  },
   corruptionLuck: {
     id: 'corruptionLuck',
     component: CorruptionLuckPage,

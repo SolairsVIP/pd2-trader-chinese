@@ -158,11 +158,11 @@ function renderWindow() {
   return render(<StashValueWindow />);
 }
 
-/** Text of the delta pills in the header ("+1.25 HR (last)"). */
+/** Text of the delta pills in the header ("+1.25 HR (较上次)"). */
 function deltaPills(): string[] {
   return [...document.querySelectorAll('span.rounded-full')]
     .map((el) => el.textContent ?? '')
-    .filter((text) => /\((last|24h|season)\)$/.test(text));
+    .filter((text) => /\((较上次|24 小时|本赛季)\)$/.test(text));
 }
 
 function openTab(name: string | RegExp) {
@@ -221,17 +221,17 @@ describe('StashValueWindow signed out', () => {
     settings = {};
     setNetWorth({ status: 'signed-out', owner: null, latest: null });
     renderWindow();
-    expect(screen.getByText('Sign in with your PD2 account to value your stash.')).not.toBeNull();
+    expect(screen.getByText('登录 PD2 账号以估算仓库价值')).not.toBeNull();
     expect(screen.queryByRole('tablist')).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
+    fireEvent.click(screen.getByRole('button', { name: '登录' }));
     expect(openPanel.mock.calls).toEqual([['signIn']]);
   });
 
   it('asks to pick an account when signed in without one', () => {
     setNetWorth({ status: 'signed-out', owner: null, latest: null });
     renderWindow();
-    expect(screen.getByText('Choose your PD2 account in Settings to value your stash.')).not.toBeNull();
-    expect(screen.queryByRole('button', { name: 'Sign in' })).toBeNull();
+    expect(screen.getByText('请在设置中选择 PD2 账号以估算仓库价值')).not.toBeNull();
+    expect(screen.queryByRole('button', { name: '登录' })).toBeNull();
   });
 });
 
@@ -239,12 +239,12 @@ describe('StashValueWindow header', () => {
   it('shows the total, gold, price day and owner', async () => {
     renderWindow();
     expect(screen.getByText('12.50')).not.toBeNull();
-    expect(screen.getByText(`${(1500).toLocaleString()} gold`)).not.toBeNull();
-    expect(screen.getByText('prices 2026-10-18')).not.toBeNull();
+    expect(screen.getByText(`${(1500).toLocaleString()} 金币`)).not.toBeNull();
+    expect(screen.getByText('价格数据：2026-10-18')).not.toBeNull();
     expect(screen.getByText('Hammerdin')).not.toBeNull();
-    expect(screen.getByText('Ladder SC')).not.toBeNull();
+    expect(screen.getByText('天梯 · 普通模式')).not.toBeNull();
     expect(screen.getByText('Season 12')).not.toBeNull();
-    expect(screen.queryByText(/ladder prices/)).toBeNull();
+    expect(screen.queryByText(/当前没有非天梯行情数据/)).toBeNull();
     await act(async () => {});
   });
 
@@ -254,16 +254,16 @@ describe('StashValueWindow header', () => {
       latest: snapshot({ valuation: valuation({ priceSource: 'ladder-fallback', seasonId: 's11' }) }),
     });
     renderWindow();
-    expect(screen.getByText('Non-ladder HC')).not.toBeNull();
+    expect(screen.getByText('非天梯 · 专家模式')).not.toBeNull();
     expect(screen.getByText('Season 11')).not.toBeNull();
-    expect(screen.getByText('valued with ladder prices (no non-ladder market data)')).not.toBeNull();
+    expect(screen.getByText('当前没有非天梯行情数据，已使用天梯价格估算')).not.toBeNull();
     await act(async () => {});
   });
 
   it('shows only the last-snapshot delta until season points load', async () => {
     vi.mocked(getPoints).mockReturnValue(Promise.withResolvers<{ points: NetWorthPoint[] }>().promise);
     renderWindow();
-    expect(deltaPills()).toEqual(['+1.25 HR (last)']);
+    expect(deltaPills()).toEqual(['+1.25 HR (较上次)']);
     await act(async () => {});
   });
 
@@ -271,7 +271,7 @@ describe('StashValueWindow header', () => {
     setNetWorth({ latest: snapshot({ delta: { sincePrevious: null, previousTakenAt: null } }) });
     vi.mocked(getPoints).mockReturnValue(Promise.withResolvers<{ points: NetWorthPoint[] }>().promise);
     renderWindow();
-    expect(deltaPills()).toEqual(['— (last)']);
+    expect(deltaPills()).toEqual(['— (较上次)']);
     await act(async () => {});
   });
 
@@ -286,7 +286,7 @@ describe('StashValueWindow header', () => {
     });
     renderWindow();
     await waitFor(() => expect(deltaPills()).toHaveLength(3));
-    expect(deltaPills()).toEqual(['+1.25 HR (last)', '+2.50 HR (24h)', '+8.50 HR (season)']);
+    expect(deltaPills()).toEqual(['+1.25 HR (较上次)', '+2.50 HR (24 小时)', '+8.50 HR (本赛季)']);
     expect(vi.mocked(getPoints).mock.calls[0]).toEqual(['tok', OWNER, { seasonId: 's12', resolution: 'hour' }]);
   });
 
@@ -296,7 +296,7 @@ describe('StashValueWindow header', () => {
     });
     renderWindow();
     await waitFor(() => expect(deltaPills()).toHaveLength(3));
-    expect(deltaPills().slice(1)).toEqual(['−1.50 HR (24h)', '−1.50 HR (season)']);
+    expect(deltaPills().slice(1)).toEqual(['−1.50 HR (24 小时)', '−1.50 HR (本赛季)']);
   });
 
   it('does not load season points while tracking is off', async () => {
@@ -304,7 +304,7 @@ describe('StashValueWindow header', () => {
     renderWindow();
     await act(async () => {});
     expect(getPoints).not.toHaveBeenCalled();
-    expect(deltaPills()).toEqual(['+1.25 HR (last)']);
+    expect(deltaPills()).toEqual(['+1.25 HR (较上次)']);
   });
 
   it('shows the wealth rank when ranked', async () => {
@@ -316,12 +316,12 @@ describe('StashValueWindow header', () => {
 
   it('re-values on Refresh and disables it while loading', async () => {
     const { rerender } = renderWindow();
-    fireEvent.click(screen.getByRole('button', { name: /Refresh/ }));
+    fireEvent.click(screen.getByRole('button', { name: /刷新/ }));
     expect(vi.mocked(netWorth.takeSnapshot).mock.calls).toEqual([['manual']]);
 
     setNetWorth({ status: 'loading' });
     rerender(<StashValueWindow />);
-    const button = screen.getByRole('button', { name: /Refreshing/ }) as HTMLButtonElement;
+    const button = screen.getByRole('button', { name: /正在刷新/ }) as HTMLButtonElement;
     expect(button.disabled).toBe(true);
     await act(async () => {});
   });
@@ -336,7 +336,7 @@ describe('StashValueWindow header', () => {
 
   it('closes its panel from the title bar close button', async () => {
     renderWindow();
-    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    fireEvent.click(screen.getByRole('button', { name: '关闭' }));
     expect(close).toHaveBeenCalledTimes(1);
     await act(async () => {});
   });
@@ -349,8 +349,8 @@ describe('StashValueWindow errors', () => {
     const alert = screen.getByRole('alert');
     expect(alert.textContent).toContain('PD2 is down');
     expect(document.querySelector('[aria-busy="true"]')).toBeNull();
-    expect(screen.getByText('No valuation yet.')).not.toBeNull();
-    fireEvent.click(within(alert).getByRole('button', { name: /Retry/ }));
+    expect(screen.getByText('暂无估值记录')).not.toBeNull();
+    fireEvent.click(within(alert).getByRole('button', { name: /重试/ }));
     expect(vi.mocked(netWorth.takeSnapshot).mock.calls).toEqual([['manual']]);
     await act(async () => {});
   });
@@ -366,7 +366,7 @@ describe('StashValueWindow errors', () => {
   it('shows no history prompt or tracking banner', async () => {
     renderWindow();
     expect(screen.queryByRole('status')).toBeNull();
-    expect(screen.queryByText(/Track net worth|tracking/i)).toBeNull();
+    expect(screen.queryByText(/保存估值历史|估值历史记录已关闭/)).toBeNull();
     await act(async () => {});
   });
 });
@@ -425,11 +425,11 @@ describe('StashValueWindow re-value when stale', () => {
 describe('StashValueWindow tabs', () => {
   it('opens on Overview, or on the tab in the panel payload', async () => {
     renderWindow();
-    expect(screen.getByRole('tab', { name: 'Overview' }).getAttribute('aria-selected')).toBe('true');
+    expect(screen.getByRole('tab', { name: '概览' }).getAttribute('aria-selected')).toBe('true');
     cleanup();
     reopen({ tab: 'history' });
     renderWindow();
-    expect(screen.getByRole('tab', { name: /History/ }).getAttribute('aria-selected')).toBe('true');
+    expect(screen.getByRole('tab', { name: /历史记录/ }).getAttribute('aria-selected')).toBe('true');
     await act(async () => {});
   });
 
@@ -438,13 +438,13 @@ describe('StashValueWindow tabs', () => {
     await act(async () => {});
     reopen({ tab: 'history' });
     rerender(<StashValueWindow />);
-    expect(screen.getByRole('tab', { name: /History/ }).getAttribute('aria-selected')).toBe('true');
+    expect(screen.getByRole('tab', { name: /历史记录/ }).getAttribute('aria-selected')).toBe('true');
     reopen(undefined);
     rerender(<StashValueWindow />);
-    expect(screen.getByRole('tab', { name: /History/ }).getAttribute('aria-selected')).toBe('true');
+    expect(screen.getByRole('tab', { name: /历史记录/ }).getAttribute('aria-selected')).toBe('true');
     reopen({ tab: 'overview' });
     rerender(<StashValueWindow />);
-    expect(screen.getByRole('tab', { name: 'Overview' }).getAttribute('aria-selected')).toBe('true');
+    expect(screen.getByRole('tab', { name: '概览' }).getAttribute('aria-selected')).toBe('true');
   });
 
   it('shows only the holdings of the tab categories, with the stash tab for uniques', async () => {
@@ -461,7 +461,7 @@ describe('StashValueWindow tabs', () => {
       }),
     });
     renderWindow();
-    openTab('Gems & Mats');
+    openTab('宝石与材料');
     const panel = screen.getByRole('tabpanel');
     expect([...panel.querySelectorAll('tbody td:first-child p')].map((p) => p.textContent)).toEqual([
       'Perfect Ruby',
@@ -469,10 +469,11 @@ describe('StashValueWindow tabs', () => {
     ]);
     expect(within(panel).queryByRole('button', { name: 'Rune exchange' })).toBeNull();
 
-    openTab('Uniques & Sets');
-    expect(screen.getByRole('tabpanel').querySelector('tbody td:first-child')?.textContent).toBe('ShakoShared 2');
+    openTab('暗金与套装');
+    expect(screen.getByRole('tabpanel').querySelector('tbody td:first-child')?.textContent).toBe('军帽Shared 2');
+    expect(within(screen.getByRole('tabpanel')).getByTitle('Shako')).not.toBeNull();
 
-    openTab('Runes');
+    openTab('符文');
     expect(within(screen.getByRole('tabpanel')).getByRole('button', { name: 'Rune exchange' })).not.toBeNull();
     await act(async () => {});
   });
@@ -480,14 +481,14 @@ describe('StashValueWindow tabs', () => {
   it('shows a skeleton in holdings tabs until the first valuation', async () => {
     setNetWorth({ status: 'loading', latest: null });
     renderWindow();
-    openTab('Currency');
+    openTab('通货');
     expect(screen.getByRole('tabpanel').querySelector('[aria-busy="true"]')).not.toBeNull();
     await act(async () => {});
   });
 
   it('offers the Rares tab only when the snapshot came with appraised rares', async () => {
     renderWindow();
-    expect(screen.queryByRole('tab', { name: 'Rares' })).toBeNull();
+    expect(screen.queryByRole('tab', { name: '稀有物品' })).toBeNull();
     cleanup();
 
     const summary: RaresSummary = {
@@ -517,13 +518,13 @@ describe('StashValueWindow tabs', () => {
     };
     setNetWorth({ latest: snapshot({ rares: [vendor] }) });
     renderWindow();
-    expect(screen.queryByRole('tab', { name: 'Rares' })).toBeNull();
+    expect(screen.queryByRole('tab', { name: '稀有物品' })).toBeNull();
     cleanup();
 
     setNetWorth({ latest: snapshot({ rares: [vendor], raresSummary: summary }) });
     renderWindow();
-    openTab('Rares');
-    expect(screen.getByText('1 likely vendor · Shared 1')).not.toBeNull();
+    openTab('稀有物品');
+    expect(screen.getByText('1 件可能卖店 · Shared 1')).not.toBeNull();
     await act(async () => {});
   });
 });
@@ -532,17 +533,17 @@ describe('StashValueWindow history tab', () => {
   it('points to Settings → Net Worth when history is off', async () => {
     setNetWorth({ trackingEnabled: false });
     renderWindow();
-    openTab(/History/);
-    expect(screen.getByText('History is off.')).not.toBeNull();
-    expect(screen.getByText(/Save net worth history" in Settings → Net Worth/)).not.toBeNull();
-    expect(screen.queryByRole('button', { name: /tracking/i })).toBeNull();
+    openTab(/历史记录/);
+    expect(screen.getByText('估值历史记录已关闭')).not.toBeNull();
+    expect(screen.getByText(/设置 → 仓库估值.*保存估值历史/)).not.toBeNull();
+    expect(screen.queryByRole('button', { name: /开启估值历史/ })).toBeNull();
     await act(async () => {});
   });
 
   it('hands the season points and refresh key to the history view and reloads on change', async () => {
     vi.mocked(getPoints).mockResolvedValue({ points: [point('2026-10-16T00:00:00.000Z', 3)] });
     renderWindow();
-    openTab(/History/);
+    openTab(/历史记录/);
     await waitFor(() => expect(screen.getByTestId('history').textContent).toContain('points=1'));
     expect(screen.getByTestId('history').textContent).toContain('refreshKey=2026-10-18T11:59:00.000Z');
     expect(screen.getByTestId('history').textContent).toContain('season=s12');
@@ -556,7 +557,7 @@ describe('StashValueWindow history tab', () => {
   it('waits for the account before showing history', async () => {
     setNetWorth({ owner: null, latest: null, status: 'idle' });
     renderWindow();
-    openTab(/History/);
+    openTab(/历史记录/);
     expect(screen.queryByTestId('history')).toBeNull();
     expect(screen.getByRole('tabpanel').querySelector('[aria-busy="true"]')).not.toBeNull();
     await act(async () => {});

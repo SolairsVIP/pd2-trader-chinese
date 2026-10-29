@@ -217,11 +217,11 @@ async function renderWidget(conversations: Conversation[]) {
 
 /** Conversation rows in the list, in display order. */
 function rows() {
-  const list = screen.queryByRole('list', { name: 'Conversations' });
+  const list = screen.queryByRole('list', { name: '会话列表' });
   return list ? (within(list).queryAllByRole('listitem') as HTMLElement[]) : [];
 }
 const rowFor = (name: string) => rows().find((r) => r.textContent?.includes(name))! as HTMLElement;
-const headerUnread = () => screen.queryByTitle(/unread$/)?.textContent ?? null;
+const headerUnread = () => screen.queryByTitle(/条未读$/)?.textContent ?? null;
 const lastEmittedUnread = () =>
   vi
     .mocked(setBadgeCount)
@@ -408,7 +408,7 @@ describe('ChatOverlayWidget conversation list', () => {
       expect.stringContaining('bob'),
     ]);
     expect(rowFor('Alice').textContent).toContain('2');
-    expect(rowFor('Alice').textContent).toContain('3m');
+    expect(rowFor('Alice').textContent).toContain('3 分钟');
     expect(rowFor('Alice').textContent).toContain('you there?');
     expect(screen.queryByText('carol')).toBeNull();
   });
@@ -447,10 +447,10 @@ describe('ChatOverlayWidget conversation list', () => {
       conv('c2', BOB, { latest: msg('m2', 'c2', ME, 'unread one', 2, [ME]) }),
       conv('c3', { id: 'dan', username: 'dan' }, { latest: msg('m3', 'c3', 'dan', 'theirs', 3) }),
     ]);
-    expect(within(rowFor('Alice')).queryByLabelText('Read')).not.toBeNull();
-    expect(within(rowFor('bob')).queryByLabelText('Sent')).not.toBeNull();
-    expect(within(rowFor('dan')).queryByLabelText('Read')).toBeNull();
-    expect(within(rowFor('dan')).queryByLabelText('Sent')).toBeNull();
+    expect(within(rowFor('Alice')).queryByLabelText('已读')).not.toBeNull();
+    expect(within(rowFor('bob')).queryByLabelText('已发送')).not.toBeNull();
+    expect(within(rowFor('dan')).queryByLabelText('已读')).toBeNull();
+    expect(within(rowFor('dan')).queryByLabelText('已发送')).toBeNull();
   });
 
   it('filters by participant name or message text, and clears with Escape', async () => {
@@ -458,7 +458,7 @@ describe('ChatOverlayWidget conversation list', () => {
       conv('c1', ALICE, { latest: msg('m1', 'c1', 'alice', 'selling shako', 1) }),
       conv('c2', BOB, { latest: msg('m2', 'c2', 'bob', 'wtb enigma', 2) }),
     ]);
-    const search = screen.getByPlaceholderText('Search chats...');
+    const search = screen.getByPlaceholderText('搜索聊天…');
 
     fireEvent.change(search, { target: { value: '  ALICE99 ' } });
     expect(rows().map((r) => r.textContent?.includes('Alice'))).toEqual([true]);
@@ -469,7 +469,7 @@ describe('ChatOverlayWidget conversation list', () => {
 
     fireEvent.change(search, { target: { value: 'zod' } });
     expect(rows()).toHaveLength(0);
-    expect(screen.queryByText('No conversations match your search')).not.toBeNull();
+    expect(screen.queryByText('没有符合搜索条件的会话')).not.toBeNull();
 
     fireEvent.keyDown(search, { key: 'Escape' });
     expect(rows()).toHaveLength(2);
@@ -479,8 +479,8 @@ describe('ChatOverlayWidget conversation list', () => {
     auth = { user: { _id: ME } };
     await renderWidget([]);
     expect(api.getConversations).not.toHaveBeenCalled();
-    expect(screen.queryByText('Not authenticated')).not.toBeNull();
-    expect(screen.queryByText('Sign in to Project Diablo 2 in Settings → Account to chat.')).not.toBeNull();
+    expect(screen.queryByText('未登录')).not.toBeNull();
+    expect(screen.queryByText('请前往“设置 → 账号”登录 Project Diablo 2。')).not.toBeNull();
   });
 
   it('shows an error with a retry when loading conversations fails', async () => {
@@ -491,23 +491,23 @@ describe('ChatOverlayWidget conversation list', () => {
       </WhisperHistoryProvider>,
     );
     await flush();
-    expect(screen.queryByText("Couldn't load conversations")).not.toBeNull();
-    expect(screen.queryByText('Loading conversations...')).toBeNull();
+    expect(screen.queryByText('无法加载会话')).not.toBeNull();
+    expect(screen.queryByText('正在加载会话…')).toBeNull();
 
     api.getConversations.mockResolvedValue({
       data: [conv('c1', ALICE, { latest: msg('a1', 'c1', 'alice', 'hi', 1) })],
     });
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /Try again/ }));
+      fireEvent.click(screen.getByRole('button', { name: '重试' }));
     });
     await flush();
-    expect(screen.queryByText("Couldn't load conversations")).toBeNull();
+    expect(screen.queryByText('无法加载会话')).toBeNull();
     expect(rows()).toHaveLength(1);
   });
 
   it('closes via the window chrome', async () => {
     const { onClose } = await renderWidget([]);
-    fireEvent.click(screen.getByRole('button', { name: 'Close chat' }));
+    fireEvent.click(screen.getByRole('button', { name: '关闭聊天' }));
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 });
@@ -519,7 +519,7 @@ describe('ChatOverlayWidget conversation switching', () => {
       msg('a1', 'c1', 'alice', 'first', 10, [ME]),
     ];
     await renderWidget([conv('c1', ALICE, { latest: msg('a2', 'c1', ME, 'second', 5) })]);
-    expect(screen.queryByText('Select a conversation to view messages')).not.toBeNull();
+    expect(screen.queryByText('选择一个会话以查看消息')).not.toBeNull();
 
     await select('Alice');
 
@@ -639,7 +639,7 @@ describe('ChatOverlayWidget conversation switching', () => {
     await flush(200);
 
     expect(screen.getByRole('heading', { level: 3 }).textContent).toBe('bob');
-    expect(screen.queryByText('Say hi to bob.')).not.toBeNull();
+    expect(screen.queryByText('向 bob 打个招呼吧。')).not.toBeNull();
     expect(api.getMessages).toHaveBeenCalledWith('c-new', { limit: 50, skip: 0 });
   });
 
@@ -710,12 +710,13 @@ describe('ChatOverlayWidget conversation switching', () => {
   });
 
   async function deleteOpenConversation() {
-    const trigger = screen.getByRole('button', { name: 'Conversation options' });
+    const thread = screen.getByRole('heading', { level: 3 }).closest('section')!;
+    const trigger = within(thread).getByRole('button', { name: '会话选项' });
     await act(async () => {
       fireEvent.pointerDown(trigger, { button: 0, ctrlKey: false, pointerType: 'mouse' });
     });
     await act(async () => {
-      fireEvent.click(screen.getByRole('menuitem', { name: /Delete Conversation/ }));
+      fireEvent.click(screen.getByRole('menuitem', { name: '删除会话' }));
     });
     await flush();
   }
@@ -730,8 +731,8 @@ describe('ChatOverlayWidget conversation switching', () => {
     await deleteOpenConversation();
 
     expect(rows().map((r) => r.textContent?.includes('bob'))).toEqual([true]);
-    expect(screen.queryByText('Select a conversation to view messages')).not.toBeNull();
-    expect(undoToasts.map((t) => t.title)).toEqual(['Conversation deleted']);
+    expect(screen.queryByText('选择一个会话以查看消息')).not.toBeNull();
+    expect(undoToasts.map((t) => t.title)).toEqual(['会话已删除']);
     await flush(5999);
     expect(api.deleteConversation).not.toHaveBeenCalled();
 
@@ -780,7 +781,7 @@ describe('ChatOverlayWidget conversation switching', () => {
     await flush(6000);
     expect(api.deleteConversation).toHaveBeenCalledWith('c1');
     expect(rows().map((r) => r.textContent?.includes('Alice'))).toEqual([true]);
-    expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ title: "Couldn't delete the conversation" }));
+    expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ title: '无法删除会话' }));
   });
 });
 
@@ -792,7 +793,7 @@ describe('ChatOverlayWidget composer', () => {
       conv('c2', BOB, { latest: msg('b1', 'c2', 'bob', 'yo', 5) }),
     ]);
     await select('Alice');
-    return screen.getByRole('textbox', { name: 'Message' });
+    return screen.getByRole('textbox', { name: '消息' });
   }
 
   it('sends trimmed text on Enter, appends it and moves the conversation to the top', async () => {
@@ -810,12 +811,12 @@ describe('ChatOverlayWidget composer', () => {
     expect(input.textContent).toBe('');
     expect(bubbles()).toEqual(['hi', 'sure, 2 ist']);
     expect(rows()[0].textContent).toContain('Alice');
-    expect(within(rows()[0] as HTMLElement).queryByLabelText('Sent')).not.toBeNull();
+    expect(within(rows()[0] as HTMLElement).queryByLabelText('已发送')).not.toBeNull();
   });
 
   it('does not send blank input or on Shift+Enter', async () => {
     const input = await openAlice();
-    const send = screen.getByRole('button', { name: /Send/ }) as HTMLButtonElement;
+    const send = screen.getByRole('button', { name: '发送' }) as HTMLButtonElement;
 
     typeDraft(input, '   ');
     expect(send.disabled).toBe(true);
@@ -833,7 +834,7 @@ describe('ChatOverlayWidget composer', () => {
   async function sendText(input: HTMLElement, text: string) {
     typeDraft(input, text);
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /Send/ }));
+      fireEvent.click(screen.getByRole('button', { name: '发送' }));
     });
     await flush();
   }
@@ -852,13 +853,13 @@ describe('ChatOverlayWidget composer', () => {
     expect(input.textContent).toBe('');
     expect(bubbles()).toEqual(['hi', 'hello']);
     expect(bubbleOf('hello').getAttribute('aria-busy')).toBe('true');
-    expect(within(bubbleOf('hello')).queryByLabelText('Sent')).toBeNull();
+    expect(within(bubbleOf('hello')).queryByLabelText('已发送')).toBeNull();
 
     await act(async () => response.resolve(msg('srv1', 'c1', ME, 'hello', 0)));
     await flush();
     expect(bubbles()).toEqual(['hi', 'hello']);
     expect(bubbleOf('hello').getAttribute('aria-busy')).toBeNull();
-    expect(within(bubbleOf('hello')).queryByLabelText('Sent')).not.toBeNull();
+    expect(within(bubbleOf('hello')).queryByLabelText('已发送')).not.toBeNull();
   });
 
   it('keeps a failed send on its bubble with a retry that resends it', async () => {
@@ -868,13 +869,13 @@ describe('ChatOverlayWidget composer', () => {
 
     expect(input.textContent).toBe('');
     expect(bubbles()).toEqual(['hi', 'hello']);
-    expect(within(bubbleOf('hello')).queryByText(/Failed/)).not.toBeNull();
+    expect(within(bubbleOf('hello')).queryByText(/发送失败/)).not.toBeNull();
     // The conversation preview only moves for delivered messages
     expect(rowFor('Alice').textContent).not.toContain('hello');
 
     api.sendMessage.mockImplementation(async (c, content, sender) => msg('srv1', c, sender, content, 0));
     await act(async () => {
-      fireEvent.click(within(bubbleOf('hello')).getByRole('button', { name: 'Retry' }));
+      fireEvent.click(within(bubbleOf('hello')).getByRole('button', { name: '重试' }));
     });
     await flush();
 
@@ -883,7 +884,7 @@ describe('ChatOverlayWidget composer', () => {
       ['c1', 'hello', ME],
     ]);
     expect(bubbles()).toEqual(['hi', 'hello']);
-    expect(within(bubbleOf('hello')).queryByText(/Failed/)).toBeNull();
+    expect(within(bubbleOf('hello')).queryByText(/发送失败/)).toBeNull();
     expect(rowFor('Alice').textContent).toContain('hello');
   });
 
@@ -912,7 +913,7 @@ describe('ChatOverlayWidget drafts and offers', () => {
       conv('c2', BOB, { latest: msg('b1', 'c2', 'bob', 'yo', 5) }),
     ]);
   }
-  const composer = () => screen.getByRole('textbox', { name: 'Message' });
+  const composer = () => screen.getByRole('textbox', { name: '消息' });
 
   it("keeps each conversation's unsent text when switching threads and hiding the panel", async () => {
     await openBoth();
@@ -968,16 +969,16 @@ describe('ChatOverlayWidget drafts and offers', () => {
     ];
     await openBoth();
     await select('bob');
-    expect(screen.queryByRole('list', { name: 'Offers with this user' })).toBeNull();
+    expect(screen.queryByRole('list', { name: '与此用户的报价' })).toBeNull();
 
     await select('Alice');
-    const deals = screen.getByRole('list', { name: 'Offers with this user' });
+    const deals = screen.getByRole('list', { name: '与此用户的报价' });
     // Opening the thread focused the composer; take focus away so the Counter has to bring it back
     composer().blur();
     await act(async () => {
       fireEvent.click(within(deals).getByRole('button', { name: /Counter/ }));
     });
-    expect(composer().textContent).toBe('Counter for Shako: ');
+    expect(composer().textContent).toBe('Counteroffer for Shako: ');
     expect(document.activeElement).toBe(composer());
   });
 });
@@ -997,7 +998,7 @@ describe('ChatOverlayWidget socket messages', () => {
     await fire('social/message_pushed', msg('b2', 'c2', 'bob', 'still selling?', 0));
 
     expect(rowFor('bob').textContent).toContain('still selling?');
-    expect(rowFor('bob').textContent).toContain('Just now');
+    expect(rowFor('bob').textContent).toContain('刚刚');
     expect(headerUnread()).toBe('2');
     expect(rows()[0].textContent).toContain('bob');
     expect(audio).toEqual([expect.objectContaining({ src: 'whisper.mp3', volume: 0.25 })]);
@@ -1062,7 +1063,7 @@ describe('ChatOverlayWidget socket messages', () => {
     await fire('social/message_pushed', msg('b2', 'c2', ME, 'mine', 0));
     expect(headerUnread()).toBe('1');
     expect(audio).toHaveLength(0);
-    expect(within(rowFor('bob')).queryByLabelText('Sent')).not.toBeNull();
+    expect(within(rowFor('bob')).queryByLabelText('已发送')).not.toBeNull();
   });
 
   it('reloads conversations when a message arrives for an unknown conversation', async () => {
@@ -1163,7 +1164,7 @@ describe('ChatOverlayWidget unified inbox', () => {
     conversation.participants[1].game = { accounts };
     return conversation;
   };
-  const composer = () => screen.getByRole('textbox', { name: 'Message' });
+  const composer = () => screen.getByRole('textbox', { name: '消息' });
   const heading = () => screen.queryByRole('heading', { level: 3 })?.textContent ?? null;
   const filterButton = (name: string) => screen.getByRole('radio', { name });
   const sourceTags = () =>
@@ -1207,7 +1208,7 @@ describe('ChatOverlayWidget unified inbox', () => {
 
     await select('Alice');
     expect(bubbles()).toEqual(['website hi', 'whisper in between', 'website reply']);
-    expect(sourceTags()).toEqual(['Website message', 'In-game whisper', 'Website message']);
+    expect(sourceTags()).toEqual(['网站消息', '游戏内密语', '网站消息']);
     expect(headerUnread()).toBeNull();
     expect(lastEmittedUnread()).toBe(0);
 
@@ -1225,20 +1226,20 @@ describe('ChatOverlayWidget unified inbox', () => {
     ]);
 
     await select('Zed');
-    expect(screen.queryByText('in-game only')).not.toBeNull();
-    expect(screen.queryByRole('group', { name: 'Reply via' })).toBeNull();
+    expect(screen.queryByText('仅限游戏内')).not.toBeNull();
+    expect(screen.queryByRole('group', { name: '回复方式' })).toBeNull();
     expect(composer().getAttribute('aria-placeholder')).toBe('输入游戏密语内容，按 Enter 复制给 *Zed');
 
     await type('2 ist');
     expect(writeText).toHaveBeenCalledWith('/w *Zed 2 ist');
     expect(api.sendMessage).not.toHaveBeenCalled();
     expect(bubbles()).toEqual(['wtb shako?', '2 ist']);
-    expect(screen.queryByText('copied')).not.toBeNull();
+    expect(screen.queryByText('已复制')).not.toBeNull();
 
     // The game log showing it sent confirms the copied entry instead of adding another
     await whisperAt(0, 'Zed', '2 ist', false);
     expect(bubbles()).toEqual(['wtb shako?', '2 ist']);
-    expect(screen.queryByText('copied')).toBeNull();
+    expect(screen.queryByText('已复制')).toBeNull();
 
     // Persisted, debounced
     await flush(SAVE_DEBOUNCE_MS);
@@ -1262,14 +1263,14 @@ describe('ChatOverlayWidget unified inbox', () => {
     expect(writeText).not.toHaveBeenCalled();
 
     await act(async () => {
-      fireEvent.click(within(screen.getByRole('group', { name: 'Reply via' })).getByRole('radio', { name: /Whisper/ }));
+      fireEvent.click(within(screen.getByRole('group', { name: '回复方式' })).getByRole('radio', { name: /游戏密语/ }));
     });
     await type('via game');
     expect(writeText).toHaveBeenCalledWith('/w *AliceAcc via game');
     expect(api.sendMessage).toHaveBeenCalledTimes(1);
     expect(bubbles().at(-1)).toBe('via game');
-    expect(sourceTags().at(-1)).toBe('In-game whisper');
-    expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ title: 'Whisper copied' }));
+    expect(sourceTags().at(-1)).toBe('游戏内密语');
+    expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ title: '游戏密语已复制' }));
   });
 
   it('filters the list to Selling or Buying threads, and the offers payload opens on Selling', async () => {
@@ -1295,19 +1296,19 @@ describe('ChatOverlayWidget unified inbox', () => {
     const names = () => rows().map((r) => ['Alice', 'bob', 'carol', 'Dan'].find((n) => r.textContent?.includes(n)));
     expect(names().sort()).toEqual(['Alice', 'Dan', 'bob', 'carol']);
 
-    await act(async () => fireEvent.click(filterButton('Selling')));
+    await act(async () => fireEvent.click(filterButton('出售')));
     expect(names().sort()).toEqual(['Dan', 'carol']);
-    await act(async () => fireEvent.click(filterButton('Buying')));
+    await act(async () => fireEvent.click(filterButton('求购')));
     expect(names()).toEqual(['bob']);
-    await act(async () => fireEvent.click(filterButton('All')));
+    await act(async () => fireEvent.click(filterButton('全部')));
     expect(names()).toHaveLength(4);
 
     await openChat({ filter: 'selling' });
-    expect(filterButton('Selling').getAttribute('aria-checked')).toBe('true');
+    expect(filterButton('出售').getAttribute('aria-checked')).toBe('true');
     expect(names().sort()).toEqual(['Dan', 'carol']);
     // Opening a conversation shows the full list again
     await openChat({ conversationId: 'c1' });
-    expect(filterButton('All').getAttribute('aria-checked')).toBe('true');
+    expect(filterButton('全部').getAttribute('aria-checked')).toBe('true');
   });
 
   it("pins a trade whisper in the sender's thread; Sold copies the template whisper and records it", async () => {
@@ -1323,7 +1324,7 @@ describe('ChatOverlayWidget unified inbox', () => {
       price: '1 ist',
     });
     await select('Dan');
-    const deals = screen.getByRole('list', { name: 'Offers with this user' });
+    const deals = screen.getByRole('list', { name: '与此用户的报价' });
     expect(deals.textContent).toContain('Arach');
     await act(async () => {
       fireEvent.click(within(deals).getByRole('button', { name: /Sold/ }));
@@ -1333,9 +1334,9 @@ describe('ChatOverlayWidget unified inbox', () => {
     expect(bubbles().at(-1)).toBe('Sorry, Arach is sold.');
 
     await act(async () => {
-      fireEvent.click(within(deals).getByRole('button', { name: /Dismiss/ }));
+      fireEvent.click(within(deals).getByRole('button', { name: '忽略' }));
     });
-    expect(screen.queryByRole('list', { name: 'Offers with this user' })).toBeNull();
+    expect(screen.queryByRole('list', { name: '与此用户的报价' })).toBeNull();
   });
 
   it('starts the conversation on the first website message to an offers-only person', async () => {
@@ -1346,7 +1347,7 @@ describe('ChatOverlayWidget unified inbox', () => {
     api.sendMessage.mockImplementation(async (c, content, sender) => msg('sent1', c, sender, content, 0));
     await renderWidget([]);
     await select('carol');
-    expect(screen.queryByText('in-game only')).toBeNull();
+    expect(screen.queryByText('仅限游戏内')).toBeNull();
 
     await type('still for sale?');
     expect(createConversation).toHaveBeenCalledWith([ME, 'carol']);
@@ -1434,7 +1435,7 @@ describe('ChatOverlayWidget unified inbox', () => {
     expect(screen.queryByText('Thumoi')).not.toBeNull();
 
     await act(async () => {
-      fireEvent.click(within(screen.getByRole('group', { name: 'Reply via' })).getByRole('radio', { name: /Whisper/ }));
+      fireEvent.click(within(screen.getByRole('group', { name: '回复方式' })).getByRole('radio', { name: /游戏密语/ }));
     });
     await type('inv me pls');
     expect(writeText).toHaveBeenCalledWith('/w *Thumoi inv me pls');
@@ -1447,18 +1448,18 @@ describe('ChatOverlayWidget unified inbox', () => {
     expect(bubbles()).toEqual(['hi', 'inv me pls', 'omw']);
     expect(rowFor('u2web').textContent).toContain('omw');
 
-    await act(async () => fireEvent.click(filterButton('Selling')));
+    await act(async () => fireEvent.click(filterButton('出售')));
     expect(rows()).toHaveLength(1);
     expect(rowFor('u2web').textContent).toContain('omw');
   });
 });
 
 describe('ChatOverlayWidget overlay fit', () => {
-  const composer = () => screen.getByRole('textbox', { name: 'Message' });
+  const composer = () => screen.getByRole('textbox', { name: '消息' });
   const filterButton = (name: string) => screen.getByRole('radio', { name });
   const heading = () => screen.queryByRole('heading', { level: 3 })?.textContent ?? null;
-  const jumpButton = () => screen.queryByRole('button', { name: /Jump to latest/ });
-  const divider = () => screen.queryByRole('separator', { name: 'New messages' });
+  const jumpButton = () => screen.queryByRole('button', { name: /跳转到最新/ });
+  const divider = () => screen.queryByRole('separator', { name: '新消息' });
   const DAN = { id: 'dan', username: 'dan' };
 
   async function key(target: Element, init: KeyboardEventInit) {
@@ -1469,8 +1470,9 @@ describe('ChatOverlayWidget overlay fit', () => {
   }
 
   async function chooseFromMenu(name: RegExp) {
+    const thread = screen.getByRole('heading', { level: 3 }).closest('section')!;
     await act(async () => {
-      fireEvent.pointerDown(screen.getByRole('button', { name: 'Conversation options' }), {
+      fireEvent.pointerDown(within(thread).getByRole('button', { name: '会话选项' }), {
         button: 0,
         ctrlKey: false,
         pointerType: 'mouse',
@@ -1507,13 +1509,13 @@ describe('ChatOverlayWidget overlay fit', () => {
       conv('c2', BOB, { latest: msg('b1', 'c2', 'bob', 'yo', 20) }),
     ]);
     expect(rows()).toHaveLength(2);
-    expect(screen.queryByText('Select a conversation to view messages')).toBeNull();
+    expect(screen.queryByText('选择一个会话以查看消息')).toBeNull();
 
     await select('Alice');
     expect(rows()).toHaveLength(0);
     expect(heading()).toBe('Alice');
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: 'Back to conversations' }));
+      fireEvent.click(screen.getByRole('button', { name: '返回会话列表' }));
     });
     expect(rows()).toHaveLength(2);
     expect(heading()).toBeNull();
@@ -1522,7 +1524,7 @@ describe('ChatOverlayWidget overlay fit', () => {
     await resize(800);
     expect(rows()).toHaveLength(2);
     expect(heading()).toBe('Alice');
-    expect(screen.queryByRole('button', { name: 'Back to conversations' })).toBeNull();
+    expect(screen.queryByRole('button', { name: '返回会话列表' })).toBeNull();
 
     await resize(639);
     expect(rows()).toHaveLength(0);
@@ -1600,9 +1602,9 @@ describe('ChatOverlayWidget overlay fit', () => {
     await select('Alice');
 
     typeDraft(composer(), '/');
-    expect(screen.queryByRole('listbox', { name: 'Message templates' })).not.toBeNull();
+    expect(screen.queryByRole('listbox', { name: '消息模板' })).not.toBeNull();
     await key(composer(), { key: 'Escape' });
-    expect(screen.queryByRole('listbox', { name: 'Message templates' })).toBeNull();
+    expect(screen.queryByRole('listbox', { name: '消息模板' })).toBeNull();
     expect(heading()).toBe('Alice');
 
     await key(composer(), { key: 'Escape', isComposing: true });
@@ -1610,7 +1612,7 @@ describe('ChatOverlayWidget overlay fit', () => {
 
     await key(composer(), { key: 'Escape' });
     expect(heading()).toBeNull();
-    expect(screen.queryByText('Select a conversation to view messages')).not.toBeNull();
+    expect(screen.queryByText('选择一个会话以查看消息')).not.toBeNull();
 
     await resize(400);
     await select('Alice');
@@ -1672,7 +1674,7 @@ describe('ChatOverlayWidget overlay fit', () => {
 
     await fire('social/message_pushed', msg('a3', 'c1', 'alice', 'while scrolled up', 0));
     await fire('social/message_pushed', msg('a4', 'c1', 'alice', 'and another', 0));
-    expect(jumpButton()?.textContent).toBe('2 new · Jump to latest');
+    expect(jumpButton()?.textContent?.replace(/\s+/g, ' ').trim()).toBe('2 条新消息 · 跳转到最新');
 
     await act(async () => {
       fireEvent.click(jumpButton()!);
@@ -1691,14 +1693,14 @@ describe('ChatOverlayWidget overlay fit', () => {
 
     // Pinned threads sort first, with a pin
     await select('bob');
-    await chooseFromMenu(/^Pin$/);
+    await chooseFromMenu(/^置顶$/);
     expect(rows()[0].textContent).toContain('bob');
-    expect(within(rows()[0] as HTMLElement).queryByLabelText('Pinned')).not.toBeNull();
+    expect(within(rows()[0] as HTMLElement).queryByLabelText('已置顶')).not.toBeNull();
     expect(savedPrefs().threads.c2).toEqual({ pinnedAt: expect.any(Number) });
 
     // Muted: no sound and no badge for its messages
-    await chooseFromMenu(/^Mute$/);
-    expect(within(rowFor('bob')).queryByLabelText('Muted')).not.toBeNull();
+    await chooseFromMenu(/^静音$/);
+    expect(within(rowFor('bob')).queryByLabelText('已静音')).not.toBeNull();
     await select('Alice');
     await fire('social/message_pushed', msg('b2', 'c2', 'bob', 'ping', 0));
     expect(audio).toHaveLength(0);
@@ -1707,12 +1709,12 @@ describe('ChatOverlayWidget overlay fit', () => {
     expect(savedPrefs().threads.c2).toEqual({ pinnedAt: expect.any(Number), muted: true });
 
     // Archived: out of All, in Archived, back in All with a new message
-    await chooseFromMenu(/^Archive$/);
+    await chooseFromMenu(/^归档$/);
     expect(heading()).toBeNull();
     expect(rows().map((r) => r.textContent?.includes('Alice'))).toEqual([false]);
-    await act(async () => fireEvent.click(filterButton('Archived')));
+    await act(async () => fireEvent.click(filterButton('已归档')));
     expect(rows().map((r) => r.textContent?.includes('Alice'))).toEqual([true]);
-    await act(async () => fireEvent.click(filterButton('All')));
+    await act(async () => fireEvent.click(filterButton('全部')));
     await fire('social/message_pushed', msg('a2', 'c1', 'alice', 'back again', -1));
     expect(rows().map((r) => r.textContent?.includes('Alice'))).toEqual([false, true]);
     expect(lastEmittedUnread()).toBe(1);
@@ -1741,7 +1743,7 @@ describe('ChatOverlayWidget overlay fit', () => {
     // Whether the panel was on screen at each focus of the composer (a hidden one can't take focus)
     const focusedWhileVisible: boolean[] = [];
     const focus = vi.spyOn(HTMLElement.prototype, 'focus').mockImplementation(function (this: HTMLElement) {
-      if (this.getAttribute('aria-label') === 'Message') focusedWhileVisible.push(panel.visible);
+      if (this.getAttribute('aria-label') === '消息') focusedWhileVisible.push(panel.visible);
     });
 
     panel.visible = false;
@@ -1762,7 +1764,7 @@ describe('ChatOverlayWidget overlay fit', () => {
     ];
     await renderWidget([]);
     await select('carol');
-    await chooseFromMenu(/^Mute$/);
+    await chooseFromMenu(/^静音$/);
     await key(composer(), { key: 'Escape' });
     expect(heading()).toBeNull();
 
@@ -1776,7 +1778,7 @@ describe('ChatOverlayWidget overlay fit', () => {
 
     expect(audio).toHaveLength(0);
     expect(rows()).toHaveLength(1);
-    expect(within(rowFor('carol')).queryByLabelText('Muted')).not.toBeNull();
+    expect(within(rowFor('carol')).queryByLabelText('已静音')).not.toBeNull();
     // Saved under the conversation too, so its socket notifications find it
     expect(getChatPrefs().threads.c9).toEqual({ muted: true });
     expect(lastEmittedUnread()).toBe(0);
@@ -1784,8 +1786,8 @@ describe('ChatOverlayWidget overlay fit', () => {
 });
 
 describe('ChatOverlayWidget trader sidebar', () => {
-  const composer = () => screen.getByRole('textbox', { name: 'Message' });
-  const sidebar = () => screen.queryByRole('complementary', { name: 'Trader' });
+  const composer = () => screen.getByRole('textbox', { name: '消息' });
+  const sidebar = () => screen.queryByRole('complementary', { name: '交易者' });
   const heading = () => screen.queryByRole('heading', { level: 3 })?.textContent ?? null;
   const savedPrefs = () =>
     parseChatPrefs(
@@ -1834,9 +1836,9 @@ describe('ChatOverlayWidget trader sidebar', () => {
     expect(sidebar()).not.toBeNull();
     expect(within(sidebar()!).getByRole('heading', { level: 4, name: 'Tara' })).not.toBeNull();
     // Presence from their listings, in the header's status line and the sidebar
-    expect(screen.getAllByText('In game now')).toHaveLength(2);
+    expect(screen.getAllByText('当前游戏中')).toHaveLength(2);
 
-    await click(screen.getByRole('button', { name: 'Collapse trader details' }));
+    await click(screen.getByRole('button', { name: '收起交易者资料' }));
     expect(sidebar()).toBeNull();
     expect(heading()).toBe('Tara');
     await flush();
@@ -1851,7 +1853,7 @@ describe('ChatOverlayWidget trader sidebar', () => {
     await renderWidget(conversations);
     await select('Tara');
     expect(sidebar()).toBeNull();
-    await click(screen.getByRole('button', { name: 'Trader details' }));
+    await click(screen.getByRole('button', { name: '交易者详情' }));
     expect(sidebar()).not.toBeNull();
     await flush();
     expect(savedPrefs().sidebarCollapsed).toBeUndefined();
@@ -1864,11 +1866,11 @@ describe('ChatOverlayWidget trader sidebar', () => {
     await select('Tom');
     expect(sidebar()).toBeNull();
 
-    await click(screen.getByRole('button', { name: 'Trader details' }));
+    await click(screen.getByRole('button', { name: '交易者详情' }));
     expect(sidebar()).not.toBeNull();
     // No listings: presence and market say so
-    expect(within(sidebar()!).queryByText('Unknown')).not.toBeNull();
-    expect(within(sidebar()!).queryByText('No active listings.')).not.toBeNull();
+    expect(within(sidebar()!).queryByText('未知')).not.toBeNull();
+    expect(within(sidebar()!).queryByText('对方没有正在出售的挂单。')).not.toBeNull();
 
     await act(async () => {
       fireEvent.keyDown(composer(), { key: 'Escape' });
@@ -1878,12 +1880,12 @@ describe('ChatOverlayWidget trader sidebar', () => {
 
     // A list avatar opens it too
     await click(
-      within(screen.getByRole('list', { name: 'Conversations' })).getByRole('button', {
-        name: 'Trader details for Tom',
+      within(screen.getByRole('list', { name: '会话列表' })).getByRole('button', {
+        name: 'Tom的交易者详情',
       }),
     );
     expect(sidebar()).not.toBeNull();
-    await click(screen.getByRole('button', { name: 'Close trader details' }));
+    await click(screen.getByRole('button', { name: '关闭交易者资料' }));
     expect(sidebar()).toBeNull();
   });
 
@@ -1902,11 +1904,11 @@ describe('ChatOverlayWidget trader sidebar', () => {
     for (const link of usernameLinks) await click(link);
     expect(vi.mocked(openUrl).mock.calls).toEqual([[profile], [profile]]);
 
-    await click(within(sidebar()!).getByRole('button', { name: 'View profile' }));
-    await click(within(sidebar()!).getByRole('button', { name: 'Their market' }));
+    await click(within(sidebar()!).getByRole('button', { name: '查看个人资料' }));
+    await click(within(sidebar()!).getByRole('button', { name: '对方的市场挂单' }));
     expect(vi.mocked(openUrl).mock.calls.slice(2)).toEqual([[profile], [`${profile}/market`]]);
     // The newest of their in-game/online stamps
-    expect(screen.getAllByText('Online 12m ago').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('在线（12 分钟前）').length).toBeGreaterThan(0);
   });
 
   it('links one of their listings in the composer when it is clicked in the sidebar', async () => {
@@ -1915,13 +1917,13 @@ describe('ChatOverlayWidget trader sidebar', () => {
     messagesByConversation.c1 = [msg('n1', 'c1', nia.id, 'hi', 10, [ME])];
     await renderWidget([conv('c1', nia, { latest: msg('n1', 'c1', nia.id, 'hi', 10) })]);
     // The list avatar opens the thread with its Trader details (a slide-over at this width)
-    await click(screen.getByRole('button', { name: 'Trader details for Nia' }));
+    await click(screen.getByRole('button', { name: 'Nia的交易者详情' }));
     expect(heading()).toBe('Nia');
 
     await act(async () => {
       typeDraft(composer(), 'how much for');
     });
-    await click(within(sidebar()!).getByRole('button', { name: 'Link Harlequin Crest in your message' }));
+    await click(within(sidebar()!).getByRole('button', { name: '将「谐角之冠」关联到消息' }));
     // Linked inline at the caret as a pill (by the name its link carries until looked up), not as URL text
     expect(composer().textContent).toBe('how much for Harlequin Crest');
     expect(within(composer()).getByText('Harlequin Crest')).not.toBeNull();

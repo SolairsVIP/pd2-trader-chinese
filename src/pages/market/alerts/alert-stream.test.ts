@@ -209,6 +209,65 @@ describe('runAlertStream', () => {
     await done;
   });
 
+  it('does not mark a late catch-up as seen after stopping, so the restarted stream can deliver it', async () => {
+    const first = streamResponse([hello('2026-10-21T08:00:00Z')], true);
+    const second = streamResponse([hello('2026-10-21T08:01:00Z')]);
+    let resolveCatchUp!: (value: MarketAlert[]) => void;
+    const catchUp = vi.fn(() => new Promise<MarketAlert[]>((resolve) => { resolveCatchUp = resolve; }));
+    const seen = new Set<string>();
+    const onAlerts = vi.fn();
+    const controller = new AbortController();
+    const done = runAlertStream({
+      token: 'tok', open: vi.fn().mockResolvedValueOnce(first.response).mockResolvedValueOnce(second.response),
+      catchUp, onAlerts, onUnauthorized: vi.fn(), signal: controller.signal, seen, sleep: async () => {},
+    });
+    await flush();
+    await flush();
+    expect(catchUp).toHaveBeenCalledTimes(1);
+
+    controller.abort();
+    second.end();
+    await done;
+    resolveCatchUp([alert('late', '2026-10-21T08:02:00Z')]);
+    await flush();
+    expect(seen.has('late')).toBe(false);
+    expect(onAlerts).not.toHaveBeenCalled();
+
+    const restarted = streamResponse([hello('2026-10-21T08:03:00Z'), frame('market.alert', alert('late', '2026-10-21T08:02:00Z'))]);
+    const nextController = new AbortController();
+    const nextDone = runAlertStream({
+      token: 'tok', open: vi.fn().mockResolvedValue(restarted.response), catchUp: vi.fn(), onAlerts,
+      onUnauthorized: vi.fn(), signal: nextController.signal, seen,
+    });
+    await flush();
+    expect(onAlerts).toHaveBeenCalledWith([expect.objectContaining({ id: 'late' })], 'live');
+    nextController.abort();
+    restarted.end();
+    await nextDone;
+  });
+
+  it('ignores a late catch-up 401 after the stream has stopped', async () => {
+    const first = streamResponse([hello('2026-10-21T08:00:00Z')], true);
+    const second = streamResponse([hello('2026-10-21T08:01:00Z')]);
+    let rejectCatchUp!: (reason: unknown) => void;
+    const catchUp = vi.fn(() => new Promise<MarketAlert[]>((_resolve, reject) => { rejectCatchUp = reject; }));
+    const onUnauthorized = vi.fn();
+    const controller = new AbortController();
+    const done = runAlertStream({
+      token: 'tok', open: vi.fn().mockResolvedValueOnce(first.response).mockResolvedValueOnce(second.response),
+      catchUp, onAlerts: vi.fn(), onUnauthorized, signal: controller.signal, sleep: async () => {},
+    });
+    await flush();
+    await flush();
+    expect(catchUp).toHaveBeenCalledTimes(1);
+    controller.abort();
+    second.end();
+    await done;
+    rejectCatchUp(Object.assign(new Error('expired old request'), { status: 401 }));
+    await flush();
+    expect(onUnauthorized).not.toHaveBeenCalled();
+  });
+
   it('stops on a 401 and waits Retry-After on a 429', async () => {
     const onUnauthorized = vi.fn();
     const sleeps: number[] = [];

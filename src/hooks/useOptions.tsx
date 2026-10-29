@@ -66,6 +66,7 @@ export interface ISettings {
   whisperNotificationTiming?: 'in-game' | 'out-of-game' | 'both' | 'never'; // When to notify
   whisperNotificationVolume?: number; // Volume for whisper notifications (0-100)
   marketAlertSoundEnabled?: boolean; // Play a sound with market Watch / saved-search alert popups
+  marketAlertRealtime?: boolean; // Show each market alert individually instead of aggregating for 30 seconds
   marketAlertVolume?: number; // Volume of the market alert sound (0-100)
   acceptOfferMessageTemplate?: string; // Custom message template for accepting offers (without /w *{accountName})
   rejectOfferMessageTemplate?: string; // Custom message template for rejecting offers (without /w *{accountName})
@@ -148,6 +149,7 @@ const DEFAULT_SETTINGS: ISettings = {
   whisperNotificationTiming: 'both',
   whisperNotificationVolume: 70,
   marketAlertSoundEnabled: true,
+  marketAlertRealtime: false,
   marketAlertVolume: 70,
   toastPopupsEnabled: true,
   toastPopupTypes: ['whispers', 'trade', 'joins', 'offers', 'networth'],

@@ -110,16 +110,16 @@ afterEach(cleanup);
 describe('RaresTab', () => {
   it('explains the tab when the stash has no rares', () => {
     renderTab([]);
-    expect(screen.getByText('No rares in your stash')).not.toBeNull();
-    expect(screen.queryByText(/^Rares:/)).toBeNull();
+    expect(screen.getByText('仓库中没有稀有物品')).not.toBeNull();
+    expect(screen.queryByText(/^稀有物品：/)).toBeNull();
   });
 
   it('lists Keep rares by predicted rank, best first', () => {
     const low = rare({ name: 'Low Keep', rank: 0.81 });
     const high = rare({ name: 'High Keep', rank: 0.97 });
     renderTab([low, high]);
-    expect(groupNames('Keep')).toEqual(['High Keep', 'Low Keep']);
-    expect(group('Keep').firstElementChild?.textContent).toBe('Keep 2');
+    expect(groupNames('建议保留')).toEqual(['High Keep', 'Low Keep']);
+    expect(group('建议保留').firstElementChild?.textContent).toBe('建议保留 2');
   });
 
   it('lists worth-a-look rares by priority, then rank, and keeps low-priority checks out of it', () => {
@@ -129,9 +129,9 @@ describe('RaresTab', () => {
       rare({ name: 'High Strong', verdict: 'check', checkPriority: 'high', rank: 0.7 }),
       rare({ name: 'Low Check', verdict: 'check', checkPriority: 'low', rank: 0.79 }),
     ]);
-    expect(groupNames('Worth a look')).toEqual(['High Strong', 'High Weak', 'Medium Strong']);
+    expect(groupNames('值得复核')).toEqual(['High Strong', 'High Weak', 'Medium Strong']);
     expect(screen.queryByText('Low Check')).toBeNull();
-    expect(group('Keep')).toBeUndefined();
+    expect(group('建议保留')).toBeUndefined();
   });
 
   it('folds low-value checks before vendor rares, per stash tab in natural tab order', () => {
@@ -143,14 +143,14 @@ describe('RaresTab', () => {
       rare({ verdict: 'check', checkPriority: null, tab: 'Personal' }),
     ]);
     expect(foldTitles()).toEqual([
-      '1 likely low value · Personal',
-      '1 likely low value · Stash',
-      '2 likely vendor · Shared 2',
-      '1 likely vendor · Shared 10',
+      '1 件估值可能较低 · Personal',
+      '1 件估值可能较低 · Stash',
+      '2 件可能卖店 · Shared 2',
+      '1 件可能卖店 · Shared 10',
     ]);
-    expect(screen.getByText('Frees 2 stash slots')).not.toBeNull();
-    expect(screen.getByText('Frees 1 stash slot')).not.toBeNull();
-    expect(screen.getAllByText('Check items without a key stat')).toHaveLength(2);
+    expect(screen.getByText('可腾出 2 个仓库格')).not.toBeNull();
+    expect(screen.getByText('可腾出 1 个仓库格')).not.toBeNull();
+    expect(screen.getAllByText('没有关键词条，建议复核')).toHaveLength(2);
   });
 
   it('opens a fold to show its rares in stash order (row, then column, unplaced last)', () => {
@@ -160,7 +160,7 @@ describe('RaresTab', () => {
       rare({ name: 'Row 1 Col 3', verdict: 'vendor', position: { column: 2, row: 0 } }),
       rare({ name: 'Row 1 Col 1', verdict: 'vendor', position: { column: 0, row: 0 } }),
     ]);
-    const fold = screen.getByText('4 likely vendor · Shared 1').closest('button')!;
+    const fold = screen.getByText('4 件可能卖店 · Shared 1').closest('button')!;
     expect(screen.queryByText('Unplaced')).toBeNull();
     fireEvent.click(fold);
     expect(fold.getAttribute('aria-expanded')).toBe('true');
@@ -186,7 +186,7 @@ describe('RaresTab', () => {
       rare({ name: 'No Band', verdict: 'keep' }),
     ]);
     const row = rowButton('Chippy');
-    expect(row.textContent).toContain('War Belt · Belt · Shared 3');
+    expect(row.textContent).toContain('War Belt · 腰带 · Shared 3');
     expect(row.textContent).toContain('~1.5–3.2 HR');
     expect([...row.querySelectorAll('.text-glow')].map((el) => el.textContent)).toEqual(['★★★', '★★']);
     expect(row.textContent).toContain('+2');
@@ -196,7 +196,7 @@ describe('RaresTab', () => {
 
   it('never shows key-stat chips on vendor rares', () => {
     renderTab([rare({ name: 'Vendor Me', verdict: 'vendor', stats: [star('+1 to All Skills', 2, 2)] })]);
-    fireEvent.click(screen.getByText('1 likely vendor · Shared 1'));
+    fireEvent.click(screen.getByText('1 件可能卖店 · Shared 1'));
     expect(rowButton('Vendor Me').querySelector('.text-glow')).toBeNull();
   });
 
@@ -223,7 +223,7 @@ describe('RaresTab', () => {
     });
     expect(row.getAttribute('aria-expanded')).toBe('true');
     expect(screen.getByText('Shared 4 · col 5, row 1')).not.toBeNull();
-    expect(screen.getByText('Item history')).not.toBeNull();
+    expect(screen.getByText('物品历史')).not.toBeNull();
 
     // Collapse and re-expand: served from the cache
     await act(async () => {
@@ -243,8 +243,8 @@ describe('RaresTab', () => {
     await act(async () => {
       fireEvent.click(rowButton('No History'));
     });
-    expect(screen.getByText('Usually listed')).not.toBeNull();
-    expect(screen.queryByText('Item history')).toBeNull();
+    expect(screen.getByText('常见挂单价')).not.toBeNull();
+    expect(screen.queryByText('物品历史')).toBeNull();
   });
 
   it('adds the hardcore note on hardcore stashes', async () => {
@@ -252,7 +252,7 @@ describe('RaresTab', () => {
     await act(async () => {
       fireEvent.click(rowButton('HC Rare'));
     });
-    expect(screen.getByText(/^Hardcore: price model and stars from softcore data/)).not.toBeNull();
+    expect(screen.getByText(/^专家模式：价格模型和星级建议基于普通模式数据/)).not.toBeNull();
   });
   it('colours crafted names and shows their recipe and low-confidence badges', () => {
     renderTab([
@@ -261,27 +261,27 @@ describe('RaresTab', () => {
     ]);
     expect([...document.querySelectorAll('li .text-q-crafted')].map((el) => el.textContent)).toContain('Doom Collar');
     expect([...document.querySelectorAll('li .text-q-rare')].map((el) => el.textContent)).toEqual(['Rune Loop']);
-    expect(screen.getByText('Blood craft')).not.toBeNull();
-    expect(screen.getAllByText('Low confidence')).toHaveLength(1);
+    expect(screen.getByText('血系手工制作')).not.toBeNull();
+    expect(screen.getAllByText('低可信度')).toHaveLength(1);
   });
 
   it('adds a crafted summary line next to the rares one when the stash has crafted items', () => {
     const crafted = { ...SUMMARY, keep: 1, check: 0, checkHigh: 0, vendor: 0, keepLowHr: 1, keepHighHr: 2.5 };
     renderTab([rare({ quality: 'Crafted', recipe: 'blood', confidence: 'normal' }), rare()], SUMMARY, false, crafted);
-    expect(screen.getByText(/^Rares:/).closest('p')!.textContent).toBe(
-      'Rares: 2 Keep · 2 worth a look · 1 likely vendor (frees 1 slot)',
+    expect(screen.getByText(/^稀有物品：/).closest('p')!.textContent).toBe(
+      '稀有物品：建议保留 2 件 · 值得复核 2 件 · 可能卖店 1 件 （可腾出 1 个仓库格）',
     );
-    expect(screen.getByText(/^Crafted:/).closest('p')!.textContent).toBe(
-      'Crafted: 1 Keep · 0 worth a look · 0 likely vendor (frees 0 slots)',
+    expect(screen.getByText(/^手工物品：/).closest('p')!.textContent).toBe(
+      '手工物品：建议保留 1 件 · 值得复核 0 件 · 可能卖店 0 件 （可腾出 0 个仓库格）',
     );
-    expect(screen.getByText(/in Keep crafted items/).textContent).toBe(
-      '+ ~1.0–2.5 HR in Keep crafted items (estimated, not in total)',
+    expect(screen.getByText(/为建议保留的手工物品估值/).textContent).toBe(
+      '+ ~1.0–2.5 HR 为建议保留的手工物品估值（仅供参考，不计入总估值）',
     );
   });
 
   it('shows no crafted summary line for a rares-only stash', () => {
     renderTab([rare()], SUMMARY, false, { ...SUMMARY, keep: 0, check: 0, checkHigh: 0, vendor: 0 });
-    expect(screen.queryByText(/^Crafted:/)).toBeNull();
+    expect(screen.queryByText(/^手工物品：/)).toBeNull();
   });
 
   it('never requests market history for crafted items', async () => {
@@ -296,25 +296,25 @@ describe('RaresTab', () => {
 describe('RaresSummaryCard', () => {
   it('summarizes verdict counts and the estimated Keep band', () => {
     render(<RaresSummaryCard summary={SUMMARY} />);
-    const card = screen.getByText(/^Rares:/).closest('p')!;
-    expect(card.textContent).toBe('Rares: 2 Keep · 2 worth a look · 1 likely vendor (frees 1 slot)');
-    const band = screen.getByText(/in Keep rares/);
-    expect(band.textContent).toBe('+ ~1.3–12 HR in Keep rares (estimated, not in total)');
+    const card = screen.getByText(/^稀有物品：/).closest('p')!;
+    expect(card.textContent).toBe('稀有物品：建议保留 2 件 · 值得复核 2 件 · 可能卖店 1 件 （可腾出 1 个仓库格）');
+    const band = screen.getByText(/为建议保留的稀有物品估值/);
+    expect(band.textContent).toBe('+ ~1.3–12 HR 为建议保留的稀有物品估值（仅供参考，不计入总估值）');
     expect(band.getAttribute('title')).toBe(
-      'Estimated from S13 asking prices of similar rares — not part of the total',
+      '参考 S13 赛季相似稀有物品的挂单价估算，不计入仓库总估值',
     );
   });
 
   it('notes Keep rares without a market band in the hint', () => {
     render(<RaresSummaryCard summary={{ ...SUMMARY, keep: 3, keepUnpriced: 1, vendor: 2 }} />);
-    expect(screen.getByText(/frees 2 slots/)).not.toBeNull();
-    expect(screen.getByText(/in Keep rares/).getAttribute('title')).toMatch(
-      /; 1 Keep rare without a market band not included$/,
+    expect(screen.getByText(/可腾出 2 个仓库格/)).not.toBeNull();
+    expect(screen.getByText(/为建议保留的稀有物品估值/).getAttribute('title')).toMatch(
+      /；另有 1 件建议保留的稀有物品无市场价范围，未计入估值$/,
     );
   });
 
   it('hides the Keep band when no Keep rare has a market band', () => {
     render(<RaresSummaryCard summary={{ ...SUMMARY, keep: 2, keepUnpriced: 2 }} />);
-    expect(screen.queryByText(/in Keep rares/)).toBeNull();
+    expect(screen.queryByText(/为建议保留的稀有物品估值/)).toBeNull();
   });
 });

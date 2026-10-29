@@ -6,8 +6,19 @@ import { AlertHistory } from './AlertHistory';
 import { publishMarketAlerts } from './alert-events';
 import { listMarketAlerts, type MarketAlert } from './saved-search-api';
 vi.mock('./saved-search-api', () => ({ listMarketAlerts: vi.fn() }));
+const updateSettings = vi.fn();
+vi.mock('@/hooks/useOptions', () => ({ useOptions: () => ({ settings: {}, isLoading: false, updateSettings }) }));
 afterEach(() => { cleanup(); vi.clearAllMocks(); });
 const alert = (id: string): MarketAlert => ({ id, listingId: id, matchedAt: new Date().toISOString(), savedSearchId: 'search', savedSearchName: '测试', listing: { id, name: `物品${id}`, baseName: null, price: '1', hrPrice: null, seller: '卖家' } as MarketAlert['listing'] });
+it('offers a persistent switch between realtime and 30-second popups', () => {
+  render(<AlertHistory onView={vi.fn()} />);
+  const control = screen.getByRole('switch', { name: '实时弹出全部市场提醒' });
+  expect(screen.getByText(/数量较多时排队/)).toBeTruthy();
+  expect(screen.getByText(/未展示的提醒合并汇总/)).toBeTruthy();
+  expect(control.getAttribute('aria-checked')).toBe('false');
+  fireEvent.click(control);
+  expect(updateSettings).toHaveBeenCalledWith({ marketAlertRealtime: true });
+});
 it('merges live alerts arriving during the history request and opens a selected listing', async () => {
   let resolve!: (value: { items: MarketAlert[] }) => void;
   vi.mocked(listMarketAlerts).mockReturnValue(new Promise((done) => { resolve = done; }));

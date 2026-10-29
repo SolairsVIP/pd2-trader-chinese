@@ -51,7 +51,7 @@ describe('WindowChrome', () => {
     render(<WindowChrome title="T"
       onClose={vi.fn()}
       actions={<span>badge</span>} />);
-    const close = screen.getByRole('button', { name: 'Close' });
+    const close = screen.getByRole('button', { name: '关闭' });
     const badge = screen.getByText('badge');
     expect(badge.compareDocumentPosition(close) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });

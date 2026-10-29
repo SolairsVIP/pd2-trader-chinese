@@ -92,13 +92,13 @@ describe('getSeasonSettingOptions', () => {
   it('lists "current" first (labelled with the live season), then other started seasons, no future ones', () => {
     at('2026-03-01T00:00:00Z');
     expect(getSeasonSettingOptions(LIST)).toEqual([
-      { value: CURRENT_SEASON_SETTING, label: 'Beta (B) (current)' },
+      { value: CURRENT_SEASON_SETTING, label: 'Beta (B)（当前赛季）' },
       { value: 'a', label: 'Alpha (A)' },
     ]);
   });
 
   it('uses a generic label when there are no seasons', () => {
-    expect(getSeasonSettingOptions([])).toEqual([{ value: CURRENT_SEASON_SETTING, label: 'Current season' }]);
+    expect(getSeasonSettingOptions([])).toEqual([{ value: CURRENT_SEASON_SETTING, label: '当前赛季' }]);
   });
 });
 

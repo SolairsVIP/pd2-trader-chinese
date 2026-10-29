@@ -97,7 +97,9 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
 
   const removeMacro = async (index: number) => {
     await saveMacros(macros.filter((_, i) => i !== index));
-    if (editingIndex === index) setEditingIndex(null);
+    setEditingIndex((current) =>
+      current === null || current === index ? null : current > index ? current - 1 : current,
+    );
   };
 
   const moveUp = async (index: number) => {
@@ -105,7 +107,9 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
     const updated = [...macros];
     [updated[index - 1], updated[index]] = [updated[index], updated[index - 1]];
     await saveMacros(updated);
-    if (editingIndex === index) setEditingIndex(index - 1);
+    setEditingIndex((current) =>
+      current === index ? index - 1 : current === index - 1 ? index : current,
+    );
   };
 
   const moveDown = async (index: number) => {
@@ -113,7 +117,9 @@ const MacroManagerSheet: React.FC<MacroManagerSheetProps> = ({ onApply }) => {
     const updated = [...macros];
     [updated[index], updated[index + 1]] = [updated[index + 1], updated[index]];
     await saveMacros(updated);
-    if (editingIndex === index) setEditingIndex(index + 1);
+    setEditingIndex((current) =>
+      current === index ? index + 1 : current === index + 1 ? index : current,
+    );
   };
 
   const startEdit = (index: number) => {

@@ -211,7 +211,7 @@ function renderWidget(item: Item, onClose = vi.fn()) {
 
 const statCheckbox = (name: string) =>
   screen.getByText(name).closest('label')!.querySelector('[role="checkbox"]') as HTMLElement;
-const searchButton = () => screen.getByRole('button', { name: /^Search$/ });
+const searchButton = () => screen.getByRole('button', { name: '搜索' });
 const lastQuery = (fn = getMarketListings) => fn.mock.calls[fn.mock.calls.length - 1][0];
 
 // ---------------------------------------------------------------- tests
@@ -345,10 +345,10 @@ describe('ItemOverlayWidget header', () => {
 
   it('shows the item name, defense and every parsed stat', () => {
     renderWidget(shako());
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Harlequin Crest');
-    expect(screen.getByText('Base: Shako')).not.toBeNull();
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('谐角之冠');
+    expect(screen.getByText('底材：军帽')).not.toBeNull();
     expect(screen.getByText('141')).not.toBeNull();
-    expect(screen.getByText('to All Skills')).not.toBeNull();
+    expect(screen.getByText('所有技能')).not.toBeNull();
   });
 
   it('titles a runeword by its runeword name with a badge', () => {
@@ -356,24 +356,24 @@ describe('ItemOverlayWidget header', () => {
       rareRing({ name: 'Monarch', quality: 'Normal', type: 'Monarch', isRuneword: true, runeword: 'Spirit' }),
     );
     const h1 = screen.getByRole('heading', { level: 1 });
-    expect(h1.textContent).toContain('Spirit');
-    expect(within(h1).getByText('Runeword')).not.toBeNull();
+    expect(h1.textContent).toContain('精神');
+    expect(within(h1).getByText('符文之语')).not.toBeNull();
   });
 
   it('lets a rare cycle the searched quality through every other base quality and back', async () => {
     renderWidget(rareRing());
-    const toggle = screen.getByTitle('Click to cycle quality');
-    expect(toggle.textContent).toBe('Rare');
-    for (const next of ['Normal', 'Superior', 'Magic', 'Crafted', 'Rare']) {
+    const toggle = screen.getByTitle('点击切换物品品质');
+    expect(toggle.textContent).toBe('稀有');
+    for (const next of ['普通', '优质', '魔法', '手工制作', '稀有']) {
       fireEvent.click(toggle);
       // the outgoing label animates out, so wait until only the new one remains
-      await waitFor(() => expect(screen.getByTitle('Click to cycle quality').textContent).toBe(next));
+      await waitFor(() => expect(screen.getByTitle('点击切换物品品质').textContent).toBe(next));
     }
   });
 
   it('the cycled quality is what the market search asks for', async () => {
     renderWidget(rareRing());
-    fireEvent.click(screen.getByTitle('Click to cycle quality')); // -> Normal
+    fireEvent.click(screen.getByTitle('点击切换物品品质')); // -> Normal
     fireEvent.click(searchButton());
     await waitFor(() => expect(getMarketListings).toHaveBeenCalled());
     expect(lastQuery()['item.quality.name']).toBe('Normal');
@@ -381,19 +381,19 @@ describe('ItemOverlayWidget header', () => {
 
   it('uniques have no quality/search-mode toggles', () => {
     renderWidget(shako());
-    expect(screen.queryByTitle('Click to cycle quality')).toBeNull();
-    expect(screen.queryByTitle('Click to toggle search mode')).toBeNull();
+    expect(screen.queryByTitle('点击切换物品品质')).toBeNull();
+    expect(screen.queryByTitle('点击切换搜索模式')).toBeNull();
   });
 
   it('Close, Settings and the trade-site button do what they say', async () => {
     const { onClose } = renderWidget(rareRing());
-    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    fireEvent.click(screen.getByRole('button', { name: '关闭' }));
     expect(onClose).toHaveBeenCalledTimes(1);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
+    fireEvent.click(screen.getByRole('button', { name: '设置' }));
     expect(overlay.openPanel).toHaveBeenCalledWith('settings');
 
-    fireEvent.click(screen.getByRole('button', { name: 'Open search on projectdiablo2.com' }));
+    fireEvent.click(screen.getByRole('button', { name: '在 projectdiablo2.com 上打开搜索' }));
     expect(vi.mocked(openUrl).mock.calls[0][0]).toMatch(/^https:\/\/(www\.)?projectdiablo2\.com\//);
   });
 });
@@ -403,16 +403,16 @@ describe('ItemOverlayWidget unique price pill', () => {
     const { promise, resolve } = Promise.withResolvers<AveragePriceResponse | null>();
     vi.mocked(fetchItemPriceByName).mockReturnValue(promise);
     renderWidget(shako());
-    expect(await screen.findByText('Loading price data...')).not.toBeNull();
+    expect(await screen.findByText('正在加载价格数据……')).not.toBeNull();
 
     await act(async () =>
       resolve(priceData({ priceChange7Days: { change: -0.5, changePercent: -12.5, previousMedianPrice: 4 } })),
     );
     await waitFor(() => expect(screen.getByAltText('Harlequin Crest').parentElement!.textContent).toContain('3.50 HR'));
     const pill = screen.getByAltText('Harlequin Crest').parentElement!;
-    expect(pill.textContent).toContain('7-day avg');
+    expect(pill.textContent).toContain('7天均价');
     expect(pill.textContent).toContain('-12.5%');
-    expect(screen.queryByText('Loading price data...')).toBeNull();
+    expect(screen.queryByText('正在加载价格数据……')).toBeNull();
 
     // asked for the selected mode over the requested window
     expect(fetchItemPriceByName).toHaveBeenCalledWith('Harlequin Crest', {
@@ -428,26 +428,26 @@ describe('ItemOverlayWidget unique price pill', () => {
     vi.mocked(fetchItemPriceByName).mockResolvedValue(priceData());
     renderWidget(shako());
     await waitFor(() => expect(screen.getByAltText('Harlequin Crest').parentElement!.textContent).toContain('4.00 HR'));
-    expect(screen.getByAltText('Harlequin Crest').parentElement!.textContent).toContain('24-hour avg');
+    expect(screen.getByAltText('Harlequin Crest').parentElement!.textContent).toContain('24小时均价');
   });
 
   it('flags a price the server computed over a longer fallback window', async () => {
     vi.mocked(fetchItemPriceByName).mockResolvedValue(priceData({ priceWindow: '30d' }));
     renderWidget(shako());
-    const note = await screen.findByLabelText(/Not enough sales this week/);
-    expect(note.textContent).toBe('30d');
+    const note = await screen.findByLabelText(/本周成交数据不足/);
+    expect(note.textContent).toBe('30 天');
   });
 
   it('reports "No price data available" as an error when the API has nothing', async () => {
     renderWidget(shako());
-    const msg = await screen.findByText('No price data available');
+    const msg = await screen.findByText('暂无价格数据。');
     expect(msg.className).toContain('text-destructive');
   });
 
   it('shows the error message when the price request throws', async () => {
-    vi.mocked(fetchItemPriceByName).mockRejectedValue(new Error('boom 503'));
+    vi.mocked(fetchItemPriceByName).mockRejectedValue(new Error('HTTP 503'));
     renderWidget(shako());
-    expect(await screen.findByText('boom 503')).not.toBeNull();
+    expect(await screen.findByText('服务器暂时无法处理请求，请稍后重试。（HTTP 503）')).not.toBeNull();
   });
 
   it('hover popover breaks the price down and links to pd2trader with the same mode and window', async () => {
@@ -458,13 +458,13 @@ describe('ItemOverlayWidget unique price pill', () => {
     const img = await screen.findByAltText('Harlequin Crest');
     fireEvent.mouseEnter(img.parentElement!.parentElement!);
     const popover = await screen.findByRole('dialog');
-    expect(within(popover).getByText('Median').parentElement!.textContent).toContain('3.00 HR');
-    expect(within(popover).getByText('Min').parentElement!.textContent).toContain('1.00 HR');
-    expect(within(popover).getByText('Max').parentElement!.textContent).toContain('9.00 HR');
-    expect(within(popover).getByText('Samples:').parentElement!.textContent).toContain('42');
-    expect(within(popover).getByText('7d Change:').parentElement!.textContent).toContain('+10.0%');
+    expect(within(popover).getByText('中位数').parentElement!.textContent).toContain('3.00 HR');
+    expect(within(popover).getByText('最低价').parentElement!.textContent).toContain('1.00 HR');
+    expect(within(popover).getByText('最高价').parentElement!.textContent).toContain('9.00 HR');
+    expect(within(popover).getByText('样本数:').parentElement!.textContent).toContain('42');
+    expect(within(popover).getByText('7 天变化:').parentElement!.textContent).toContain('+10.0%');
 
-    fireEvent.click(within(popover).getByRole('button', { name: /Open on pd2trader.com/ }));
+    fireEvent.click(within(popover).getByRole('button', { name: /在 pd2trader.com 打开/ }));
     expect(openUrl).toHaveBeenCalledWith(
       'https://pd2trader.com/item/harlequin_crest?isLadder=true&isHardcore=false&hours=168',
     );
@@ -489,11 +489,11 @@ describe('ItemOverlayWidget unique price pill', () => {
     const img = await screen.findByAltText('Harlequin Crest');
     fireEvent.mouseEnter(img.parentElement!.parentElement!);
     const popover = await screen.findByRole('dialog');
-    await within(popover).findByText('Top Corruptions');
+    await within(popover).findByText('热门腐化属性');
 
     // first five, then Show More reveals the rest
     expect(within(popover).queryByText('Corr 5')).toBeNull();
-    fireEvent.click(within(popover).getByRole('button', { name: 'Show More (2 more)' }));
+    fireEvent.click(within(popover).getByRole('button', { name: '显示更多（另有 2 项）' }));
     expect(within(popover).getByText('Corr 6')).not.toBeNull();
 
     fireEvent.click(within(popover).getByText('Corr 2'));
@@ -507,39 +507,39 @@ describe('ItemOverlayWidget unique price pill', () => {
   it('does not ask for unique prices for rares', () => {
     renderWidget(rareRing());
     expect(fetchItemPriceByName).not.toHaveBeenCalled();
-    expect(screen.queryByText('No price data available')).toBeNull();
+    expect(screen.queryByText('暂无价格数据。')).toBeNull();
   });
 });
 
 describe('ItemOverlayWidget stat selection', () => {
   it('selecting a stat pre-fills a range around its value and shows a clearable count', async () => {
     renderWidget(rareRing());
-    expect(screen.queryByText(/selected/)).toBeNull();
+    expect(screen.queryByText(/已选 \d+ 项/)).toBeNull();
 
-    fireEvent.click(statCheckbox('% Faster Cast Rate'));
-    expect((screen.getByLabelText('% Faster Cast Rate minimum') as HTMLInputElement).value).toBe('19');
-    expect((screen.getByLabelText('% Faster Cast Rate maximum') as HTMLInputElement).value).toBe('20');
-    expect(screen.getByText('1 selected')).not.toBeNull();
+    fireEvent.click(statCheckbox('% 快速施法率'));
+    expect((screen.getByLabelText('% 快速施法率最小值') as HTMLInputElement).value).toBe('19');
+    expect((screen.getByLabelText('% 快速施法率最大值') as HTMLInputElement).value).toBe('20');
+    expect(screen.getByText('已选 1 项')).not.toBeNull();
 
-    fireEvent.click(screen.getByText('Clear'));
-    await waitFor(() => expect(screen.queryByLabelText('% Faster Cast Rate minimum')).toBeNull());
-    expect(statCheckbox('% Faster Cast Rate').getAttribute('aria-checked')).toBe('false');
+    fireEvent.click(screen.getByText('清除'));
+    await waitFor(() => expect(screen.queryByLabelText('% 快速施法率最小值')).toBeNull());
+    expect(statCheckbox('% 快速施法率').getAttribute('aria-checked')).toBe('false');
   });
 
   it('Clear also resets the tri-state corrupted filter', async () => {
     renderWidget(rareRing({ name: 'Doom Visage', type: 'Shako' }));
-    const corrupted = screen.getByRole('checkbox', { name: 'Corrupted filter' });
+    const corrupted = screen.getByRole('checkbox', { name: '腐化筛选' });
     fireEvent.click(corrupted);
     expect(corrupted.getAttribute('aria-checked')).toBe('true');
-    fireEvent.click(screen.getByText('Clear'));
-    expect(screen.getByRole('checkbox', { name: 'Corrupted filter' }).getAttribute('aria-checked')).toBe('false');
+    fireEvent.click(screen.getByText('清除'));
+    expect(screen.getByRole('checkbox', { name: '腐化筛选' }).getAttribute('aria-checked')).toBe('false');
   });
 
   it('edited min/max values are what the search filters on', async () => {
     renderWidget(rareRing());
-    fireEvent.click(statCheckbox('% Faster Cast Rate'));
-    fireEvent.change(screen.getByLabelText('% Faster Cast Rate minimum'), { target: { value: '15' } });
-    fireEvent.change(screen.getByLabelText('% Faster Cast Rate maximum'), { target: { value: '' } });
+    fireEvent.click(statCheckbox('% 快速施法率'));
+    fireEvent.change(screen.getByLabelText('% 快速施法率最小值'), { target: { value: '15' } });
+    fireEvent.change(screen.getByLabelText('% 快速施法率最大值'), { target: { value: '' } });
     fireEvent.click(searchButton());
     await waitFor(() => expect(getMarketListings).toHaveBeenCalledTimes(1));
     expect(JSON.stringify(lastQuery())).toContain(
@@ -549,29 +549,29 @@ describe('ItemOverlayWidget stat selection', () => {
 
   it('Enter in a range input runs the search', async () => {
     renderWidget(rareRing());
-    fireEvent.click(statCheckbox('% Faster Cast Rate'));
-    fireEvent.keyDown(screen.getByLabelText('% Faster Cast Rate minimum'), { key: 'Enter' });
+    fireEvent.click(statCheckbox('% 快速施法率'));
+    fireEvent.keyDown(screen.getByLabelText('% 快速施法率最小值'), { key: 'Enter' });
     await waitFor(() => expect(getMarketListings).toHaveBeenCalledTimes(1));
   });
 
   it('a new item clears the previous selection and results', async () => {
     getMarketListings.mockResolvedValue(page([listing()], 1));
     const { rerenderItem } = renderWidget(rareRing());
-    fireEvent.click(statCheckbox('% Faster Cast Rate'));
+    fireEvent.click(statCheckbox('% 快速施法率'));
     fireEvent.click(searchButton());
     await screen.findByText('1.5 HR');
 
     rerenderItem(rareRing({ name: 'Storm Loop', stats: [MF] }));
     await waitFor(() => expect(screen.queryByText('1.5 HR')).toBeNull());
-    expect(screen.queryByText(/selected/)).toBeNull();
-    expect(screen.getByText('Ready to search')).not.toBeNull();
+    expect(screen.queryByText(/已选 \d+ 项/)).toBeNull();
+    expect(screen.getByText('可以开始搜索')).not.toBeNull();
   });
 });
 
 describe('ItemOverlayWidget market search', () => {
   it('starts with an idle hint and no request', () => {
     renderWidget(rareRing());
-    expect(screen.getByText('Ready to search')).not.toBeNull();
+    expect(screen.getByText('可以开始搜索')).not.toBeNull();
     expect(getMarketListings).not.toHaveBeenCalled();
   });
 
@@ -580,15 +580,15 @@ describe('ItemOverlayWidget market search', () => {
     getMarketListings.mockReturnValue(promise);
     renderWidget(rareRing());
     fireEvent.click(searchButton());
-    expect(await screen.findByText('Loading market listings...')).not.toBeNull();
-    expect(screen.queryByText('Ready to search')).toBeNull();
+    expect(await screen.findByText('正在加载市场挂单……')).not.toBeNull();
+    expect(screen.queryByText('可以开始搜索')).toBeNull();
 
     await act(async () => resolve(page([listing({ hr_price: 2 }), listing({ hr_price: 0, price: 'offer me' })], 57)));
     expect(await screen.findByText('2 HR')).not.toBeNull();
     expect(screen.getByText('offer me')).not.toBeNull();
     expect(screen.getByText('57')).not.toBeNull();
-    expect(screen.getByText('· showing 2')).not.toBeNull();
-    expect(screen.queryByText('Loading market listings...')).toBeNull();
+    expect(screen.getByText('· 当前显示 2 项')).not.toBeNull();
+    expect(screen.queryByText('正在加载市场挂单……')).toBeNull();
 
     const q = lastQuery();
     expect(q.$limit).toBe(20);
@@ -623,11 +623,11 @@ describe('ItemOverlayWidget market search', () => {
   it('shows a no-results state that suggests Show Expired only when it is off', async () => {
     renderWidget(rareRing());
     fireEvent.click(searchButton());
-    expect(await screen.findByText('No listings found')).not.toBeNull();
-    expect(screen.getByText('Try loosening your stat filters or turn on Show Expired.')).not.toBeNull();
+    expect(await screen.findByText('没有找到挂单')).not.toBeNull();
+    expect(screen.getByText('请放宽属性筛选条件，或开启“显示已过期挂单”。')).not.toBeNull();
 
     fireEvent.click(screen.getByRole('switch'));
-    expect(screen.getByText('Try loosening your stat filters.')).not.toBeNull();
+    expect(screen.getByText('请放宽属性筛选条件。')).not.toBeNull();
   });
 
   it('Show Expired routes the search to the archive', async () => {
@@ -639,17 +639,17 @@ describe('ItemOverlayWidget market search', () => {
   });
 
   it('shows the error with a Retry that searches again', async () => {
-    getMarketListings.mockRejectedValueOnce(new Error('Rate limited'));
+    getMarketListings.mockRejectedValueOnce(new Error('HTTP 429'));
     getMarketListings.mockResolvedValueOnce(page([listing({ hr_price: 7 })]));
     renderWidget(rareRing());
     fireEvent.click(searchButton());
 
     const alert = await screen.findByRole('alert');
-    expect(alert.textContent).toContain("Couldn't load listings");
-    expect(alert.textContent).toContain('Rate limited');
-    expect(screen.queryByText('No listings found')).toBeNull();
+    expect(alert.textContent).toContain('无法加载挂单');
+    expect(alert.textContent).toContain('请求过于频繁，请稍后重试。（HTTP 429）');
+    expect(screen.queryByText('没有找到挂单')).toBeNull();
 
-    fireEvent.click(within(alert).getByRole('button', { name: /Retry/ }));
+    fireEvent.click(within(alert).getByRole('button', { name: '重试' }));
     expect(await screen.findByText('7 HR')).not.toBeNull();
     expect(screen.queryByRole('alert')).toBeNull();
   });
@@ -671,7 +671,7 @@ describe('ItemOverlayWidget market search', () => {
     const item = rareRing();
     const { rerenderItem } = renderWidget(item);
     fireEvent.click(searchButton());
-    expect(await screen.findByText('Load more')).not.toBeNull();
+    expect(await screen.findByText('加载更多')).not.toBeNull();
 
     inView = true;
     rerenderItem(item);
@@ -679,7 +679,7 @@ describe('ItemOverlayWidget market search', () => {
     expect(lastQuery().$skip).toBe(20);
     expect(screen.getAllByRole('row')).toHaveLength(1 + 21); // header + 20 + one new (duplicate dropped)
     // a short page means there is nothing more to load
-    expect(screen.queryByText('Load more')).toBeNull();
+    expect(screen.queryByText('加载更多')).toBeNull();
   });
 
   it.each([
@@ -714,13 +714,13 @@ describe('ItemOverlayWidget market search', () => {
 describe('ItemOverlayWidget listing to quick-list', () => {
   it('List is disabled for items outside the shared stash', () => {
     renderWidget(rareRing());
-    expect((screen.getByRole('button', { name: /List$/ }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole('button', { name: '上架' }) as HTMLButtonElement).disabled).toBe(true);
   });
 
   it('opens the quick-list panel at the cursor with the encoded item for stash items', () => {
     const item = rareRing({ location: 'Stash' });
     renderWidget(item);
-    const list = screen.getByRole('button', { name: /List$/ }) as HTMLButtonElement;
+    const list = screen.getByRole('button', { name: '上架' }) as HTMLButtonElement;
     if (list.disabled) throw new Error('expected stash item to be listable');
     fireEvent.click(list);
     expect(overlay.openPanel).toHaveBeenCalledWith('quickList', { item: expect.any(String) }, { placement: 'cursor' });
@@ -873,23 +873,23 @@ describe('ItemOverlayWidget rare appraisal', () => {
 describe('ItemOverlayWidget extra header behaviour', () => {
   it('toggles a rare between searching its exact base and its whole item type', async () => {
     renderWidget(rareRing());
-    const mode = screen.getByTitle('Click to toggle search mode');
-    expect(mode.textContent).toBe('Base: Ring');
+    const mode = screen.getByTitle('点击切换搜索模式');
+    expect(mode.textContent).toBe('底材：Ring');
     fireEvent.click(mode);
-    await waitFor(() => expect(screen.getByTitle('Click to toggle search mode').textContent).toBe('Type: Jewelry'));
+    await waitFor(() => expect(screen.getByTitle('点击切换搜索模式').textContent).toBe('类型：Jewelry'));
 
     fireEvent.click(searchButton());
     await waitFor(() => expect(getMarketListings).toHaveBeenCalled());
     expect(JSON.stringify(lastQuery())).toContain('amul');
     expect(JSON.stringify(lastQuery())).not.toContain('"rin"');
 
-    fireEvent.click(screen.getByTitle('Click to toggle search mode'));
-    await waitFor(() => expect(screen.getByTitle('Click to toggle search mode').textContent).toBe('Base: Ring'));
+    fireEvent.click(screen.getByTitle('点击切换搜索模式'));
+    await waitFor(() => expect(screen.getByTitle('点击切换搜索模式').textContent).toBe('底材：Ring'));
   });
 
   it('Net Worth opens the currency panel', () => {
     renderWidget(rareRing());
-    fireEvent.click(screen.getByRole('button', { name: 'Net Worth' }));
+    fireEvent.click(screen.getByRole('button', { name: '仓库估值' }));
     expect(overlay.openPanel).toHaveBeenCalledWith('currency');
   });
 
@@ -935,9 +935,9 @@ describe('ItemOverlayWidget extra header behaviour', () => {
     const img = await screen.findByAltText('Harlequin Crest');
     fireEvent.mouseEnter(img.parentElement!.parentElement!);
     const popover = await screen.findByRole('dialog');
-    await within(popover).findByText('Top Corruptions');
+    await within(popover).findByText('热门腐化属性');
 
-    const own = within(popover).getByText("This Item's Corruption").closest('div.border-t') as HTMLElement;
+    const own = within(popover).getByText('此物品的腐化').closest('div.border-t') as HTMLElement;
     expect(own.textContent).toContain('Tohit Percent');
     expect(own.textContent).toContain('5.50 HR');
     // listed once: the top list leaves out the item's own corruption
@@ -946,7 +946,7 @@ describe('ItemOverlayWidget extra header behaviour', () => {
 
     // socket breakdown: picking a socket count filters on exactly that many sockets
     fireEvent.mouseEnter(within(own).getByText('Tohit Percent').closest('[role="button"]')!.parentElement!);
-    fireEvent.click(await screen.findByText(/1 Socket$/));
+    fireEvent.click(await screen.findByText('1 孔'));
     await waitFor(() => expect(getMarketListings).toHaveBeenCalled());
     const q = lastQuery();
     expect(q['item.socket_count']).toEqual({ $gte: 1, $lte: 1 });
@@ -958,8 +958,8 @@ describe('ItemOverlayWidget sockets and ethereal rows', () => {
   it('turns item sockets and ethereal flags into filterable rows', async () => {
     renderWidget(rareRing({ type: 'Shako', sockets: 2, isEthereal: true }));
     fireEvent.click(statCheckbox('Sockets'));
-    expect((screen.getByLabelText('Sockets minimum') as HTMLInputElement).value).toBe('2');
-    fireEvent.click(statCheckbox('Ethereal'));
+    expect((screen.getByLabelText('Sockets最小值') as HTMLInputElement).value).toBe('2');
+    fireEvent.click(statCheckbox('无形'));
     fireEvent.click(searchButton());
     await waitFor(() => expect(getMarketListings).toHaveBeenCalled());
     const q = lastQuery();
@@ -971,6 +971,6 @@ describe('ItemOverlayWidget sockets and ethereal rows', () => {
   // against the 'rin'/'amu' whitelist entries, so rings and amulets never get the Corrupted filter row.
   it.fails('offers the Corrupted filter on rare rings', () => {
     renderWidget(rareRing());
-    expect(screen.getByRole('checkbox', { name: 'Corrupted filter' })).not.toBeNull();
+    expect(screen.getByRole('checkbox', { name: '腐化筛选' })).not.toBeNull();
   });
 });

@@ -21,6 +21,13 @@ describe('localizePd2Text optional display text', () => {
     expect(localizePd2Text('% Faster Cast Rate')).toBe('% 快速施法率');
   });
 
+  it('translates full resistance names without leaving English suffixes', () => {
+    expect(localizePd2Text('+{X}% Total Fire Resistance')).toBe('+{X}% 总火焰抗性');
+    expect(localizePd2Text('+{X}% Total Cold Resistance')).toBe('+{X}% 总冰冷抗性');
+    expect(localizePd2Text('+{X}% Total Resistances (sum of all elements)')).toBe('+{X}% 总抗性 (各元素之和)');
+    expect(localizePd2Text('Fire Resist')).toBe('火焰抗性');
+  });
+
   it('preserves unrecognized server explanations', () => {
     expect(localizePd2Text('unparsed stats: 2')).toBe('unparsed stats: 2');
   });

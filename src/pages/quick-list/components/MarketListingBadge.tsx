@@ -152,11 +152,16 @@ const MarketListingBadge: React.FC<MarketListingBadgeProps> = ({
             onClick={async (e) => {
               e.stopPropagation();
               setDeleting(true);
+              let removed = false;
               try {
                 await deleteMarketListing(listing._id);
+                removed = true;
                 await onRefresh();
                 showToast(`已将「${stashItem?.name || ''}」从市场下架。`);
                 close();
+              } catch (err) {
+                console.error('Failed to remove or refresh listing:', err);
+                showToast(removed ? '挂单已删除，但刷新失败。' : '删除挂单失败。');
               } finally {
                 setDeleting(false);
               }

@@ -49,7 +49,7 @@ describe('StatsForm', () => {
 
   it('saves the price window as a number after the debounce', async () => {
     renderForm();
-    fireEvent.change(screen.getByLabelText('Price window'), { target: { value: '720' } });
+    fireEvent.change(screen.getByLabelText('价格统计区间'), { target: { value: '720' } });
     await advance(499);
     expect(store.updateSettings).not.toHaveBeenCalled();
     await advance(1);
@@ -77,19 +77,19 @@ describe('StatsForm', () => {
 
   it('relabels the fill value when the margin unit switches to flat', async () => {
     renderForm();
-    expect(screen.queryByText('Fill Stat Value (%)')).not.toBeNull();
-    fireEvent.change(screen.getByLabelText('Margin Unit'), { target: { value: 'flat' } });
-    expect(screen.queryByText('Fill Stat Value (flat)')).not.toBeNull();
-    expect(screen.queryByText(/Flat amount applied/)).not.toBeNull();
+    expect(screen.queryByText('填充属性数值（%）')).not.toBeNull();
+    fireEvent.change(screen.getByLabelText('浮动单位'), { target: { value: 'flat' } });
+    expect(screen.queryByText('填充属性数值（固定值）')).not.toBeNull();
+    expect(screen.queryByText(/按固定数值设置/)).not.toBeNull();
     await advance(500);
     expect(lastSaved()?.statFillMarginUnit).toBe('flat');
   });
 
   it('saves the leave-empty switches and filters', async () => {
     renderForm();
-    fireEvent.click(screen.getByRole('switch', { name: 'Leave Max Empty' }));
-    fireEvent.change(screen.getByLabelText('Default Corrupted Filter'), { target: { value: 'corrupted' } });
-    fireEvent.change(screen.getByLabelText('Rare rank display'), { target: { value: 'blocks' } });
+    fireEvent.click(screen.getByRole('switch', { name: '最大值留空' }));
+    fireEvent.change(screen.getByLabelText('默认腐化筛选'), { target: { value: 'corrupted' } });
+    fireEvent.change(screen.getByLabelText('稀有物品评级显示'), { target: { value: 'blocks' } });
     await advance(500);
     expect(store.updateSettings).toHaveBeenCalledTimes(1);
     expect(lastSaved()).toMatchObject({
@@ -103,14 +103,14 @@ describe('StatsForm', () => {
   it('fills defaults for unset settings', () => {
     renderForm({});
     expect(fillInput().value).toBe('5');
-    expect((screen.getByLabelText('Price window') as HTMLSelectElement).value).toBe('168');
+    expect((screen.getByLabelText('价格统计区间') as HTMLSelectElement).value).toBe('168');
   });
 
   it('does not save back an external change', async () => {
     renderForm();
     act(() => store.replace({ ...FULL, rareRankDisplay: 'blocks' }));
     await advance(600);
-    expect((screen.getByLabelText('Rare rank display') as HTMLSelectElement).value).toBe('blocks');
+    expect((screen.getByLabelText('稀有物品评级显示') as HTMLSelectElement).value).toBe('blocks');
     expect(store.updateSettings).not.toHaveBeenCalled();
   });
 

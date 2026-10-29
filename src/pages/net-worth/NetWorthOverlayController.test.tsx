@@ -72,7 +72,7 @@ describe('NetWorthOverlayController snapshot toasts', () => {
     const { update } = renderController();
     latest = snapshot(1.24);
     update();
-    expect(toasts()).toEqual([{ title: 'Net Worth', description: '+1.2 HR', variant: 'success' }]);
+    expect(toasts()).toEqual([{ title: '仓库估值', description: '+1.2 HR', variant: 'success' }]);
   });
 
   it('names the biggest movers in the direction of the change', () => {
@@ -88,7 +88,7 @@ describe('NetWorthOverlayController snapshot toasts', () => {
       line('Unpriced', 4, null),
     ]);
     update();
-    expect(toasts()[1]).toEqual({ title: 'Net Worth', description: '+7.7 HR · Ber, 3× Ist, Sol', variant: 'success' });
+    expect(toasts()[1]).toEqual({ title: '仓库估值', description: '+7.7 HR · Ber, 3× Ist, Sol', variant: 'success' });
   });
 
   it('names removed holdings when the total dropped', () => {
@@ -97,7 +97,7 @@ describe('NetWorthOverlayController snapshot toasts', () => {
     update();
     latest = snapshot(-2.7, [line('Ist', 4, 0.5)]);
     update();
-    expect(toasts()[1]).toEqual({ title: 'Net Worth', description: '-2.7 HR · Ber, 2× Mal', variant: 'warning' });
+    expect(toasts()[1]).toEqual({ title: '仓库估值', description: '-2.7 HR · Ber, 2× Mal', variant: 'warning' });
   });
 
   it('leaves out movers when none moved in the direction of the change', () => {
@@ -147,7 +147,7 @@ describe('NetWorthOverlayController snapshot toasts', () => {
     const { update } = renderController();
     latest = snapshot(-0.5);
     update();
-    expect(toasts()).toEqual([{ title: 'Net Worth', description: '-0.5 HR', variant: 'warning' }]);
+    expect(toasts()).toEqual([{ title: '仓库估值', description: '-0.5 HR', variant: 'warning' }]);
   });
 });
 

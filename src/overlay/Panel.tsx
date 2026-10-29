@@ -162,6 +162,7 @@ export const Panel: React.FC<{ id: PanelId }> = ({ id }) => {
       isKeyboardClaimed() &&
       !(e.target instanceof Element && e.target.closest('[data-keep-overlay-keyboard]'))
     ) {
+      window.dispatchEvent(new Event('controller-deactivate'));
       void releaseKeyboard();
     }
   };

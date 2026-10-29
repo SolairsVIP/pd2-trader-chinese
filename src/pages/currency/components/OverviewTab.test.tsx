@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import type { NetWorthCategory, Valuation, ValuationLine } from '@/lib/networth-api';
@@ -72,24 +72,24 @@ describe('OverviewTab', () => {
         byCategory: { ...NO_CATEGORIES, runes: 7.5, ubers: 2.5 },
       }),
     );
-    expect(screen.getByText('Runes').nextElementSibling?.textContent).toBe('75% · 7.50');
-    expect(screen.getByText('Uber Mats').nextElementSibling?.textContent).toBe('25% · 2.50');
-    expect(screen.queryByText('Currency')).toBeNull();
-    expect(screen.queryByText('No priced holdings yet.')).toBeNull();
+    expect(screen.getByText('符文').nextElementSibling?.textContent).toBe('75% · 7.50');
+    expect(screen.getByText('Uber 材料').nextElementSibling?.textContent).toBe('25% · 2.50');
+    expect(screen.queryByText('通货')).toBeNull();
+    expect(within(screen.getByText('符文').closest('section')!).queryByText('暂无可估值物品。')).toBeNull();
   });
 
   it('shows empty states when nothing is priced', () => {
-    renderOverview(valuation({ lines: [line(1, { value: 0 })] }));
-    expect(screen.getByText('No priced holdings yet.')).not.toBeNull();
-    expect(screen.getByText('Nothing priced yet.')).not.toBeNull();
-    expect(screen.queryByText(/top \d+/)).toBeNull();
-    expect(screen.queryByText('By stash tab')).toBeNull();
+    const { container } = renderOverview(valuation({ lines: [line(1, { value: 0 })] }));
+    expect(within(container.querySelector('section')!).getByText('暂无可估值物品。')).not.toBeNull();
+    expect(within(screen.getByRole('heading', { name: '估值最高的物品' }).closest('section')!).getByText('暂无可估值物品。')).not.toBeNull();
+    expect(screen.queryByText(/按估值排序 · 前 \d+ 件/)).toBeNull();
+    expect(screen.queryByText('按仓库页分类')).toBeNull();
   });
 
   it('lists at most ten positive-value holdings, in the given order', () => {
     const lines = [line(0, { value: 0 }), ...Array.from({ length: 12 }, (_, i) => line(i + 1, { value: 20 - i }))];
     renderOverview(valuation({ totalHr: 200, byCategory: { ...NO_CATEGORIES, runes: 200 }, lines }));
-    expect(screen.getByText('by value · top 10')).not.toBeNull();
+    expect(screen.getByText('按估值排序 · 前 10 件')).not.toBeNull();
     expect(screen.queryByText('Item 0')).toBeNull();
     expect(screen.getByText('Item 10')).not.toBeNull();
     expect(screen.queryByText('Item 11')).toBeNull();
@@ -102,8 +102,8 @@ describe('OverviewTab', () => {
         lines: [line(1, { tab: 'Shared 3' }), line(2)],
       }),
     );
-    expect(screen.getByText('Item 1').nextElementSibling?.textContent).toBe('Shared 3');
-    expect(screen.getByText('Item 2').nextElementSibling).toBeNull();
+    expect(screen.getByText('Item 1').closest('p')?.nextElementSibling?.textContent).toBe('Shared 3');
+    expect(screen.getByText('Item 2').closest('p')?.nextElementSibling).toBeNull();
   });
 
   it('formats unit price with extra precision for sub-cent values', () => {
@@ -111,16 +111,17 @@ describe('OverviewTab', () => {
     expect(screen.getByText('0.0025')).not.toBeNull();
   });
 
-  it('reports unpriced, uncertain and gold amounts with singular/plural wording', () => {
+  it('reports unpriced, uncertain and gold amounts for different counts', () => {
     renderOverview(valuation({ unpricedCount: 1, uncertainHr: 1.234, gold: 2_500_000 }));
-    const note = screen.getByText(/unpriced/).textContent ?? '';
-    expect(note).toContain('1 item unpriced');
-    expect(note).toContain('1.23 HR uncertain');
-    expect(note).toContain(`${(2_500_000).toLocaleString()} gold`);
+    const note = screen.getByText(/件物品暂无价格/).textContent?.replace(/\s+/g, ' ') ?? '';
+    expect(note).toContain('1 件物品暂无价格');
+    expect(note).toContain('1.23 HR');
+    expect(note).toContain('估值可信度较低，未计入总值');
+    expect(note).toContain(`${(2_500_000).toLocaleString()} 金币`);
 
     cleanup();
     renderOverview(valuation({ unpricedCount: 3 }));
-    expect(screen.getByText(/unpriced/).textContent).toContain('3 items unpriced');
+    expect(screen.getByText(/件物品暂无价格/).textContent?.replace(/\s+/g, ' ')).toContain('3 件物品暂无价格');
   });
 
   it('ranks stash tabs by value and scales bars to the largest tab', () => {
@@ -130,7 +131,7 @@ describe('OverviewTab', () => {
         byTab: { 'Shared 1': 1.5, Personal: 0, 'Shared 2': 6 },
       }),
     );
-    const section = screen.getByText('By stash tab').closest('section')!;
+    const section = screen.getByText('按仓库页分类').closest('section')!;
     const rows = [...section.querySelectorAll('.group')];
     expect(rows.map((r) => r.firstElementChild?.textContent)).toEqual(['Shared 2', 'Shared 1']);
     expect(rows.map((r) => r.lastElementChild?.textContent)).toEqual(['6.00', '1.50']);

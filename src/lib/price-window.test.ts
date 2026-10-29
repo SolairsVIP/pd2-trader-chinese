@@ -17,22 +17,22 @@ describe('windowLabel', () => {
 
 describe('basisLabel', () => {
   it.each([
-    ['7d', '7-day avg'],
-    ['30d', '30-day avg'],
-    ['24h', '24-hour avg'],
-    ['season', 'season avg'],
-    ['', 'season avg'],
-    ['7dx', 'season avg'],
+    ['7d', '7天均价'],
+    ['30d', '30天均价'],
+    ['24h', '24小时均价'],
+    ['season', '赛季均价'],
+    ['', '赛季均价'],
+    ['7dx', '赛季均价'],
   ])('%j -> %s', (window, label) => {
     expect(basisLabel(window)).toBe(label);
   });
 
   it('round-trips with windowLabel for every option', () => {
     expect([24, 72, 168, 720].map((h) => basisLabel(windowLabel(h)))).toEqual([
-      '24-hour avg',
-      '3-day avg',
-      '7-day avg',
-      '30-day avg',
+      '24小时均价',
+      '3天均价',
+      '7天均价',
+      '30天均价',
     ]);
   });
 });
@@ -52,22 +52,22 @@ describe('priceWindowNote', () => {
 
   it('labels the 30-day fallback, phrasing a 7d request as "this week"', () => {
     expect(priceWindowNote('30d', '7d', inS13)).toEqual({
-      label: '30d',
-      title: 'Not enough sales this week — based on the last 30 days',
+      label: '30 天',
+      title: '本周成交数据不足，采用最近 30 天的数据',
     });
   });
 
   it('phrases non-7d requests with the requested window', () => {
     expect(priceWindowNote('season', '24h', inS13)).toEqual({
-      label: 'season',
-      title: 'Not enough sales in the last 24h — based on the whole season',
+      label: '赛季',
+      title: '最近 24h成交数据不足，采用整个赛季的数据',
     });
   });
 
   it('names the previous season tag for the lastSeason fallback', () => {
     expect(priceWindowNote('lastSeason', '7d', inS13)).toEqual({
       label: 'S12',
-      title: 'Not enough sales this week — based on the last 30 days of S12',
+      title: '本周成交数据不足，采用S12 最近 30 天的数据',
     });
   });
 
@@ -78,15 +78,15 @@ describe('priceWindowNote', () => {
   it('falls back to "last season" when there is no earlier season in the list', () => {
     // S12 is the oldest bundled season.
     expect(priceWindowNote('lastSeason', '7d', new Date('2026-01-15T12:00:00Z'))).toEqual({
-      label: 'last season',
-      title: 'Not enough sales this week — based on the last 30 days of last season',
+      label: '上赛季',
+      title: '本周成交数据不足，采用上赛季 最近 30 天的数据',
     });
   });
 
   it('passes through unknown fallback windows', () => {
     expect(priceWindowNote('90d', '7d', inS13)).toEqual({
       label: '90d',
-      title: 'Not enough sales this week — based on the last 90d',
+      title: '本周成交数据不足，采用最近 90d的数据',
     });
   });
 });

@@ -151,6 +151,8 @@ export async function runAlertStream(options: AlertStreamOptions): Promise<void>
   let stopped = false;
 
   const deliver = (alerts: MarketAlert[], source: 'live' | 'catch-up') => {
+    // A catch-up request can finish after its stream was aborted. Do not poison the shared dedupe set.
+    if (signal.aborted || stopped) return;
     const fresh = takeUnseen(seen, alerts);
     if (fresh.length === 0) return;
     const newest = fresh[fresh.length - 1].matchedAt;
@@ -159,6 +161,7 @@ export async function runAlertStream(options: AlertStreamOptions): Promise<void>
   };
 
   const unauthorized = () => {
+    if (signal.aborted || stopped) return;
     stopped = true;
     onUnauthorized();
   };
@@ -168,6 +171,7 @@ export async function runAlertStream(options: AlertStreamOptions): Promise<void>
       try {
         deliver(await catchUp(token, since), 'catch-up');
       } catch (error) {
+        if (signal.aborted || stopped) return;
         if (statusOf(error) === 401) unauthorized();
         else console.warn('[market alerts] catch-up failed:', error);
       }

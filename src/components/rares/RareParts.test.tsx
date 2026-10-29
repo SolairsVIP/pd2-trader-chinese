@@ -67,14 +67,14 @@ function tooltipOf(trigger: HTMLElement): string | null {
 describe('VerdictBadge', () => {
   it('labels the verdict without a hint on softcore keep', () => {
     withTooltips(<VerdictBadge rare={rare()} />);
-    const badge = screen.getByText('Keep');
+    const badge = screen.getByText('建议保留');
     expect(badge.className).not.toContain('cursor-help');
     expect(tooltipOf(badge)).toBeNull();
   });
 
   it('explains the check priority on hover', () => {
     withTooltips(<VerdictBadge rare={rare({ verdict: 'check', checkPriority: 'high' })} />);
-    const badge = screen.getByText('Check');
+    const badge = screen.getByText('建议复核');
     expect(badge.className).toContain('cursor-help');
     expect(tooltipOf(badge)).toBe('Has a ★★ or better key stat');
   });
@@ -82,8 +82,8 @@ describe('VerdictBadge', () => {
   it('ignores a stray priority on non-check verdicts and adds the hardcore note', () => {
     withTooltips(<VerdictBadge rare={rare({ verdict: 'vendor', checkPriority: 'high', rankReference: 'hardcore' })}
       hardcore />);
-    expect(tooltipOf(screen.getByText('Vendor'))).toBe(
-      'Hardcore: price model and stars from softcore data; ranked against hardcore listings; prices from softcore listings',
+    expect(tooltipOf(screen.getByText('建议卖商店'))).toBe(
+      '专家模式：价格模型和星级建议基于普通模式数据；排名参照专家模式挂单；价格参考普通模式挂单',
     );
   });
 });
@@ -93,15 +93,15 @@ describe('RankBar', () => {
     withTooltips(<RankBar rare={rare({ rank: 0.72, rankError: 0.08 })}
       rule={RULE} />);
     expect(screen.getByRole('img').getAttribute('aria-label')).toBe(
-      'Predicted at the 72nd percentile of rings prices, give or take 8 points',
+      '估计排名位于戒指价格的 72%，误差约 8 个百分点',
     );
   });
 
   it('draws the vendor and keep thresholds from the rule', () => {
     withTooltips(<RankBar rare={rare()}
       rule={RULE} />);
-    expect(screen.getByText('vendor').style.left).toBe('25%');
-    expect(screen.getByText('keep').style.left).toBe('80%');
+    expect(screen.getByText('卖店参考线').style.left).toBe('25%');
+    expect(screen.getByText('保留参考线').style.left).toBe('80%');
   });
 
   it('clamps the error band to 0–100 and keeps the label inside the bar', () => {
@@ -111,7 +111,7 @@ describe('RankBar', () => {
     const band = [...bar.querySelectorAll('span')].find((s) => s.style.opacity === '0.3')!;
     expect(band.style.left).toBe('88%');
     expect(Number.parseFloat(band.style.width)).toBeCloseTo(12);
-    const label = screen.getByText('98th');
+    const label = screen.getByText('98%');
     expect(label.style.left).toBe('95%');
     // Near the top end the "100" axis label would collide with the tick
     expect(screen.queryByText('100')).toBeNull();
@@ -123,19 +123,19 @@ describe('RankBar', () => {
       rule={RULE} />);
     expect(screen.queryByText('0')).toBeNull();
     expect(screen.getByText('100')).not.toBeNull();
-    expect(screen.getByText('5th').style.left).toBe('5%');
+    expect(screen.getByText('5%').style.left).toBe('5%');
   });
 });
 
 describe('RankBlocks', () => {
   it.each([
-    [0.1, 'bottom 25%'],
-    [0.4, 'bottom 50%'],
-    [0.75, 'top 25%'],
-    [0.96, 'top 5%'],
+    [0.1, '后 25%'],
+    [0.4, '后 50%'],
+    [0.75, '前 25%'],
+    [0.96, '前 5%'],
   ])('lights the block for rank %s (%s)', (rank, label) => {
     withTooltips(<RankBlocks rare={rare({ slot: 'amul', rank })} />);
-    expect(screen.getByRole('img').getAttribute('aria-label')).toBe(`Rank among amulets: ${label}`);
+    expect(screen.getByRole('img').getAttribute('aria-label')).toBe(`项链中的排名：${label}`);
     const lit = [...screen.getByRole('img').querySelectorAll('span.font-semibold')].map((s) => s.textContent);
     expect(lit).toEqual([label]);
   });
@@ -146,12 +146,12 @@ describe('RankDisplay', () => {
     withTooltips(<RankDisplay rare={rare()}
       rule={RULE}
       mode="blocks" />);
-    expect(screen.getByRole('img').getAttribute('aria-label')).toMatch(/^Rank among rings/);
+    expect(screen.getByRole('img').getAttribute('aria-label')).toMatch(/^戒指中的排名/);
     cleanup();
     withTooltips(<RankDisplay rare={rare()}
       rule={RULE}
       mode="bar" />);
-    expect(screen.getByRole('img').getAttribute('aria-label')).toMatch(/^Predicted at the/);
+    expect(screen.getByRole('img').getAttribute('aria-label')).toMatch(/^估计排名位于/);
   });
 });
 
@@ -183,7 +183,7 @@ describe('ItemStatsSection', () => {
     withTooltips(<Harness />);
     const toggle = screen.getByRole('button');
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
-    expect(toggle.textContent).toContain('2 key stats');
+    expect(toggle.textContent).toContain('2 个关键词条');
     expect(screen.queryByRole('listitem')).toBeNull();
 
     fireEvent.click(toggle);
@@ -195,10 +195,10 @@ describe('ItemStatsSection', () => {
 
   it('says "no key stats" and singular wording', () => {
     withTooltips(<Harness rareStats={[stat()]} />);
-    expect(screen.getByRole('button').textContent).toContain('no key stats');
+    expect(screen.getByRole('button').textContent).toContain('没有关键词条');
     cleanup();
     withTooltips(<Harness rareStats={[stat({ stars: 2 })]} />);
-    expect(screen.getByRole('button').textContent).toContain('1 key stat');
+    expect(screen.getByRole('button').textContent).toContain('1 个关键词条');
   });
 
   it('orders stats strongest first, then near misses, then the rest', () => {
@@ -215,11 +215,11 @@ describe('ItemStatsSection', () => {
   it('shows stars, roll and multiplier for key stats and a tag for corruption-only / near-miss stats', () => {
     withTooltips(<Harness initialOpen />);
     const [fcr, skills, nearMiss, plain] = screen.getAllByRole('listitem');
-    expect(fcr.textContent).toBe('★★★+20% Faster Cast RateCroll 90%·×4.2');
-    expect(skills.textContent).toBe('★+1 to All Skillsroll 100%·×1.6');
+    expect(fcr.textContent).toBe('★★★+20% Faster Cast RateC词条范围 90%·×4.2');
+    expect(skills.textContent).toBe('★+1 to All Skills词条范围 100%·×1.6');
     expect(nearMiss.textContent).toBe('+5% Faster Cast Rate↑10');
     expect(plain.textContent).toBe('+15 to Strength');
-    expect(tooltipOf(screen.getByText('C'))).toBe('20 FCR on rings only via corruption');
+    expect(tooltipOf(screen.getByText('C'))).toBe('20 FCR 仅能通过腐化出现在戒指上');
   });
 
   it('marks a stat label as truncated when it overflows', () => {
@@ -261,8 +261,8 @@ describe('HardcoreNote', () => {
         hardcore
       />,
     );
-    expect(screen.getByText(/^Hardcore/).textContent).toBe(
-      'Hardcore: price model and stars from softcore data; ranked against hardcore listings blended with softcore (43% hardcore); prices from hardcore listings.',
+    expect(screen.getByText(/^专家模式/).textContent).toBe(
+      '专家模式：价格模型和星级建议基于普通模式数据；排名综合参考专家模式与普通模式挂单（专家模式占 43%）；价格参考专家模式挂单.',
     );
   });
 });
@@ -294,9 +294,9 @@ describe('RareHistorySection', () => {
 
   it('summarizes listings and prints each asking price', () => {
     withTooltips(<RareHistorySection history={history} />);
-    expect(screen.getByText(/3× · 1 seller · since Sep 27/)).not.toBeNull();
+    expect(screen.getByText(/3 次 · 1 位卖家 · 首次出现于 9月27日/)).not.toBeNull();
     const rows = screen.getAllByRole('listitem').map((li) => li.textContent);
-    expect(rows).toEqual(['Oct 10new owner3.5 HR', 'Oct 12 ist', 'Sep 27no price']);
+    expect(rows).toEqual(['Oct 10卖家变更3.5 HR', 'Oct 12 ist', 'Sep 27未标价']);
   });
 
   it('trims HR prices to two decimals without trailing zeros', () => {
@@ -309,7 +309,7 @@ describe('RareHistorySection', () => {
         }}
       />,
     );
-    expect(screen.getByText(/2 sellers/)).not.toBeNull();
+    expect(screen.getByText(/2 位卖家/)).not.toBeNull();
     expect(screen.getByRole('listitem').textContent).toBe('Oct 102 HR');
   });
 });

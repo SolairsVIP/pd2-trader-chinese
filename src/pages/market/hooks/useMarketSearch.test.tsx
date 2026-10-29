@@ -139,7 +139,7 @@ describe('useMarketSearch', () => {
     const g = filters({ itemName: 'x' });
     const { result: hook } = renderHook(() => useMarketSearch(api, g, { signedIn: true, debounceMs: 0 }));
     await waitFor(() => expect(hook.current.status).toBe('error'));
-    expect(hook.current.error).toBe('Market service unavailable. Retry in a moment.');
+    expect(hook.current.error).toBe('市场服务暂时不可用，请稍后重试。');
   });
 
   it('a failed next page stops automatic loading until Retry, and Retry waits out a rate limit', async () => {
@@ -154,7 +154,7 @@ describe('useMarketSearch', () => {
 
     await act(() => hook.current.loadMore());
     expect(hook.current).toMatchObject({ loadingMore: false, hasMore: true, status: 'ready' });
-    expect(hook.current.loadMoreError).toMatch(/Too many market searches/);
+    expect(hook.current.loadMoreError).toMatch(/搜索请求过于频繁/);
     expect(hook.current.loadMoreRetryAt).toBeGreaterThan(Date.now() + 2000);
 
     // The list's end-of-scroll effect calls loadMore again after every loadingMore flip: no request now
@@ -186,7 +186,7 @@ describe('useMarketSearch', () => {
     await waitFor(() => expect(hook.current.hasMore).toBe(true));
     await act(() => hook.current.loadMore());
     expect(hook.current).toMatchObject({
-      loadMoreError: 'Market service unavailable. Retry in a moment.',
+      loadMoreError: '市场服务暂时不可用，请稍后重试。',
       loadMoreRetryAt: null,
     });
 
@@ -202,10 +202,10 @@ describe('useMarketSearch', () => {
 
 describe('searchErrorMessage', () => {
   it('words each market service failure', () => {
-    expect(searchErrorMessage(new MarketBackendError('x', 'rate-limited', 429))).toMatch(/Too many market searches/);
+    expect(searchErrorMessage(new MarketBackendError('x', 'rate-limited', 429))).toMatch(/搜索请求过于频繁/);
     expect(searchErrorMessage(new MarketBackendError('filters.stats[0].key is bad', 'invalid', 400))).toBe(
-      'The market service rejected these filters: filters.stats[0].key is bad',
+      '市场服务无法识别这些筛选条件，请调整后重试。',
     );
-    expect(searchErrorMessage(new Error('boom\nstack'))).toBe('boom');
+    expect(searchErrorMessage(new Error('boom\nstack'))).toBe('搜索失败，请稍后重试。');
   });
 });

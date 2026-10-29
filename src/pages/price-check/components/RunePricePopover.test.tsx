@@ -45,7 +45,7 @@ function open(props: Partial<Props> = {}) {
       {...props}
     />,
   );
-  fireEvent.click(screen.getByRole('button', { name: 'Rune prices' }));
+  fireEvent.click(screen.getByRole('button', { name: '符文价格' }));
   return { onRuneBreakdownSelect, dialog: screen.getByRole('dialog') };
 }
 
@@ -62,48 +62,48 @@ describe('RunePricePopover', () => {
         onRuneBreakdownSelect={() => {}}
       />,
     );
-    expect(screen.queryByText('Current Rune Prices')).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Rune prices' }));
-    expect(screen.getByText('Current Rune Prices')).not.toBeNull();
+    expect(screen.queryByText('当前符文价格')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: '符文价格' }));
+    expect(screen.getByText('当前符文价格')).not.toBeNull();
   });
 
   it('shows a loading placeholder instead of prices while loading', () => {
     const { dialog } = open({ loading: true });
-    expect(within(dialog).getByText('Loading rune data...')).not.toBeNull();
+    expect(within(dialog).getByText('正在加载符文数据……')).not.toBeNull();
     expect(runeButton('Ber Rune')).toBeNull();
-    expect(within(dialog).queryByText(/Show More/)).toBeNull();
+    expect(within(dialog).queryByText(/显示更多/)).toBeNull();
   });
 
   it('lists high runes with market prices and listing counts, hiding low runes behind Show More', () => {
     open();
     const ber = runeButton('Ber Rune')!;
     expect(ber.textContent).toContain('1.5 HR');
-    expect(ber.textContent).toContain('(40 listings)');
+    expect(ber.textContent).toContain('(40 个挂单)');
     expect(runeButton('Ist Rune')).toBeNull();
     expect(runeButton('Mal Rune')).toBeNull();
     // Vex is fixed-priced but not one of the "low" runes
-    expect(runeButton('Vex Rune')!.textContent).toContain('(fixed)');
+    expect(runeButton('Vex Rune')!.textContent).toContain('(固定价格)');
   });
 
   it('marks fixed-priced runes with an asterisk instead of a listing count', () => {
     open();
     const vex = runeButton('Vex Rune')!;
     expect(vex.textContent).toContain('0.25 HR*');
-    expect(vex.textContent).not.toContain('listings');
+    expect(vex.textContent).not.toContain('挂单');
   });
 
   it('Show More reveals the low runes and Show Less hides them again', () => {
     open();
-    fireEvent.click(screen.getByRole('button', { name: /Show More \(2 lower runes\)/ }));
+    fireEvent.click(screen.getByRole('button', { name: /显示更多（2 个低阶符文）/ }));
     expect(runeButton('Ist Rune')).not.toBeNull();
     expect(runeButton('Mal Rune')).not.toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: /Show Less/ }));
+    fireEvent.click(screen.getByRole('button', { name: /收起/ }));
     expect(runeButton('Ist Rune')).toBeNull();
   });
 
   it('has no Show More when there are no low runes', () => {
     const { dialog } = open({ calculatedRuneValues: RUNES.slice(0, 2) });
-    expect(within(dialog).queryByText(/Show More/)).toBeNull();
+    expect(within(dialog).queryByText(/显示更多/)).toBeNull();
   });
 
   it('selecting a rune requests its breakdown; selecting it again clears it', () => {
@@ -132,16 +132,16 @@ describe('RunePricePopover', () => {
     ];
     const { dialog } = open({ selectedRuneBreakdown: 'Ber Rune', selectedRuneCombinations: combos });
 
-    expect(within(dialog).getByText('target 1.5 HR')).not.toBeNull();
+    expect(within(dialog).getByText('目标 1.5 HR')).not.toBeNull();
 
-    const exact = within(dialog).getByText('1x Jah');
+    const exact = within(dialog).getByText('1 个 Jah');
     expect(exact.parentElement!.textContent).toContain('= 1.2 HR');
     // tiny differences (<= 0.1) are not worth a Diff line
-    expect(exact.closest('div.rounded-md')!.textContent).not.toContain('Diff');
+    expect(exact.closest('div.rounded-md')!.textContent).not.toContain('差值');
     expect(within(dialog).getByText('= 1.2 HR').className).toContain('text-success');
 
-    const near = within(dialog).getByText('4x Vex + 2x Ist');
-    expect(near.closest('div.rounded-md')!.textContent).toContain('Diff: 0.4 HR');
+    const near = within(dialog).getByText('4 个 Vex + 2 个 Ist');
+    expect(near.closest('div.rounded-md')!.textContent).toContain('差值：0.4 HR');
     expect(within(dialog).getByText('= 1.1 HR').className).toContain('text-warning');
 
     expect(within(dialog).getByText('= 0.09 HR').className).toContain('text-muted-foreground');
@@ -149,7 +149,7 @@ describe('RunePricePopover', () => {
 
   it('shows no breakdown when the selected rune has no combinations', () => {
     const { dialog } = open({ selectedRuneBreakdown: 'Ber Rune', selectedRuneCombinations: [] });
-    expect(within(dialog).queryByText(/Breakdown:/)).toBeNull();
+    expect(within(dialog).queryByText(/兑换组合：/)).toBeNull();
   });
 
   it('clicking a rune in a stateful parent swaps the breakdown target', async () => {
@@ -168,10 +168,10 @@ describe('RunePricePopover', () => {
       );
     }
     render(<Parent />);
-    fireEvent.click(screen.getByRole('button', { name: 'Rune prices' }));
+    fireEvent.click(screen.getByRole('button', { name: '符文价格' }));
     fireEvent.click(runeButton('Jah Rune')!);
-    expect(await screen.findByText('target 1.2 HR')).not.toBeNull();
+    expect(await screen.findByText('目标 1.2 HR')).not.toBeNull();
     fireEvent.click(runeButton('Jah Rune')!);
-    await waitFor(() => expect(screen.queryByText(/target/)).toBeNull());
+    await waitFor(() => expect(screen.queryByText(/目标/)).toBeNull());
   });
 });

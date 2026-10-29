@@ -6,7 +6,7 @@ import { ToastActionType, type CustomToastPayload } from '@/common/types/Events'
 import type { MarketFilters, SavedSearch } from '@/pages/market/lib/types';
 import type { MarketAlert } from './saved-search-api';
 
-/** More alerts than this at once (a catch-up after a reconnect) show as one summary popup. */
+/** Maximum number of realtime alert popups displayed at once; additional alerts wait in the queue. */
 export const MAX_ALERT_TOASTS = 3;
 
 /** "Harlequin Crest — 1.5 HR" (listing text is shown as plain text). */

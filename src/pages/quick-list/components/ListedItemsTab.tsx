@@ -318,9 +318,12 @@ const ListedItemsTab: React.FC<ListedItemsTabProps> = ({
       return; // Don't fetch paginated results when searching
     }
 
-    if (marketQuery && hasInitialized && currentPage !== 0) {
-      fetchListings();
-    } else if (marketQuery && hasInitialized && currentPage === 0 && listings.length === 0 && totalCount > 0) {
+    if (marketQuery && hasInitialized && currentPage !== 0) fetchListings();
+  }, [marketQuery, fetchListings, currentPage, searchQuery, hasInitialized]);
+
+  useEffect(() => {
+    if (isDeletingRef.current || searchQuery.trim()) return;
+    if (marketQuery && hasInitialized && currentPage === 0 && listings.length === 0 && totalCount > 0) {
       // Refetch if we reset to page 0 and have no items but expect some
       fetchListings();
     }

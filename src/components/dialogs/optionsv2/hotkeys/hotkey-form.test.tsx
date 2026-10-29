@@ -49,28 +49,28 @@ afterEach(cleanup);
 describe('HotkeyForm', () => {
   it('shows a skeleton and no inputs while settings load', () => {
     renderForm(HOTKEYS, true);
-    expect(screen.queryByLabelText('Price check')).toBeNull();
+    expect(screen.queryByLabelText('物品估价')).toBeNull();
   });
 
   it('displays the stored keys upper-cased', () => {
     renderForm();
-    expect(keyInput('Price check').value).toBe('D');
-    expect(keyInput('Delist Item').value).toBe('U');
+    expect(keyInput('物品估价').value).toBe('D');
+    expect(keyInput('下架物品').value).toBe('U');
   });
 
   it('saves a typed key lower-cased along with the rest of the hotkeys', () => {
     renderForm();
-    type('Price check', 'Q');
+    type('物品估价', 'Q');
     expect(store.updateSettings).toHaveBeenCalledTimes(1);
     const saved = store.updateSettings.mock.calls[0][0];
     expect(saved.hotkeyKey).toBe('q');
     expect(saved.hotkeyKeyListItem).toBe('l');
-    expect(keyInput('Price check').value).toBe('Q');
+    expect(keyInput('物品估价').value).toBe('Q');
   });
 
   it('saves the modifier picked for a row', () => {
     renderForm();
-    const tabs = screen.getByRole('tablist', { name: 'List item modifier' });
+    const tabs = screen.getByRole('tablist', { name: '上架物品 的组合修饰键' });
     fireEvent.click(within(tabs).getByRole('tab', { name: 'Alt' }));
     expect(store.updateSettings).toHaveBeenCalledTimes(1);
     expect(store.updateSettings.mock.calls[0][0]).toMatchObject({
@@ -81,23 +81,23 @@ describe('HotkeyForm', () => {
 
   it('lets the snapshot key be cleared to unbind it', () => {
     renderForm({ ...HOTKEYS, hotkeyKeySnapshot: 'n' });
-    type('Net Worth Snapshot', '');
+    type('记录估值快照', '');
     expect(store.updateSettings.mock.calls.at(-1)?.[0].hotkeyKeySnapshot).toBe('');
   });
 
   it('lets the market key be cleared to unbind it', () => {
     renderForm(HOTKEYS);
-    type('Market', '');
+    type('市场浏览器', '');
     expect(store.updateSettings.mock.calls.at(-1)?.[0].hotkeyKeyMarket).toBe('');
   });
 
   it('warns on both rows when two actions share a combo, and clears once resolved', () => {
     renderForm();
-    type('Chat Window', 'd');
+    type('聊天窗口', 'd');
     const warnings = screen.getAllByRole('status').map((el) => el.textContent);
-    expect(warnings).toEqual(['Also used by Chat Window.', 'Also used by Price check.']);
+    expect(warnings).toEqual(['已被“聊天窗口”占用。', '已被“物品估价”占用。']);
 
-    type('Chat Window', 'k');
+    type('聊天窗口', 'k');
     expect(screen.queryAllByRole('status')).toHaveLength(0);
   });
 
@@ -108,15 +108,15 @@ describe('HotkeyForm', () => {
 
   it('warns that Ctrl + C is reserved', () => {
     renderForm();
-    type('Net Worth', 'c');
-    expect(screen.getByRole('status').textContent).toContain('Ctrl + C is reserved');
-    expect(keyInput('Net Worth').getAttribute('aria-invalid')).toBe('true');
+    type('仓库估值', 'c');
+    expect(screen.getByRole('status').textContent).toContain('Ctrl + C 是复制物品的保留快捷键');
+    expect(keyInput('仓库估值').getAttribute('aria-invalid')).toBe('true');
   });
 
   it('follows external settings changes without echoing them back as a save', () => {
     renderForm();
     act(() => store.replace({ ...HOTKEYS, hotkeyKey: 'p' }));
-    expect(keyInput('Price check').value).toBe('P');
+    expect(keyInput('物品估价').value).toBe('P');
     expect(store.updateSettings).not.toHaveBeenCalled();
   });
 
@@ -124,7 +124,7 @@ describe('HotkeyForm', () => {
   // schema rejects ("Must be a letter or number") is persisted and handed to the global-shortcut registrar.
   it.fails('does not persist a key the schema rejects', () => {
     renderForm();
-    type('Price check', '!');
+    type('物品估价', '!');
     expect(store.updateSettings).not.toHaveBeenCalled();
   });
 });

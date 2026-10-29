@@ -6,6 +6,7 @@ import type { SettingsSectionId } from '@/components/dialogs/optionsv2/settings-
 import type { MarketPanelPayload } from '@/pages/market/lib/types';
 
 export type PanelId =
+  | 'controllerMenu'
   | 'itemSearch'
   | 'quickList'
   | 'currency'
@@ -22,6 +23,7 @@ export type PanelId =
   | 'market';
 
 export interface PanelPayloads {
+  controllerMenu: undefined;
   /** encodeItem(raw) output (what used to be ?text=). undefined only before the first search (the panel is keepMounted). */
   itemSearch: { text: string; controller?: boolean } | undefined;
   /** item = encodeItemForQuickList(raw); undefined = manage mode */

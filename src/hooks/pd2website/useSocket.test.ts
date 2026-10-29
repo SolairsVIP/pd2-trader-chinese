@@ -94,14 +94,14 @@ describe('connection lifecycle', () => {
     ]);
   });
 
-  it('connect_error surfaces the message and marks disconnected; a later connect clears it', () => {
+  it('connect_error shows a localized message and marks disconnected; a later connect clears it', () => {
     const { hook, socket } = connectedSocket();
     socket.fire('connect_error', new Error('websocket error'));
     expect(hook.result.current.isConnected).toBe(false);
-    expect(hook.result.current.error).toBe('websocket error');
+    expect(hook.result.current.error).toBe('连接失败，正在自动重试。');
 
     socket.fire('connect_error', 'timeout');
-    expect(hook.result.current.error).toBe('timeout');
+    expect(hook.result.current.error).toBe('请求超时，请稍后重试。');
 
     socket.fire('connect');
     expect(hook.result.current.error).toBeNull();

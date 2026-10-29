@@ -69,65 +69,66 @@ describe('StatFilters', () => {
 
   it('removes a row with its always-present remove button', () => {
     const { latest } = mount([row('a'), row('b', { key: 'maxhp' })]);
-    fireEvent.click(screen.getByRole('button', { name: 'Remove Faster Cast Rate' }));
+    fireEvent.click(screen.getByRole('button', { name: '移除 快速施法速度 (FCR)' }));
     expect(latest().map((s) => s.id)).toEqual(['b']);
   });
 
   it('AND/OR toggle moves a row into the "Any of" group and back', () => {
     const { latest } = mount([row('a'), row('b', { key: 'maxhp' })]);
-    expect(screen.queryByRole('region', { name: 'Any of' })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: /Faster Cast Rate: required/ }));
+    expect(screen.queryByRole('region', { name: '满足任意一项' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: '快速施法速度 (FCR)：必须满足' }));
     expect(latest().find((s) => s.id === 'a')?.or).toBe(true);
-    const group = screen.getByRole('region', { name: 'Any of' });
-    expect(within(group).getByText('Faster Cast Rate')).toBeTruthy();
-    expect(within(group).getByText('add another OR row')).toBeTruthy();
+    const group = screen.getByRole('region', { name: '满足任意一项' });
+    expect(within(group).getByText('快速施法速度 (FCR)')).toBeTruthy();
+    expect(within(group).getByText('再添加一条“或”条件')).toBeTruthy();
 
-    fireEvent.click(within(group).getByRole('button', { name: /Faster Cast Rate: one of the any-of group/ }));
+    fireEvent.click(within(group).getByRole('button', { name: '快速施法速度 (FCR)：任意条件组（满足其中之一）' }));
     expect(latest().find((s) => s.id === 'a')?.or).toBeUndefined();
-    expect(screen.queryByRole('region', { name: 'Any of' })).toBeNull();
+    expect(screen.queryByRole('region', { name: '满足任意一项' })).toBeNull();
   });
 
   it('adds cube corruptions from the stat search; unrolled ones have no min/max', () => {
     const { latest } = mount([]);
-    const search = screen.getByRole('combobox', { name: 'Add a stat filter' });
+    const search = screen.getByRole('combobox', { name: '添加属性筛选' });
     fireEvent.focus(search);
     fireEvent.change(search, { target: { value: 'corrupted sockets' } });
     fireEvent.keyDown(search, { key: 'Enter' });
     expect(latest()).toMatchObject([{ kind: 'corruption', key: 'item_numsockets', enabled: true }]);
-    expect(screen.getByText('Item has this corruption')).toBeTruthy();
-    expect(screen.queryByRole('spinbutton', { name: 'Sockets min' })).toBeNull();
+    expect(screen.getByText('物品具有此腐化属性')).toBeTruthy();
+    expect(screen.queryByRole('spinbutton', { name: '孔数 最小值' })).toBeNull();
 
     fireEvent.change(search, { target: { value: 'corrupted faster cast' } });
     fireEvent.keyDown(search, { key: 'Enter' });
     expect(latest()[1]).toMatchObject({ kind: 'corruption', key: 'item_fastercastrate' });
-    expect(screen.getByRole('spinbutton', { name: 'Faster Cast Rate min' })).toBeTruthy();
+    expect(screen.getByRole('spinbutton', { name: '快速施法速度 (FCR) 最小值' })).toBeTruthy();
   });
 
   it("splits suggestions into Mods / Pseudo / Corruptions tabs; the best match picks the tab, Tab cycles", () => {
     const { latest } = mount([]);
-    const search = screen.getByRole("combobox", { name: "Add a stat filter" });
+    const search = screen.getByRole("combobox", { name: "添加属性筛选" });
     const selected = () => screen.getAllByRole("tab").find((t) => t.getAttribute("aria-selected") === "true")?.textContent;
     fireEvent.focus(search);
     fireEvent.change(search, { target: { value: "life" } });
-    expect(selected()).toMatch(/^Pseudo/);
-    fireEvent.click(screen.getByRole("tab", { name: /^Mods/ }));
+    expect(selected()).toMatch(/^综合属性/);
+    fireEvent.click(screen.getByRole("tab", { name: /^属性词条/ }));
     fireEvent.keyDown(search, { key: "Enter" });
     expect(latest()[0].kind).toBe("mod");
 
     fireEvent.change(search, { target: { value: "corrupted faster cast" } });
-    expect(selected()).toMatch(/^Corruptions/);
+    expect(selected()).toMatch(/^腐化词条/);
     fireEvent.change(search, { target: { value: "faster cast" } });
     const first = selected();
     fireEvent.keyDown(search, { key: "Tab" });
     expect(selected()).not.toBe(first);
-    while (!/^Corruptions/.test(selected() ?? "")) fireEvent.keyDown(search, { key: "Tab" });
+    for (let i = 0; i < 3 && !/^腐化词条/.test(selected() ?? ""); i++) fireEvent.keyDown(search, { key: "Tab" });
+    expect(selected()).toMatch(/^腐化词条/);
     fireEvent.keyDown(search, { key: "Enter" });
     expect(latest()[1]).toMatchObject({ kind: "corruption", key: "item_fastercastrate" });
   });
 
   it("lists corruption rows after stat rows", () => {
     mount([row("c", { kind: "corruption", key: "item_numsockets" }), row("a"), row("b", { key: "maxhp" })]);
-    const names = screen.getAllByRole("button", { name: /^Remove / }).map((b) => b.getAttribute("aria-label"));
-    expect(names.at(-1)).toMatch(/Remove .*Socket/i);
+    const names = screen.getAllByRole("button", { name: /^移除 / }).map((b) => b.getAttribute("aria-label"));
+    expect(names.at(-1)).toBe('移除 孔数');
   });
 });

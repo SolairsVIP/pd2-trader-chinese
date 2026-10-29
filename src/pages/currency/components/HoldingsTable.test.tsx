@@ -52,15 +52,15 @@ function rowCells(name: string): string[] {
 }
 
 function search(text: string) {
-  fireEvent.change(screen.getByLabelText('Search holdings'), { target: { value: text } });
+  fireEvent.change(screen.getByLabelText('搜索仓库物品'), { target: { value: text } });
 }
 
 describe('HoldingsTable', () => {
   it('lists holdings by value, highest first, with zero-value rows hidden by default', () => {
     renderTable();
     expect(rowNames()).toEqual(['Ber Rune', 'Ist Rune', 'Mal Rune']);
-    expect(screen.getByText(/1 zero-value row hidden/)).not.toBeNull();
-    expect(screen.getByRole('columnheader', { name: /Value/ }).getAttribute('aria-sort')).toBe('descending');
+    expect(screen.getByText(/1 件零估值物品已隐藏/)).not.toBeNull();
+    expect(screen.getByRole('columnheader', { name: '估值' }).getAttribute('aria-sort')).toBe('descending');
   });
 
   it('formats unit price, share of total and 7d change per row', () => {
@@ -69,7 +69,7 @@ describe('HoldingsTable', () => {
     expect(rowCells('Ber Rune').slice(1, 6)).toEqual(['1', '6.00', '6.00 HR', '70.6%', '▼4%']);
     expect(rowCells('Ist Rune').slice(1, 6)).toEqual(['4', '0.50', '2.00 HR', '23.5%', '▲12%']);
     expect(rowCells('Mal Rune').slice(1, 6)).toEqual(['2', '—', '0.50 HR', '5.9%', '—']);
-    expect(rowCells('Mal Rune')[6]).toBe('fixed');
+    expect(rowCells('Mal Rune')[6]).toBe('固定值');
   });
 
   it('shows a 0% share instead of dividing by a zero total', () => {
@@ -79,53 +79,53 @@ describe('HoldingsTable', () => {
 
   it('footer totals only the visible holdings', () => {
     renderTable();
-    expect(screen.getByText(/3 holdings/).textContent).toBe('3 holdings · 8.50 HR');
+    expect(screen.getByText(/3.*件物品/).textContent?.replace(/\s+/g, ' ').trim()).toBe('3 件物品 · 8.50 HR');
     search('ber');
-    expect(screen.getByText(/1 holding\b/).textContent).toBe('1 holding · 6.00 HR');
+    expect(screen.getByText(/1.*件物品/).textContent?.replace(/\s+/g, ' ').trim()).toBe('1 件物品 · 6.00 HR');
   });
 
   it('cycles a column through ascending, descending and back to unsorted', () => {
     renderTable();
-    fireEvent.click(screen.getByRole('button', { name: 'Item: sort ascending' }));
+    fireEvent.click(screen.getByRole('button', { name: '物品: sort ascending' }));
     expect(rowNames()).toEqual(['Ber Rune', 'Ist Rune', 'Mal Rune']);
-    expect(screen.getByRole('columnheader', { name: /Item/ }).getAttribute('aria-sort')).toBe('ascending');
-    expect(screen.getByRole('columnheader', { name: /Value/ }).getAttribute('aria-sort')).toBeNull();
+    expect(screen.getByRole('columnheader', { name: /物品/ }).getAttribute('aria-sort')).toBe('ascending');
+    expect(screen.getByRole('columnheader', { name: '估值' }).getAttribute('aria-sort')).toBeNull();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Item: sort descending' }));
+    fireEvent.click(screen.getByRole('button', { name: '物品: sort descending' }));
     expect(rowNames()).toEqual(['Mal Rune', 'Ist Rune', 'Ber Rune']);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Item: clear sorting' }));
+    fireEvent.click(screen.getByRole('button', { name: '物品: clear sorting' }));
     expect(rowNames()).toEqual(['Ist Rune', 'Ber Rune', 'Mal Rune']);
-    expect(screen.getByRole('columnheader', { name: /Item/ }).getAttribute('aria-sort')).toBeNull();
+    expect(screen.getByRole('columnheader', { name: /物品/ }).getAttribute('aria-sort')).toBeNull();
   });
 
   it('sorts numeric columns by number, not by text', () => {
     renderTable();
-    fireEvent.click(screen.getByRole('button', { name: 'Qty: sort ascending' }));
+    fireEvent.click(screen.getByRole('button', { name: '数量: sort ascending' }));
     expect(rowNames()).toEqual(['Ber Rune', 'Mal Rune', 'Ist Rune']);
-    fireEvent.click(screen.getByRole('button', { name: 'Qty: sort descending' }));
+    fireEvent.click(screen.getByRole('button', { name: '数量: sort descending' }));
     expect(rowNames()).toEqual(['Ist Rune', 'Mal Rune', 'Ber Rune']);
   });
 
   it('keeps unpriced rows last when sorting by unit price in either direction', () => {
     renderTable();
-    fireEvent.click(screen.getByRole('button', { name: 'Unit: sort ascending' }));
+    fireEvent.click(screen.getByRole('button', { name: '单价: sort ascending' }));
     expect(rowNames()).toEqual(['Ist Rune', 'Ber Rune', 'Mal Rune']);
-    fireEvent.click(screen.getByRole('button', { name: 'Unit: sort descending' }));
+    fireEvent.click(screen.getByRole('button', { name: '单价: sort descending' }));
     expect(rowNames()).toEqual(['Ber Rune', 'Ist Rune', 'Mal Rune']);
   });
 
   it('keeps rows without 7d change last when sorting by change', () => {
     renderTable();
-    fireEvent.click(screen.getByRole('button', { name: '7d: sort ascending' }));
+    fireEvent.click(screen.getByRole('button', { name: '7天: sort ascending' }));
     expect(rowNames()).toEqual(['Ber Rune', 'Ist Rune', 'Mal Rune']);
-    fireEvent.click(screen.getByRole('button', { name: '7d: sort descending' }));
+    fireEvent.click(screen.getByRole('button', { name: '7天: sort descending' }));
     expect(rowNames()).toEqual(['Ist Rune', 'Ber Rune', 'Mal Rune']);
   });
 
   it('does not offer sorting on the price confidence column', () => {
     renderTable();
-    const header = screen.getByRole('columnheader', { name: 'Price' });
+    const header = screen.getByRole('columnheader', { name: '估值依据' });
     expect(within(header).queryByRole('button')).toBeNull();
   });
 
@@ -141,15 +141,15 @@ describe('HoldingsTable', () => {
 
   it('clears the search with the clear button and with Escape', () => {
     renderTable();
-    expect(screen.queryByRole('button', { name: 'Clear search' })).toBeNull();
+    expect(screen.queryByRole('button', { name: '清除搜索' })).toBeNull();
     search('ber');
-    fireEvent.click(screen.getByRole('button', { name: 'Clear search' }));
-    expect((screen.getByLabelText('Search holdings') as HTMLInputElement).value).toBe('');
+    fireEvent.click(screen.getByRole('button', { name: '清除搜索' }));
+    expect((screen.getByLabelText('搜索仓库物品') as HTMLInputElement).value).toBe('');
     expect(rowNames()).toHaveLength(3);
 
     search('ber');
-    fireEvent.keyDown(screen.getByLabelText('Search holdings'), { key: 'Escape' });
-    expect((screen.getByLabelText('Search holdings') as HTMLInputElement).value).toBe('');
+    fireEvent.keyDown(screen.getByLabelText('搜索仓库物品'), { key: 'Escape' });
+    expect((screen.getByLabelText('搜索仓库物品') as HTMLInputElement).value).toBe('');
   });
 
   it('lets Escape bubble (e.g. to close the window) when the search is already empty', () => {
@@ -159,9 +159,9 @@ describe('HoldingsTable', () => {
     document.addEventListener('keydown', onKeyDown);
     try {
       search('ber');
-      fireEvent.keyDown(screen.getByLabelText('Search holdings'), { key: 'Escape' });
+      fireEvent.keyDown(screen.getByLabelText('搜索仓库物品'), { key: 'Escape' });
       expect(bubbled).toBe(0);
-      fireEvent.keyDown(screen.getByLabelText('Search holdings'), { key: 'Escape' });
+      fireEvent.keyDown(screen.getByLabelText('搜索仓库物品'), { key: 'Escape' });
       expect(bubbled).toBe(1);
     } finally {
       document.removeEventListener('keydown', onKeyDown);
@@ -172,32 +172,32 @@ describe('HoldingsTable', () => {
     renderTable();
     fireEvent.click(screen.getByRole('switch'));
     expect(rowNames()).toEqual(['Ber Rune', 'Ist Rune', 'Mal Rune', 'El Rune']);
-    expect(screen.queryByText(/zero-value/)).toBeNull();
-    expect(rowCells('El Rune')[6]).toBe('unpriced');
+    expect(screen.queryByText(/零估值物品已隐藏/)).toBeNull();
+    expect(rowCells('El Rune')[6]).toBe('暂无价格');
   });
 
-  it('pluralizes the hidden zero-value note', () => {
+  it('shows the count of hidden zero-value rows', () => {
     renderTable({ lines: [...LINES, line({ key: 'eld', name: 'Eld Rune', value: 0 })] });
-    expect(screen.getByText(/2 zero-value rows hidden/)).not.toBeNull();
+    expect(screen.getByText(/2 件零估值物品已隐藏/)).not.toBeNull();
   });
 
   it('says the stash has none when there are no lines at all', () => {
     renderTable({ lines: [] });
-    expect(screen.getByText('None in your stash.')).not.toBeNull();
-    expect(screen.queryByText(/holdings? ·/)).toBeNull();
+    expect(screen.getByText('仓库中没有此类物品。')).not.toBeNull();
+    expect(screen.queryByText(/件物品 ·/)).toBeNull();
   });
 
   it('says nothing matches when every line is filtered out', () => {
     renderTable();
     search('zod');
-    expect(screen.getByText('Nothing matches.')).not.toBeNull();
-    expect(screen.queryByText(/holdings? ·/)).toBeNull();
+    expect(screen.getByText('没有符合条件的物品。')).not.toBeNull();
+    expect(screen.queryByText(/件物品 ·/)).toBeNull();
   });
 
   it('says nothing matches when every line is a hidden zero-value row', () => {
     renderTable({ lines: [line({ key: 'el', name: 'El Rune', value: 0 })] });
-    expect(screen.getByText('Nothing matches.')).not.toBeNull();
-    expect(screen.getByText(/1 zero-value row hidden/)).not.toBeNull();
+    expect(screen.getByText('没有符合条件的物品。')).not.toBeNull();
+    expect(screen.getByText(/1 件零估值物品已隐藏/)).not.toBeNull();
   });
 
   it('shows the stash tab under the name only when asked to', () => {

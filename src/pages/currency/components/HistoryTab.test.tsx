@@ -89,7 +89,8 @@ const P1 = point('p1', '2026-10-17T10:00:00.000Z', 10);
 const P2 = point('p2', '2026-10-17T22:00:00.000Z', 11.5);
 const P3 = point('p3', '2026-10-18T10:00:00.000Z', 12.5);
 
-const fmt = (iso: string) => moment(iso).format('MMM D HH:mm');
+const fmt = (iso: string) => moment(iso).format('M月D日 HH:mm');
+const fmtDiff = (iso: string) => moment(iso).format('MMM D HH:mm');
 
 let netWorth: { currentSession: SessionSummary | null; startSession: () => Promise<void>; stopSession: () => Promise<void> };
 
@@ -116,11 +117,15 @@ function sectionOf(title: string): HTMLElement {
   return screen.getByRole('heading', { name: new RegExp(`^${title}`) }).closest('section')!;
 }
 
+function chartSection(): HTMLElement {
+  return screen.getByRole('radio', { name: '本赛季' }).closest('section')!;
+}
+
 /** Times of the snapshot rows, top to bottom. */
 function snapshotTimes(): string[] {
-  return within(sectionOf('Snapshots'))
+  return within(sectionOf('估值快照'))
     .queryAllByRole('checkbox')
-    .map((cb) => cb.getAttribute('aria-label')!.replace('Select snapshot ', ''));
+    .map((cb) => cb.getAttribute('aria-label')!.replace('选择估值快照 ', ''));
 }
 
 // happy-dom's Web Animations reject on cancel; framer-motion animations add nothing to these assertions
@@ -192,14 +197,14 @@ describe('HistoryTab chart range', () => {
       from: new Date(NOW.getTime() - 7 * 24 * 3_600_000).toISOString(),
       resolution: 'raw',
     });
-    expect(screen.getByRole('radio', { name: '7d' }).getAttribute('data-state')).toBe('on');
+    expect(screen.getByRole('radio', { name: '7 天' }).getAttribute('data-state')).toBe('on');
   });
 
   it('loads 24 hours when switching to 24h and shows the change over that range', async () => {
     renderHistory();
     await screen.findByText('+2.50 HR');
     vi.mocked(getPoints).mockResolvedValue({ points: [P3, point('p4', '2026-10-18T11:00:00.000Z', 12)] });
-    fireEvent.click(screen.getByRole('radio', { name: '24h' }));
+    fireEvent.click(screen.getByRole('radio', { name: '24 小时' }));
     expect(await screen.findByText('−0.50 HR')).not.toBeNull();
     const opts = vi.mocked(getPoints).mock.calls[1][2]!;
     expect(opts.from).toBe(new Date(NOW.getTime() - 24 * 3_600_000).toISOString());
@@ -215,7 +220,7 @@ describe('HistoryTab chart range', () => {
   it('uses the season points from the parent for the Season range without fetching', async () => {
     renderHistory({ seasonPoints: [P1, point('s2', '2026-10-18T11:00:00.000Z', 9)] });
     await screen.findByText('+2.50 HR');
-    fireEvent.click(screen.getByRole('radio', { name: 'Season' }));
+    fireEvent.click(screen.getByRole('radio', { name: '本赛季' }));
     expect(screen.getByText('−1.00 HR')).not.toBeNull();
     expect(getPoints).toHaveBeenCalledTimes(1);
     expect(snapshotTimes()).toEqual([fmt('2026-10-18T11:00:00.000Z'), fmt(P1.takenAt)]);
@@ -224,10 +229,10 @@ describe('HistoryTab chart range', () => {
   it('shows a placeholder for the Season range until the parent has points', async () => {
     renderHistory({ seasonPoints: null });
     await screen.findByText('+2.50 HR');
-    fireEvent.click(screen.getByRole('radio', { name: 'Season' }));
+    fireEvent.click(screen.getByRole('radio', { name: '本赛季' }));
     expect(document.querySelector('.animate-spin')).toBeNull();
-    expect(screen.queryByText('No snapshots in this range yet.')).toBeNull();
-    expect(screen.getByText('No snapshots in this range.')).not.toBeNull();
+    expect(within(chartSection()).queryByText('此时间范围内暂无估值快照')).toBeNull();
+    expect(within(sectionOf('估值快照')).getByText('此时间范围内暂无估值快照')).not.toBeNull();
   });
 
   it('merges daily points of every season, oldest first, for the All range', async () => {
@@ -240,7 +245,7 @@ describe('HistoryTab chart range', () => {
           ? [point('a1', '2026-06-02T00:00:00.000Z', 1), point('a2', '2026-09-01T00:00:00.000Z', 4)]
           : [point('b1', '2026-10-16T00:00:00.000Z', 5)],
     }));
-    fireEvent.click(screen.getByRole('radio', { name: 'All' }));
+    fireEvent.click(screen.getByRole('radio', { name: '全部' }));
     expect(await screen.findByText('+4.00 HR')).not.toBeNull();
     const calls = vi.mocked(getPoints).mock.calls.slice(1);
     expect(calls.map(([, , opts]) => opts)).toEqual([
@@ -258,29 +263,29 @@ describe('HistoryTab chart range', () => {
     vi.mocked(getPoints).mockResolvedValue({ points: [P1] });
     renderHistory();
     await waitFor(() => expect(snapshotTimes()).toHaveLength(1));
-    expect(screen.queryByTitle('Change over the selected range')).toBeNull();
+    expect(screen.queryByTitle('所选时间范围内的变化')).toBeNull();
 
     cleanup();
     vi.mocked(getPoints).mockResolvedValue({ points: [] });
     renderHistory();
-    expect(await screen.findByText('No snapshots in this range yet.')).not.toBeNull();
-    expect(screen.getByText('No snapshots in this range.')).not.toBeNull();
+    expect(await within(chartSection()).findByText('此时间范围内暂无估值快照')).not.toBeNull();
+    expect(within(sectionOf('估值快照')).getByText('此时间范围内暂无估值快照')).not.toBeNull();
   });
 
   it('shows the load error with a working Retry', async () => {
     vi.mocked(getPoints).mockRejectedValueOnce(new Error('Net worth API 500'));
     renderHistory();
-    const alert = await screen.findByText('Net worth API 500');
+    const alert = await screen.findByText('服务器暂时无法处理请求，请稍后重试。（HTTP 500）');
     expect(alert.closest('[role="alert"]')).not.toBeNull();
-    fireEvent.click(within(alert.closest('[role="alert"]') as HTMLElement).getByRole('button', { name: 'Retry' }));
+    fireEvent.click(within(alert.closest('[role="alert"]') as HTMLElement).getByRole('button', { name: '重试' }));
     expect(await screen.findByText('+2.50 HR')).not.toBeNull();
-    expect(screen.queryByText('Net worth API 500')).toBeNull();
+    expect(screen.queryByText('服务器暂时无法处理请求，请稍后重试。（HTTP 500）')).toBeNull();
   });
 
   it('asks to sign in again when the session expired', async () => {
     vi.mocked(getPoints).mockRejectedValue(new NetWorthApiError('Unauthorized', 401));
     renderHistory();
-    expect(await screen.findByText('Your PD2 session expired. Sign in again.')).not.toBeNull();
+    expect(await screen.findByText('登录已失效，请重新登录后重试。')).not.toBeNull();
   });
 
   it('keeps the previous points visible with a spinner while a refresh loads', async () => {
@@ -342,18 +347,18 @@ describe('HistoryTab sessions', () => {
       ],
     });
     renderHistory();
-    const section = sectionOf('Sessions');
+    const section = sectionOf('游戏会话');
     await waitFor(() => expect(within(section).getAllByText(/^[+−±]\d/).length).toBeGreaterThan(0));
-    expect(within(section).getByRole('heading').textContent).toBe('Sessions4');
-    const stars = within(section).getAllByLabelText('Best HR/h this season');
+    expect(within(section).getByRole('heading').textContent).toBe('游戏会话4');
+    const stars = within(section).getAllByLabelText('本赛季最高 HR/小时收益');
     expect(stars).toHaveLength(1);
     const bestRow = stars[0].closest('[tabindex="0"]')!;
-    expect(bestRow.textContent).toContain('1h15');
+    expect(bestRow.textContent).toContain('1小时15分');
     expect(bestRow.textContent).toContain('+4.00 HR');
     expect(bestRow.textContent).toContain('−0.25 HR');
     expect(bestRow.textContent).toContain('3.20');
-    expect(bestRow.textContent).toContain('manual');
-    expect(within(section).getAllByLabelText('Open session')).toHaveLength(1);
+    expect(bestRow.textContent).toContain('手动');
+    expect(within(section).getAllByLabelText('正在进行的会话')).toHaveLength(1);
     expect(vi.mocked(getSessions).mock.calls[0]).toEqual([TOKEN, OWNER, 's12']);
   });
 
@@ -362,32 +367,32 @@ describe('HistoryTab sessions', () => {
       sessions: Array.from({ length: 10 }, (_, i) => session(`s${i}`)),
     });
     renderHistory();
-    const more = await within(sectionOf('Sessions')).findByRole('button', { name: 'Show more (2 older)' });
-    const rows = () => sectionOf('Sessions').querySelectorAll('[tabindex="0"]');
+    const more = await within(sectionOf('游戏会话')).findByRole('button', { name: '展开更多（还有 2 条较早记录）' });
+    const rows = () => sectionOf('游戏会话').querySelectorAll('[tabindex="0"]');
     expect(rows()).toHaveLength(8);
     fireEvent.click(more);
     expect(rows()).toHaveLength(10);
-    expect(within(sectionOf('Sessions')).queryByRole('button', { name: /Show more/ })).toBeNull();
+    expect(within(sectionOf('游戏会话')).queryByRole('button', { name: /展开更多/ })).toBeNull();
   });
 
   it('explains how sessions build when there are none', async () => {
     renderHistory();
-    expect(await screen.findByText('No sessions yet.')).not.toBeNull();
+    expect(await screen.findByText('暂无游戏会话')).not.toBeNull();
   });
 
   it('shows a session load error', async () => {
     vi.mocked(getSessions).mockRejectedValue(new Error('sessions down'));
     renderHistory();
-    expect((await screen.findByText('sessions down')).closest('[role="alert"]')).not.toBeNull();
+    expect((await screen.findByText('加载估值数据失败，请稍后重试。')).closest('[role="alert"]')).not.toBeNull();
   });
 
   it('starts a session, disabling the buttons meanwhile, then reloads the list', async () => {
     const pending = Promise.withResolvers<void>();
     netWorth.startSession = vi.fn(() => pending.promise);
     renderHistory();
-    await screen.findByText('No sessions yet.');
-    const start = screen.getByRole('button', { name: /Start new session/ }) as HTMLButtonElement;
-    const stop = screen.getByRole('button', { name: /Stop session/ }) as HTMLButtonElement;
+    await screen.findByText('暂无游戏会话');
+    const start = screen.getByRole('button', { name: /开始新会话/ }) as HTMLButtonElement;
+    const stop = screen.getByRole('button', { name: /结束会话/ }) as HTMLButtonElement;
     expect(stop.disabled).toBe(true);
 
     vi.mocked(getSessions).mockResolvedValue({ sessions: [session('new', { isOpen: true })] });
@@ -395,7 +400,7 @@ describe('HistoryTab sessions', () => {
     expect(start.disabled).toBe(true);
     await act(async () => pending.resolve());
     expect(start.disabled).toBe(false);
-    expect(await screen.findByLabelText('Open session')).not.toBeNull();
+    expect(await screen.findByLabelText('正在进行的会话')).not.toBeNull();
     expect(getSessions).toHaveBeenCalledTimes(2);
   });
 
@@ -446,18 +451,18 @@ describe('HistoryTab snapshots and comparison', () => {
   };
 
   function select(iso: string) {
-    fireEvent.click(screen.getByRole('checkbox', { name: `Select snapshot ${fmt(iso)}` }));
+    fireEvent.click(screen.getByRole('checkbox', { name: `选择估值快照 ${fmt(iso)}` }));
   }
 
   it('lists snapshots newest first with the change from the one before', async () => {
     renderHistory();
     await screen.findByText('+2.50 HR');
     expect(snapshotTimes()).toEqual([fmt(P3.takenAt), fmt(P2.takenAt), fmt(P1.takenAt)]);
-    const rows = [...sectionOf('Snapshots').querySelectorAll('.divide-y > div')];
+    const rows = [...sectionOf('估值快照').querySelectorAll('.divide-y > div')];
     expect(rows.map((r) => r.children[2].textContent)).toEqual(['12.50', '11.50', '10.00']);
     expect(rows.map((r) => r.children[3].textContent)).toEqual(['+1.00 HR', '+1.50 HR', '']);
-    expect(within(sectionOf('Snapshots')).getByRole('heading').textContent).toBe('Snapshots3');
-    expect(screen.getByText('Pick two to compare')).not.toBeNull();
+    expect(within(sectionOf('估值快照')).getByRole('heading').textContent).toBe('估值快照3');
+    expect(screen.getByText('选择两条记录进行比较')).not.toBeNull();
   });
 
   it('pages snapshots thirty at a time', async () => {
@@ -467,7 +472,7 @@ describe('HistoryTab snapshots and comparison', () => {
       ),
     });
     renderHistory();
-    const more = await screen.findByRole('button', { name: 'Show more (5 older)' });
+    const more = await screen.findByRole('button', { name: '展开更多（还有 5 条较早记录）' });
     expect(snapshotTimes()).toHaveLength(30);
     fireEvent.click(more);
     expect(snapshotTimes()).toHaveLength(35);
@@ -478,17 +483,17 @@ describe('HistoryTab snapshots and comparison', () => {
     renderHistory();
     await screen.findByText('+2.50 HR');
     select(P3.takenAt);
-    expect(screen.getByText('1/2 selected')).not.toBeNull();
+    expect(screen.getByText('已选择 1/2 条')).not.toBeNull();
     expect(getDiff).not.toHaveBeenCalled();
     select(P1.takenAt);
-    expect(screen.getByText('2/2 selected')).not.toBeNull();
+    expect(screen.getByText('已选择 2/2 条')).not.toBeNull();
 
-    expect(await screen.findByText('Farmed')).not.toBeNull();
+    expect(await screen.findByText('物品增值')).not.toBeNull();
     expect(vi.mocked(getDiff).mock.calls[0]).toEqual([TOKEN, OWNER, 'p1', 'p3', 'then']);
-    expect(screen.getByText(`${fmt(P1.takenAt)} → ${fmt(P3.takenAt)}`)).not.toBeNull();
-    expect(screen.getByText('Farmed').nextElementSibling?.textContent).toBe('+3.00 HR');
-    expect(screen.getByText('Market drift').nextElementSibling?.textContent).toBe('−0.50 HR');
-    expect(screen.getByText('Total').nextElementSibling?.textContent).toBe('10.00 → 12.50 HR');
+    expect(screen.getByText(`${fmtDiff(P1.takenAt)} → ${fmtDiff(P3.takenAt)}`)).not.toBeNull();
+    expect(screen.getByText('物品增值').nextElementSibling?.textContent).toBe('+3.00 HR');
+    expect(screen.getByText('市场变动').nextElementSibling?.textContent).toBe('−0.50 HR');
+    expect(screen.getByText('总计').nextElementSibling?.textContent).toBe('10.00 → 12.50 HR');
     const ber = screen.getByText('Ber Rune').parentElement!;
     expect([...ber.children].map((c) => c.textContent)).toEqual(['Ber Rune', '0 → 1', '+1', '+3.00 HR']);
     const ist = screen.getByText('Ist Rune').parentElement!;
@@ -501,10 +506,10 @@ describe('HistoryTab snapshots and comparison', () => {
     await screen.findByText('+2.50 HR');
     select(P1.takenAt);
     select(P2.takenAt);
-    await screen.findByText('Farmed');
+    await screen.findByText('物品增值');
     vi.mocked(getDiff).mockResolvedValue({ ...DIFF, priceBasis: 'now', marketDriftHr: 0, lines: [] });
-    fireEvent.click(screen.getByRole('radio', { name: 'Prices now' }));
-    expect(await screen.findByText('No holdings changed.')).not.toBeNull();
+    fireEvent.click(screen.getByRole('radio', { name: '使用当前价格' }));
+    expect(await screen.findByText('物品数量没有变化。')).not.toBeNull();
     expect(vi.mocked(getDiff).mock.calls.at(-1)).toEqual([TOKEN, OWNER, 'p1', 'p2', 'now']);
   });
 
@@ -515,9 +520,9 @@ describe('HistoryTab snapshots and comparison', () => {
     select(P1.takenAt);
     select(P2.takenAt);
     select(P3.takenAt);
-    await screen.findByText('Farmed');
+    await screen.findByText('物品增值');
     expect(vi.mocked(getDiff).mock.calls.at(-1)!.slice(2, 4)).toEqual(['p2', 'p3']);
-    expect((screen.getByRole('checkbox', { name: `Select snapshot ${fmt(P1.takenAt)}` }) as HTMLElement).dataset.state).toBe(
+    expect((screen.getByRole('checkbox', { name: `选择估值快照 ${fmt(P1.takenAt)}` }) as HTMLElement).dataset.state).toBe(
       'unchecked',
     );
   });
@@ -527,25 +532,25 @@ describe('HistoryTab snapshots and comparison', () => {
     await screen.findByText('+2.50 HR');
     select(P1.takenAt);
     select(P1.takenAt);
-    expect(screen.getByText('Pick two to compare')).not.toBeNull();
+    expect(screen.getByText('选择两条记录进行比较')).not.toBeNull();
     select(P1.takenAt);
-    fireEvent.click(screen.getByRole('button', { name: 'Clear' }));
-    expect(screen.getByText('Pick two to compare')).not.toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: '清除' }));
+    expect(screen.getByText('选择两条记录进行比较')).not.toBeNull();
   });
 
   it('compares a snapshot with the previous one in one click and closes the comparison', async () => {
     vi.mocked(getDiff).mockResolvedValue(DIFF);
     renderHistory();
     await screen.findByText('+2.50 HR');
-    const compare = within(sectionOf('Snapshots')).getAllByRole('button', { name: 'Compare with previous' });
+    const compare = within(sectionOf('估值快照')).getAllByRole('button', { name: '与上一条估值快照比较' });
     // The oldest snapshot has no previous one
     expect(compare.map((b) => (b as HTMLButtonElement).disabled)).toEqual([false, false, true]);
     fireEvent.click(compare[0]);
-    await screen.findByText('Farmed');
+    await screen.findByText('物品增值');
     expect(vi.mocked(getDiff).mock.calls[0].slice(2, 4)).toEqual(['p2', 'p3']);
-    fireEvent.click(screen.getByRole('button', { name: 'Close comparison' }));
-    await waitFor(() => expect(screen.queryByText('Farmed')).toBeNull());
-    expect(screen.getByText('Pick two to compare')).not.toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: '关闭比较结果' }));
+    await waitFor(() => expect(screen.queryByText('物品增值')).toBeNull());
+    expect(screen.getByText('选择两条记录进行比较')).not.toBeNull();
   });
 
   it('does not allow picking or comparing snapshots without stored holdings', async () => {
@@ -553,9 +558,9 @@ describe('HistoryTab snapshots and comparison', () => {
     renderHistory();
     await screen.findByText('+2.50 HR');
     expect(
-      (screen.getByRole('checkbox', { name: `Select snapshot ${fmt(P2.takenAt)}` }) as HTMLButtonElement).disabled,
+      (screen.getByRole('checkbox', { name: `选择估值快照 ${fmt(P2.takenAt)}` }) as HTMLButtonElement).disabled,
     ).toBe(true);
-    const compare = within(sectionOf('Snapshots')).getAllByRole('button', { name: 'Compare with previous' });
+    const compare = within(sectionOf('估值快照')).getAllByRole('button', { name: '与上一条估值快照比较' });
     expect(compare.map((b) => (b as HTMLButtonElement).disabled)).toEqual([true, true, true]);
   });
 
@@ -565,23 +570,23 @@ describe('HistoryTab snapshots and comparison', () => {
     await screen.findByText('+2.50 HR');
     select(P1.takenAt);
     select(P3.takenAt);
-    expect((await screen.findByText('diff failed')).closest('[role="alert"]')).not.toBeNull();
-    expect(screen.queryByText('Farmed')).toBeNull();
+    expect((await screen.findByText('加载估值数据失败，请稍后重试。')).closest('[role="alert"]')).not.toBeNull();
+    expect(screen.queryByText('物品增值')).toBeNull();
   });
 });
 
 describe('HistoryTab delete history', () => {
   async function openDialog() {
     await screen.findByText('+2.50 HR');
-    fireEvent.click(screen.getByRole('button', { name: /Delete history/ }));
+    fireEvent.click(screen.getByRole('button', { name: /删除历史记录/ }));
     return screen.getByRole('alertdialog');
   }
 
   it('describes whose history is deleted', async () => {
     renderHistory();
     const dialog = await openDialog();
-    expect(within(dialog).getByText(/Removes stored snapshots/).textContent).toBe(
-      'Removes stored snapshots for Hammerdin (ladder, softcore). This cannot be undone.',
+    expect(within(dialog).getByText(/将删除账号/).textContent?.replace(/\s+/g, ' ').trim()).toBe(
+      '将删除账号 Hammerdin 的估值快照（天梯、 普通模式）。此操作无法撤销。',
     );
   });
 
@@ -591,30 +596,30 @@ describe('HistoryTab delete history', () => {
     const dialog = await openDialog();
     vi.mocked(getPoints).mockResolvedValue({ points: [] });
     await act(async () => {
-      fireEvent.click(within(dialog).getByRole('button', { name: 'Delete Season 12' }));
+      fireEvent.click(within(dialog).getByRole('button', { name: '删除 Season 12 的记录' }));
     });
     expect(vi.mocked(deleteHistory).mock.calls[0]).toEqual([TOKEN, OWNER, 's12']);
-    expect(screen.getByRole('status').textContent).toBe('Deleted 5 snapshots.');
+    expect(screen.getByRole('status').textContent).toBe('已删除 5 个估值快照。');
     expect(onHistoryChanged).toHaveBeenCalledTimes(1);
-    expect(await screen.findByText('No snapshots in this range yet.')).not.toBeNull();
+    expect(await within(chartSection()).findByText('此时间范围内暂无估值快照')).not.toBeNull();
   });
 
   it('deletes all seasons and offers no per-season button without a current season', async () => {
     vi.mocked(deleteHistory).mockResolvedValue({ deletedPoints: 9, deletedSnapshots: 3 });
     renderHistory({ currentSeasonId: null });
     const dialog = await openDialog();
-    expect(within(dialog).queryByRole('button', { name: /^Delete Season/ })).toBeNull();
+    expect(within(dialog).queryByRole('button', { name: /^删除 .* 的记录$/ })).toBeNull();
     await act(async () => {
-      fireEvent.click(within(dialog).getByRole('button', { name: 'Delete all seasons' }));
+      fireEvent.click(within(dialog).getByRole('button', { name: '删除所有赛季记录' }));
     });
     expect(vi.mocked(deleteHistory).mock.calls[0]).toEqual([TOKEN, OWNER, undefined]);
-    expect(screen.getByRole('status').textContent).toBe('Deleted 9 snapshots.');
+    expect(screen.getByRole('status').textContent).toBe('已删除 9 个估值快照。');
   });
 
   it('falls back to "this season" for an unknown season id', async () => {
     renderHistory({ currentSeasonId: 's99' });
     const dialog = await openDialog();
-    expect(within(dialog).getByRole('button', { name: 'Delete this season' })).not.toBeNull();
+    expect(within(dialog).getByRole('button', { name: '删除 本赛季 的记录' })).not.toBeNull();
   });
 
   it('reports a failed delete without notifying the parent', async () => {
@@ -622,10 +627,10 @@ describe('HistoryTab delete history', () => {
     const { onHistoryChanged } = renderHistory();
     const dialog = await openDialog();
     await act(async () => {
-      fireEvent.click(within(dialog).getByRole('button', { name: 'Delete all seasons' }));
+      fireEvent.click(within(dialog).getByRole('button', { name: '删除所有赛季记录' }));
     });
-    expect(screen.getByRole('status').textContent).toBe('forbidden');
+    expect(screen.getByRole('status').textContent).toBe('快照操作失败，请稍后重试。');
     expect(onHistoryChanged).not.toHaveBeenCalled();
-    expect((screen.getByRole('button', { name: /Delete history/ }) as HTMLButtonElement).disabled).toBe(false);
+    expect((screen.getByRole('button', { name: /删除历史记录/ }) as HTMLButtonElement).disabled).toBe(false);
   });
 });

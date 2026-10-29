@@ -96,6 +96,7 @@ const AppController: React.FC = () => {
       showToast({ title: 'PD2 Trader', description: '物品不受支持或数据无效。', variant: 'error' });
       return;
     }
+    if (controller) window.dispatchEvent(new Event('controller-activate'));
     openPanel('itemSearch', controller ? { text: encodeItem(raw), controller: true } : { text: encodeItem(raw) });
     if (controller) await claimKeyboard();
   }, [checkDiabloFocus, copyItemUnderCursor, openPanel, settings.hotkeyModifier, settings.hotkeyKey]);
@@ -172,8 +173,13 @@ const AppController: React.FC = () => {
     if (!isTauri() || isLoading) return;
     let disposed = false;
     let unlisten: (() => void) | undefined;
+    let unlistenMenu: (() => void) | undefined;
     const enabled = settings.controllerPriceCheckEnabled === true;
     if (enabled) {
+      listen('controller-open-menu', () => {
+        window.dispatchEvent(new Event('controller-activate'));
+        openPanel('controllerMenu', undefined, { focus: true });
+      }).then((stop) => { if (disposed) stop(); else unlistenMenu = stop; }).catch(console.error);
       listen('controller-price-check', () => { void hotkeysRef.current.itemSearch(true); }).then((stop) => {
         if (disposed) stop();
         else {
@@ -187,9 +193,10 @@ const AppController: React.FC = () => {
     return () => {
       disposed = true;
       unlisten?.();
+      unlistenMenu?.();
       if (enabled) void invoke('set_controller_price_check_enabled', { enabled: false }).catch(console.error);
     };
-  }, [isLoading, settings.controllerPriceCheckEnabled]);
+  }, [isLoading, settings.controllerPriceCheckEnabled, openPanel]);
 
   usePD2Auth();
   useAppUpdates();
