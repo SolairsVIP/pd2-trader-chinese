@@ -18,6 +18,7 @@ export type SettingsSectionId =
   | 'Net Worth'
   | 'Corrupted Zone'
   | 'Hotkeys'
+  | 'Controller'
   | 'Updates'
   | 'About';
 

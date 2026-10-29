@@ -330,6 +330,22 @@ afterEach(() => {
 });
 
 describe('ChatOverlayWidget conversation list', () => {
+  it('confirms before clearing all website conversations, preserving failed ones', async () => {
+    await renderWidget([
+      conv('c1', ALICE, { latest: msg('m1', 'c1', 'alice', 'a', 1) }),
+      conv('c2', BOB, { latest: msg('m2', 'c2', 'bob', 'b', 2) }),
+    ]);
+    api.deleteConversation.mockImplementation(async (id) => id !== 'c2');
+    fireEvent.click(screen.getByRole('button', { name: '清除聊天记录' }));
+    expect(api.deleteConversation).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: '确认清除' }));
+    await flush();
+    expect(api.deleteConversation).toHaveBeenCalledWith('c1');
+    expect(api.deleteConversation).toHaveBeenCalledWith('c2');
+    const list = screen.getByRole('list', { name: '会话列表' });
+    expect(within(list).queryByText('Alice')).toBeNull();
+    expect(within(list).getByText('bob')).not.toBeNull();
+  });
   it('opens the right-clicked conversation menu and pins that conversation, not the selected one', async () => {
     await renderWidget([
       conv('c1', ALICE, { latest: msg('m1', 'c1', 'alice', 'a', 1) }),

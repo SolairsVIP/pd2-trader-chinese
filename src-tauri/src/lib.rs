@@ -142,6 +142,9 @@ pub fn run() {
                 }),
             );
 
+            #[cfg(target_os = "windows")]
+            modules::controller_trigger::start(app.app_handle().clone());
+
             #[cfg(all(debug_assertions, not(target_os = "windows")))]
             main_window.open_devtools();
             #[cfg(all(debug_assertions, target_os = "windows"))]
@@ -150,6 +153,7 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             commands::read_game_item_clipboard,
+            modules::controller_trigger::set_controller_price_check_enabled,
             commands::get_diablo_rect,
             commands::get_overlay_viewport,
             commands::press_key,

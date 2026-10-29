@@ -81,6 +81,18 @@ afterEach(() => {
 });
 
 describe('OptionsProvider loading', () => {
+  it('enables controller price check by default but preserves an explicit opt-out', async () => {
+    const first = await renderLoaded();
+    expect(first.result.current.settings.controllerPriceCheckEnabled).toBe(true);
+    first.unmount();
+    state.files.set('settings.json', JSON.stringify({ hotkeyKey: 'q' }));
+    const old = await renderLoaded();
+    expect(old.result.current.settings.controllerPriceCheckEnabled).toBe(true);
+    old.unmount();
+    state.files.set('settings.json', JSON.stringify({ controllerPriceCheckEnabled: false }));
+    const existing = await renderLoaded();
+    expect(existing.result.current.settings.controllerPriceCheckEnabled).toBe(false);
+  });
   it('creates the config dir and a defaults file on first run', async () => {
     state.dirExists = false;
     const { result } = await renderLoaded();

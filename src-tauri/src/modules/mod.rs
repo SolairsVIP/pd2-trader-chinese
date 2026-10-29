@@ -1,5 +1,6 @@
 pub mod chat_watcher;
 pub mod commands;
+pub mod controller_trigger;
 pub mod config;
 pub mod debug_logger;
 pub mod game_clipboard;

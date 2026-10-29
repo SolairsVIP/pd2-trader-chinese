@@ -5,6 +5,7 @@ import {
   Check,
   Info,
   Download,
+  Gamepad2,
   Keyboard,
   LayoutPanelTop,
   MapPin,
@@ -23,6 +24,7 @@ import { fadeInUp, springSnappy } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import SettingGenereal from './appearance/layout';
 import SettingsHotkeys from './hotkeys/layout';
+import SettingsController from './controller/layout';
 import SettingsAbout from './about/layout';
 import SettingsUpdates from './updates/layout';
 import SettingsAccount from './account/layout';
@@ -48,6 +50,7 @@ const sidebarNavItems: INavItem[] = [
   { title: 'Net Worth', label: '仓库估值', icon: TrendingUp, content: <SettingsNetWorth /> },
   { title: 'Corrupted Zone', label: '腐化区提示', icon: MapPin, content: <SettingsCorruptedZone /> },
   { title: 'Hotkeys', label: '快捷键', icon: Keyboard, content: <SettingsHotkeys /> },
+  { title: 'Controller', label: '手柄', icon: Gamepad2, content: <SettingsController /> },
   { title: 'About', label: '关于', icon: Info, content: <SettingsAbout /> },
   { title: 'Updates', label: '更新', icon: Download, content: <SettingsUpdates /> },
 ];
@@ -156,7 +159,7 @@ export default function SettingsLayout() {
 
         <SettingsNavContext.Provider value={goTo}>
           <div className="flex min-h-0 flex-1">
-            <aside className="flex w-52 shrink-0 flex-col border-r border-border/70 bg-muted/20 p-3 lg:w-56">
+            <aside className="flex w-52 min-h-0 shrink-0 flex-col overflow-y-auto border-r border-border/70 bg-muted/20 p-3 lg:w-56">
               <nav
                 role="tablist"
                 aria-orientation="vertical"

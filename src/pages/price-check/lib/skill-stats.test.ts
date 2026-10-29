@@ -42,6 +42,15 @@ function assertQueryParity(stat: Stat, property: string, params: number[], value
 }
 
 describe('skill filter catalogue and query parity', () => {
+  it('maps the observed Enchant Fire clipboard spelling to the Enchant market skill', () => {
+    const stat: Stat = { name: '+1 to Enchant Fire', skill: 'Enchant Fire', value: 1 };
+    expect(resolveCharacterSkillId('Enchant Fire')).toBe(52);
+    expect(getSkillFilter(stat)).toMatchObject({ property: 'item_singleskill', params: [52], value: 1 });
+    assertQueryParity(stat, 'item_singleskill', [52], 1);
+    expect(resolveCharacterSkillId('Cold Enchant')).toBe(40);
+    expect(resolveCharacterSkillId('Shiver Armor')).toBe(50);
+    expect(resolveCharacterSkillId('Lightning Mastery')).toBe(63);
+  });
   // Exhaust the bundled canonical names, including the explicit PD2 rename alias.
   it.each(Object.entries(skillNameToIdMap).map(([name, skill]) => [name, skill.id] as const))(
     'single skill %s resolves to %i in the row, URL and both market views',

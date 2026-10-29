@@ -68,6 +68,13 @@ afterEach(() => {
 });
 
 describe('SettingsLayout navigation', () => {
+  it('provides a dedicated controller section', () => {
+    renderLayout();
+    fireEvent.click(tab('手柄'));
+    expect(selected()).toEqual(['手柄']);
+    expect(screen.getByRole('switch', { name: '手柄快捷查价' })).not.toBeNull();
+    expect(screen.getByRole('slider', { name: '手柄光标速度' })).not.toBeNull();
+  });
   it('opens on General with a single tab stop', () => {
     renderLayout();
     expect(screen.getAllByRole('tab').map((t) => t.textContent)).toEqual(SECTIONS);

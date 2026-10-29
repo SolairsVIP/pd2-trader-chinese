@@ -121,6 +121,7 @@ export default function ChatOverlayWidget({ onClose }: ChatOverlayWidgetProps) {
   const [channels, setChannels] = useState<Record<string, ReplyChannel>>({});
   // Conversations deleted but still undoable: hidden now, deleted on the website once the undo window closes
   const [deleting, setDeleting] = useState<ReadonlySet<string>>(() => new Set());
+  const [clearingHistory, setClearingHistory] = useState(false);
   // The Trader sidebar sliding over the thread (below WIDE_FROM_PX; wide panels show it as a column)
   const [traderOverlay, setTraderOverlay] = useState(false);
   const [now, setNow] = useState(() => Date.now());
@@ -478,6 +479,32 @@ export default function ChatOverlayWidget({ onClose }: ChatOverlayWidgetProps) {
     pendingDeletesRef.current.set(conversationId, { timer, dismiss });
   };
 
+  const clearAllHistory = async () => {
+    if (clearingHistory) return;
+    setClearingHistory(true);
+    let failed = 0;
+    try {
+      // Use the unfiltered inbox, including archived threads. Offers themselves are not deleted.
+      for (const thread of threads) {
+        if (thread.conversation) {
+          const removed = await chat.deleteConversation(thread.conversation._id);
+          if (!removed) {
+            failed++;
+            continue;
+          }
+        }
+        thread.people.forEach((person) => whispers.forget(person.key));
+        clearDraft(thread.id);
+      }
+      selectThread(null);
+      showToast(failed
+        ? { title: '部分会话未能清除', description: `${failed} 个网站会话清除失败，请重试。`, variant: 'error' }
+        : { title: '聊天记录已清除', variant: 'success' });
+    } finally {
+      setClearingHistory(false);
+    }
+  };
+
   // Deletes still in their undo window are sent right away when the panel unmounts or the app closes
   const flushDeletesRef = useRef(() => {});
   useEffect(() => {
@@ -608,6 +635,9 @@ export default function ChatOverlayWidget({ onClose }: ChatOverlayWidgetProps) {
               failed={chat.conversationsFailed}
               signedIn={signedIn}
               onReload={loadConversations}
+              onClearHistory={() => void clearAllHistory()}
+              clearingHistory={clearingHistory}
+              canClearHistory={!loadingConversations && !chat.conversationsFailed && whispers.loaded && threads.some((thread) => !!thread.conversation || thread.people.length > 0)}
               now={now}
               className={compact ? 'w-full border-r-0' : undefined}
             />

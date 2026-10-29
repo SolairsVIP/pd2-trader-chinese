@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { isTauri, invoke } from '@tauri-apps/api/core';
+import { listen } from '@tauri-apps/api/event';
 import { useClipboard } from '@/hooks/useClipboard';
 import { useOptions } from '@/hooks/useOptions';
 import { useKeySender } from '@/hooks/useKeySender';
@@ -12,6 +13,7 @@ import { useNetWorth } from '@/hooks/useNetWorth';
 import { clipboardContainsValidItem, isStashItem, encodeItem, encodeItemForQuickList, sleep } from '@/lib/item-utils';
 import {
   getBadgeCount,
+  claimKeyboard,
   isKeyboardClaimed,
   releaseKeyboard,
   showToast,
@@ -84,17 +86,18 @@ const AppController: React.FC = () => {
     [copy, keyPress],
   );
 
-  const fireSearch = useCallback(async () => {
+  const fireSearch = useCallback(async (controller = false) => {
     if (!(await checkDiabloFocus())) return;
     // When the price-check hotkey itself is Ctrl+C the game already copied the item
-    const capture = await copyItemUnderCursor(!(settings.hotkeyModifier === 'ctrl' && settings.hotkeyKey === 'c'));
+    const capture = await copyItemUnderCursor(controller || !(settings.hotkeyModifier === 'ctrl' && settings.hotkeyKey === 'c'));
     if (capture.error) return;
     const raw = capture.text;
     if (!clipboardContainsValidItem(raw)) {
       showToast({ title: 'PD2 Trader', description: '物品不受支持或数据无效。', variant: 'error' });
       return;
     }
-    openPanel('itemSearch', { text: encodeItem(raw) });
+    openPanel('itemSearch', controller ? { text: encodeItem(raw), controller: true } : { text: encodeItem(raw) });
+    if (controller) await claimKeyboard();
   }, [checkDiabloFocus, copyItemUnderCursor, openPanel, settings.hotkeyModifier, settings.hotkeyKey]);
 
   const openQuickList = useCallback(async () => {
@@ -164,6 +167,29 @@ const AppController: React.FC = () => {
   const onSnapshot = useCallback(() => hotkeysRef.current.snapshot(), []);
   const onMarket = useCallback(() => hotkeysRef.current.market(), []);
   useAppShortcuts(onItemSearch, onQuickList, onCurrency, onChat, onOffers, onDelist, onSnapshot, onMarket);
+
+  useEffect(() => {
+    if (!isTauri() || isLoading) return;
+    let disposed = false;
+    let unlisten: (() => void) | undefined;
+    const enabled = settings.controllerPriceCheckEnabled === true;
+    if (enabled) {
+      listen('controller-price-check', () => { void hotkeysRef.current.itemSearch(true); }).then((stop) => {
+        if (disposed) stop();
+        else {
+          unlisten = stop;
+          void invoke('set_controller_price_check_enabled', { enabled: true }).catch(console.error);
+        }
+      }).catch(console.error);
+    } else {
+      void invoke('set_controller_price_check_enabled', { enabled: false }).catch(console.error);
+    }
+    return () => {
+      disposed = true;
+      unlisten?.();
+      if (enabled) void invoke('set_controller_price_check_enabled', { enabled: false }).catch(console.error);
+    };
+  }, [isLoading, settings.controllerPriceCheckEnabled]);
 
   usePD2Auth();
   useAppUpdates();

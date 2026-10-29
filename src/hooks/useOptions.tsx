@@ -29,6 +29,8 @@ export interface ISettings {
   mode: 'hardcore' | 'softcore';
   hotkeyModifier: 'ctrl' | 'alt';
   hotkeyKey: string;
+  controllerPriceCheckEnabled?: boolean;
+  controllerPointerSpeed?: number; // Percentage of the default controller pointer speed.
   hotkeyModifierListItem: 'ctrl' | 'alt';
   hotkeyKeyListItem: string;
   lastSeenVersion?: string;
@@ -120,6 +122,8 @@ const DEFAULT_SETTINGS: ISettings = {
   ladder: 'ladder',
   hotkeyModifier: 'ctrl',
   hotkeyKey: 'd',
+  controllerPriceCheckEnabled: true,
+  controllerPointerSpeed: 100,
   lastSeenVersion: '0.0.0', // fallback version
   hotkeyModifierListItem: 'ctrl',
   hotkeyKeyListItem: 'l',

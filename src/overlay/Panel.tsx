@@ -150,6 +150,7 @@ export const Panel: React.FC<{ id: PanelId }> = ({ id }) => {
   const onPointerDownCapture = (e: React.PointerEvent<HTMLDivElement>) => {
     bringToFront(id);
     if (def.keyboard !== 'onPointerDown') return;
+    if (document.documentElement.hasAttribute('data-controller-pointer-click')) return;
     // Claim the keyboard for text entry; keep it while choosing a suggestion in a portaled autocomplete.
     // Ordinary panel clicks still hand focus back to the game.
     const field = textEntryAt(e.target);
@@ -166,6 +167,7 @@ export const Panel: React.FC<{ id: PanelId }> = ({ id }) => {
   };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (document.documentElement.hasAttribute('data-controller-pointer-click')) return;
     if (e.button !== 0 || !(e.target instanceof Element)) return;
     const handle = e.target.closest('[data-panel-drag]');
     if (!handle || !e.currentTarget.contains(handle) || e.target.closest(NO_DRAG_SELECTOR)) return;

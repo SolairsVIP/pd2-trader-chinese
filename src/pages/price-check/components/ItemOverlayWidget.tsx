@@ -1543,7 +1543,7 @@ export default function ItemOverlayWidget({ item, statMapper, onClose }: Props) 
               )}
             </AnimatePresence>
 
-            <ScrollArea className="min-h-0 flex-1">
+            <ScrollArea className="min-h-0 flex-1" data-controller-scroll-default>
               {marketLoading && marketListings.length === 0 && (
                 <div aria-busy="true">
                   <div className="flex items-center justify-center gap-2 p-3 text-sm text-muted-foreground">

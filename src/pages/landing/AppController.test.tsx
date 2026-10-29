@@ -2,6 +2,7 @@
 import { act, cleanup, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { invoke, isTauri } from '@tauri-apps/api/core';
+import { listen } from '@tauri-apps/api/event';
 import { useOptions } from '@/hooks/useOptions';
 import type { ISettings } from '@/hooks/useOptions';
 import { useAppShortcuts } from '@/hooks/useShortcuts';
@@ -18,6 +19,7 @@ const h = vi.hoisted(() => ({
   overlay: { openPanel: vi.fn(), closePanel: vi.fn(), togglePanel: vi.fn() },
   /** An open panel (e.g. a price check) holds the keyboard. */
   keyboardClaimed: false,
+  claimKeyboard: vi.fn(async () => { h.keyboardClaimed = true; }),
   releaseKeyboard: vi.fn(async () => {
     h.keyboardClaimed = false;
   }),
@@ -26,12 +28,15 @@ const h = vi.hoisted(() => ({
 }));
 
 vi.mock('@tauri-apps/api/core', () => ({ isTauri: vi.fn(), invoke: vi.fn() }));
+vi.mock('@tauri-apps/api/event', () => ({ listen: vi.fn(async () => vi.fn()) }));
+vi.mock('@/lib/browser-clipboard', () => ({ readGameItemText: async () => clipboard }));
 // A fresh value per render (like any context value that changes): hotkey handlers must not depend on its identity
 vi.mock('@/overlay', () => ({
   showToast: vi.fn(),
   useOverlay: () => ({ ...h.overlay }),
   isKeyboardClaimed: () => h.keyboardClaimed,
   releaseKeyboard: () => h.releaseKeyboard(),
+  claimKeyboard: () => h.claimKeyboard(),
   getBadgeCount: (key: string) => (key === 'chatUnread' ? h.chatUnread : 0),
 }));
 vi.mock('@/hooks/useOptions', () => ({ useOptions: vi.fn() }));
@@ -120,6 +125,22 @@ afterEach(() => {
 });
 
 describe('AppController price check hotkey', () => {
+  it('only enables the controller listener when requested and copies on an accepted controller event', async () => {
+    await mount({ ...SETTINGS, hotkeyKey: 'c', controllerPriceCheckEnabled: true });
+    expect(listen).toHaveBeenCalledWith('controller-price-check', expect.any(Function));
+    expect(invoke).toHaveBeenCalledWith('set_controller_price_check_enabled', { enabled: true });
+    const handler = vi.mocked(listen).mock.calls.find(([event]) => event === 'controller-price-check')![1];
+    diabloFocused = false;
+    act(() => handler({} as never));
+    await advance(300);
+    expect(keyPress).not.toHaveBeenCalled();
+    diabloFocused = true;
+    act(() => handler({} as never));
+    await advance(300);
+    expect(keyPress).toHaveBeenCalledWith('ctrl+c');
+    expect(h.overlay.openPanel).toHaveBeenCalledWith('itemSearch', { text: encodeItem('ITEM sword'), controller: true });
+    expect(h.claimKeyboard).toHaveBeenCalledTimes(1);
+  });
   it('does nothing while Diablo is not focused', async () => {
     diabloFocused = false;
     await mount();

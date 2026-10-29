@@ -23,7 +23,7 @@ export type PanelId =
 
 export interface PanelPayloads {
   /** encodeItem(raw) output (what used to be ?text=). undefined only before the first search (the panel is keepMounted). */
-  itemSearch: { text: string } | undefined;
+  itemSearch: { text: string; controller?: boolean } | undefined;
   /** item = encodeItemForQuickList(raw); undefined = manage mode */
   quickList: { item?: string; error?: 'not_shared_stash' } | undefined;
   currency: { tab?: NetWorthTab } | undefined;

@@ -14,8 +14,10 @@ import {
   RotateCw,
   Search,
   SearchX,
+  Trash2,
   X,
 } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@/components/ui/dropdown-menu';
 import { ConversationMenuItems } from './ThreadHeader';
@@ -96,6 +98,9 @@ export function ConversationList({
   failed,
   signedIn,
   onReload,
+  onClearHistory,
+  clearingHistory,
+  canClearHistory,
   now,
   className,
 }: {
@@ -117,6 +122,9 @@ export function ConversationList({
   failed: boolean;
   signedIn: boolean;
   onReload: () => void;
+  onClearHistory: () => void;
+  clearingHistory: boolean;
+  canClearHistory: boolean;
   /** Epoch ms, for presence dots. */
   now: number;
   className?: string;
@@ -401,6 +409,23 @@ export function ConversationList({
             <span className="ml-auto text-[11px] tabular-nums text-muted-foreground">
               {total} {" " + __ui("个会话") + " "}</span>
           )}
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label={__ui('清除聊天记录')} title={__ui('清除聊天记录')} disabled={!canClearHistory || clearingHistory} className="size-8 text-muted-foreground">
+                <Trash2 className="size-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{__ui('清除全部聊天记录？')}</AlertDialogTitle>
+                <AlertDialogDescription>{__ui('将移除列表中的全部网站会话（通过官网归档）及本地游戏密语记录，包括已归档的记录和密语关联的交易信息。网站报价不受影响，此操作无法撤销。')}</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>{__ui('取消')}</AlertDialogCancel>
+                <AlertDialogAction onClick={onClearHistory}>{__ui('确认清除')}</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
         <div className="group relative">
           <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground transition-colors duration-(--dur-fast) group-focus-within:text-foreground" />

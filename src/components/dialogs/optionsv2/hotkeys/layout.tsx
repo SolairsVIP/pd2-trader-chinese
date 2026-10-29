@@ -1,5 +1,4 @@
 import { useUiText } from '@/lib/ui-language';
-import React from 'react';
 import { SettingsSection } from '../settings-ui';
 import { HotkeyForm } from './hotkey-form';
 

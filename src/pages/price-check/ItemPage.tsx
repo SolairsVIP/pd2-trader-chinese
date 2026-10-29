@@ -4,9 +4,10 @@ import ItemOverlayWidget from '@/pages/price-check/components/ItemOverlayWidget'
 import type { Item } from '@/pages/price-check/lib/interfaces';
 import { WindowChrome, WindowPanel } from '@/components/custom/window-chrome';
 import { usePanel } from '@/overlay';
+import ControllerPointer from './ControllerPointer';
 
 const ItemWindow: React.FC = () => {
-  const { payload, payloadVersion, close } = usePanel<'itemSearch'>();
+  const { payload, payloadVersion, close, visible } = usePanel<'itemSearch'>();
   const [search, setSearch] = useState<{ version: number; item: Item | null }>({ version: 0, item: null });
 
   // Every price-check hotkey press reopens the panel with a new payload (payloadVersion bumps even for the same item).
@@ -25,7 +26,7 @@ const ItemWindow: React.FC = () => {
   }
   const { item } = search;
 
-  return !item ? (
+  return <>{!item ? (
     <WindowPanel animate
       className="h-full w-full">
       <WindowChrome
@@ -47,7 +48,7 @@ const ItemWindow: React.FC = () => {
   ) : (
     <ItemOverlayWidget item={item}
       onClose={close} />
-  );
+  )}{visible && payload?.controller && <ControllerPointer close={close} />}</>;
 };
 
 export default ItemWindow;
