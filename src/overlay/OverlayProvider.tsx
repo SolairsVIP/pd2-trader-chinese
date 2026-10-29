@@ -385,7 +385,10 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
         const current = stateRef.current.panels[request.id];
         if (!current?.open || current.payloadVersion !== request.version) return;
         if (isTauri()) await invoke('raise_overlay');
-        if (!cancelled && pendingFocus.current === request) await claimKeyboard();
+        const latest = stateRef.current.panels[request.id];
+        if (!cancelled && pendingFocus.current === request && latest?.open && latest.payloadVersion === request.version) {
+          await claimKeyboard();
+        }
       } catch (error) {
         if (!cancelled) console.warn('[overlay] explicit panel activation failed:', error);
       } finally {
@@ -421,6 +424,9 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
   const closePanel = useCallback(
     (id: PanelId, { focusGame = true }: { focusGame?: boolean } = {}) => {
       if (!stateRef.current.panels[id]?.open) return;
+      // Invalidate the request synchronously: native presentation may finish before React runs
+      // effect cleanup, and must never activate a panel the user has already closed.
+      if (pendingFocus.current?.id === id) pendingFocus.current = null;
       placeTokens.current[id] = (placeTokens.current[id] ?? 0) + 1;
       apply({ type: 'close', id });
       const keyboardPanelOpen = Object.entries(stateRef.current.panels).some(
@@ -429,7 +435,10 @@ export const OverlayProvider: React.FC<{ defs: PanelDefs; children?: React.React
       const pending = pendingFocus.current;
       const target = pending && stateRef.current.panels[pending.id];
       const focusTransferPending = !!target?.open && target.payloadVersion === pending?.version;
-      if (isKeyboardClaimed() && !keyboardPanelOpen && !focusTransferPending) {
+      // Explicitly closing the controller menu returns to the game even when, for example,
+      // a pinned market remains visible. Opening another panel passes focusGame: false.
+      const returningFromControllerMenu = id === 'controllerMenu' && focusGame;
+      if (isKeyboardClaimed() && !focusTransferPending && (!keyboardPanelOpen || returningFromControllerMenu)) {
         window.dispatchEvent(new Event('controller-deactivate'));
         void releaseKeyboard({ focusGame });
       }

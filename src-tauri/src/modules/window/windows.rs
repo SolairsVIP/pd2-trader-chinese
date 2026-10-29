@@ -10,10 +10,9 @@ use windows_sys::Win32::{
         GetMonitorInfoW, MonitorFromPoint, MonitorFromWindow, HMONITOR, MONITORINFO,
         MONITOR_DEFAULTTONEAREST, MONITOR_DEFAULTTOPRIMARY,
     },
-    System::Threading::{AttachThreadInput, GetCurrentThreadId},
     UI::Accessibility::{SetWinEventHook, UnhookWinEvent, HWINEVENTHOOK},
     UI::WindowsAndMessaging::{
-        BringWindowToTop, FindWindowW, GetForegroundWindow, GetWindowRect,
+        FindWindowW, GetForegroundWindow, GetWindowRect,
         GetWindowThreadProcessId, GetWindowLongW, IsIconic, SetForegroundWindow, SetWindowPos, ShowWindow,
         GWL_EXSTYLE, WS_EX_TOPMOST,
         EVENT_SYSTEM_FOREGROUND, HWND_BOTTOM, HWND_NOTOPMOST, HWND_TOPMOST, SWP_NOACTIVATE,
@@ -150,44 +149,40 @@ pub fn diablo_running() -> bool {
 
 /// Gives keyboard focus back to the Diablo II window.
 pub fn focus_diablo() -> bool {
+    crate::debug_logger::overlay_trace("native focus-diablo start");
     let Some(hwnd) = find_diablo_hwnd() else {
+        crate::debug_logger::overlay_trace("native focus-diablo found=false");
         return false;
     };
+    let owner = foreground();
+    if !may_return_focus_to_game(owner) {
+        crate::debug_logger::overlay_trace(&format!("native focus-diablo skipped owner={:?}", owner));
+        return false;
+    }
     unsafe {
         if IsIconic(hwnd) != 0 {
             ShowWindow(hwnd, SW_RESTORE);
         }
-        SetForegroundWindow(hwnd) != 0
     }
+    crate::debug_logger::overlay_trace("native focus-diablo foreground-start");
+    let focused = bring_to_foreground(hwnd);
+    crate::debug_logger::overlay_trace(&format!("native focus-diablo success={}", focused));
+    focused
 }
 
-/// Brings `hwnd` to the foreground; true when it got there. Windows only lets the process that produced the
-/// last input do that, and after a global hotkey or our injected Ctrl+C that is the game, so a plain
-/// SetForegroundWindow is refused. Attaching to the foreground thread's input queue for the call gets past it.
+fn may_return_focus_to_game(owner: Foreground) -> bool {
+    matches!(owner, Foreground::Diablo | Foreground::OwnWindow)
+}
+
+/// Requests foreground activation without joining the game's input queue to the overlay UI thread.
+/// Windows can refuse the request; callers must handle a false result rather than blocking on
+/// another process's message loop.
 pub fn bring_to_foreground(hwnd: HWND) -> bool {
     unsafe {
-        let foreground = GetForegroundWindow();
-        if foreground == hwnd {
+        if GetForegroundWindow() == hwnd {
             return true;
         }
-        if SetForegroundWindow(hwnd) != 0 && GetForegroundWindow() == hwnd {
-            return true;
-        }
-
-        let this_thread = GetCurrentThreadId();
-        let foreground_thread = if foreground == 0 {
-            0
-        } else {
-            GetWindowThreadProcessId(foreground, ptr::null_mut())
-        };
-        let attached = foreground_thread != 0
-            && foreground_thread != this_thread
-            && AttachThreadInput(this_thread, foreground_thread, 1) != 0;
-        BringWindowToTop(hwnd);
         SetForegroundWindow(hwnd);
-        if attached {
-            AttachThreadInput(this_thread, foreground_thread, 0);
-        }
         GetForegroundWindow() == hwnd
     }
 }
@@ -285,6 +280,14 @@ mod tests {
     const DIABLO: HWND = 20;
     const TRAY_MENU_OWNER: HWND = 30;
     const BROWSER: HWND = 40;
+
+    #[test]
+    fn returning_focus_never_pulls_the_game_over_another_application() {
+        assert!(may_return_focus_to_game(Foreground::Diablo));
+        assert!(may_return_focus_to_game(Foreground::OwnWindow));
+        assert!(!may_return_focus_to_game(Foreground::Other));
+        assert!(!may_return_focus_to_game(Foreground::Unknown));
+    }
 
     #[test]
     fn pinned_market_yields_topmost_when_other_app_is_foreground() {

@@ -47,6 +47,7 @@ const callOrder = (command: string) =>
 beforeEach(() => {
   vi.clearAllMocks();
   resetKeyboardStateForTests();
+  win.setFocusable.mockImplementation(async () => {});
   events.foreground = null;
   events.subscribed = [];
   commands = {};
@@ -92,6 +93,17 @@ describe('claimKeyboard', () => {
     expect(isKeyboardClaimed()).toBe(true);
   });
 
+  it('restores the non-focusable window if native activation throws', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.mocked(invoke).mockImplementation(async (command: string) => {
+      if (command === 'focus_overlay') throw new Error('activation failed');
+      return true;
+    });
+    await claimKeyboard();
+    expect(isKeyboardClaimed()).toBe(false);
+    expect(win.setFocusable).toHaveBeenLastCalledWith(false);
+  });
+
   it('is a no-op in a browser', async () => {
     vi.mocked(isTauri).mockReturnValue(false);
     await claimKeyboard();
@@ -101,6 +113,87 @@ describe('claimKeyboard', () => {
 });
 
 describe('releaseKeyboard', () => {
+  it('retries a temporarily refused focus return so the user does not need to click the game', async () => {
+    vi.useFakeTimers();
+    try {
+      let owner = 'diablo';
+      let attempts = 0;
+      vi.mocked(invoke).mockImplementation(async (command: string) => {
+        if (command === 'focus_overlay') { owner = 'overlay'; return true; }
+        if (command === 'focus_diablo') {
+          if (++attempts === 1) return false;
+          owner = 'diablo';
+        }
+        return true;
+      });
+      await claimKeyboard();
+      const closing = releaseKeyboard({ focusGame: true });
+      await flush();
+      await vi.advanceTimersByTimeAsync(150);
+      await closing;
+      expect(owner).toBe('diablo');
+      expect(attempts).toBe(2);
+      expect(win.setFocusable).toHaveBeenLastCalledWith(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('returns focus to the game when the menu closes while activation is still in flight', async () => {
+    let unblock!: () => void;
+    const activation = new Promise<void>((resolve) => { unblock = resolve; });
+    let focusable = false;
+    let owner = 'diablo';
+    win.setFocusable.mockImplementation(async (next) => {
+      if (next) await activation;
+      focusable = next;
+    });
+    vi.mocked(invoke).mockImplementation(async (command: string) => {
+      if (command === 'focus_overlay') { if (focusable) owner = 'overlay'; return focusable; }
+      if (command === 'focus_diablo') { owner = 'diablo'; return true; }
+      return true;
+    });
+
+    const opening = claimKeyboard();
+    await flush();
+    const closing = releaseKeyboard({ focusGame: true });
+    await flush();
+    unblock();
+    await Promise.all([opening, closing]);
+
+    expect(owner).toBe('diablo');
+    expect(focusable).toBe(false);
+    expect(isKeyboardClaimed()).toBe(false);
+  });
+
+  it('keeps the reopened menu focused when an older close finishes late', async () => {
+    let unblock!: () => void;
+    const release = new Promise<void>((resolve) => { unblock = resolve; });
+    let focusable = false;
+    let owner = 'diablo';
+    win.setFocusable.mockImplementation(async (next) => {
+      if (!next) await release;
+      focusable = next;
+    });
+    vi.mocked(invoke).mockImplementation(async (command: string) => {
+      if (command === 'focus_overlay') { if (focusable) owner = 'overlay'; return focusable; }
+      if (command === 'focus_diablo') { owner = 'diablo'; return true; }
+      return true;
+    });
+
+    await claimKeyboard();
+    const closing = releaseKeyboard({ focusGame: true });
+    await flush();
+    const reopening = claimKeyboard();
+    await flush();
+    unblock();
+    await Promise.all([closing, reopening]);
+
+    expect(owner).toBe('overlay');
+    expect(focusable).toBe(true);
+    expect(isKeyboardClaimed()).toBe(true);
+  });
+
   it('makes Main non-focusable and hands focus back to Diablo', async () => {
     await claimKeyboard();
     await releaseKeyboard();
@@ -146,6 +239,131 @@ describe('trackKeyboardFocus', () => {
     return { seen, stop };
   }
 
+  it('hands control back to the game after each of two complete menu sessions', async () => {
+    const { seen, stop } = await track();
+    foreground('diablo');
+    for (let i = 0; i < 2; i++) {
+      await claimKeyboard();
+      foreground('ownWindow');
+      await releaseKeyboard({ focusGame: true });
+      foreground('diablo');
+      expect(isKeyboardClaimed()).toBe(false);
+    }
+    expect(calls('focus_diablo')).toBe(2);
+    expect(seen).toEqual([[true, false], [false, true], [true, false], [false, true]]);
+    stop();
+  });
+
+  it('does not cancel a reopened menu when the previous handoff event arrives late', async () => {
+    const { seen, stop } = await track();
+    let finishHandoff!: () => void;
+    const handoff = new Promise<void>((resolve) => { finishHandoff = resolve; });
+    vi.mocked(invoke).mockImplementation(async (command: string) => {
+      if (command === 'focus_diablo') await handoff;
+      return true;
+    });
+    foreground('diablo');
+    await claimKeyboard();
+    foreground('ownWindow');
+
+    const closing = releaseKeyboard({ focusGame: true });
+    await flush();
+    const reopening = claimKeyboard();
+    await flush();
+    foreground('diablo'); // delayed notification from the previous close
+    finishHandoff();
+    await Promise.all([closing, reopening]);
+
+    expect(isKeyboardClaimed()).toBe(true);
+    expect(win.setFocusable).toHaveBeenLastCalledWith(true);
+    expect(seen).not.toContainEqual([false, false]);
+    stop();
+  });
+
+  it('does not treat a late overlay heartbeat as a completed reopening', async () => {
+    const { stop } = await track();
+    let finishRelease!: () => void;
+    const release = new Promise<void>((resolve) => { finishRelease = resolve; });
+    win.setFocusable.mockImplementation(async (next) => { if (!next) await release; });
+    foreground('diablo');
+    await claimKeyboard();
+    foreground('ownWindow');
+
+    const closing = releaseKeyboard({ focusGame: true });
+    await flush();
+    foreground('ownWindow'); // heartbeat for the old, still-closing session
+    const reopening = claimKeyboard();
+    finishRelease();
+    await Promise.all([closing, reopening]);
+
+    expect(isKeyboardClaimed()).toBe(true);
+    expect(win.setFocusable).toHaveBeenLastCalledWith(true);
+    expect(calls('focus_overlay')).toBe(2);
+    stop();
+  });
+
+  it('does not steal focus from another app when activation finishes after the user switched away', async () => {
+    const { stop } = await track();
+    let finishActivation!: () => void;
+    const activation = new Promise<void>((resolve) => { finishActivation = resolve; });
+    win.setFocusable.mockImplementation(async (next) => { if (next) await activation; });
+    foreground('diablo');
+    const opening = claimKeyboard();
+    await flush();
+    foreground('other');
+    finishActivation();
+    await opening;
+    await flush();
+
+    expect(isKeyboardClaimed()).toBe(false);
+    expect(win.setFocusable).toHaveBeenLastCalledWith(false);
+    expect(calls('focus_overlay')).toBe(0);
+    stop();
+  });
+
+  it('does not pull the game forward after the user switches away during a close', async () => {
+    const { seen, stop } = await track();
+    let finishRelease!: () => void;
+    const release = new Promise<void>((resolve) => { finishRelease = resolve; });
+    win.setFocusable.mockImplementation(async (next) => { if (!next) await release; });
+    foreground('diablo');
+    await claimKeyboard();
+    foreground('ownWindow');
+
+    const closing = releaseKeyboard({ focusGame: true });
+    await flush();
+    foreground('other');
+    finishRelease();
+    await closing;
+    await flush();
+
+    expect(calls('focus_diablo')).toBe(0);
+    expect(isKeyboardClaimed()).toBe(false);
+    expect(seen.at(-1)).toEqual([false, false]);
+    stop();
+  });
+
+  it('cancels a focus retry when the user has switched to another application', async () => {
+    vi.useFakeTimers();
+    try {
+      const { stop } = await track();
+      vi.mocked(invoke).mockImplementation(async (command: string) => command !== 'focus_diablo');
+      foreground('diablo');
+      await claimKeyboard();
+      foreground('ownWindow');
+      const closing = releaseKeyboard({ focusGame: true });
+      await flush();
+      foreground('other');
+      await vi.advanceTimersByTimeAsync(150);
+      await closing;
+      expect(calls('focus_diablo')).toBe(1);
+      expect(isKeyboardClaimed()).toBe(false);
+      stop();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('follows the Rust foreground hook', async () => {
     const { stop } = await track();
     expect(events.subscribed).toEqual([FOREGROUND_EVENT]);
@@ -175,6 +393,7 @@ describe('trackKeyboardFocus', () => {
       [false, false],
     ]);
     expect(isKeyboardClaimed()).toBe(false);
+    await flush();
     expect(win.setFocusable).toHaveBeenCalledWith(false);
     // The user went there themselves: no focus_diablo round-trip
     expect(invoke).not.toHaveBeenCalledWith('focus_diablo');

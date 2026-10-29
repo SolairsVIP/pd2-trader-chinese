@@ -80,21 +80,29 @@ pub fn focus_overlay(overlay: tauri::Window) -> bool {
             debug_logger::overlay_trace(&format!("native focus-overlay visible={}", unsafe {
                 windows_sys::Win32::UI::WindowsAndMessaging::IsWindowVisible(hwnd.0 as isize) != 0
             }));
-            if window::bring_to_foreground(hwnd.0 as isize) {
+            let foreground = window::bring_to_foreground(hwnd.0 as isize);
+            debug_logger::overlay_trace(&format!("native focus-overlay foreground={}", foreground));
+            if foreground {
                 // Child-webview hosts don't have WebviewWindow's WM_SETFOCUS forwarding.
                 if let Some(webview) = overlay.app_handle().get_webview(overlay.label()) {
+                    debug_logger::overlay_trace("native focus-overlay webview-start");
                     let _ = webview.set_focus();
+                    debug_logger::overlay_trace("native focus-overlay webview-end");
                 }
                 debug_logger::overlay_trace("native focus-overlay success=true");
                 return true;
             }
         }
         // Last resort, Tauri's own path (SetForegroundWindow, then a simulated Alt press)
+        debug_logger::overlay_trace("native focus-overlay fallback-start");
         let _ = overlay.set_focus();
+        debug_logger::overlay_trace("native focus-overlay fallback-end");
         let focused = overlay.is_focused().unwrap_or(false);
         if focused {
             if let Some(webview) = overlay.app_handle().get_webview(overlay.label()) {
+                debug_logger::overlay_trace("native focus-overlay webview-start");
                 let _ = webview.set_focus();
+                debug_logger::overlay_trace("native focus-overlay webview-end");
             }
         }
         debug_logger::overlay_trace(&format!(

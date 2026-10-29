@@ -207,6 +207,43 @@ it('deactivates the controller cursor after closing the last interactive panel w
   }
 });
 
+it('returns control to the game each time the controller menu closes over a pinned market', async () => {
+  const onDeactivate = vi.fn();
+  window.addEventListener('controller-deactivate', onDeactivate);
+  vi.mocked(isKeyboardClaimed).mockReturnValue(true);
+  try {
+    mount();
+    act(() => { api.openPanel('market'); api.setMarketPinned(true); });
+    for (let i = 0; i < 2; i++) {
+      await act(async () => { api.openPanel('controllerMenu', undefined, { focus: true }); });
+      act(() => api.closePanel('controllerMenu'));
+    }
+    expect(api.isOpen('market')).toBe(true);
+    expect(releaseKeyboard).toHaveBeenCalledTimes(2);
+    expect(releaseKeyboard).toHaveBeenLastCalledWith({ focusGame: true });
+    expect(onDeactivate).toHaveBeenCalledTimes(2);
+  } finally {
+    window.removeEventListener('controller-deactivate', onDeactivate);
+    vi.mocked(isKeyboardClaimed).mockReturnValue(false);
+  }
+});
+
+it('keeps control in the overlay when the controller menu opens another panel', async () => {
+  vi.mocked(isKeyboardClaimed).mockReturnValue(true);
+  try {
+    mount();
+    await act(async () => { api.openPanel('controllerMenu', undefined, { focus: true }); });
+    act(() => {
+      api.openPanel('market', undefined, { focus: true });
+      api.closePanel('controllerMenu', { focusGame: false });
+    });
+    expect(api.isOpen('market')).toBe(true);
+    expect(releaseKeyboard).not.toHaveBeenCalled();
+  } finally {
+    vi.mocked(isKeyboardClaimed).mockReturnValue(false);
+  }
+});
+
 it('deactivates the controller cursor when a real mouse click returns focus to the game', () => {
   const onDeactivate = vi.fn();
   window.addEventListener('controller-deactivate', onDeactivate);
@@ -470,6 +507,41 @@ describe('OverlayProvider', () => {
     act(() => api.closePanel('settings'));
     await act(async () => ready());
     expect(claimKeyboard).not.toHaveBeenCalled();
+  });
+
+  it('does not activate a controller menu closed while its native raise is pending', async () => {
+    tauri.on = true;
+    let finishRaise!: () => void;
+    const raisePending = new Promise<void>((resolve) => { finishRaise = resolve; });
+    vi.mocked(invoke).mockImplementation(async (command, args) => {
+      nativeOverlay.calls.push({ command, args });
+      if (command === 'raise_overlay') return raisePending;
+      if (command === 'get_foreground_owner') return nativeOverlay.foregroundOwner;
+      return undefined;
+    });
+    try {
+      mount();
+      act(() => api.openPanel('controllerMenu', undefined, { focus: true }));
+      await act(async () => {});
+      expect(invoke).toHaveBeenCalledWith('raise_overlay');
+      expect(claimKeyboard).not.toHaveBeenCalled();
+
+      // The native raise can finish before React commits the close and runs effect cleanup.
+      await act(async () => {
+        api.closePanel('controllerMenu');
+        finishRaise();
+        await Promise.resolve();
+      });
+
+      expect(api.isOpen('controllerMenu')).toBe(false);
+      expect(claimKeyboard).not.toHaveBeenCalled();
+    } finally {
+      vi.mocked(invoke).mockImplementation(async (command, args) => {
+        nativeOverlay.calls.push({ command, args });
+        if (command === 'get_foreground_owner') return nativeOverlay.foregroundOwner;
+        return undefined;
+      });
+    }
   });
 
   it('closing the last keyboard panel releases a claim', () => {
