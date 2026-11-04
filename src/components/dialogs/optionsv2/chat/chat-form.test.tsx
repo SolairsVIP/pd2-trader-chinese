@@ -2,6 +2,7 @@
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MotionGlobalConfig } from 'framer-motion';
+import { NOTIFICATION_SOUND_PRESETS } from '@/lib/bundled-notification-sounds';
 import { useOptions } from '@/hooks/useOptions';
 import type { ISettings } from '@/hooks/useOptions';
 import { createOptionsStore, type OptionsStore } from '../test-utils';
@@ -67,6 +68,19 @@ describe('ChatForm', () => {
     await advance(1);
     expect(store.updateSettings).toHaveBeenCalledTimes(1);
     expect(lastSaved()).toMatchObject({ tradeNotificationsEnabled: false, whisperNotificationsEnabled: true });
+  });
+
+  it('does not add sound effects to ordinary interface controls', async () => {
+    const audio = vi.fn();
+    vi.stubGlobal('Audio', audio);
+    try {
+      renderForm({});
+      fireEvent.click(screen.getByRole('switch', { name: '交易通知' }));
+      await advance(500);
+      expect(audio).not.toHaveBeenCalled();
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it('"Never" disables every notification control and explains why', async () => {
@@ -155,6 +169,123 @@ describe('ChatForm', () => {
     expect(screen.getByText(/^通知音量：/).textContent).toContain('1%');
     await advance(500);
     expect(lastSaved()?.whisperNotificationVolume).toBe(1);
+  });
+
+  it('offers separate sound selection, reset and preview for chat and market alerts', () => {
+    renderForm({});
+    for (const name of ['聊天提示音', '市场提醒音效']) {
+      expect(screen.getByLabelText(`选择${name}`)).toBeTruthy();
+      expect(screen.getByRole('button', { name: `试听${name}` })).toBeTruthy();
+      expect(screen.getByRole('button', { name: `恢复默认${name}` })).toBeTruthy();
+      const select = screen.getByLabelText(`${name}选项`) as HTMLSelectElement;
+      expect(select.value).toBe('preset:action');
+      expect(within(select).queryByRole('option', { name: '默认提示音' })).toBeNull();
+    }
+  });
+
+  it('previews the chat sound when adjusting its volume', async () => {
+    const played: number[] = [];
+    const created: FakeAudio[] = [];
+    class FakeAudio {
+      volume = 1;
+      paused = true;
+      ended = false;
+      constructor() { created.push(this); }
+      play() { this.paused = false; played.push(this.volume); return Promise.resolve(); }
+      pause() { this.paused = true; }
+    }
+    vi.stubGlobal('Audio', FakeAudio);
+    try {
+      renderForm({ whisperNotificationVolume: 50 });
+      await act(async () => fireEvent.keyDown(screen.getAllByRole('slider')[0], { key: 'ArrowRight' }));
+      expect(played).toEqual([0.51]);
+      await act(async () => fireEvent.keyDown(screen.getAllByRole('slider')[0], { key: 'ArrowRight' }));
+      expect(created).toHaveLength(1);
+      expect(created[0].volume).toBe(0.52);
+      fireEvent.click(screen.getByRole('button', { name: '停止试听聊天提示音' }));
+      expect(created[0].paused).toBe(true);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it('imports and restores a custom chat sound without changing the market sound', async () => {
+    const played: string[] = [];
+    vi.stubGlobal('Audio', class {
+      volume = 1;
+      paused = true;
+      ended = false;
+      constructor(public src: string) {}
+      play() { this.paused = false; played.push(this.src); return Promise.resolve(); }
+      pause() { this.paused = true; }
+    });
+    vi.stubGlobal('FileReader', class {
+      result = 'data:audio/mpeg;base64,Y2hhdA==';
+      onload: (() => void) | null = null;
+      readAsDataURL() { this.onload?.(); }
+    });
+    try {
+      renderForm({});
+      await act(async () => fireEvent.change(screen.getByLabelText('选择聊天提示音'), {
+        target: { files: [new File(['chat'], 'hello.mp3', { type: 'audio/mpeg' })] },
+      }));
+      expect(screen.getByText('hello.mp3')).toBeTruthy();
+      expect((screen.getByLabelText('聊天提示音选项') as HTMLSelectElement).value).toBe('custom');
+      expect(played.at(-1)).toBe('data:audio/mpeg;base64,Y2hhdA==');
+      expect((screen.getByRole('button', { name: '恢复默认市场提醒音效' }) as HTMLButtonElement).disabled).toBe(true);
+
+      await act(async () => fireEvent.click(screen.getByRole('button', { name: '恢复默认聊天提示音' })));
+      expect((screen.getByLabelText('聊天提示音选项') as HTMLSelectElement).value).toBe('preset:action');
+      expect(played.at(-1)).not.toBe('data:audio/mpeg;base64,Y2hhdA==');
+      await act(async () => fireEvent.change(screen.getByLabelText('聊天提示音选项'), { target: { value: 'custom' } }));
+      expect((screen.getByLabelText('聊天提示音选项') as HTMLSelectElement).value).toBe('custom');
+      expect(played.at(-1)).toBe('data:audio/mpeg;base64,Y2hhdA==');
+      await act(async () => fireEvent.click(screen.getByRole('button', { name: '恢复默认聊天提示音' })));
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it('explains an invalid selection and preserves the existing audio choice', async () => {
+    renderForm({});
+    await act(async () => fireEvent.change(screen.getByLabelText('选择市场提醒音效'), {
+      target: { files: [new File(['not audio'], 'not-a-sound.txt')] },
+    }));
+    expect(screen.getByRole('alert').textContent).toContain('请选择 MP3、WAV 或 OGG');
+    expect((screen.getByRole('button', { name: '恢复默认市场提醒音效' }) as HTMLButtonElement).disabled).toBe(true);
+  });
+
+  it('offers all five built-in sounds separately for chat and market and remembers both selections', async () => {
+    const played: string[] = [];
+    vi.stubGlobal('Audio', class {
+      volume = 1;
+      paused = true;
+      ended = false;
+      constructor(public src: string) {}
+      play() { this.paused = false; played.push(this.src); return Promise.resolve(); }
+      pause() { this.paused = true; }
+    });
+    try {
+      renderForm({});
+      const chat = screen.getByLabelText('聊天提示音选项') as HTMLSelectElement;
+      const market = screen.getByLabelText('市场提醒音效选项') as HTMLSelectElement;
+      for (const preset of NOTIFICATION_SOUND_PRESETS) {
+        expect(within(chat).getByRole('option', { name: preset.name })).toBeTruthy();
+        expect(within(market).getByRole('option', { name: preset.name })).toBeTruthy();
+      }
+      await act(async () => fireEvent.change(chat, { target: { value: 'preset:interface-back' } }));
+      expect(played.at(-1)).toBe(NOTIFICATION_SOUND_PRESETS[0].source);
+      await act(async () => fireEvent.change(market, { target: { value: 'preset:in-game-choice' } }));
+      expect(played.at(-1)).toBe(NOTIFICATION_SOUND_PRESETS[4].source);
+      cleanup();
+      await act(async () => { renderForm({}); });
+      expect((screen.getByLabelText('聊天提示音选项') as HTMLSelectElement).value).toBe('preset:interface-back');
+      expect((screen.getByLabelText('市场提醒音效选项') as HTMLSelectElement).value).toBe('preset:in-game-choice');
+      await act(async () => fireEvent.click(screen.getByRole('button', { name: '恢复默认聊天提示音' })));
+      await act(async () => fireEvent.click(screen.getByRole('button', { name: '恢复默认市场提醒音效' })));
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it('turns the market alert sound off and dims its volume', async () => {

@@ -136,7 +136,7 @@ export function useMarketAlerts(): void {
           entry.cancel();
           pumpRealtime();
         }, Math.max(0, Date.parse(alert.matchedAt) + ALERT_RETENTION_MS - Date.now()));
-        if (!sounded && sound.current.enabled) playNotificationSound(sound.current.volume);
+        if (!sounded && sound.current.enabled) playNotificationSound(sound.current.volume, 'market');
       }
     };
     const reconcileCapacity = () => {
@@ -174,7 +174,7 @@ export function useMarketAlerts(): void {
       clearTimeout(summaryExpiry);
       const newestExpiry = fresh.reduce((latest, { alert }) => Math.max(latest, Date.parse(alert.matchedAt) + ALERT_RETENTION_MS), 0);
       summaryExpiry = setTimeout(dismissSummary, Math.max(0, newestExpiry - Date.now()));
-      if (fresh.some(({ sounded }) => !sounded) && sound.current.enabled) playNotificationSound(sound.current.volume);
+      if (fresh.some(({ sounded }) => !sounded) && sound.current.enabled) playNotificationSound(sound.current.volume, 'market');
     };
     modeChanged.current = () => {
       if (realtime.current) {

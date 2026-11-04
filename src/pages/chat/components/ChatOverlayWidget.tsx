@@ -1,6 +1,6 @@
 import { useUiText } from '@/lib/ui-language';
 import { buildGameWhisper, gameAccount } from '@/lib/game-account';
-import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { MessageSquare, MessagesSquare } from 'lucide-react';
 import { WindowChrome, WindowPanel } from '@/components/custom/window-chrome';
@@ -23,7 +23,7 @@ import { isOpenTrade, unreadWhispers } from '@/lib/whisper-history';
 import { setBadgeCount, showToast, undoToast, usePanel } from '@/overlay';
 import { DUR, EASE_OUT, fadeIn, slideInRight } from '@/lib/motion';
 import { EmptyState } from '@/pages/currency/components/StatePanel';
-import poeWhisperSound from '@/assets/poe_whisper.mp3';
+import { playNotificationSound } from '@/lib/notification-sound';
 import { findMarketLinks } from '../lib/market-links';
 import {
   buildInbox,
@@ -132,19 +132,6 @@ export default function ChatOverlayWidget({ onClose }: ChatOverlayWidgetProps) {
 
   // Get current user ID
   const currentUserId = authData?.user?._id;
-
-  // Play notification sound
-  const playNotificationSound = useCallback((volume: number = 70) => {
-    try {
-      const audio = new Audio(poeWhisperSound);
-      audio.volume = volume / 100; // Convert 0-100 to 0-1
-      audio.play().catch((error) => {
-        console.error('Failed to play notification sound:', error);
-      });
-    } catch (error) {
-      console.error('Failed to create audio element:', error);
-    }
-  }, []);
 
   const api = useMemo(
     () => ({ getConversations, getMessages, sendMessage, markMessagesAsRead, deleteConversation }),

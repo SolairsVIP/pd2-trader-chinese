@@ -12,6 +12,7 @@ import { WhisperHistoryProvider } from '@/hooks/useWhisperHistory';
 import { writeText } from '@/lib/browser-clipboard';
 import { openUrl } from '@/lib/browser-opener';
 import { exists, readTextFile, writeTextFile } from '@/lib/browser-fs';
+import { DEFAULT_NOTIFICATION_SOUND_SOURCE } from '@/lib/bundled-notification-sounds';
 import {
   CHAT_PREFS_FILENAME,
   changeChatPrefs,
@@ -1001,7 +1002,7 @@ describe('ChatOverlayWidget socket messages', () => {
     expect(rowFor('bob').textContent).toContain('刚刚');
     expect(headerUnread()).toBe('2');
     expect(rows()[0].textContent).toContain('bob');
-    expect(audio).toEqual([expect.objectContaining({ src: 'whisper.mp3', volume: 0.25 })]);
+    expect(audio).toEqual([expect.objectContaining({ src: DEFAULT_NOTIFICATION_SOUND_SOURCE, volume: 0.25 })]);
   });
 
   it('ignores a duplicate push of the same message', async () => {

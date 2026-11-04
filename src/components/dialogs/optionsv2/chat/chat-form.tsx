@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils';
 import { templatePlaceholders } from '@/lib/message-templates';
 import { SettingsGroup, SettingsRow, SettingsSkeleton } from '../settings-ui';
 import { ChatTemplatesEditor } from './chat-templates-editor';
+import { SoundFileControl, useNotificationSoundPreview } from './notification-sound-control';
 
 const TOAST_TYPES = [
   { id: 'whispers', label: '密语' },
@@ -53,6 +54,7 @@ export function ChatForm() {
   const { settings, isLoading, updateSettings } = useOptions();
   const [newIgnorePlayer, setNewIgnorePlayer] = React.useState('');
   const debounceRef = React.useRef<NodeJS.Timeout | null>(null);
+  const { preview, stop, playingKind, errorKind } = useNotificationSoundPreview();
 
   const form = useForm<ChatFormValues>({
     resolver: zodResolver(chatFormSchema),
@@ -426,11 +428,12 @@ export function ChatForm() {
                       <VolumeIcon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
                       <FormControl>
                         <Slider
+                          aria-label={__ui("通知音量")}
                           min={0}
                           max={100}
                           step={1}
                           value={[volume]}
-                          onValueChange={(value) => field.onChange(value[0])}
+                          onValueChange={(value) => { field.onChange(value[0]); void preview('chat', value[0]); }}
                           disabled={isDisabled}
                           className="flex-1"
                         />
@@ -438,6 +441,14 @@ export function ChatForm() {
                     </div>
                   }
                 >
+                  <SoundFileControl
+                    kind="chat"
+                    volume={volume}
+                    preview={preview}
+                    previewError={errorKind === 'chat'}
+                    stop={stop}
+                    playing={playingKind === 'chat'}
+                  />
                   <FormMessage />
                 </SettingsRow>
               );
@@ -484,7 +495,7 @@ export function ChatForm() {
                           max={100}
                           step={1}
                           value={[volume]}
-                          onValueChange={(value) => field.onChange(value[0])}
+                          onValueChange={(value) => { field.onChange(value[0]); void preview('market', value[0]); }}
                           disabled={soundOff}
                           className="flex-1"
                         />
@@ -492,6 +503,14 @@ export function ChatForm() {
                     </div>
                   }
                 >
+                  <SoundFileControl
+                    kind="market"
+                    volume={volume}
+                    preview={preview}
+                    previewError={errorKind === 'market'}
+                    stop={stop}
+                    playing={playingKind === 'market'}
+                  />
                   <FormMessage />
                 </SettingsRow>
               );

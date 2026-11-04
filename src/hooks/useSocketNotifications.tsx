@@ -4,7 +4,8 @@ import { isTauri, invoke } from '@tauri-apps/api/core';
 import { usePd2Website } from './pd2website/usePD2Website';
 import { ToastActionType, GenericToastPayload } from '@/common/types/Events';
 import { ISettings } from './useOptions';
-import poeWhisperSound from '@/assets/poe_whisper.mp3';
+import { playNotificationSound } from '@/lib/notification-sound';
+export { playNotificationSound } from '@/lib/notification-sound';
 import { showToast } from '@/overlay';
 import { isThreadMuted, loadChatPrefs } from '@/lib/chat-prefs';
 import { normalizeName as personKey } from '@/lib/whisper-history';
@@ -46,19 +47,6 @@ interface ChatMessagePush {
   sender?: { _id?: string; display_name?: string; username?: string };
 }
 
-/** Plays the whisper notification sound at `volume` (0-100); also the market alert sound. */
-export function playNotificationSound(volume: number = 70) {
-  try {
-    const audio = new Audio(poeWhisperSound);
-    audio.volume = volume / 100; // Convert 0-100 to 0-1
-    audio.play().catch((error) => {
-      console.error('Failed to play notification sound:', error);
-    });
-  } catch (error) {
-    console.error('Failed to play notification sound:', error);
-  }
-}
-
 export function isToastEnabled(settings: ISettings | undefined, type: string): boolean {
   if (!(settings?.toastPopupsEnabled ?? true)) return false;
   const types = settings?.toastPopupTypes ?? ['whispers', 'trade', 'joins', 'offers', 'networth'];
@@ -98,7 +86,7 @@ export const useSocketNotifications = ({
       const tradeEnabled = settings?.tradeNotificationsEnabled ?? true;
       if (tradeEnabled) {
         const volume = settings?.whisperNotificationVolume ?? 70;
-        playNotificationSound(volume);
+        playNotificationSound(volume, 'other');
       }
 
       // Show toast notification with link to listing
@@ -163,7 +151,7 @@ export const useSocketNotifications = ({
             if ((settings?.whisperJoinNotificationsEnabled ?? false) && !isDiabloFocused) {
               // Play notification sound
               const volume = settings?.whisperNotificationVolume ?? 70;
-              playNotificationSound(volume);
+              playNotificationSound(volume, 'other');
 
               if (isToastEnabled(settings, 'joins')) {
                 const toastPayload: GenericToastPayload = {

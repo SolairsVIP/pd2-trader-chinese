@@ -134,7 +134,7 @@ describe('useMarketAlerts', () => {
       id: expect.stringMatching(/^market-alert-summary-/),
       action: { data: { tab: 'alerts' } },
     });
-    expect(playNotificationSound).toHaveBeenCalledWith(40);
+    expect(playNotificationSound).toHaveBeenCalledWith(40, 'market');
   });
 
   it('每 30 秒汇总尚未弹窗的新匹配，旧记录不会重复提醒', async () => {
